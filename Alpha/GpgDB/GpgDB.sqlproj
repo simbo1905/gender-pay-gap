@@ -77,4 +77,8 @@
   <ItemGroup>
     <RefactorLog Include="GpgDB.refactorlog" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="GpgDB.dbmdl" />
+    <None Include="GpgDB.jfm" />
+  </ItemGroup>
 </Project>

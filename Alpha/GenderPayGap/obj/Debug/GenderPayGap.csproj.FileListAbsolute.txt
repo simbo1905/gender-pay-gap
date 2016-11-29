@@ -64,5 +64,6 @@ C:\Cadence\GenderPayGap\Alpha\GenderPayGap\bin\Microsoft.Owin.Security.OAuth.xml
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap\bin\Microsoft.Owin.Security.Google.xml
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap\bin\Microsoft.Owin.Security.Twitter.xml
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap\bin\Microsoft.Owin.Security.MicrosoftAccount.xml
+C:\Cadence\GenderPayGap\Alpha\GenderPayGap\obj\Debug\GenderPayGap.csprojResolveAssemblyReference.cache
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap\obj\Debug\GenderPayGap.dll
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap\obj\Debug\GenderPayGap.pdb
