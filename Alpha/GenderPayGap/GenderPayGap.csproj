@@ -52,6 +52,8 @@
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -167,27 +169,152 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="AuthToken.cs">
+      <DependentUpon>GPGEntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="C__RefactorLog.cs">
+      <DependentUpon>GPGEntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="GPGEntityDataModel.Context.cs">
+      <DependentUpon>GPGEntityDataModel.Context.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="GPGEntityDataModel.cs">
+      <DependentUpon>GPGEntityDataModel.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
+    <Compile Include="GPGEntityDataModel.Designer.cs">
+      <DependentUpon>GPGEntityDataModel.edmx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Organisation.cs">
+      <DependentUpon>GPGEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrganisationAddress.cs">
+      <DependentUpon>GPGEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrganisationFile.cs">
+      <DependentUpon>GPGEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrganisationGPGReturn.cs">
+      <DependentUpon>GPGEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="OrganisationStatus.cs">
+      <DependentUpon>GPGEntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Return.cs">
+      <DependentUpon>GPGEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReturnHit.cs">
+      <DependentUpon>GPGEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ReturnStatus.cs">
+      <DependentUpon>GPGEntityDataModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Startup.cs" />
+    <Compile Include="User.cs">
+      <DependentUpon>GPGEntityDataModel.tt</DependentUpon>
+    </Compile>
+    <Compile Include="UserStatus.cs">
+      <DependentUpon>GPGEntityDataModel.tt</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\bootstrap-theme.css" />
+    <Content Include="Content\bootstrap-theme.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\elements-page.css" />
+    <Content Include="Content\fonts.css" />
+    <Content Include="Content\govuk-template-print.css" />
+    <Content Include="Content\govuk-template.css" />
+    <Content Include="Content\img\org_crest.png" />
+    <Content Include="Content\prism.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
+    <Content Include="GPGEntityDataModel.Context.tt">
+      <DependentUpon>GPGEntityDataModel.edmx</DependentUpon>
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GPGEntityDataModel.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="GPGEntityDataModel.edmx.sql" />
+    <Content Include="GPGEntityDataModel.tt">
+      <DependentUpon>GPGEntityDataModel.edmx</DependentUpon>
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GPGEntityDataModel.cs</LastGenOutput>
+    </Content>
+    <Content Include="public\assets\images\dfe-small.png" />
+    <Content Include="public\assets\images\dfe-xsmall.png" />
+    <Content Include="public\assets\images\dfe.png" />
+    <Content Include="public\assets\images\grid-rating.png" />
+    <Content Include="public\assets\images\icon-ages.png" />
+    <Content Include="public\assets\images\icon-denom.png" />
+    <Content Include="public\assets\images\icon-gender-mixed.png" />
+    <Content Include="public\assets\images\icon-location.png" />
+    <Content Include="public\assets\images\icon-pupils.png" />
+    <Content Include="public\assets\images\ofsted-logo-sm.jpeg" />
+    <Content Include="public\assets\images\ofsted-logo-x-small.jpeg" />
+    <Content Include="public\assets\images\ofsted-logo.jpg" />
+    <Content Include="public\govuk_template\assets\images\apple-touch-icon-120x120.png" />
+    <Content Include="public\govuk_template\assets\images\apple-touch-icon-152x152.png" />
+    <Content Include="public\govuk_template\assets\images\apple-touch-icon-60x60.png" />
+    <Content Include="public\govuk_template\assets\images\apple-touch-icon-76x76.png" />
+    <Content Include="public\govuk_template\assets\images\favicon.ico" />
+    <Content Include="public\govuk_template\assets\images\gov.uk_logotype_crown.png" />
+    <Content Include="public\govuk_template\assets\images\gov.uk_logotype_crown.svg" />
+    <Content Include="public\govuk_template\assets\images\gov.uk_logotype_crown_invert.png" />
+    <Content Include="public\govuk_template\assets\images\gov.uk_logotype_crown_invert_trans.png" />
+    <Content Include="public\govuk_template\assets\images\opengraph-image.png" />
+    <Content Include="public\govuk_template\assets\javascripts\govuk-template.js" />
+    <Content Include="public\govuk_template\assets\javascripts\ie.js" />
+    <Content Include="public\govuk_template\assets\stylesheets\external-links\external-link-24x24.png" />
+    <Content Include="public\govuk_template\assets\stylesheets\external-links\external-link-black-12x12.png" />
+    <Content Include="public\govuk_template\assets\stylesheets\external-links\external-link-black-24x24.png" />
+    <Content Include="public\govuk_template\assets\stylesheets\external-links\external-link.png" />
+    <Content Include="public\govuk_template\assets\stylesheets\fonts-ie8.css" />
+    <Content Include="public\govuk_template\assets\stylesheets\fonts.css" />
+    <Content Include="public\govuk_template\assets\stylesheets\govuk-template-ie6.css" />
+    <Content Include="public\govuk_template\assets\stylesheets\govuk-template-ie7.css" />
+    <Content Include="public\govuk_template\assets\stylesheets\govuk-template-ie8.css" />
+    <Content Include="public\govuk_template\assets\stylesheets\govuk-template-print.css" />
+    <Content Include="public\govuk_template\assets\stylesheets\govuk-template.css" />
+    <Content Include="public\govuk_template\assets\stylesheets\images\close.png" />
+    <Content Include="public\govuk_template\assets\stylesheets\images\gov.uk_logotype_crown-1x.png" />
+    <Content Include="public\govuk_template\assets\stylesheets\images\gov.uk_logotype_crown.png" />
+    <Content Include="public\govuk_template\assets\stylesheets\images\govuk-crest-2x.png" />
+    <Content Include="public\govuk_template\assets\stylesheets\images\govuk-crest-ie.png" />
+    <Content Include="public\govuk_template\assets\stylesheets\images\govuk-crest.png" />
+    <Content Include="public\govuk_template\assets\stylesheets\images\open-government-licence.png" />
+    <Content Include="public\govuk_template\assets\stylesheets\images\open-government-licence_2x.png" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
+    <EntityDeploy Include="GPGEntityDataModel.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>GPGEntityDataModel.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="public\govuk_template\assets\stylesheets\fonts\GDSTransportTabular-Bold.eot" />
+    <Content Include="public\govuk_template\assets\stylesheets\fonts\GDSTransportTabular-Light.eot" />
+    <Content Include="public\govuk_template\assets\stylesheets\fonts\GDSTransportWebsite-Bold.eot" />
+    <Content Include="public\govuk_template\assets\stylesheets\fonts\GDSTransportWebsite.eot" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
+    <Content Include="Content\bootstrap.css.map" />
+    <Content Include="Content\bootstrap.min.css.map" />
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -234,9 +361,16 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <Content Include="Views\DfE\Layouts\template.cshtml" />
+    <Content Include="Views\GOVUK\Layouts\template.cshtml" />
+    <Content Include="Views\GOVUK\Partials\footer-support-links.cshtml" />
+    <Content Include="Views\GOVUK\Partials\footer-top.cshtml" />
+    <Content Include="Views\GOVUK\Partials\phase\alpha.cshtml" />
+    <Content Include="Views\GOVUK\Partials\phase\beta.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="public\govuk_template\assets\javascripts\vendor\goog\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
@@ -245,6 +379,9 @@
     <Content Include="packages.config" />
     <None Include="Project_Readme.html" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

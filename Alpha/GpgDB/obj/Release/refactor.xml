@@ -1,0 +1,129 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Operations Version="1.0">
+  <Operation Name="Rename Refactor" Key="a9488e41-2f8d-40ce-b1ce-774f43d539d2" ChangeDateTime="11/18/2016 13:17:42" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[TableGpg].[DiffMeanPercent]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TableGpg]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DiffMeanhourlyPercent" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="612e64f2-18b7-4589-9cd8-245d0859664b" ChangeDateTime="11/18/2016 13:17:53" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[TableGpg].[DiffMedianPercent]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TableGpg]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DiffMedianHourlyPercent" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="9b614cc8-b156-43be-b5c6-2428a002fb3e" ChangeDateTime="11/18/2016 13:18:00" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[TableGpg].[DiffMeanhourlyPercent]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TableGpg]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DiffMeanHourlyPercent" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3f902c9b-e3fc-4dd5-b484-3848f8d08573" ChangeDateTime="11/18/2016 13:19:16" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[TableGpg].[DiffMeanHourlyPercent]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TableGpg]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DiffMeanHourlyPercentage" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="e457b9f3-1fff-4f74-b4f8-7b2380174b10" ChangeDateTime="11/18/2016 13:19:21" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[TableGpg].[DiffMedianHourlyPercent]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TableGpg]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DiffMedianHourlyPercentage" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="bc704c7f-a71d-4f09-a033-57c4bfe02bd0" ChangeDateTime="11/18/2016 13:19:26" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[TableGpg].[DiffMeanBonusPercent]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TableGpg]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DiffMeanBonusPercentage" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="6913dd39-a169-45e8-97b1-9eec335bf719" ChangeDateTime="11/18/2016 13:23:14" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[TableGpg].[DiffMeanHourlyPercentage]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TableGpg]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DiffMeanHourlyPayPercent" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="b1c07b82-56e7-4ec8-a13b-c9bbacd02a38" ChangeDateTime="11/18/2016 13:23:20" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[TableGpg].[DiffMedianHourlyPercentage]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TableGpg]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DiffMedianHourlyPercent" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="3c715eb5-3f5b-4534-a194-5cb7c31d5034" ChangeDateTime="11/18/2016 13:23:44" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[TableGpg].[DiffMeanBonusPercentage]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TableGpg]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DiffMeanBonusPercent" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="cf6504ef-c563-4cf4-a1ab-1fefc986bf63" ChangeDateTime="11/18/2016 13:23:50" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[TableGpg].[DiffMedianBonusPercentage]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TableGpg]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="DiffMedianBonusPercent" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="f9c51767-d29f-423c-8f9f-70e082cd86cf" ChangeDateTime="11/18/2016 13:23:56" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[TableGpg].[MaleMedianBonusPayPercentage]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TableGpg]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="MaleMedianBonusPayPercent" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="0841090a-3415-45be-8ab2-652c13438a67" ChangeDateTime="11/18/2016 13:24:02" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[TableGpg].[FemaleMedianBonusPayPercentage]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TableGpg]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FemaleMedianBonusPayPercent" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="82fde621-bd84-4526-a596-8a7921526e95" ChangeDateTime="11/18/2016 13:26:12" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[TableGpg].[MaleLowerPayBand]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TableGpg]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="FemaleMiddlePayBand" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5f9f097c-8456-4e71-af34-0f63a4967a28" ChangeDateTime="11/18/2016 13:37:23" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[TableGpg].[LinkToComapnyGPGURLInfo]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[TableGpg]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="CompanyLinkToGPGInfo" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="af75455d-7e0c-4645-ab59-c34a37823700" ChangeDateTime="11/18/2016 14:49:55" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[OrganisationStatuses].[StatusCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[OrganisationStatuses]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StatusId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="51082164-a4a2-4222-92cd-c3ad50166c81" ChangeDateTime="11/18/2016 14:50:42" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[UserStatuses].[StatusCode]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[UserStatuses]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="StatusId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="c2fcf0e3-c45a-4694-b41c-f3744be4f4d8" ChangeDateTime="11/18/2016 16:00:33" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[Return].[VacancyId]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[Return]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="ReturnId" />
+  </Operation>
+  <Operation Name="Rename Refactor" Key="5dfcaec1-61ad-4887-b382-7db785920d54" ChangeDateTime="11/18/2016 16:06:13" xmlns="http://schemas.microsoft.com/sqlserver/dac/Serialization/2012/02">
+    <Property Name="ElementName" Value="[dbo].[OrganisationAddress].[SchoolID]" />
+    <Property Name="ElementType" Value="SqlSimpleColumn" />
+    <Property Name="ParentElementName" Value="[dbo].[OrganisationAddress]" />
+    <Property Name="ParentElementType" Value="SqlTable" />
+    <Property Name="NewName" Value="OrganisationID" />
+  </Operation>
+</Operations>

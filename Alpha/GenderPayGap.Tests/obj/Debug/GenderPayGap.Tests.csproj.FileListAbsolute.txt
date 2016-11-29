@@ -30,8 +30,8 @@ C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\Microsoft.AspNet.Iden
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\Microsoft.Owin.Security.dll
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\Owin.dll
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\Microsoft.Owin.Security.Cookies.dll
-C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.dll
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\EntityFramework.dll
+C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.dll
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\Microsoft.Owin.Host.SystemWeb.dll
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\GenderPayGap.pdb
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\Microsoft.VisualStudio.QualityTools.UnitTestFramework.xml
@@ -48,8 +48,8 @@ C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\Microsoft.AspNet.Iden
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\Microsoft.AspNet.Identity.Owin.xml
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\Microsoft.Owin.Security.xml
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\Microsoft.Owin.Security.Cookies.xml
-C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.xml
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\EntityFramework.xml
+C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\Microsoft.AspNet.Identity.EntityFramework.xml
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\bin\Debug\Microsoft.Owin.Host.SystemWeb.xml
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\obj\Debug\GenderPayGap.Tests.csprojResolveAssemblyReference.cache
 C:\Cadence\GenderPayGap\Alpha\GenderPayGap.Tests\obj\Debug\GenderPayGap.Tests.dll

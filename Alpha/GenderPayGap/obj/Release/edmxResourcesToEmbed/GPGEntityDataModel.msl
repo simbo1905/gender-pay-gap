@@ -1,0 +1,193 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+  <EntityContainerMapping StorageEntityContainer="GpgDBModelStoreContainer" CdmEntityContainer="GpgDBEntities">
+    <EntitySetMapping Name="C__RefactorLog">
+      <EntityTypeMapping TypeName="IsTypeOf(GpgDBModel.C__RefactorLog)">
+        <MappingFragment StoreEntitySet="C__RefactorLog">
+          <ScalarProperty Name="OperationKey" ColumnName="OperationKey" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Organisations">
+      <EntityTypeMapping TypeName="IsTypeOf(GpgDBModel.Organisation)">
+        <MappingFragment StoreEntitySet="Organisations">
+          <ScalarProperty Name="OrganisationId" ColumnName="OrganisationId" />
+          <ScalarProperty Name="GroupId" ColumnName="GroupId" />
+          <ScalarProperty Name="URN" ColumnName="URN" />
+          <ScalarProperty Name="OrganisationName" ColumnName="OrganisationName" />
+          <ScalarProperty Name="OrganisationType" ColumnName="OrganisationType" />
+          <ScalarProperty Name="OrganisationPhase" ColumnName="OrganisationPhase" />
+          <ScalarProperty Name="OrganisationPolicy" ColumnName="OrganisationPolicy" />
+          <ScalarProperty Name="OrganisationDescription" ColumnName="OrganisationDescription" />
+          <ScalarProperty Name="Capacity" ColumnName="Capacity" />
+          <ScalarProperty Name="Population" ColumnName="Population" />
+          <ScalarProperty Name="Phone" ColumnName="Phone" />
+          <ScalarProperty Name="Email" ColumnName="Email" />
+          <ScalarProperty Name="Web" ColumnName="Web" />
+          <ScalarProperty Name="CurrentStatus" ColumnName="CurrentStatus" />
+          <ScalarProperty Name="CurrentStatusDate" ColumnName="CurrentStatusDate" />
+          <ScalarProperty Name="CurrentStatusDetails" ColumnName="CurrentStatusDetails" />
+          <ScalarProperty Name="Created" ColumnName="Created" />
+          <ScalarProperty Name="Modified" ColumnName="Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrganisationAddresses">
+      <EntityTypeMapping TypeName="IsTypeOf(GpgDBModel.OrganisationAddress)">
+        <MappingFragment StoreEntitySet="OrganisationAddresses">
+          <ScalarProperty Name="OrganisationID" ColumnName="OrganisationID" />
+          <ScalarProperty Name="Type" ColumnName="Type" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="Address2" ColumnName="Address2" />
+          <ScalarProperty Name="Address3" ColumnName="Address3" />
+          <ScalarProperty Name="TownCity" ColumnName="TownCity" />
+          <ScalarProperty Name="County" ColumnName="County" />
+          <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+          <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+          <ScalarProperty Name="Created" ColumnName="Created" />
+          <ScalarProperty Name="Modified" ColumnName="Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrganisationFiles">
+      <EntityTypeMapping TypeName="IsTypeOf(GpgDBModel.OrganisationFile)">
+        <MappingFragment StoreEntitySet="OrganisationFiles">
+          <ScalarProperty Name="FileId" ColumnName="FileId" />
+          <ScalarProperty Name="OrganisationId" ColumnName="OrganisationId" />
+          <ScalarProperty Name="FileType" ColumnName="FileType" />
+          <ScalarProperty Name="FileSize" ColumnName="FileSize" />
+          <ScalarProperty Name="Filename" ColumnName="Filename" />
+          <ScalarProperty Name="ContentType" ColumnName="ContentType" />
+          <ScalarProperty Name="Created" ColumnName="Created" />
+          <ScalarProperty Name="Modified" ColumnName="Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrganisationGPGReturns">
+      <EntityTypeMapping TypeName="IsTypeOf(GpgDBModel.OrganisationGPGReturn)">
+        <MappingFragment StoreEntitySet="OrganisationGPGReturns">
+          <ScalarProperty Name="OrganisationId" ColumnName="OrganisationId" />
+          <ScalarProperty Name="ReturnId" ColumnName="ReturnId" />
+          <ScalarProperty Name="Created" ColumnName="Created" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="OrganisationStatuses">
+      <EntityTypeMapping TypeName="IsTypeOf(GpgDBModel.OrganisationStatus)">
+        <MappingFragment StoreEntitySet="OrganisationStatuses">
+          <ScalarProperty Name="OrganisationStatusId" ColumnName="OrganisationStatusId" />
+          <ScalarProperty Name="OrganisationId" ColumnName="OrganisationId" />
+          <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+          <ScalarProperty Name="StatusDate" ColumnName="StatusDate" />
+          <ScalarProperty Name="StatusMessage" ColumnName="StatusMessage" />
+          <ScalarProperty Name="ByUserId" ColumnName="ByUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Returns">
+      <EntityTypeMapping TypeName="IsTypeOf(GpgDBModel.Return)">
+        <MappingFragment StoreEntitySet="Returns">
+          <ScalarProperty Name="ReturnId" ColumnName="ReturnId" />
+          <ScalarProperty Name="DiffMeanHourlyPayPercent" ColumnName="DiffMeanHourlyPayPercent" />
+          <ScalarProperty Name="DiffMedianHourlyPercent" ColumnName="DiffMedianHourlyPercent" />
+          <ScalarProperty Name="DiffMeanBonusPercent" ColumnName="DiffMeanBonusPercent" />
+          <ScalarProperty Name="DiffMedianBonusPercent" ColumnName="DiffMedianBonusPercent" />
+          <ScalarProperty Name="MaleMedianBonusPayPercent" ColumnName="MaleMedianBonusPayPercent" />
+          <ScalarProperty Name="FemaleMedianBonusPayPercent" ColumnName="FemaleMedianBonusPayPercent" />
+          <ScalarProperty Name="MaleLowerPayBand" ColumnName="MaleLowerPayBand" />
+          <ScalarProperty Name="FemaleLowerPayBand" ColumnName="FemaleLowerPayBand" />
+          <ScalarProperty Name="MaleMiddlePayBand" ColumnName="MaleMiddlePayBand" />
+          <ScalarProperty Name="FemaleMiddlePayBand" ColumnName="FemaleMiddlePayBand" />
+          <ScalarProperty Name="MaleUpperPayBand" ColumnName="MaleUpperPayBand" />
+          <ScalarProperty Name="FemaleUpperPayBand" ColumnName="FemaleUpperPayBand" />
+          <ScalarProperty Name="MaleUpperQuartilePayBand" ColumnName="MaleUpperQuartilePayBand" />
+          <ScalarProperty Name="FemaleUpperQuartilePayBand" ColumnName="FemaleUpperQuartilePayBand" />
+          <ScalarProperty Name="CompanyLinkToGPGInfo" ColumnName="CompanyLinkToGPGInfo" />
+          <ScalarProperty Name="CurrentStatus" ColumnName="CurrentStatus" />
+          <ScalarProperty Name="CurrentStatusDate" ColumnName="CurrentStatusDate" />
+          <ScalarProperty Name="CurrentStatusDetails" ColumnName="CurrentStatusDetails" />
+          <ScalarProperty Name="Created" ColumnName="Created" />
+          <ScalarProperty Name="Modified" ColumnName="Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ReturnHits">
+      <EntityTypeMapping TypeName="IsTypeOf(GpgDBModel.ReturnHit)">
+        <MappingFragment StoreEntitySet="ReturnHits">
+          <ScalarProperty Name="ReturnHitId" ColumnName="ReturnHitId" />
+          <ScalarProperty Name="ReturnId" ColumnName="ReturnId" />
+          <ScalarProperty Name="ByAccountId" ColumnName="ByAccountId" />
+          <ScalarProperty Name="HitType" ColumnName="HitType" />
+          <ScalarProperty Name="Source" ColumnName="Source" />
+          <ScalarProperty Name="Created" ColumnName="Created" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="ReturnStatuses">
+      <EntityTypeMapping TypeName="IsTypeOf(GpgDBModel.ReturnStatus)">
+        <MappingFragment StoreEntitySet="ReturnStatuses">
+          <ScalarProperty Name="ReturnStatusId" ColumnName="ReturnStatusId" />
+          <ScalarProperty Name="StatusMessage" ColumnName="StatusMessage" />
+          <ScalarProperty Name="ReturnId" ColumnName="ReturnId" />
+          <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+          <ScalarProperty Name="StatusDate" ColumnName="StatusDate" />
+          <ScalarProperty Name="ByUserId" ColumnName="ByUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="Users">
+      <EntityTypeMapping TypeName="IsTypeOf(GpgDBModel.User)">
+        <MappingFragment StoreEntitySet="Users">
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="UserRef" ColumnName="UserRef" />
+          <ScalarProperty Name="UserType" ColumnName="UserType" />
+          <ScalarProperty Name="Title" ColumnName="Title" />
+          <ScalarProperty Name="Firstname" ColumnName="Firstname" />
+          <ScalarProperty Name="Lastname" ColumnName="Lastname" />
+          <ScalarProperty Name="Address1" ColumnName="Address1" />
+          <ScalarProperty Name="Address2" ColumnName="Address2" />
+          <ScalarProperty Name="Address3" ColumnName="Address3" />
+          <ScalarProperty Name="TownCity" ColumnName="TownCity" />
+          <ScalarProperty Name="County" ColumnName="County" />
+          <ScalarProperty Name="CountryCode" ColumnName="CountryCode" />
+          <ScalarProperty Name="PostCode" ColumnName="PostCode" />
+          <ScalarProperty Name="WorkPhone1" ColumnName="WorkPhone1" />
+          <ScalarProperty Name="WorkPhone2" ColumnName="WorkPhone2" />
+          <ScalarProperty Name="HomePhone" ColumnName="HomePhone" />
+          <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+          <ScalarProperty Name="Fax" ColumnName="Fax" />
+          <ScalarProperty Name="Web" ColumnName="Web" />
+          <ScalarProperty Name="Email1" ColumnName="Email1" />
+          <ScalarProperty Name="Email2" ColumnName="Email2" />
+          <ScalarProperty Name="CurrentStatus" ColumnName="CurrentStatus" />
+          <ScalarProperty Name="CurrentStatusDate" ColumnName="CurrentStatusDate" />
+          <ScalarProperty Name="CurrentStatusDetails" ColumnName="CurrentStatusDetails" />
+          <ScalarProperty Name="Created" ColumnName="Created" />
+          <ScalarProperty Name="Modified" ColumnName="Modified" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="UserStatuses">
+      <EntityTypeMapping TypeName="IsTypeOf(GpgDBModel.UserStatus)">
+        <MappingFragment StoreEntitySet="UserStatuses">
+          <ScalarProperty Name="UserStatusId" ColumnName="UserStatusId" />
+          <ScalarProperty Name="UserId" ColumnName="UserId" />
+          <ScalarProperty Name="StatusId" ColumnName="StatusId" />
+          <ScalarProperty Name="StatusDate" ColumnName="StatusDate" />
+          <ScalarProperty Name="StatusMessage" ColumnName="StatusMessage" />
+          <ScalarProperty Name="ByUserId" ColumnName="ByUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+    <EntitySetMapping Name="AuthTokens">
+      <EntityTypeMapping TypeName="IsTypeOf(GpgDBModel.AuthToken)">
+        <MappingFragment StoreEntitySet="AuthTokens">
+          <ScalarProperty Name="AuthTokenId" ColumnName="AuthTokenId" />
+          <ScalarProperty Name="AuthUserTokenId" ColumnName="AuthUserTokenId" />
+          <ScalarProperty Name="AuthProviderId" ColumnName="AuthProviderId" />
+          <ScalarProperty Name="UserUserId" ColumnName="UserUserId" />
+        </MappingFragment>
+      </EntityTypeMapping>
+    </EntitySetMapping>
+  </EntityContainerMapping>
+</Mapping>

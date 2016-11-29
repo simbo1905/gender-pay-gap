@@ -1,0 +1,9 @@
+C:\Cadence\GenderPayGap\Alpha\GpgDB\bin\Release\GpgDB.dacpac
+C:\Cadence\GenderPayGap\Alpha\GpgDB\bin\Release\GpgDB.dll
+C:\Cadence\GenderPayGap\Alpha\GpgDB\bin\Release\GpgDB.pdb
+C:\Cadence\GenderPayGap\Alpha\GpgDB\obj\Release\Model.xml
+C:\Cadence\GenderPayGap\Alpha\GpgDB\obj\Release\refactor.xml
+C:\Cadence\GenderPayGap\Alpha\GpgDB\obj\Release\postdeploy.sql
+C:\Cadence\GenderPayGap\Alpha\GpgDB\obj\Release\predeploy.sql
+C:\Cadence\GenderPayGap\Alpha\GpgDB\obj\Release\GpgDB.dll
+C:\Cadence\GenderPayGap\Alpha\GpgDB\obj\Release\GpgDB.pdb

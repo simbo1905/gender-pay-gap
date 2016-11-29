@@ -25,6 +25,7 @@ namespace GenderPayGap
 
             bundles.Add(new StyleBundle("~/Content/css").Include(
                       "~/Content/bootstrap.css",
+                      "~/Content/elements-page.css",
                       "~/Content/site.css"));
         }
     }

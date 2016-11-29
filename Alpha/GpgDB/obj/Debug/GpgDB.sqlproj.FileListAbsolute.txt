@@ -1,0 +1,5 @@
+C:\Cadence\GenderPayGap\Alpha\GpgDB\bin\Debug\GpgDB.dacpac
+C:\Cadence\GenderPayGap\Alpha\GpgDB\bin\Debug\GpgDB.dll
+C:\Cadence\GenderPayGap\Alpha\GpgDB\bin\Debug\GpgDB.pdb
+C:\Cadence\GenderPayGap\Alpha\GpgDB\obj\Debug\GpgDB.dll
+C:\Cadence\GenderPayGap\Alpha\GpgDB\obj\Debug\GpgDB.pdb
