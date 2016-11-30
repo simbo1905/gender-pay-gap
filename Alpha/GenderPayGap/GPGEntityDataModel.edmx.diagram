@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="371b5484c25e4939a99ca9cc485e6417" Name="Diagram1" ZoomLevel="94" >
+        <EntityTypeShape EntityType="GpgDBModel.C__RefactorLog" Width="1.5" PointX="29.125" PointY="14" />
+        <EntityTypeShape EntityType="GpgDBModel.Organisation" Width="1.5" PointX="27.375" PointY="17.75" />
+        <EntityTypeShape EntityType="GpgDBModel.OrganisationAddress" Width="1.5" PointX="29.375" PointY="22.125" />
+        <EntityTypeShape EntityType="GpgDBModel.OrganisationFile" Width="1.5" PointX="29.375" PointY="19.125" />
+        <EntityTypeShape EntityType="GpgDBModel.OrganisationGPGReturn" Width="1.5" PointX="31.25" PointY="17.5" />
+        <EntityTypeShape EntityType="GpgDBModel.OrganisationStatus" Width="1.5" PointX="27.375" PointY="14.125" />
+        <EntityTypeShape EntityType="GpgDBModel.Return" Width="1.5" PointX="33.125" PointY="12.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GpgDBModel.ReturnHit" Width="1.5" PointX="29.25" PointY="15.625" />
+        <EntityTypeShape EntityType="GpgDBModel.ReturnStatus" Width="1.5" PointX="28.125" PointY="10.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GpgDBModel.User" Width="1.5" PointX="25.5" PointY="13.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GpgDBModel.UserStatus" Width="1.5" PointX="23.625" PointY="16.125" IsExpanded="true" />
+        <AssociationConnector Association="GpgDBModel.FK_Address_Organisation" />
+        <AssociationConnector Association="GpgDBModel.FK_Files_Organisation" />
+        <AssociationConnector Association="GpgDBModel.FK_OrganisationStatuses_School" />
+        <AssociationConnector Association="GpgDBModel.FK_ReturnHit_Account" />
+        <AssociationConnector Association="GpgDBModel.FK_VacancySchools_School" />
+        <AssociationConnector Association="GpgDBModel.FK_VacancySchools_Vacancy" />
+        <AssociationConnector Association="GpgDBModel.FK_OrganisationStatuses_User" />
+        <AssociationConnector Association="GpgDBModel.FK_ReturnHit_Vacancy" />
+        <AssociationConnector Association="GpgDBModel.FK_ReturnStatuses_Vacancy" />
+        <AssociationConnector Association="GpgDBModel.FK_ReturnStatuses_User" />
+        <AssociationConnector Association="GpgDBModel.FK_UserStatuses_ByUser" />
+        <AssociationConnector Association="GpgDBModel.FK_UserStatuses_User" />
+        <EntityTypeShape EntityType="GpgDBModel.AuthToken" Width="1.5" PointX="23.625" PointY="13.875" />
+        <AssociationConnector Association="GpgDBModel.UserId" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
