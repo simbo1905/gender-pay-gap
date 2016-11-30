@@ -1,4 +1,0 @@
-C:\Cadence\GenderPayGap\Alpha\GPGRepository\bin\Debug\GPGRepository.dll
-C:\Cadence\GenderPayGap\Alpha\GPGRepository\bin\Debug\GPGRepository.pdb
-C:\Cadence\GenderPayGap\Alpha\GPGRepository\obj\Debug\GPGRepository.dll
-C:\Cadence\GenderPayGap\Alpha\GPGRepository\obj\Debug\GPGRepository.pdb
