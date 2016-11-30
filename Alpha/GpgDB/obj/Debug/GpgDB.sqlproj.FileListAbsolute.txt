@@ -1,9 +1,0 @@
-C:\Cadence\GenderPayGap\Alpha\GpgDB\bin\Debug\GpgDB.dacpac
-C:\Cadence\GenderPayGap\Alpha\GpgDB\bin\Debug\GpgDB.dll
-C:\Cadence\GenderPayGap\Alpha\GpgDB\bin\Debug\GpgDB.pdb
-C:\Cadence\GenderPayGap\Alpha\GpgDB\obj\Debug\Model.xml
-C:\Cadence\GenderPayGap\Alpha\GpgDB\obj\Debug\refactor.xml
-C:\Cadence\GenderPayGap\Alpha\GpgDB\obj\Debug\postdeploy.sql
-C:\Cadence\GenderPayGap\Alpha\GpgDB\obj\Debug\predeploy.sql
-C:\Cadence\GenderPayGap\Alpha\GpgDB\obj\Debug\GpgDB.dll
-C:\Cadence\GenderPayGap\Alpha\GpgDB\obj\Debug\GpgDB.pdb
