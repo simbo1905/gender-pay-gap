@@ -14,11 +14,17 @@ namespace GenderPayGap
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
 
+            //routes.MapRoute(
+            //    name: "Return",
+            //    url: "{controller}/{action}/{id}",
+            //    defaults: new { controller = "Return", action = "Index", id = UrlParameter.Optional }
+            //);
+
             routes.MapRoute(
-                name: "Return",
-                url: "{controller}/{action}/{id}",
-                defaults: new { controller = "ReturnController", action = "Index", id = UrlParameter.Optional }
-            );
+               name: "Return",
+               url: "{controller}/{action}/{id}",
+               defaults: new { controller = "Return", action = "Create", id = UrlParameter.Optional }
+           );
 
             routes.MapRoute(
                 name: "Default",
