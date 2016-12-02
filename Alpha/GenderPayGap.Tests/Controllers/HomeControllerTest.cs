@@ -21,13 +21,13 @@ namespace GenderPayGap.Tests.Controllers
             // Act
             ViewResult result = controller.Index() as ViewResult;
 
-            int a = 1;
+            
             // Assert
             //Positive Test:
-           //Assert.IsNotNull(result);
+           Assert.IsNotNull(result);
 
             //Negative Test:
-            Assert.IsNull(result);
+            //Assert.IsNull(result);
         }
 
         [TestMethod]
