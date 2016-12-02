@@ -7,13 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GenderPayGap
+namespace GenderPayGap.Models.GPGEntityModel
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class C__RefactorLog
+    public partial class GroupPermissions
     {
-        public System.Guid OperationKey { get; set; }
+        public long GroupId { get; set; }
+        public byte PermissionId { get; set; }
+        public byte GroupPermissionsID { get; set; }
     }
 }
