@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GenderPayGap
+namespace GenderPayGap.Models.GPGEntityModel
 {
     using System;
     using System.Collections.Generic;
@@ -17,9 +17,9 @@ namespace GenderPayGap
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Return()
         {
-            this.OrganisationGPGReturns = new HashSet<OrganisationGPGReturn>();
-            this.ReturnHits = new HashSet<ReturnHit>();
-            this.ReturnStatuses = new HashSet<ReturnStatus>();
+            this.OrganisationGPGReturns = new HashSet<OrganisationGPGReturns>();
+            this.ReturnHit = new HashSet<ReturnHit>();
+            this.ReturnStatuses = new HashSet<ReturnStatuses>();
         }
     
         public long ReturnId { get; set; }
@@ -45,10 +45,10 @@ namespace GenderPayGap
         public Nullable<System.DateTime> Modified { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrganisationGPGReturn> OrganisationGPGReturns { get; set; }
+        public virtual ICollection<OrganisationGPGReturns> OrganisationGPGReturns { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReturnHit> ReturnHits { get; set; }
+        public virtual ICollection<ReturnHit> ReturnHit { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReturnStatus> ReturnStatuses { get; set; }
+        public virtual ICollection<ReturnStatuses> ReturnStatuses { get; set; }
     }
 }

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GenderPayGap
+namespace GenderPayGap.Models.GPGEntityModel
 {
     using System;
     using System.Collections.Generic;
@@ -17,10 +17,10 @@ namespace GenderPayGap
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Organisation()
         {
-            this.OrganisationFiles = new HashSet<OrganisationFile>();
-            this.OrganisationStatuses = new HashSet<OrganisationStatus>();
-            this.ReturnHits = new HashSet<ReturnHit>();
-            this.OrganisationGPGReturns = new HashSet<OrganisationGPGReturn>();
+            this.OrganisationFiles = new HashSet<OrganisationFiles>();
+            this.OrganisationStatuses = new HashSet<OrganisationStatuses>();
+            this.ReturnHit = new HashSet<ReturnHit>();
+            this.OrganisationGPGReturns = new HashSet<OrganisationGPGReturns>();
         }
     
         public long OrganisationId { get; set; }
@@ -42,14 +42,15 @@ namespace GenderPayGap
         public Nullable<System.DateTime> Created { get; set; }
         public Nullable<System.DateTime> Modified { get; set; }
     
+        public virtual Group Group { get; set; }
         public virtual OrganisationAddress OrganisationAddress { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrganisationFile> OrganisationFiles { get; set; }
+        public virtual ICollection<OrganisationFiles> OrganisationFiles { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrganisationStatus> OrganisationStatuses { get; set; }
+        public virtual ICollection<OrganisationStatuses> OrganisationStatuses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReturnHit> ReturnHits { get; set; }
+        public virtual ICollection<ReturnHit> ReturnHit { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrganisationGPGReturn> OrganisationGPGReturns { get; set; }
+        public virtual ICollection<OrganisationGPGReturns> OrganisationGPGReturns { get; set; }
     }
 }

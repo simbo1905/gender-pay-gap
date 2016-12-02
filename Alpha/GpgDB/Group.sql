@@ -1,6 +1,6 @@
 ﻿CREATE TABLE [dbo].[Group]
 (
-	[GroupId] BIGINT NOT NULL PRIMARY KEY, 
+	[GroupId] BIGINT NOT NULL , 
 	OrganisationId BIGINT NULL,
 	[GroupRef] VARCHAR(50) NULL,
 	[UserId] BIGINT NOT NULL, 
@@ -10,5 +10,6 @@
     [Created] SMALLDATETIME NOT NULL DEFAULT GETDATE(), 
     [Modified] SMALLDATETIME NOT NULL DEFAULT GETDATE(), 
     CONSTRAINT [FK_Group_User] FOREIGN KEY ([UserId]) REFERENCES [User]([UserId]),
-	CONSTRAINT [FK_Group_Organisation] FOREIGN KEY ([UserId]) REFERENCES [User]([UserId])
+	CONSTRAINT [FK_Group_Organisation] FOREIGN KEY ([UserId]) REFERENCES [User]([UserId]), 
+    CONSTRAINT [PK_GroupId] PRIMARY KEY ([GroupId])
 )

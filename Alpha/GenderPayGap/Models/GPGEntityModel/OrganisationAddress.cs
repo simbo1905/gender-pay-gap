@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GenderPayGap
+namespace GenderPayGap.Models.GPGEntityModel
 {
     using System;
     using System.Collections.Generic;

@@ -7,18 +7,21 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GenderPayGap
+namespace GenderPayGap.Models.GPGEntityModel
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class AuthToken
+    public partial class ReturnHit
     {
-        public int AuthTokenId { get; set; }
-        public string AuthUserTokenId { get; set; }
-        public int AuthProviderId { get; set; }
-        public long UserUserId { get; set; }
+        public long ReturnHitId { get; set; }
+        public long ReturnId { get; set; }
+        public long ByAccountId { get; set; }
+        public Nullable<byte> HitType { get; set; }
+        public string Source { get; set; }
+        public System.DateTime Created { get; set; }
     
-        public virtual User User { get; set; }
+        public virtual Organisation Organisation { get; set; }
+        public virtual Return Return { get; set; }
     }
 }

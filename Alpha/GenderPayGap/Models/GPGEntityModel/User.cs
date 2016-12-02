@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GenderPayGap
+namespace GenderPayGap.Models.GPGEntityModel
 {
     using System;
     using System.Collections.Generic;
@@ -17,14 +17,19 @@ namespace GenderPayGap
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public User()
         {
-            this.OrganisationStatuses = new HashSet<OrganisationStatus>();
-            this.ReturnStatuses = new HashSet<ReturnStatus>();
-            this.UserStatuses = new HashSet<UserStatus>();
-            this.AuthTokens = new HashSet<AuthToken>();
+            this.Group = new HashSet<Group>();
+            this.Group1 = new HashSet<Group>();
+            this.OrganisationStatuses = new HashSet<OrganisationStatuses>();
+            this.ReturnStatuses = new HashSet<ReturnStatuses>();
+            this.UserGroups = new HashSet<UserGroups>();
+            this.UserStatuses = new HashSet<UserStatuses>();
+            this.UserStatuses1 = new HashSet<UserStatuses>();
         }
     
         public long UserId { get; set; }
         public string UserRef { get; set; }
+        public Nullable<int> AuthProviderId { get; set; }
+        public string AuthUserTokenId { get; set; }
         public string UserType { get; set; }
         public string Title { get; set; }
         public string Firstname { get; set; }
@@ -51,12 +56,18 @@ namespace GenderPayGap
         public Nullable<System.DateTime> Modified { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<OrganisationStatus> OrganisationStatuses { get; set; }
+        public virtual ICollection<Group> Group { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<ReturnStatus> ReturnStatuses { get; set; }
+        public virtual ICollection<Group> Group1 { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<UserStatus> UserStatuses { get; set; }
+        public virtual ICollection<OrganisationStatuses> OrganisationStatuses { get; set; }
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
-        public virtual ICollection<AuthToken> AuthTokens { get; set; }
+        public virtual ICollection<ReturnStatuses> ReturnStatuses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserGroups> UserGroups { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserStatuses> UserStatuses { get; set; }
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<UserStatuses> UserStatuses1 { get; set; }
     }
 }
