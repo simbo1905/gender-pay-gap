@@ -1,7 +1,7 @@
 ﻿CREATE TABLE [dbo].[Return]
 (
 
-	[ReturnId] BIGINT NOT NULL PRIMARY KEY, 
+	[ReturnId] BIGINT NOT NULL PRIMARY KEY IDENTITY, 
 	
     [DiffMeanHourlyPayPercent] DECIMAL NOT NULL, 
     [DiffMedianHourlyPercent] DECIMAL NOT NULL, 
@@ -28,3 +28,5 @@
     --CONSTRAINT [FK_Return_Group] FOREIGN KEY ([GroupId]) REFERENCES [GroupId]([GroupIdId])
 )
 
+
+GO

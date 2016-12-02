@@ -7,12 +7,12 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GenderPayGap
+namespace GenderPayGap.Models.GPGEntityModel
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class OrganisationFile
+    public partial class OrganisationFiles
     {
         public System.Guid FileId { get; set; }
         public long OrganisationId { get; set; }

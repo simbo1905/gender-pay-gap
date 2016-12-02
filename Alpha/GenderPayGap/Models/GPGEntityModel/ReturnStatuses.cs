@@ -7,21 +7,21 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GenderPayGap
+namespace GenderPayGap.Models.GPGEntityModel
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class OrganisationStatus
+    public partial class ReturnStatuses
     {
-        public long OrganisationStatusId { get; set; }
-        public long OrganisationId { get; set; }
+        public long ReturnStatusId { get; set; }
+        public long ReturnId { get; set; }
         public byte StatusId { get; set; }
         public System.DateTime StatusDate { get; set; }
         public string StatusMessage { get; set; }
         public Nullable<long> ByUserId { get; set; }
     
-        public virtual Organisation Organisation { get; set; }
+        public virtual Return Return { get; set; }
         public virtual User User { get; set; }
     }
 }

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="a8923dc4e8854e1a838bf97cc4e0f2bd" Name="Diagram1" ZoomLevel="34">
+        <EntityTypeShape EntityType="GpgDBModel.Group" Width="1.5" PointX="3" PointY="11.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="GpgDBModel.GroupPermissions" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GpgDBModel.Organisation" Width="1.5" PointX="5.25" PointY="10.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="GpgDBModel.OrganisationAddress" Width="1.5" PointX="7.5" PointY="9.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="GpgDBModel.OrganisationFiles" Width="1.5" PointX="7.5" PointY="13.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GpgDBModel.OrganisationGPGReturns" Width="1.5" PointX="10.5" PointY="12.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GpgDBModel.OrganisationStatuses" Width="1.5" PointX="10.5" PointY="15.25" IsExpanded="true" />
+        <EntityTypeShape EntityType="GpgDBModel.Return" Width="1.5" PointX="8.25" PointY="3.375" IsExpanded="true" />
+        <EntityTypeShape EntityType="GpgDBModel.ReturnHit" Width="1.5" PointX="10.5" PointY="8.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GpgDBModel.ReturnStatuses" Width="1.5" PointX="3" PointY="16.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="GpgDBModel.User" Width="1.5" PointX="0.75" PointY="11" IsExpanded="true" />
+        <EntityTypeShape EntityType="GpgDBModel.UserGroups" Width="1.5" PointX="5.25" PointY="16.875" IsExpanded="true" />
+        <EntityTypeShape EntityType="GpgDBModel.UserStatuses" Width="1.5" PointX="3" PointY="20.625" IsExpanded="true" />
+        <AssociationConnector Association="GpgDBModel.FK_Group_Organisation" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_Group_User" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_Organisation_Group" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_UserGroups_Group" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_Address_Organisation" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_Files_Organisation" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_OrganisationStatuses_School" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_ReturnHit_Account" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_VacancySchools_School" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_VacancySchools_Vacancy" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_OrganisationStatuses_User" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_ReturnHit_Vacancy" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_ReturnStatuses_Vacancy" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_ReturnStatuses_User" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_UserGroups_User" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_UserStatuses_ByUser" ManuallyRouted="false" />
+        <AssociationConnector Association="GpgDBModel.FK_UserStatuses_User" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
