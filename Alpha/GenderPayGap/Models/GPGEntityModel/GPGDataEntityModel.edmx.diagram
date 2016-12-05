@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="a8923dc4e8854e1a838bf97cc4e0f2bd" Name="Diagram1" ZoomLevel="34">
+      <Diagram DiagramId="a8923dc4e8854e1a838bf97cc4e0f2bd" Name="Diagram1" ZoomLevel="44">
         <EntityTypeShape EntityType="GpgDBModel.Group" Width="1.5" PointX="3" PointY="11.5" IsExpanded="true" />
         <EntityTypeShape EntityType="GpgDBModel.GroupPermissions" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="GpgDBModel.Organisation" Width="1.5" PointX="5.25" PointY="10.375" IsExpanded="true" />
