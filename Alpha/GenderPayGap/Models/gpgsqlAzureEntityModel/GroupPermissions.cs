@@ -7,18 +7,15 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GenderPayGap.Models.GpgEntityModel
+namespace GenderPayGap.Models.gpgsqlAzureEntityModel
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class OrganisationGPGReturns
+    public partial class GroupPermissions
     {
-        public long OrganisationId { get; set; }
-        public long ReturnId { get; set; }
-        public System.DateTime Created { get; set; }
-    
-        public virtual Organisation Organisation { get; set; }
-        public virtual Return Return { get; set; }
+        public long GroupId { get; set; }
+        public byte PermissionId { get; set; }
+        public byte GroupPermissionsID { get; set; }
     }
 }

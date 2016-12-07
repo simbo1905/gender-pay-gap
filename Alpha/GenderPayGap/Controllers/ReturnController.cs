@@ -6,13 +6,13 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using GenderPayGap.Models.GPGEntityModel;
+using GenderPayGap.Models.gpgsqlAzureEntityModel;
 
 namespace GenderPayGap.Controllers
 {
     public class ReturnController : Controller
     {
-        private GpgDBEntities db = new GpgDBEntities();
+        private gpgsqlDBEntitiesContext db = new gpgsqlDBEntitiesContext();
 
         // GET: Return
         public ActionResult Index()

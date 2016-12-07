@@ -7,18 +7,22 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GenderPayGap.Models.GpgEntityModel
+namespace GenderPayGap.Models.gpgsqlAzureEntityModel
 {
     using System;
     using System.Collections.Generic;
     
-    public partial class OrganisationGPGReturns
+    public partial class OrganisationFiles
     {
+        public System.Guid FileId { get; set; }
         public long OrganisationId { get; set; }
-        public long ReturnId { get; set; }
-        public System.DateTime Created { get; set; }
+        public string FileType { get; set; }
+        public Nullable<int> FileSize { get; set; }
+        public string Filename { get; set; }
+        public string ContentType { get; set; }
+        public Nullable<System.DateTime> Created { get; set; }
+        public Nullable<System.DateTime> Modified { get; set; }
     
         public virtual Organisation Organisation { get; set; }
-        public virtual Return Return { get; set; }
     }
 }

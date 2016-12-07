@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="GpgDBModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+      <Schema Namespace="GPGDBAzureModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012.Azure" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="Group">
           <Key>
             <PropertyRef Name="GroupId" />
@@ -404,7 +404,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="GpgDBModelStoreContainer">
+        <EntityContainer Name="GPGDBAzureModelStoreContainer">
           <EntitySet Name="Group" EntityType="Self.Group" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="GroupPermissions" EntityType="Self.GroupPermissions" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Organisation" EntityType="Self.Organisation" Schema="dbo" store:Type="Tables" />
@@ -491,7 +491,7 @@
     </edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
-      <Schema Namespace="GpgDBModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+      <Schema Namespace="GPGDBAzureModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
         <EntityType Name="Group">
           <Key>
             <PropertyRef Name="GroupId" />
@@ -925,7 +925,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="GpgDBEntitiesContext" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="gpgsqlDBEntitiesContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Group" EntityType="Self.Group" />
           <EntitySet Name="GroupPermissions" EntityType="Self.GroupPermissions" />
           <EntitySet Name="Organisation" EntityType="Self.Organisation" />
@@ -1013,9 +1013,9 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="GpgDBModelStoreContainer" CdmEntityContainer="GpgDBEntitiesContext">
+        <EntityContainerMapping StorageEntityContainer="GPGDBAzureModelStoreContainer" CdmEntityContainer="gpgsqlDBEntitiesContext">
           <EntitySetMapping Name="Group">
-            <EntityTypeMapping TypeName="GpgDBModel.Group">
+            <EntityTypeMapping TypeName="GPGDBAzureModel.Group">
               <MappingFragment StoreEntitySet="Group">
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
                 <ScalarProperty Name="OrganisationId" ColumnName="OrganisationId" />
@@ -1030,7 +1030,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="GroupPermissions">
-            <EntityTypeMapping TypeName="GpgDBModel.GroupPermissions">
+            <EntityTypeMapping TypeName="GPGDBAzureModel.GroupPermissions">
               <MappingFragment StoreEntitySet="GroupPermissions">
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
                 <ScalarProperty Name="PermissionId" ColumnName="PermissionId" />
@@ -1039,7 +1039,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Organisation">
-            <EntityTypeMapping TypeName="GpgDBModel.Organisation">
+            <EntityTypeMapping TypeName="GPGDBAzureModel.Organisation">
               <MappingFragment StoreEntitySet="Organisation">
                 <ScalarProperty Name="OrganisationId" ColumnName="OrganisationId" />
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
@@ -1063,7 +1063,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OrganisationAddress">
-            <EntityTypeMapping TypeName="GpgDBModel.OrganisationAddress">
+            <EntityTypeMapping TypeName="GPGDBAzureModel.OrganisationAddress">
               <MappingFragment StoreEntitySet="OrganisationAddress">
                 <ScalarProperty Name="OrganisationID" ColumnName="OrganisationID" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
@@ -1080,7 +1080,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OrganisationFiles">
-            <EntityTypeMapping TypeName="GpgDBModel.OrganisationFiles">
+            <EntityTypeMapping TypeName="GPGDBAzureModel.OrganisationFiles">
               <MappingFragment StoreEntitySet="OrganisationFiles">
                 <ScalarProperty Name="FileId" ColumnName="FileId" />
                 <ScalarProperty Name="OrganisationId" ColumnName="OrganisationId" />
@@ -1094,7 +1094,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OrganisationGPGReturns">
-            <EntityTypeMapping TypeName="GpgDBModel.OrganisationGPGReturns">
+            <EntityTypeMapping TypeName="GPGDBAzureModel.OrganisationGPGReturns">
               <MappingFragment StoreEntitySet="OrganisationGPGReturns">
                 <ScalarProperty Name="OrganisationId" ColumnName="OrganisationId" />
                 <ScalarProperty Name="ReturnId" ColumnName="ReturnId" />
@@ -1103,7 +1103,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="OrganisationStatuses">
-            <EntityTypeMapping TypeName="GpgDBModel.OrganisationStatuses">
+            <EntityTypeMapping TypeName="GPGDBAzureModel.OrganisationStatuses">
               <MappingFragment StoreEntitySet="OrganisationStatuses">
                 <ScalarProperty Name="OrganisationStatusId" ColumnName="OrganisationStatusId" />
                 <ScalarProperty Name="OrganisationId" ColumnName="OrganisationId" />
@@ -1115,7 +1115,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="Return">
-            <EntityTypeMapping TypeName="GpgDBModel.Return">
+            <EntityTypeMapping TypeName="GPGDBAzureModel.Return">
               <MappingFragment StoreEntitySet="Return">
                 <ScalarProperty Name="ReturnId" ColumnName="ReturnId" />
                 <ScalarProperty Name="DiffMeanHourlyPayPercent" ColumnName="DiffMeanHourlyPayPercent" />
@@ -1142,7 +1142,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ReturnHit">
-            <EntityTypeMapping TypeName="GpgDBModel.ReturnHit">
+            <EntityTypeMapping TypeName="GPGDBAzureModel.ReturnHit">
               <MappingFragment StoreEntitySet="ReturnHit">
                 <ScalarProperty Name="ReturnHitId" ColumnName="ReturnHitId" />
                 <ScalarProperty Name="ReturnId" ColumnName="ReturnId" />
@@ -1154,7 +1154,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="ReturnStatuses">
-            <EntityTypeMapping TypeName="GpgDBModel.ReturnStatuses">
+            <EntityTypeMapping TypeName="GPGDBAzureModel.ReturnStatuses">
               <MappingFragment StoreEntitySet="ReturnStatuses">
                 <ScalarProperty Name="ReturnStatusId" ColumnName="ReturnStatusId" />
                 <ScalarProperty Name="ReturnId" ColumnName="ReturnId" />
@@ -1166,7 +1166,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="User">
-            <EntityTypeMapping TypeName="GpgDBModel.User">
+            <EntityTypeMapping TypeName="GPGDBAzureModel.User">
               <MappingFragment StoreEntitySet="User">
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="UserRef" ColumnName="UserRef" />
@@ -1200,7 +1200,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="UserGroups">
-            <EntityTypeMapping TypeName="GpgDBModel.UserGroups">
+            <EntityTypeMapping TypeName="GPGDBAzureModel.UserGroups">
               <MappingFragment StoreEntitySet="UserGroups">
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
                 <ScalarProperty Name="GroupId" ColumnName="GroupId" />
@@ -1209,7 +1209,7 @@
             </EntityTypeMapping>
           </EntitySetMapping>
           <EntitySetMapping Name="UserStatuses">
-            <EntityTypeMapping TypeName="GpgDBModel.UserStatuses">
+            <EntityTypeMapping TypeName="GPGDBAzureModel.UserStatuses">
               <MappingFragment StoreEntitySet="UserStatuses">
                 <ScalarProperty Name="UserStatusId" ColumnName="UserStatusId" />
                 <ScalarProperty Name="UserId" ColumnName="UserId" />
