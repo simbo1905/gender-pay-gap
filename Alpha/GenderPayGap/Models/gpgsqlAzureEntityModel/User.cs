@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GenderPayGap.Models.GpgEntityModel
+namespace GenderPayGap.Models.gpgsqlAzureEntityModel
 {
     using System;
     using System.Collections.Generic;

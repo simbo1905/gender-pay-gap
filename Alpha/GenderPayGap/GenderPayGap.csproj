@@ -177,63 +177,62 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
-    <Compile Include="Models\GPGEntityModel\GPGDataEntityModel.Context.cs">
+    <Compile Include="Models\gpgsqlAzureEntityModel\gpgsqlAzureDataEntityModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>GPGDataEntityModel.Context.tt</DependentUpon>
+      <DependentUpon>gpgsqlAzureDataEntityModel.Context.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPGEntityModel\GPGDataEntityModel.cs">
+    <Compile Include="Models\gpgsqlAzureEntityModel\gpgsqlAzureDataEntityModel.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>GPGDataEntityModel.tt</DependentUpon>
+      <DependentUpon>gpgsqlAzureDataEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPGEntityModel\GPGDataEntityModel.Designer.cs">
+    <Compile Include="Models\gpgsqlAzureEntityModel\gpgsqlAzureDataEntityModel.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>GPGDataEntityModel.edmx</DependentUpon>
+      <DependentUpon>gpgsqlAzureDataEntityModel.edmx</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPGEntityModel\Group.cs">
-      <DependentUpon>GPGDataEntityModel.tt</DependentUpon>
+    <Compile Include="Models\gpgsqlAzureEntityModel\Group.cs">
+      <DependentUpon>gpgsqlAzureDataEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPGEntityModel\GroupPermissions.cs">
-      <DependentUpon>GPGDataEntityModel.tt</DependentUpon>
+    <Compile Include="Models\gpgsqlAzureEntityModel\GroupPermissions.cs">
+      <DependentUpon>gpgsqlAzureDataEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPGEntityModel\Organisation.cs">
-      <DependentUpon>GPGDataEntityModel.tt</DependentUpon>
+    <Compile Include="Models\gpgsqlAzureEntityModel\Organisation.cs">
+      <DependentUpon>gpgsqlAzureDataEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPGEntityModel\OrganisationAddress.cs">
-      <DependentUpon>GPGDataEntityModel.tt</DependentUpon>
+    <Compile Include="Models\gpgsqlAzureEntityModel\OrganisationAddress.cs">
+      <DependentUpon>gpgsqlAzureDataEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPGEntityModel\OrganisationFiles.cs">
-      <DependentUpon>GPGDataEntityModel.tt</DependentUpon>
+    <Compile Include="Models\gpgsqlAzureEntityModel\OrganisationFiles.cs">
+      <DependentUpon>gpgsqlAzureDataEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPGEntityModel\OrganisationGPGReturns.cs">
-      <DependentUpon>GPGDataEntityModel.tt</DependentUpon>
+    <Compile Include="Models\gpgsqlAzureEntityModel\OrganisationGPGReturns.cs">
+      <DependentUpon>gpgsqlAzureDataEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPGEntityModel\OrganisationStatuses.cs">
-      <DependentUpon>GPGDataEntityModel.tt</DependentUpon>
+    <Compile Include="Models\gpgsqlAzureEntityModel\OrganisationStatuses.cs">
+      <DependentUpon>gpgsqlAzureDataEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPGEntityModel\Return.cs">
-      <DependentUpon>GPGDataEntityModel.tt</DependentUpon>
+    <Compile Include="Models\gpgsqlAzureEntityModel\Return.cs">
+      <DependentUpon>gpgsqlAzureDataEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPGEntityModel\ReturnHit.cs">
-      <DependentUpon>GPGDataEntityModel.tt</DependentUpon>
+    <Compile Include="Models\gpgsqlAzureEntityModel\ReturnHit.cs">
+      <DependentUpon>gpgsqlAzureDataEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPGEntityModel\ReturnStatuses.cs">
-      <DependentUpon>GPGDataEntityModel.tt</DependentUpon>
+    <Compile Include="Models\gpgsqlAzureEntityModel\ReturnStatuses.cs">
+      <DependentUpon>gpgsqlAzureDataEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPGEntityModel\User.cs">
-      <DependentUpon>GPGDataEntityModel.tt</DependentUpon>
+    <Compile Include="Models\gpgsqlAzureEntityModel\User.cs">
+      <DependentUpon>gpgsqlAzureDataEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPGEntityModel\UserGroups.cs">
-      <DependentUpon>GPGDataEntityModel.tt</DependentUpon>
+    <Compile Include="Models\gpgsqlAzureEntityModel\UserGroups.cs">
+      <DependentUpon>gpgsqlAzureDataEntityModel.tt</DependentUpon>
     </Compile>
-    <Compile Include="Models\GPGEntityModel\UserStatuses.cs">
-      <DependentUpon>GPGDataEntityModel.tt</DependentUpon>
+    <Compile Include="Models\gpgsqlAzureEntityModel\UserStatuses.cs">
+      <DependentUpon>gpgsqlAzureDataEntityModel.tt</DependentUpon>
     </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
-    <Compile Include="Models\MyDbContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -252,15 +251,15 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\GPGEntityModel\GPGDataEntityModel.Context.tt">
+    <Content Include="Models\gpgsqlAzureEntityModel\gpgsqlAzureDataEntityModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>GPGDataEntityModel.edmx</DependentUpon>
-      <LastGenOutput>GPGDataEntityModel.Context.cs</LastGenOutput>
+      <DependentUpon>gpgsqlAzureDataEntityModel.edmx</DependentUpon>
+      <LastGenOutput>gpgsqlAzureDataEntityModel.Context.cs</LastGenOutput>
     </Content>
-    <Content Include="Models\GPGEntityModel\GPGDataEntityModel.tt">
+    <Content Include="Models\gpgsqlAzureEntityModel\gpgsqlAzureDataEntityModel.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>GPGDataEntityModel.edmx</DependentUpon>
-      <LastGenOutput>GPGDataEntityModel.cs</LastGenOutput>
+      <DependentUpon>gpgsqlAzureDataEntityModel.edmx</DependentUpon>
+      <LastGenOutput>gpgsqlAzureDataEntityModel.cs</LastGenOutput>
     </Content>
     <Content Include="public\assets\images\dfe-small.png" />
     <Content Include="public\assets\images\dfe-xsmall.png" />
@@ -315,12 +314,12 @@
     <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
-    <EntityDeploy Include="Models\GPGEntityModel\GPGDataEntityModel.edmx">
+    <EntityDeploy Include="Models\gpgsqlAzureEntityModel\gpgsqlAzureDataEntityModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>GPGDataEntityModel.Designer.cs</LastGenOutput>
+      <LastGenOutput>gpgsqlAzureDataEntityModel.Designer.cs</LastGenOutput>
     </EntityDeploy>
-    <Content Include="Models\GPGEntityModel\GPGDataEntityModel.edmx.diagram">
-      <DependentUpon>GPGDataEntityModel.edmx</DependentUpon>
+    <Content Include="Models\gpgsqlAzureEntityModel\gpgsqlAzureDataEntityModel.edmx.diagram">
+      <DependentUpon>gpgsqlAzureDataEntityModel.edmx</DependentUpon>
     </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
