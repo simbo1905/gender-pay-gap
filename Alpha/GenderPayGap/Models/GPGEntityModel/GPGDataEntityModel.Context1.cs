@@ -7,16 +7,16 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GenderPayGap.Models.gpgsqlAzureEntityModel
+namespace GenderPayGap.Models.GpgEntityModel
 {
     using System;
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class gpgsqlDBEntitiesContext : DbContext
+    public partial class GpgDBEntitiesContext : DbContext
     {
-        public gpgsqlDBEntitiesContext()
-            : base("name=gpgsqlDBEntitiesContext")
+        public GpgDBEntitiesContext()
+            : base("name=GpgDBEntitiesContext")
         {
         }
     
