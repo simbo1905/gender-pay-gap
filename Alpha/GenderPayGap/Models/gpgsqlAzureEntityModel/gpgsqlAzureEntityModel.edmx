@@ -925,7 +925,7 @@
             </Dependent>
           </ReferentialConstraint>
         </Association>
-        <EntityContainer Name="gpgsqlDBEntitiesContext" annotation:LazyLoadingEnabled="true">
+        <EntityContainer Name="gpgsqDBEntitiesContext" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="Group" EntityType="Self.Group" />
           <EntitySet Name="GroupPermissions" EntityType="Self.GroupPermissions" />
           <EntitySet Name="Organisation" EntityType="Self.Organisation" />
@@ -1013,7 +1013,7 @@
     <!-- C-S mapping content -->
     <edmx:Mappings>
       <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
-        <EntityContainerMapping StorageEntityContainer="GPGDBAzureModelStoreContainer" CdmEntityContainer="gpgsqlDBEntitiesContext">
+        <EntityContainerMapping StorageEntityContainer="GPGDBAzureModelStoreContainer" CdmEntityContainer="gpgsqDBEntitiesContext">
           <EntitySetMapping Name="Group">
             <EntityTypeMapping TypeName="GPGDBAzureModel.Group">
               <MappingFragment StoreEntitySet="Group">

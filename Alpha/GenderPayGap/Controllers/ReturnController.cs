@@ -12,8 +12,8 @@ namespace GenderPayGap.Controllers
 {
     public class ReturnController : Controller
     {
-        private gpgsqlDBEntitiesContext db = new gpgsqlDBEntitiesContext();
-
+        private gpgsqDBEntitiesContext db = new gpgsqDBEntitiesContext();
+        
         // GET: Return
         public ActionResult Index()
         {
