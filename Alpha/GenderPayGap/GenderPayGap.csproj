@@ -380,6 +380,7 @@
     <Content Include="Views\Return\Details.cshtml" />
     <Content Include="Views\Return\Edit.cshtml" />
     <Content Include="Views\Return\Index.cshtml" />
+    <Content Include="Views\Home\_Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
