@@ -14,17 +14,38 @@ namespace GenderPayGap
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
             #region ReturnRoute
-            routes.MapRoute(
+
+                routes.MapRoute(
+                   name: "ReturnEdit",
+                   url: "{controller}/{action}/{id}",
+                   defaults: new { controller = "Return", action = "Edit", id = UrlParameter.Optional }
+                );
+
+                routes.MapRoute(
                     name: "Default",
                     url: "{controller}/{action}/{id}",
                     defaults: new { controller = "Return", action = "Index", id = UrlParameter.Optional }
                 );
 
-            routes.MapRoute(
-               name: "ReturnCreate",
-               url: "{controller}/{action}/{id}",
-               defaults: new { controller = "Return", action = "Create", id = UrlParameter.Optional }
-           ); 
+                routes.MapRoute(
+                   name: "ReturnCreate",
+                   url: "{controller}/{action}/{id}",
+                   defaults: new { controller = "Return", action = "Create", id = UrlParameter.Optional }
+                );
+
+                routes.MapRoute(
+                  name: "ReturnDelete",
+                  url: "{controller}/{action}/{id}",
+                  defaults: new { controller = "Return", action = "Delete", id = UrlParameter.Optional }
+               );
+
+                routes.MapRoute(
+                 name: "ReturnDetails",
+                 url: "{controller}/{action}/{id}",
+                 defaults: new { controller = "Return", action = "Details", id = UrlParameter.Optional }
+              );
+
+               
             #endregion
 
             //routes.MapRoute(

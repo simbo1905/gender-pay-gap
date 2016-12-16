@@ -33,6 +33,8 @@ namespace GenderPayGap.Controllers
                 return HttpNotFound();
             }
             return View(@return);
+
+            //return View();
         }
 
         // GET: Return/Create
@@ -71,6 +73,8 @@ namespace GenderPayGap.Controllers
                 return HttpNotFound();
             }
             return View(@return);
+
+            //return View();
         }
 
         // POST: Return/Edit/5

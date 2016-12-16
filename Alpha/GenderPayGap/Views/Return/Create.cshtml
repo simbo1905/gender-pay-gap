@@ -1,185 +1,582 @@
 ﻿@model GenderPayGap.Models.gpgsqlAzureEntityModel.Return
 
-@{
-    ViewBag.Title = "Create";
-}
-
-<h2>Create</h2>
 
 
-@using (Html.BeginForm()) 
+
+<main id="content" role="main">
+    @*<div class="phase-banner-alpha">
+            <p>
+                <strong class="phase-tag">ALPHA</strong>
+                <span>This is a new service – your <a href="#">feedback</a> will help us to improve it.</span>
+            </p>
+        </div>*@
+
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <h1 class="heading-large">
+                <span class="heading-secondary">Step 1 of 3</span>
+                Submit your gender pay gap data for 2016 to 2017
+            </h1>
+
+            @*<form method="get" name="registration" action="/signup" id="registration">*@
+
+
+                @using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+
+                    <div class="form-horizontal">
+                        <h4>Return</h4>
+                        <hr />
+                        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+
+                        <h2 class="heading-medium">1. Difference in mean hourly rate of pay between male and female employees  </h2>
+                        <fieldset>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DiffMeanHourlyPayPercent, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.DiffMeanHourlyPayPercent, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                    @Html.ValidationMessageFor(model => model.DiffMeanHourlyPayPercent, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </fieldset>
+                        <details>
+                            <summary><span class="summary">What to include when calculating hourly rate of pay</span></summary>
+                            <div class="panel panel-border-narrow">
+                                <p>You must include:</p>
+                                <ol class="list list-bullet">
+                                    <li>
+                                        all pay to ‘relevant employees’ (all employees, workers and self-employed people who have a contract to perform services personally engaged by your organisation on the ‘snapshot date’)
+                                    </li>
+                                    <li>
+                                        ‘ordinary pay’-  which includes basic pay, pay for leave, pay for piecework, shift premium pay and any allowances paid in money (eg location allowances or payments for additional responsibilities like being fire warden)
+                                    </li>
+                                    <li>
+                                        the weekly hours worked by each employee
+                                    </li>
+                                </ol>
+                                <p>Don’t include</p>
+                                <ul class="list list-bullet">
+                                    <li>benefits in kind </li>
+                                    <li>interest-free loans</li>
+                                    <li>bonuses </li>
+                                    <li>salary sacrifice schemes </li>
+                                </ul>
+                                <a href="#">More guidance on what to include when calculating hourly rate of pay  </a>
+                            </div>
+                        </details>
+                        <details>
+                            <summary><span class="summary">Mean hourly rate of pay as a percentage : how to calculate</span></summary>
+                            <div class="panel panel-border-narrow">
+                                <p>
+                                    <ol class="list list-number">
+                                        <li>Get the mean hourly rate of pay for male ‘relevant employees’ from your payroll system</li>
+                                        <li>Get the mean hourly rate of pay for female ‘relevant employees’ from your payroll system</li>
+                                        <li>Subtract the figure for females from the figure for males</li>
+                                        <li>Divide this number by the figure for males</li>
+                                        <li>Multiply by 100 to give you a percentage figure</li>
+                                    </ol>
+                                    <a href="#">More guidance on calculating mean hourly rates of pay </a>
+                                </p>
+                            </div>
+                        </details>
+                        <h2 class="heading-medium">2. Difference in median hourly rate of pay between male and female employees </h2>
+                        <fieldset>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DiffMedianHourlyPercent, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.DiffMedianHourlyPercent, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                    @Html.ValidationMessageFor(model => model.DiffMedianHourlyPercent, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </fieldset>
+                        <details>
+                            <summary><span class="summary">What to include when calculating hourly rate of pay</span></summary>
+                            <div class="panel panel-border-narrow">
+                                <p>You must include:</p>
+                                <ol class="list list-bullet">
+                                    <li>
+                                        all pay to ‘relevant employees’ (all employees, workers and self-employed people who have a contract to perform services personally engaged by your organisation on the ‘snapshot date’)
+                                    </li>
+                                    <li>
+                                        ‘ordinary pay’ - which includes basic pay, pay for leave, pay for piecework, shift premium pay and any allowances paid in money (eg location allowances or payments for additional responsibilities like being fire warden)
+                                    </li>
+                                    <li>
+                                        the weekly hours worked by each employee
+                                    </li>
+                                </ol>
+                                <p>Don’t include</p>
+                                <ol class="list list-bullet">
+                                    <li>benefits in kind </li>
+                                    <li>interest-free loans</li>
+                                    <li>bonuses </li>
+                                    <li>salary sacrifice schemes </li>
+                                </ol>
+                                <a href="#">More guidance on what to include when calculating hourly rate of pay  </a>
+                            </div>
+                        </details>
+                        <details>
+                            <summary><span class="summary">Median hourly rate of pay as a percentage : how to calculate</span></summary>
+                            <div class="panel panel-border-narrow">
+                                <p>
+                                    <ol class="list list-number">
+                                        <li>Get the median hourly rate of pay for male ‘relevant employees’ from your payroll system</li>
+                                        <li>Get the median hourly rate of pay for female ‘relevant employees’ from your payroll system</li>
+                                        <li>Subtract the figure for females from the figure for males</li>
+                                        <li>Divide this number by the figure for males</li>
+                                        <li>Multiply by 100 to give you a percentage figure</li>
+                                    </ol>
+                                    <a href="#">More guidance on calculating mean hourly rates of pay </a>
+                                </p>
+                            </div>
+                        </details>
+                        <h2 class="heading-medium">3. Difference in mean bonus pay between male and female employees  </h2>
+                        <fieldset>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DiffMeanBonusPercent, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.DiffMeanBonusPercent, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                    @Html.ValidationMessageFor(model => model.DiffMeanBonusPercent, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </fieldset>
+                        <details>
+                            <summary><span class="summary">What to include when calculating mean bonus pay</span></summary>
+                            <div class="panel panel-border-narrow">
+                                <p>You must include:</p>
+                                <ol class="list list-bullet">
+                                    <li>all bonuses paid to ‘relevant employees’ in the 12-month period that ends on the snapshot date.  (‘Relevant employees’ are all employees, workers and self-employed people who have a contract to perform services personally engaged by your organisation on the ‘snapshot date’)</li>
+                                </ol>
+                                <a href="#">More guidance on what to include when calculating mean bonus pay   </a>
+                            </div>
+                        </details>
+                        <details>
+                            <summary><span class="summary">Mean bonus pay as a percentage : how to calculate</span></summary>
+                            <div class="panel panel-border-narrow">
+                                <p>
+                                    <ol class="list list-number">
+                                        <li>Get the mean amount of bonus pay for male ‘relevant employees’ from your payroll system</li>
+                                        <li>Get the mean amount of bonus pay for female ‘relevant employees’ from your payroll system</li>
+                                        <li>Subtract the figure for females from the figure for males</li>
+                                        <li>Divide the result by the figure for the males</li>
+                                        <li>Multiply by 100 to give you a percentage figure</li>
+                                    </ol>
+                                    <a href="#">More guidance on calculating the difference in mean bonus pay  </a>
+                                </p>
+                            </div>
+                        </details>
+                        <h2 class="heading-medium">4. Difference in median bonus pay between male and female employees</h2>
+                        <fieldset>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.DiffMedianBonusPercent, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.DiffMedianBonusPercent, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                    @Html.ValidationMessageFor(model => model.DiffMedianBonusPercent, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </fieldset>
+                        <details>
+                            <summary><span class="summary">What to include when calculating mean bonus pay</span></summary>
+                            <div class="panel panel-border-narrow">
+                                <p>You must include:</p>
+                                <ol class="list list-bullet">
+                                    <li>all bonuses paid to ‘relevant employees’ in the 12-month period that ends on the snapshot date. (‘Relevant employees’ are all employees, workers and self-employed people who have a contract to perform services personally engaged by your organisation on the ‘snapshot date’)</li>
+                                </ol>
+                                <a href="#">More guidance on what to include when calculating mean bonus pay   </a>
+                            </div>
+                        </details>
+                        <details>
+                            <summary><span class="summary">Median bonus pay as a percentage : how to calculate</span></summary>
+                            <div class="panel panel-border-narrow">
+                                <p>
+                                    <ol class="list list-number">
+                                        <li>Get the median amount of bonus pay for male ‘relevant employees’ from your payroll system</li>
+                                        <li>Get the median amount of bonus pay for female ‘relevant employees’ s from your payroll system</li>
+                                        <li>Subtract the figure for females from the figure for males</li>
+                                        <li>Divide the result by the figure for the males</li>
+                                        <li>Multiply by 100 to give you a percentage figure</li>
+                                    </ol>
+                                    <a href="#">More guidance on calculating the difference in median bonus pay  </a>
+                                </p>
+                            </div>
+                        </details>
+                        <h2 class="heading-medium">5. Percentage of male and female employees who received bonus pay</h2>
+                        <fieldset>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.MaleMedianBonusPayPercent, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.MaleMedianBonusPayPercent, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                    @Html.ValidationMessageFor(model => model.MaleMedianBonusPayPercent, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FemaleMedianBonusPayPercent, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.FemaleMedianBonusPayPercent, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                    @Html.ValidationMessageFor(model => model.FemaleMedianBonusPayPercent, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </fieldset>
+                        <details>
+                            <summary><span class="summary">How do I calculate this</span></summary>
+                            <div class="panel panel-border-narrow">
+                                <p>
+                                    <ol class="list list-number">
+                                        <li>Get the number of male ‘relevant employees’ who received bonus pay from your payroll system during the 12-month period that ends with the ‘snapshot date’</li>
+                                        <li>Get the number of male ‘relevant employees’ who were engaged by your organisation in the 12-month period that ends with the ‘snapshot date’</li>
+                                        <li>Work out the percentage by dividing the first figure by the second figure and multiplying by 100</li>
+                                        <li>Get the number of female ‘relevant employees’ who received bonus pay from your payroll system during the 12-month period that ends with the ‘snapshot date’</li>
+                                        <li>Get the number of female ‘relevant employees’ who were engaged by your organisation in the 12-month period that ends with the ‘snapshot date’</li>
+                                        <li>Work out the percentage by dividing the first figure by the second figure</li>
+                                    </ol>
+                                    <a href="#">More guidance on calculating the difference in median bonus pay  </a>
+                                </p>
+                            </div>
+                        </details>
+                        <h2 class="heading-medium">6. Male and female employees by pay quartile	</h2>
+                        <h3 class="heading-small">Lower quartile</h3>
+                        <fieldset>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.MaleLowerPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.MaleLowerPayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                    @Html.ValidationMessageFor(model => model.MaleLowerPayBand, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FemaleLowerPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.FemaleLowerPayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                    @Html.ValidationMessageFor(model => model.FemaleLowerPayBand, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </fieldset>
+                        <h3 class="heading-small">Lower middle quartile</h3>
+                        <fieldset>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.MaleMiddlePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.MaleMiddlePayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                    @Html.ValidationMessageFor(model => model.MaleMiddlePayBand, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FemaleMiddlePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.FemaleMiddlePayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                    @Html.ValidationMessageFor(model => model.FemaleMiddlePayBand, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </fieldset>
+                        <h3 class="heading-small">Upper middle quartile</h3>
+                        <fieldset>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.MaleUpperPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.MaleUpperPayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                    @Html.ValidationMessageFor(model => model.MaleUpperPayBand, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FemaleUpperPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.FemaleUpperPayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                    @Html.ValidationMessageFor(model => model.FemaleUpperPayBand, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                        </fieldset>
+                        <h3 class="heading-small">Top quartile </h3>
+                        <fieldset>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.MaleUpperQuartilePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.MaleUpperQuartilePayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                    @Html.ValidationMessageFor(model => model.MaleUpperQuartilePayBand, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.FemaleUpperQuartilePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                                <div class="col-md-10">
+                                    @Html.EditorFor(model => model.FemaleUpperQuartilePayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                    @Html.ValidationMessageFor(model => model.FemaleUpperQuartilePayBand, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <details>
+                                <summary>What to include when calculating data by quartile</summary>
+                                <div class="panel panel-border-narrow">
+                                    <p>
+                                    <p>Pay quartile reporting only requires your organisation to include ‘full-pay relevant employees’. This means every employee who, on the ‘snapshot date’, is both:</p>
+                                    <ul class="list list-bullet">
+                                        <li>employed </li>
+                                        <li>being paid their full regular pay </li>
+                                    </ul>
+                                    <p>Don’t include:</p>
+                                    <ul class="list list-bullet">
+                                        <li>employees not paid in full at their normal rate for the ‘snapshot date’ because they are on leave (eg maternity, paternity or sick leave) </li>
+                                    </ul>
+                                    <a href="#">More guidance on full-pay relevant employees for pay quartile calculation  </a>
+                                    </p>
+                                </div>
+                            </details>
+                        </fieldset>
+                        <h2 class="heading-medium">7. Link to your gender pay gap information</h2>
+                        @*<p>Enter the web address (URL) for the gender pay gap information published on your organisation’s website. The person with responsibility for gender pay gap reporting in your organisation will have this.</p>*@
+                        <fieldset>
+                            @*<div class="form-group ">
+                                    <textarea class="form-control" id="textarea-b" cols="30" rows="6"></textarea>
+                                </div>*@
+
+                            <div class="form-group">
+                                <p>@Html.LabelFor(model => model.CompanyLinkToGPGInfo, htmlAttributes: new { @class = "control-label col-md-2" })</p>
+                                <div class="col-md-10">
+                                    @Html.TextAreaFor(model => model.CompanyLinkToGPGInfo, 6, 30, new { @class = "form-control" })
+
+                                    @Html.ValidationMessageFor(model => model.CompanyLinkToGPGInfo, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+
+                        </fieldset>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CurrentStatus, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.CurrentStatus, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.CurrentStatus, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CurrentStatusDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.CurrentStatusDate, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.CurrentStatusDate, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.CurrentStatusDetails, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.CurrentStatusDetails, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.CurrentStatusDetails, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Created, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Created, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Created, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Modified, htmlAttributes: new { @class = "control-label col-md-2" })
+                            <div class="col-md-10">
+                                @Html.EditorFor(model => model.Modified, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.ValidationMessageFor(model => model.Modified, "", new { @class = "text-danger" })
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-md-offset-2 col-md-10">
+                                <input type="submit" value="Create" class="btn btn-default" />
+                            </div>
+                        </div>
+
+                    </div>
+                }
+
+            @*</form>*@
+            <p><a class="button" href="approval" role="button">Continue</a></p>
+            <a href="gpg-overview">Cancel</a>
+        </div>
+
+    </div>
+</main>
+
+
+
+
+
+
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
-    
+
     <div class="form-horizontal">
         <h4>Return</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-        <div class="form-group">
-            @Html.LabelFor(model => model.DiffMeanHourlyPayPercent, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DiffMeanHourlyPayPercent, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DiffMeanHourlyPayPercent, "", new { @class = "text-danger" })
-            </div>
-        </div>
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.DiffMedianHourlyPercent, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DiffMedianHourlyPercent, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DiffMedianHourlyPercent, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.DiffMeanHourlyPayPercent, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DiffMeanHourlyPayPercent, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DiffMeanHourlyPayPercent, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.DiffMeanBonusPercent, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DiffMeanBonusPercent, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DiffMeanBonusPercent, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.DiffMedianHourlyPercent, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DiffMedianHourlyPercent, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DiffMedianHourlyPercent, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.DiffMedianBonusPercent, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.DiffMedianBonusPercent, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.DiffMedianBonusPercent, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.DiffMeanBonusPercent, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DiffMeanBonusPercent, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DiffMeanBonusPercent, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.MaleMedianBonusPayPercent, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.MaleMedianBonusPayPercent, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MaleMedianBonusPayPercent, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.DiffMedianBonusPercent, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.DiffMedianBonusPercent, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.DiffMedianBonusPercent, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.FemaleMedianBonusPayPercent, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FemaleMedianBonusPayPercent, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FemaleMedianBonusPayPercent, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.MaleMedianBonusPayPercent, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.MaleMedianBonusPayPercent, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MaleMedianBonusPayPercent, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.MaleLowerPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.MaleLowerPayBand, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MaleLowerPayBand, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.FemaleMedianBonusPayPercent, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FemaleMedianBonusPayPercent, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FemaleMedianBonusPayPercent, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.FemaleLowerPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FemaleLowerPayBand, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FemaleLowerPayBand, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.MaleLowerPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.MaleLowerPayBand, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MaleLowerPayBand, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.MaleMiddlePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.MaleMiddlePayBand, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MaleMiddlePayBand, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.FemaleLowerPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FemaleLowerPayBand, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FemaleLowerPayBand, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.FemaleMiddlePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FemaleMiddlePayBand, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FemaleMiddlePayBand, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.MaleMiddlePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.MaleMiddlePayBand, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MaleMiddlePayBand, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.MaleUpperPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.MaleUpperPayBand, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MaleUpperPayBand, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.FemaleMiddlePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FemaleMiddlePayBand, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FemaleMiddlePayBand, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.FemaleUpperPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FemaleUpperPayBand, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FemaleUpperPayBand, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.MaleUpperPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.MaleUpperPayBand, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MaleUpperPayBand, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.MaleUpperQuartilePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.MaleUpperQuartilePayBand, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.MaleUpperQuartilePayBand, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.FemaleUpperPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FemaleUpperPayBand, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FemaleUpperPayBand, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.FemaleUpperQuartilePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.FemaleUpperQuartilePayBand, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.FemaleUpperQuartilePayBand, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.MaleUpperQuartilePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.MaleUpperQuartilePayBand, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.MaleUpperQuartilePayBand, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CompanyLinkToGPGInfo, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CompanyLinkToGPGInfo, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CompanyLinkToGPGInfo, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.FemaleUpperQuartilePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.FemaleUpperQuartilePayBand, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.FemaleUpperQuartilePayBand, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CurrentStatus, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CurrentStatus, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CurrentStatus, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.CompanyLinkToGPGInfo, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CompanyLinkToGPGInfo, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CompanyLinkToGPGInfo, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CurrentStatusDate, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CurrentStatusDate, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CurrentStatusDate, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.CurrentStatus, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CurrentStatus, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CurrentStatus, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.CurrentStatusDetails, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.CurrentStatusDetails, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.CurrentStatusDetails, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.CurrentStatusDate, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CurrentStatusDate, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CurrentStatusDate, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Created, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Created, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Created, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.CurrentStatusDetails, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.CurrentStatusDetails, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.CurrentStatusDetails, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            @Html.LabelFor(model => model.Modified, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                @Html.EditorFor(model => model.Modified, new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.Modified, "", new { @class = "text-danger" })
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.Created, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Created, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Created, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
 
-        <div class="form-group">
-            <div class="col-md-offset-2 col-md-10">
-                <input type="submit" value="Create" class="btn btn-default" />
-            </div>
-        </div>
+        @*<div class="form-group">
+                @Html.LabelFor(model => model.Modified, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    @Html.EditorFor(model => model.Modified, new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessageFor(model => model.Modified, "", new { @class = "text-danger" })
+                </div>
+            </div>*@
+
+        @*<div class="form-group">
+                <div class="col-md-offset-2 col-md-10">
+                    <input type="submit" value="Create" class="btn btn-default" />
+                </div>
+            </div>*@
     </div>
 }
 
