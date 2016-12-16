@@ -6,7 +6,7 @@
     ViewBag.assetsPath = Url.Content("~/public/govuk_template/assets");
 
     var appTitle = "";
-    var title = !string.IsNullOrEmpty(ViewBag.Title) ? ViewBag.Title : "Performance Management";
+    var title = !string.IsNullOrEmpty(ViewBag.Title) ? ViewBag.Title : "Gender Pay Gap Management";
     var documentTitle = string.Format("{0} - {1}", title, "GOV.UK");
 }
 <!DOCTYPE html>
@@ -150,9 +150,8 @@
         <div class="inner-block">
             <div class="header-bar"></div>
         </div>
-    </div>
-    <!--end global-header-bar-->
-    <div class="side-width-wrapper">
+
+        <div class="side-width-wrapper">
         <div class="grid-row">
             <div class="column-full">
                 <div class="phase-banner">
@@ -161,6 +160,21 @@
             </div>
         </div>
     </div>
+
+    </div>
+
+    <!--end global-header-bar-->
+    @*<div class="side-width-wrapper">
+        <div class="grid-row">
+            <div class="column-full">
+                <div class="phase-banner">
+                    @(Html.Partial("../govuk/partials/phase/alpha"))
+                </div>
+            </div>
+        </div>
+    </div>*@
+ 
+   
     @*<div class="side-width-wrapper">
         <div class="grid-row">
             <div class="column-full">

@@ -11,6 +11,7 @@ namespace GenderPayGap.Models.gpgsqlAzureEntityModel
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel.DataAnnotations;
     
     public partial class Return
     {
@@ -23,20 +24,50 @@ namespace GenderPayGap.Models.gpgsqlAzureEntityModel
         }
     
         public long ReturnId { get; set; }
+
+        [Display(Name = "*Enter the difference in mean hourly rate")]
         public decimal DiffMeanHourlyPayPercent { get; set; }
+
+        [Display(Name = "*Enter the difference in median hourly rate")]
         public decimal DiffMedianHourlyPercent { get; set; }
+
+        [Display(Name = "*Enter the difference in mean bonus pay")]
         public decimal DiffMeanBonusPercent { get; set; }
+
+        [Display(Name = "*Enter the difference in median bonus pay")]
         public decimal DiffMedianBonusPercent { get; set; }
+
+        [Display(Name = "* Males who received bonus pay %")]
         public decimal MaleMedianBonusPayPercent { get; set; }
+
+        [Display(Name = "*Females who received bonus pay %")]
         public decimal FemaleMedianBonusPayPercent { get; set; }
+
+        [Display(Name = "*Male")]
         public decimal MaleLowerPayBand { get; set; }
+
+        [Display(Name = "*Female")]
         public decimal FemaleLowerPayBand { get; set; }
+
+        [Display(Name = "*Male")]
         public decimal MaleMiddlePayBand { get; set; }
+
+        [Display(Name = "*Female")]
         public decimal FemaleMiddlePayBand { get; set; }
+
+        [Display(Name = "*Male")]
         public decimal MaleUpperPayBand { get; set; }
+
+        [Display(Name = "*Female")]
         public decimal FemaleUpperPayBand { get; set; }
+
+        [Display(Name = "*Male")]
         public decimal MaleUpperQuartilePayBand { get; set; }
+
+        [Display(Name = "*Female")]
         public decimal FemaleUpperQuartilePayBand { get; set; }
+
+        [Display(Name = "*Enter the web address (URL) for the gender pay gap information published on your organisation’s website. The person with responsibility for gender pay gap reporting in your organisation will have this.")]
         public string CompanyLinkToGPGInfo { get; set; }
         public string CurrentStatus { get; set; }
         public Nullable<System.DateTime> CurrentStatusDate { get; set; }

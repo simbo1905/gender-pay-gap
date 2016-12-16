@@ -23,10 +23,13 @@ namespace GenderPayGap
                       "~/Scripts/bootstrap.js",
                       "~/Scripts/respond.js"));
 
+            //bundles.Add(new StyleBundle("~/Content/css").Include(
+            //          "~/Content/bootstrap.css",
+            //          "~/Content/elements-page.css",
+            //          "~/Content/site.css"));
+
             bundles.Add(new StyleBundle("~/Content/css").Include(
-                      "~/Content/bootstrap.css",
-                      "~/Content/elements-page.css",
-                      "~/Content/site.css"));
+                     "~/Content/application.css"));
         }
     }
 }
