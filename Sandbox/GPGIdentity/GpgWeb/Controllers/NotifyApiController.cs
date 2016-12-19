@@ -16,7 +16,7 @@ namespace EmbeddedMvc.Controllers
     public class GovNotifyController : Controller
     {
         const string ClientReference = "GpgAlphaTest";
-        string ApiKey = ConfigurationManager.AppSettings["GovNotifyKey"];
+        string ApiKey = ConfigurationManager.AppSettings["GovNotifyApiKey"];
 
         public async Task<ActionResult> SendEmail()
         {
