@@ -16,7 +16,7 @@ namespace GenderPayGap.Models.GpgEntityModel
     public partial class GpgDBEntitiesContext : DbContext
     {
         public GpgDBEntitiesContext()
-            : base("name=GpgDBEntitiesContext") 
+            : base("name=GpgDBEntitiesContext")
         {
         }
     
