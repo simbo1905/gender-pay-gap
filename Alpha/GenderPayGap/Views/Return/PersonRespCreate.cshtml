@@ -101,8 +101,11 @@
             @*</form>*@
 
             <p>
-            <p><a class="button" href="summary-preview" role="button">Continue</a></p>
-            <p><a href="login">Cancel</a></p>
+            @*<p><a class="button" href="summary-preview" role="button">Continue</a></p>*@
+            @*<p><a href="login">Cancel</a></p>*@
+
+            <p><a class="button" role="button" onclick="$('.next').click()">Continue</a></p>
+            <p><a class="button" role="button" onclick="$('.prev').click()">Back</a></p>
             </p>
         </div>
     </div>

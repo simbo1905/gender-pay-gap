@@ -1,5 +1,7 @@
 ﻿@model GenderPayGap.Models.GpgEntityModel.Return
 
+
+
 <main id="content" role="main">
     @*<div class="phase-banner-alpha">
             <p>
@@ -21,7 +23,7 @@
                 <thead>
                     <tr>
                         <th class="question" colspan="3">
-                            1. Your organisation’s 2016 to 2017 gender pay gap data <span class="edit">@Html.ActionLink("Edit", "Edit", new { id = Model.ReturnId })</span>
+                            1. Your organisation’s 2016 to 2017 gender pay gap data <span class="edit">@*@Html.ActionLink("Edit", "Edit", new { id = Model.ReturnId })*@</span>
                         </th>
                     </tr>
                 </thead>
@@ -134,9 +136,8 @@
                 <thead>
                     <tr>
                         <th class="question" colspan="3">
-                            2. Person responsible in your organisation <span class="edit"><a href='edit-approval'>Edit</a></span>
-                            @Html.ActionLink("Edit", "Edit", new { id = Model.ReturnId })
-                            @*@Html.ActionLink("Edit", "Edit", "User", new GenderPayGap.Models.GpgEntityModel.User { UserId = User })*@
+                            2. Person responsible in your organisation @*<span class="edit"><a href='edit-approval'>Edit</a></span>*@
+                            @*@Html.ActionLink("Edit", "Edit", new { id = Model.ReturnId })*@
                         </th>
                     </tr>
                 </thead>
@@ -150,7 +151,7 @@
             </table>
 
             <p>
-            <p><a href="confirmation" class="button">Confirm and send</a></p>
+                <p><a href="confirmation" class="button">Confirm and send</a></p>
             </p>
         </div>
     </div>
@@ -333,7 +334,7 @@
 
 @*</dl>
     </div>*@
-<p>
-    @*@Html.ActionLink("Edit", "Edit", new { id = Model.ReturnId }) |*@
+@*<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ReturnId }) |
     @Html.ActionLink("Back to List", "Index")
-</p>
+</p>*@
