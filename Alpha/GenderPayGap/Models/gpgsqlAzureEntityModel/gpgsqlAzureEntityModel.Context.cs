@@ -13,10 +13,10 @@ namespace GenderPayGap.Models.gpgsqlAzureEntityModel
     using System.Data.Entity;
     using System.Data.Entity.Infrastructure;
     
-    public partial class gpgsqlDBEntitiesContext : DbContext
+    public partial class gpgsqDBEntitiesContext : DbContext
     {
-        public gpgsqlDBEntitiesContext()
-            : base("name=gpgsqlDBEntitiesContext")
+        public gpgsqDBEntitiesContext()
+            : base("name=gpgsqDBEntitiesContext")
         {
         }
     

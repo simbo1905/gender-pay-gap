@@ -124,6 +124,9 @@
           <Property Name="CurrentStatusDetails" Type="varchar" MaxLength="512" />
           <Property Name="Created" Type="smalldatetime" />
           <Property Name="Modified" Type="smalldatetime" />
+          <Property Name="JobTitle" Type="varchar" MaxLength="50" />
+          <Property Name="FirstName" Type="varchar" MaxLength="50" />
+          <Property Name="LastName" Type="varchar" MaxLength="50" />
         </EntityType>
         <EntityType Name="ReturnHit">
           <Key>
@@ -170,10 +173,13 @@
           <Property Name="WorkPhone2" Type="varchar" MaxLength="30" />
           <Property Name="HomePhone" Type="varchar" MaxLength="30" />
           <Property Name="Mobile" Type="varchar" MaxLength="30" />
+          <Property Name="MobileVerifyCode" Type="varchar" MaxLength="30" />
+          <Property Name="MobileVerifyDate" Type="smalldatetime" />
           <Property Name="Fax" Type="varchar" MaxLength="30" />
           <Property Name="Web" Type="varchar" MaxLength="500" />
-          <Property Name="Email1" Type="varchar" MaxLength="500" />
-          <Property Name="Email2" Type="varchar" MaxLength="500" />
+          <Property Name="EmailAddress" Type="varchar" MaxLength="500" />
+          <Property Name="VerifyCode" Type="varchar" MaxLength="50" />
+          <Property Name="VerifyDate" Type="smalldatetime" />
           <Property Name="CurrentStatus" Type="varchar" MaxLength="20" Nullable="false" />
           <Property Name="CurrentStatusDate" Type="smalldatetime" Nullable="false" />
           <Property Name="CurrentStatusDetails" Type="varchar" MaxLength="512" />
@@ -627,6 +633,9 @@
           <Property Name="CurrentStatusDetails" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
           <Property Name="Created" Type="DateTime" Precision="0" />
           <Property Name="Modified" Type="DateTime" Precision="0" />
+          <Property Name="JobTitle" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="FirstName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="LastName" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <NavigationProperty Name="OrganisationGPGReturns" Relationship="Self.FK_VacancySchools_Vacancy" FromRole="Return" ToRole="OrganisationGPGReturns" />
           <NavigationProperty Name="ReturnHit" Relationship="Self.FK_ReturnHit_Vacancy" FromRole="Return" ToRole="ReturnHit" />
           <NavigationProperty Name="ReturnStatuses" Relationship="Self.FK_ReturnStatuses_Vacancy" FromRole="Return" ToRole="ReturnStatuses" />
@@ -680,10 +689,13 @@
           <Property Name="WorkPhone2" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="HomePhone" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Mobile" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="MobileVerifyCode" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
+          <Property Name="MobileVerifyDate" Type="DateTime" Precision="0" />
           <Property Name="Fax" Type="String" MaxLength="30" FixedLength="false" Unicode="false" />
           <Property Name="Web" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="Email1" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
-          <Property Name="Email2" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="EmailAddress" Type="String" MaxLength="500" FixedLength="false" Unicode="false" />
+          <Property Name="VerifyCode" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
+          <Property Name="VerifyDate" Type="DateTime" Precision="0" />
           <Property Name="CurrentStatus" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
           <Property Name="CurrentStatusDate" Type="DateTime" Nullable="false" Precision="0" />
           <Property Name="CurrentStatusDetails" Type="String" MaxLength="512" FixedLength="false" Unicode="false" />
@@ -1138,6 +1150,9 @@
                 <ScalarProperty Name="CurrentStatusDetails" ColumnName="CurrentStatusDetails" />
                 <ScalarProperty Name="Created" ColumnName="Created" />
                 <ScalarProperty Name="Modified" ColumnName="Modified" />
+                <ScalarProperty Name="JobTitle" ColumnName="JobTitle" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="LastName" ColumnName="LastName" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
@@ -1187,10 +1202,13 @@
                 <ScalarProperty Name="WorkPhone2" ColumnName="WorkPhone2" />
                 <ScalarProperty Name="HomePhone" ColumnName="HomePhone" />
                 <ScalarProperty Name="Mobile" ColumnName="Mobile" />
+                <ScalarProperty Name="MobileVerifyCode" ColumnName="MobileVerifyCode" />
+                <ScalarProperty Name="MobileVerifyDate" ColumnName="MobileVerifyDate" />
                 <ScalarProperty Name="Fax" ColumnName="Fax" />
                 <ScalarProperty Name="Web" ColumnName="Web" />
-                <ScalarProperty Name="Email1" ColumnName="Email1" />
-                <ScalarProperty Name="Email2" ColumnName="Email2" />
+                <ScalarProperty Name="EmailAddress" ColumnName="EmailAddress" />
+                <ScalarProperty Name="VerifyCode" ColumnName="VerifyCode" />
+                <ScalarProperty Name="VerifyDate" ColumnName="VerifyDate" />
                 <ScalarProperty Name="CurrentStatus" ColumnName="CurrentStatus" />
                 <ScalarProperty Name="CurrentStatusDate" ColumnName="CurrentStatusDate" />
                 <ScalarProperty Name="CurrentStatusDetails" ColumnName="CurrentStatusDetails" />

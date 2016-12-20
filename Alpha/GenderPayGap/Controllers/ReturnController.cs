@@ -6,13 +6,13 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using GenderPayGap.Models.gpgsqlAzureEntityModel;
+using GenderPayGap.Models.GpgEntityModel;
 
 namespace GenderPayGap.Controllers
 {
     public class ReturnController : Controller
     {
-        private gpgsqlDBEntitiesContext db = new gpgsqlDBEntitiesContext();
+        private GpgDBEntitiesContext db = new GpgDBEntitiesContext();
 
         // GET: Return
         public ActionResult Index()
@@ -20,8 +20,17 @@ namespace GenderPayGap.Controllers
             return View(db.Return.ToList());
         }
 
+        //Get: Return
+        public ActionResult GpgWizardView()
+        {
+            return View();
+        }
+
+
+
+
         // GET: Return/Details/5
-        public ActionResult Details(long? id)
+        public ActionResult Details(long? id = 4)
         {
             if (id == null)
             {
@@ -33,6 +42,7 @@ namespace GenderPayGap.Controllers
                 return HttpNotFound();
             }
             return View(@return);
+
         }
 
         // GET: Return/Create
@@ -123,5 +133,20 @@ namespace GenderPayGap.Controllers
             }
             base.Dispose(disposing);
         }
+
+
+       //GET
+        public ActionResult PersonRespCreate()
+        {
+            return View();
+        }
+
+        //GET
+        public ActionResult PersonRespEdit()
+        {
+            return View();
+        }
     }
 }
+
+
