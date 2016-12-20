@@ -43,6 +43,9 @@ namespace GenderPayGap.Models.GpgEntityModel
         public string CurrentStatusDetails { get; set; }
         public Nullable<System.DateTime> Created { get; set; }
         public Nullable<System.DateTime> Modified { get; set; }
+        public string JobTitle { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<OrganisationGPGReturns> OrganisationGPGReturns { get; set; }

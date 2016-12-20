@@ -678,7 +678,12 @@ hr {
     }
 
 .button {
-    /*background-color: #00823b;*/
+    background-color: #00823b;
+}
+
+/*
+.button {
+    background-color: #00823b;
     position: relative;
     display: -moz-inline-stack;
     display: inline-block;
@@ -761,7 +766,7 @@ hr {
         content: none;
         margin-left: 0;
         margin-right: 0;
-    }
+    }*/
 
 @media (max-width:640px) {
     .button {
@@ -819,7 +824,7 @@ hr {
 
 
 
-/* testing new button color for GDS template side wide*/
+/* testing new button color for GDS template site wide*
 .btn-GDS {
   color: #fff;
   background-color:  #00823b;
@@ -877,7 +882,7 @@ fieldset[disabled] .btn-GDS.focus {
   color: #5cb85c;
   background-color: #fff;
 }
-/*end of the test*/
+end of the test*/
 
 
 
