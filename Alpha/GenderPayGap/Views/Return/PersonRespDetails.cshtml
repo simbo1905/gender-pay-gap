@@ -1,10 +1,16 @@
 ﻿@model GenderPayGap.Models.GpgEntityModel.Return
 
+@{ 
+     Model.ReturnId = 4;
+   
+ }
+
 <div>
     <h4>Return</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
+            @Html.HiddenFor(model => model.ReturnId)
             @Html.DisplayNameFor(model => model.DiffMeanHourlyPayPercent)
         </dt>
 

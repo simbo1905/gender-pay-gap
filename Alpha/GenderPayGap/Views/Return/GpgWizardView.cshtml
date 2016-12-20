@@ -1,6 +1,5 @@
 ﻿@model GenderPayGap.Models.GpgEntityModel.Return
 
-
 <br />
 @{
     ViewBag.Title = "Gpg Return";
@@ -14,6 +13,7 @@
                 @Html.Partial("~/Views/Home/Index.cshtml", Model)
             </div>
 
+            <!--Steves login page goes in here -->
             @*<div class="step" style="display:none">
                 @Html.Partial("/Views/Account/Login.cshtml", Model)
             </div>*@
@@ -26,9 +26,9 @@
                 @Html.Partial("~/Views/Return/PersonRespCreate.cshtml", Model)
             </div>
 
-            @*<div class="step" style="display:none">
+            <div class="step" style="display:none">
                 @Html.Partial("~/Views/Return/Details.cshtml", Model)
-            </div>*@
+            </div>
 
             <input type="button" class="prev" style="display: none" value="Previous" />
             <input type="button" class="next" style="" value="Next" />
@@ -41,17 +41,6 @@
 @section scripts {
     <script>
 
-        //$(document).ready(function () {
-        //    $(".mytest").click(function () {
-        //        alert('this is a jquery test')
-        //    })
-        //});
-
-
-        function ShowText(source$,target$)
-        {
-            target$.text(source$.text());
-        }
 
         $(document).ready(function () {
 
