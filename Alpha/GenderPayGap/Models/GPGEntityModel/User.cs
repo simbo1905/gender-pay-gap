@@ -45,10 +45,13 @@ namespace GenderPayGap.Models.GpgEntityModel
         public string WorkPhone2 { get; set; }
         public string HomePhone { get; set; }
         public string Mobile { get; set; }
+        public string MobileVerifyCode { get; set; }
+        public Nullable<System.DateTime> MobileVerifyDate { get; set; }
         public string Fax { get; set; }
         public string Web { get; set; }
-        public string Email1 { get; set; }
-        public string Email2 { get; set; }
+        public string EmailAddress { get; set; }
+        public string VerifyCode { get; set; }
+        public Nullable<System.DateTime> VerifyDate { get; set; }
         public string CurrentStatus { get; set; }
         public System.DateTime CurrentStatusDate { get; set; }
         public string CurrentStatusDetails { get; set; }
