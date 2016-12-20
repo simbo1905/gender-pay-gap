@@ -17,7 +17,7 @@ namespace GenderPayGap.Controllers
         // GET: Return
         public ActionResult Index()
         {
-            return View(db.Return.ToList());
+            return View();
         }
 
         //Get: Return
@@ -27,10 +27,19 @@ namespace GenderPayGap.Controllers
         }
 
 
+        [HttpPost]
+        public ActionResult Details(/*[Bind(Include = "ReturnId,DiffMeanHourlyPayPercent,DiffMedianHourlyPercent,DiffMeanBonusPercent,DiffMedianBonusPercent,MaleMedianBonusPayPercent,FemaleMedianBonusPayPercent,MaleLowerPayBand,FemaleLowerPayBand,MaleMiddlePayBand,FemaleMiddlePayBand,MaleUpperPayBand,FemaleUpperPayBand,MaleUpperQuartilePayBand,FemaleUpperQuartilePayBand,CompanyLinkToGPGInfo,CurrentStatus,CurrentStatusDate,CurrentStatusDetails,Created,Modified")]*/ Return @return)
+        {
+            //Create(@return);
 
+            //return View();
+
+            return RedirectToAction("SendConfirmed");
+            
+        }
 
         // GET: Return/Details/5
-        public ActionResult Details(long? id = 4)
+        public ActionResult Details(long? id)
         {
             if (id == null)
             {
@@ -42,9 +51,9 @@ namespace GenderPayGap.Controllers
                 return HttpNotFound();
             }
             return View(@return);
-
         }
 
+       
         // GET: Return/Create
         public ActionResult Create()
         {
@@ -146,6 +155,12 @@ namespace GenderPayGap.Controllers
         {
             return View();
         }
+
+        public ActionResult SendConfirmed()
+        {
+            return View();
+        }
+       
     }
 }
 
