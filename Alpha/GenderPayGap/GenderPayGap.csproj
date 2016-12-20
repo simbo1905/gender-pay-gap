@@ -353,7 +353,7 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Home\Index.cshtml" />
+    <Content Include="Views\Return\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -384,8 +384,8 @@
     <Content Include="Views\Return\Delete.cshtml" />
     <Content Include="Views\Return\Old_Details.cshtml" />
     <Content Include="Views\Return\Old_Edit.cshtml" />
-    <Content Include="Views\Return\Index.cshtml" />
-    <Content Include="Views\Home\_Index.cshtml" />
+    <Content Include="Views\Return\Old_Index.cshtml" />
+    <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Return\Create.cshtml" />
     <Content Include="Views\Return\Details.cshtml" />
     <Content Include="Views\Return\Edit.cshtml" />
@@ -394,6 +394,7 @@
     <Content Include="Views\Return\PersonRespEdit.cshtml" />
     <Content Include="Views\Return\PersonRespDelete.cshtml" />
     <Content Include="Views\Return\PersonRespDetails.cshtml" />
+    <Content Include="Views\Return\SendConfirmed.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
