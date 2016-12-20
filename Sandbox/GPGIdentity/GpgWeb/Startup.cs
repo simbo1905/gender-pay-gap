@@ -37,11 +37,11 @@ namespace EmbeddedMvc
                     AuthenticationType = "Cookies"
                 });
 
-
+           
             app.UseOpenIdConnectAuthentication(new OpenIdConnectAuthenticationOptions
                 {
                     Authority = ConfigurationManager.AppSettings["GpgIdentityServer"],
-
+                    
                     ClientId = "gpgWeb",
                     Scope = "openid profile roles " + ConfigurationManager.AppSettings["GpgApiScope"],
                     ResponseType = "id_token token",
