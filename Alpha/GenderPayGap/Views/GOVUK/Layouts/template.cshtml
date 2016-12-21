@@ -139,6 +139,13 @@
                             </ul>
                         }*@
                        @*<b>@Html.Partial("_LoginPartial")</b>*@
+
+                        <ul id="proposition-links">
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <li>@Html.ActionLink("Logout", "Logout", "Home")</li>
+                            }
+                        </ul>
                     </nav>
                 </div>
             </div>

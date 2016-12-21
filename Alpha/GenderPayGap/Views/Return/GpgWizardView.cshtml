@@ -8,17 +8,7 @@
     <form method="post" action="@Url.Action("RecruiterNewView", "Recruiter")">
 
         <div class="wizard">
-            <div class="step active">
-                @*@Html.Partial("Index", Model)*@
-                @Html.Partial("~/Views/Home/Index.cshtml", Model)
-            </div>
-
-            <!--Steves login page goes in here -->
-            @*<div class="step" style="display:none">
-                @Html.Partial("/Views/Account/Login.cshtml", Model)
-            </div>*@
-
-            <div class="step" style="display:none">
+            <div class="step">
                 @Html.Partial("~/Views/Return/Create.cshtml", Model)
             </div>
 
