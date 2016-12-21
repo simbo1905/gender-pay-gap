@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using GenderPayGap.Models.GpgEntityModel;
+using System.Security.Claims;
 
 namespace GenderPayGap.Controllers
 {
@@ -17,16 +18,25 @@ namespace GenderPayGap.Controllers
         // GET: Return
         public ActionResult Index()
         {
-            return View(db.Return.ToList());
-        }
-
-        //Get: Return
-        public ActionResult GpgWizardView()
-        {
             return View();
         }
 
-
+        //Get: Return
+        [Authorize]
+        public ActionResult GpgWizardView()
+        {
+            //This is how to get the UserID facebook willbe a ling string or our id will be a simple number
+            
+            //TODO IF the user is not in the database redirect to /Register
+            //TODO If the user is not verified (clicked email verification link) redirect to /Register/Verify
+            //TODO If the user is not active (confirmed via PIN) then then redirect to /Register/Confirm
+            //Load the organisation for the active user
+            //Find the Return for the current year
+            //If no return then create a new one
+            //If it has already been submitted then show a warning and submitted data
+            //if the return has not been submitted then load for editing
+            return View();
+        }
 
 
         // GET: Return/Details/5

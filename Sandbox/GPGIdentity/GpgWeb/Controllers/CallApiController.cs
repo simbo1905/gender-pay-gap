@@ -24,6 +24,7 @@ namespace EmbeddedMvc.Controllers
         // GET: CallApi/UserCredentials
         public async Task<ActionResult> UserCredentials()
         {
+            var type = User.Identity.AuthenticationType;
             var user = User as ClaimsPrincipal;
             var token = user.FindFirst("access_token").Value;
             var result = await CallApi(token);
