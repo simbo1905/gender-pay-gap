@@ -28,5 +28,6 @@ namespace GenderPayGap.Models.GpgDatabase
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserStatus> UserStatuses { get; set; }
         public virtual DbSet<UserOrganisation> UserOrganisations { get; set; }
+        public virtual DbSet<UserToken> UserTokens { get; set; }
     }
 }

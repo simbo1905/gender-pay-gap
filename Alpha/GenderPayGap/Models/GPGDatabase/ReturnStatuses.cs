@@ -26,7 +26,7 @@ namespace GenderPayGap.Models.GpgDatabase
         public long ReturnStatusId { get; set; }
         public long ReturnId { get; set; }
         public byte StatusId { get; set; }
-        public System.DateTime StatusDate { get; set; }
+        public Nullable<System.DateTime>  StatusDate { get; set; }
         public string StatusMessage { get; set; }
         public Nullable<long> ByUserId { get; set; }
 

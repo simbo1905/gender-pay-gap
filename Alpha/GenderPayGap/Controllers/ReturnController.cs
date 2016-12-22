@@ -6,15 +6,14 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using GenderPayGap.Models.GpgEntityModel;
+
 using System.Security.Claims;
+using GenderPayGap.Models.GpgDatabase;
 
 namespace GenderPayGap.Controllers
 {
     public class ReturnController : Controller
     {
-        private GpgDBEntitiesContext db = new GpgDBEntitiesContext();
-
         // GET: Return
         public ActionResult Index()
         {
@@ -46,7 +45,7 @@ namespace GenderPayGap.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Return @return = db.Return.Find(id);
+            Return @return = MvcApplication.Database.Return.Find(id);
             if (@return == null)
             {
                 return HttpNotFound();
@@ -70,8 +69,8 @@ namespace GenderPayGap.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Return.Add(@return);
-                db.SaveChanges();
+                MvcApplication.Database.Return.Add(@return);
+                MvcApplication.Database.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -85,7 +84,7 @@ namespace GenderPayGap.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Return @return = db.Return.Find(id);
+            Return @return = MvcApplication.Database.Return.Find(id);
             if (@return == null)
             {
                 return HttpNotFound();
@@ -102,8 +101,8 @@ namespace GenderPayGap.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(@return).State = EntityState.Modified;
-                db.SaveChanges();
+                MvcApplication.Database.Entry(@return).State = EntityState.Modified;
+                MvcApplication.Database.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(@return);
@@ -116,7 +115,7 @@ namespace GenderPayGap.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Return @return = db.Return.Find(id);
+            Return @return = MvcApplication.Database.Return.Find(id);
             if (@return == null)
             {
                 return HttpNotFound();
@@ -129,9 +128,9 @@ namespace GenderPayGap.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            Return @return = db.Return.Find(id);
-            db.Return.Remove(@return);
-            db.SaveChanges();
+            Return @return = MvcApplication.Database.Return.Find(id);
+            MvcApplication.Database.Return.Remove(@return);
+            MvcApplication.Database.SaveChanges();
             return RedirectToAction("Index");
         }
 
@@ -139,7 +138,7 @@ namespace GenderPayGap.Controllers
         {
             if (disposing)
             {
-                db.Dispose();
+                MvcApplication.Database.Dispose();
             }
             base.Dispose(disposing);
         }

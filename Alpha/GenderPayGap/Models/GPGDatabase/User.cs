@@ -9,10 +9,14 @@
 
 namespace GenderPayGap.Models.GpgDatabase
 {
+    using Extensions;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
+    using System.Linq;
+    using System.Security.Claims;
+    using System.Security.Principal;
 
     public partial class User
     {
@@ -52,5 +56,31 @@ namespace GenderPayGap.Models.GpgDatabase
         public virtual ICollection<Organisation> Organisations { get; set; }
         public virtual ICollection<UserToken> UserTokens { get; set; }
         public virtual ICollection<UserStatus> UserStatuses { get; set; }
+
+        public static string GetUserIdentifier(IPrincipal principal)
+        {
+            if (principal == null || !principal.Identity.IsAuthenticated) return null;
+
+            var claims = (principal as ClaimsPrincipal).Claims;
+
+            //Use this to lookup the long UserID from the db - ignore the authProvider for now
+            return claims.FirstOrDefault().Value;
+        }
+
+        public static GenderPayGap.Models.GpgDatabase.User FindCurrentUser(IPrincipal principal)
+        {
+            //GEt the logged in users identifier
+            var tokenIdentifier = GetUserIdentifier(principal);
+            if (string.IsNullOrWhiteSpace(tokenIdentifier)) return null;
+
+            //If internal user the load it using the identifier as the UserID
+            long userId = tokenIdentifier.ToLong();
+            if (userId > 0) return MvcApplication.Database.User.Find(userId);
+
+            //If external user the load it using the identifier
+            var userToken = MvcApplication.Database.UserTokens.FirstOrDefault<UserToken>(t => t.TokenIdentifier == tokenIdentifier);
+            if (userToken != null && userToken.UserId > 0) return MvcApplication.Database.User.Find(userToken.UserId);
+            return null;
+        }
     }
 }
