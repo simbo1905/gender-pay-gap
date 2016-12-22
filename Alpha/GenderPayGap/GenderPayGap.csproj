@@ -168,6 +168,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Controllers\QueryController.cs" />
+    <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\Startup.Auth.cs" />
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -177,6 +179,9 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\GpgEntityModel\C__RefactorLog.cs">
+      <DependentUpon>GpgDataEntityModel.tt</DependentUpon>
+    </Compile>
     <Compile Include="Models\GpgEntityModel\GpgDataEntityModel.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -243,18 +248,22 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <Content Include="Content\application.css" />
+    <Content Include="Content\bootstrap-theme.css.map" />
+    <Content Include="Content\bootstrap-theme.min.css.map" />
     <Content Include="Content\bootstrap.css" />
+    <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="Content\elements-page.css" />
     <Content Include="Content\fonts.css" />
     <Content Include="Content\govuk-template-print.css" />
     <Content Include="Content\govuk-template.css" />
     <Content Include="Content\img\org_crest.png" />
     <Content Include="Content\prism.css" />
+    <Content Include="Content\Site.css" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
-    <Content Include="Content\Site.css" />
     <Content Include="Models\GpgEntityModel\GpgDataEntityModel.Context.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <DependentUpon>GpgDataEntityModel.edmx</DependentUpon>
@@ -273,6 +282,7 @@
     <Content Include="public\assets\images\icon-denom.png" />
     <Content Include="public\assets\images\icon-gender-mixed.png" />
     <Content Include="public\assets\images\icon-location.png" />
+    <Content Include="public\assets\images\icon-pointer.png" />
     <Content Include="public\assets\images\icon-pupils.png" />
     <Content Include="public\assets\images\ofsted-logo-sm.jpeg" />
     <Content Include="public\assets\images\ofsted-logo-x-small.jpeg" />
@@ -314,10 +324,6 @@
     <Content Include="public\govuk_template\assets\stylesheets\fonts\GDSTransportTabular-Light.eot" />
     <Content Include="public\govuk_template\assets\stylesheets\fonts\GDSTransportWebsite-Bold.eot" />
     <Content Include="public\govuk_template\assets\stylesheets\fonts\GDSTransportWebsite.eot" />
-    <Content Include="Content\bootstrap-theme.css.map" />
-    <Content Include="Content\bootstrap-theme.min.css.map" />
-    <Content Include="Content\bootstrap.css.map" />
-    <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="package.json" />
     <EntityDeploy Include="Models\GpgEntityModel\GpgDataEntityModel.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -390,11 +396,26 @@
     <Content Include="Views\Return\Details.cshtml" />
     <Content Include="Views\Return\Edit.cshtml" />
     <Content Include="Views\Return\GpgWizardView.cshtml" />
-    <Content Include="Views\Return\PersonRespCreate.cshtml" />
     <Content Include="Views\Return\PersonRespEdit.cshtml" />
     <Content Include="Views\Return\PersonRespDelete.cshtml" />
     <Content Include="Views\Return\PersonRespDetails.cshtml" />
     <Content Include="Views\Return\SendConfirmed.cshtml" />
+    <Content Include="Views\Query\Old_Create.cshtml" />
+    <Content Include="Views\Query\Sectors.cshtml" />
+    <Content Include="Views\Query\Download.cshtml" />
+    <Content Include="Views\Query\Edit.cshtml" />
+    <Content Include="Views\Query\Start.cshtml" />
+    <Content Include="Views\Register\Create.cshtml" />
+    <Content Include="Views\Register\Delete.cshtml" />
+    <Content Include="Views\Register\Details.cshtml" />
+    <Content Include="Views\Register\Edit.cshtml" />
+    <Content Include="Views\Register\Index.cshtml" />
+    <Content Include="Views\Return\PersonRespCreate.cshtml" />
+    <Content Include="Views\Query\Search.cshtml" />
+    <Content Include="Views\Query\Old_Delete.cshtml" />
+    <Content Include="Views\Query\Old_Details.cshtml" />
+    <Content Include="Views\Query\Old_Edit.cshtml" />
+    <Content Include="Views\Query\Old_Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

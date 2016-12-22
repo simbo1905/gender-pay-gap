@@ -38,5 +38,6 @@ namespace GenderPayGap.Models.GpgEntityModel
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserGroups> UserGroups { get; set; }
         public virtual DbSet<UserStatuses> UserStatuses { get; set; }
+        public virtual DbSet<C__RefactorLog> C__RefactorLog { get; set; }
     }
 }

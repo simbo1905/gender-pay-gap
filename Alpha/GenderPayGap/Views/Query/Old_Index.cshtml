@@ -1,0 +1,135 @@
+﻿@model IEnumerable<GenderPayGap.Models.GpgEntityModel.Organisation>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.URN)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrganisationName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrganisationType)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrganisationPhase)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrganisationPolicy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrganisationDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Capacity)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Population)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Phone)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Web)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CurrentStatus)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CurrentStatusDate)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CurrentStatusDetails)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Created)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Modified)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Group.GroupRef)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.OrganisationAddress.Type)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.URN)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrganisationName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrganisationType)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrganisationPhase)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrganisationPolicy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrganisationDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Capacity)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Population)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Phone)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Web)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CurrentStatus)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CurrentStatusDate)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CurrentStatusDetails)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Created)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Modified)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Group.GroupRef)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.OrganisationAddress.Type)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.OrganisationId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.OrganisationId }) |
+            @Html.ActionLink("Delete", "Delete", new { id=item.OrganisationId })
+        </td>
+    </tr>
+}
+
+</table>
