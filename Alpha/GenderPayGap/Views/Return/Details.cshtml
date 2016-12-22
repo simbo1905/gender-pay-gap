@@ -3,16 +3,6 @@
 
 
 <main id="content" role="main">
-    @*<div class="phase-banner-alpha">
-            <p>
-                <strong class="phase-tag">ALPHA</strong>
-                <span>This is a new service – your <a href="#">feedback</a> will help us to improve it.</span>
-            </p>
-        </div>*@
-
-
-  
-
     <h1 class="heading-large">
         <span class="heading-secondary">Step 3 of 3</span>
         Review your gender pay gap data
@@ -169,7 +159,10 @@
    
 </main>
 
-
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Styles.Render("~/Content/css")
+}
 
 @*@model GenderPayGap.Models.GpgEntityModel.Return
 
