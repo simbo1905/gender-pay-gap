@@ -60,6 +60,9 @@ namespace GenderPayGap.Models
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public string VerifyUrl { get; internal set; }
+
     }
 
     public class VerifyViewModel
@@ -69,7 +72,17 @@ namespace GenderPayGap.Models
 
         }
 
-        public VerifyViewModel(Organisation organisation)
+        public long UserId { get; set; }
+    }
+
+    public class OrganisationViewModel
+    {
+        public OrganisationViewModel()
+        {
+
+        }
+
+        public OrganisationViewModel(Organisation organisation)
         {
             if (organisation != null)
             {
@@ -80,9 +93,12 @@ namespace GenderPayGap.Models
 
         public OrgTypes OrganisationType { get; set; }
 
-        [Required]
         public string OrganisationRef { get; set; }
-    }
 
+        public string OrganisationName { get; set; }
+
+        public string OrganisationAddress { get; set; }
+        public long UserId { get; set; }
+    }
 
 }

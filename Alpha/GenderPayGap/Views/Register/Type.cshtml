@@ -1,0 +1,71 @@
+﻿@{
+    ViewBag.Title = "Register";
+}
+@model GenderPayGap.Models.VerifyViewModel
+
+<main id="content" role="main">
+    <div class="grid-row">
+
+        @if (string.IsNullOrWhiteSpace(Model.))
+        {
+            @using (Html.BeginForm())
+            {
+                <div class="column-two-thirds">
+                    <div class="govuk-box-highlight">
+                        <h1 class="bold-large">Your email has been confirmed</h1>
+                    </div>
+
+                    <div class="subsection panel-indent">
+                        <div class="bold-small">Next step: Tell us about your organisation.</div>
+                    </div>
+                    <p></p>
+                    <input type="submit" class="button" value="Continue" />
+                </div>
+            }
+        }
+        else
+        {
+            @using (Html.BeginForm())
+            {
+                <div class="column-two-thirds">
+                    <h1 class="heading-large">
+                        <span class="heading-secondary">Step 3 of 5</span>
+                        Your type of organisation
+                    </h1>
+                    <p>Please select the type of organisation you’re registering to report gender pay gap data. </p>
+
+                    <div class="form-section">
+                        <!-- "Chunky" Radio buttons, stacked -->
+                        <h2 class="heading-small">Organisation type</h2>
+
+                        <form lpformnum="1">
+                            <div class="form-group">
+                                <fieldset>
+                                    <label class="block-label selection-button-radio" for="radio-1">
+                                        <input id="radio-1" type="radio" name="radio-group" value="Northern Ireland">
+                                        Private limited company
+                                    </label>
+                                    <label class="block-label selection-button-radio" for="radio-2">
+                                        <input id="radio-2" type="radio" name="radio-group" value="Isle of Man or the Channel Islands">
+                                        Limited liability partnership
+                                    </label>
+                                    <label class="block-label selection-button-radio " for="radio-3">
+                                        <input id="radio-3" type="radio" name="radio-group" value="I am a British citizen living abroad">
+                                        Charity
+                                    </label>
+                                    <label class="block-label selection-button-radio " for="radio-4">
+                                        <input id="radio-4" type="radio" name="radio-group" value="I am a British citizen living abroad">
+                                        Public limited company
+                                    </label>
+                                </fieldset>
+                                <br>
+
+                                <input type="submit" class="button" value="Continue" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            }
+        }
+    </div>
+</main>

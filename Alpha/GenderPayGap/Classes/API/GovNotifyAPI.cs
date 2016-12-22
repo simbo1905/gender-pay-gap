@@ -31,7 +31,7 @@ namespace GenderPayGap
 
         public static bool SendVerifyEmail(string emailAddress, string verifyCode)
         {
-            string url = string.Format("{0}/Register/Verify?{1}", ConfigurationManager.AppSettings["GpgWebServer"], verifyCode);
+            string url = GetVerifyUrl(verifyCode);
 
             var personalisation = new Dictionary<string, dynamic>{{ "url", url }};
 
@@ -40,5 +40,9 @@ namespace GenderPayGap
             return result.status.EqualsI("created","sending","delivered");
         }
 
+        public static string GetVerifyUrl(string verifyCode)
+        {
+            return string.Format("{0}/Register/Verify?code={1}", ConfigurationManager.AppSettings["GpgWebServer"], verifyCode);
+        }
     }
 }

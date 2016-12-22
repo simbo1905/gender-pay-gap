@@ -1,0 +1,26 @@
+﻿@{
+    ViewBag.Title = "Register";
+}
+@model GenderPayGap.Models.VerifyViewModel
+
+<main id="content" role="main">
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
+            }
+            else
+            {
+            <div class="govuk-box-highlight">
+                <h1 class="bold-large">Your email has been confirmed</h1>
+            </div>
+
+            <div class="subsection panel-indent">
+                <div class="bold-small">Next step: Tell us about your organisation.</div>
+            </div>
+            <p></p>
+            <a class="button" href="@Url.Action("Organisation")@Request.Url.Query" role="button">Continue</a>}
+        </div>
+    </div>
+</main>
