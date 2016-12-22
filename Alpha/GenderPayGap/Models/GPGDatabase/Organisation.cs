@@ -27,10 +27,10 @@ namespace GenderPayGap.Models.GpgDatabase
 
         public enum OrgTypes:int
         {
-            Unknown,
-            Company,
-            Charity,
-            Government
+            Unknown=0,
+            Company=1,
+            Charity=2,
+            Government=3
         }
 
         [Key]

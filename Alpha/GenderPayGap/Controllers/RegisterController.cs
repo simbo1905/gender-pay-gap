@@ -7,6 +7,7 @@ using System.Web.Mvc;
 using GenderPayGap;
 using Extensions;
 using GenderPayGap.Models;
+using Newtonsoft.Json;
 
 namespace GenderPayGap.Controllers
 {
@@ -30,9 +31,11 @@ namespace GenderPayGap.Controllers
         {
             //TODO validate the submitted fields
             if (!ModelState.IsValid)return View(model);
+            model.EmailAddress = model.EmailAddress.ToLower();
 
             var currentUser = GetCurrentUser();
-            model.EmailAddress = model.EmailAddress.ToLower();
+
+            if (currentUser == null) currentUser = MvcApplication.Database.User.FirstOrDefault(u => u.EmailAddress == model.EmailAddress);
 
             if (currentUser == null) currentUser = new Models.GpgDatabase.User();
 
@@ -50,11 +53,6 @@ namespace GenderPayGap.Controllers
             {
                 //Go to the verification process
                 return RedirectToAction("Verify", new { code = currentUser.EmailVerifyCode });
-            }
-            else if (currentUser.EmailVerifySendDate > DateTime.MinValue)
-            {
-                //Prompt user to resend PIN
-                return View(model);
             }
 
             //Save the submitted fields
@@ -91,46 +89,53 @@ namespace GenderPayGap.Controllers
             //Set the verification link and save it to the db
             ViewData["currentUser"] = currentUser;
 
+            //Pass the verify url back to the view for confirmation
+            model.VerifyUrl = string.IsNullOrWhiteSpace(currentUser.EmailVerifyCode) ? null : GovNotifyAPI.GetVerifyUrl(currentUser.EmailVerifyCode);
+
             //Prompt user to click verification link
             return View(model);
         }
 
 
-        public ActionResult Verify(string code)
+        [HttpGet]
+        public ActionResult Verify(string code=null)
         {
-            try
-            {
-                //TODO Decrypt the id value to get the id of the user
-                code = global::Extensions.Encryption.DecryptQuerystring(code);
-            }
-            catch (Exception ex)//Exception thrown when decrypt fails
-            {
-                //Show error message
-                return View();
-            }
+            if (string.IsNullOrWhiteSpace(code))code = Request.Url.Query.TrimStartI(" ?");
 
             //Load the user from the verification code
             var currentUser = MvcApplication.Database.User.FirstOrDefault(u=>u.EmailVerifyCode==code);
+
+            var model = new VerifyViewModel();
 
             //Show an error if the code doesnt exist in db
             if (currentUser == null)
             {
                 ModelState.AddModelError("", "Invalid email verification code");
-                return View(code);
+                return View(model);
             }
 
             if (currentUser.EmailVerifySendDate<DateTime.Now.AddDays(-6))
             {
                 //TODO Resend verification code and prompt user
                 ModelState.AddModelError("", "This verification link has expired. A new link has been sent to " + currentUser.EmailAddress);
-                return View(code);
+                return View(model);
+            }
+
+            try
+            {
+                code = Encryption.DecryptQuerystring(code);
+            }
+            catch 
+            {
+                ModelState.AddModelError("", "Invalid email verification code");
+                return View(model);
             }
 
             //Show an error if the code doesnt match the userId
             if (currentUser.UserId != code.ToLong())
             {
                 ModelState.AddModelError("", "Invalid email verification code");
-                return View(code);
+                return View(model);
             }
 
             //Set the user as verified
@@ -140,10 +145,111 @@ namespace GenderPayGap.Controllers
             MvcApplication.Database.SaveChanges();
             ViewData["currentUser"] = currentUser;
 
-            var model = new VerifyViewModel();
             //Take the user through the process of lookup address and send pin code
+
+            model.UserId = currentUser.UserId;
             return View(model);
         }
+
+        [HttpPost]
+        public ActionResult Verify(VerifyViewModel model)
+        {
+            return View(model);
+        }
+
+        [HttpGet]
+        public ActionResult Organisation(string code=null)
+        {
+            if (string.IsNullOrWhiteSpace(code)) code = Request.Url.Query.TrimStartI(" ?");
+
+            //Load the user from the verification code
+            var currentUser = MvcApplication.Database.User.FirstOrDefault(u => u.EmailVerifyCode == code);
+
+            var model = new OrganisationViewModel();
+            
+            //Show an error if the code doesnt exist in db
+            if (currentUser == null)
+            {
+                ModelState.AddModelError("", "Invalid request");
+                return View(model);
+            }
+
+            try
+            {
+                code = Encryption.DecryptQuerystring(code);
+            }
+            catch
+            {
+                ModelState.AddModelError("", "Invalid email verification code");
+                return View(model);
+            }
+
+            //Show an error if the code doesnt match the userId
+            if (currentUser.UserId != code.ToLong())
+            {
+                ModelState.AddModelError("", "Invalid email verification code");
+                return View(model);
+            }
+            model.UserId = currentUser.UserId;
+
+            if (currentUser != null) ViewData["currentUser"] = currentUser;
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public ActionResult Organisation(OrganisationViewModel model)
+        {
+            if (model == null || model.UserId==0)
+            {
+                ModelState.AddModelError("", "Invalid request");
+                return View(model);
+            }
+
+            //TODO validate the submitted fields
+            if (!ModelState.IsValid) return View(model);
+
+            var currentUser = GetCurrentUser();
+
+            if (model.OrganisationType != Models.GpgDatabase.Organisation.OrgTypes.Unknown)
+            {
+                if (string.IsNullOrWhiteSpace(model.OrganisationRef))
+                {
+                    switch (model.OrganisationType)
+                    {
+                        case Models.GpgDatabase.Organisation.OrgTypes.Company:
+                            ModelState.AddModelError("OrganisationRef", "You must enter your company number");
+                            break;
+                        case Models.GpgDatabase.Organisation.OrgTypes.Charity:
+                            ModelState.AddModelError("OrganisationRef", "You must enter your charity number");
+                            break;
+                        case Models.GpgDatabase.Organisation.OrgTypes.Government:
+                            ModelState.AddModelError("OrganisationRef", "You must enter your department reference");
+                            break;
+                    }
+                    return View(model);
+                }
+                else if (string.IsNullOrWhiteSpace(model.OrganisationName))
+                {
+                    //TODO Lookup the company details
+                    var company = CompaniesHouseAPI.Lookup(model.OrganisationRef);
+
+                    model.OrganisationName = company.company_name;
+                    model.OrganisationAddress = company.registered_office_address.address_line_1;
+                    model.OrganisationAddress = company.registered_office_address.address_line_2;
+                    model.OrganisationAddress = company.registered_office_address.country;
+                    model.OrganisationAddress = company.registered_office_address.post_code;
+                }
+                else
+                {
+                    //TODO Send the PIN and confirm when sent
+
+                }
+            }
+
+            return View(model);
+        }
+
 
         public ActionResult Find(VerifyViewModel model)
         {

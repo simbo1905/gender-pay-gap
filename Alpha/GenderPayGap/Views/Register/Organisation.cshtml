@@ -1,0 +1,170 @@
+﻿@{
+    ViewBag.Title = "Register";
+}
+@model GenderPayGap.Models.OrganisationViewModel
+
+<main id="content" role="main">
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(m => m.UserId)
+
+        <div class="grid-row">
+            @if (Model.UserId == 0)
+            {
+                if (!ViewData.ModelState.IsValid)
+                {
+                    @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
+                }
+            }
+            else if (Model.OrganisationType == GenderPayGap.Models.GpgDatabase.Organisation.OrgTypes.Unknown)
+            {
+                if (!ViewData.ModelState.IsValid)
+                {
+                    @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
+                }
+                <div class="column-two-thirds">
+                    <h1 class="heading-large">
+                        <span class="heading-secondary">Step 3 of 5</span>
+                        Your type of organisation
+                    </h1>
+                    <p>Please select the type of organisation you’re registering to report gender pay gap data. </p>
+
+                    <div class="form-section">
+                        <!-- "Chunky" Radio buttons, stacked -->
+                        <h2 class="heading-small">Organisation type</h2>
+                        <div class="form-group">
+                            <fieldset>
+                                <label class="block-label selection-button-radio" for="radio-1">
+                                    @Html.RadioButtonFor(m => m.OrganisationType, GenderPayGap.Models.GpgDatabase.Organisation.OrgTypes.Company, new { @type = "radio", @class = "styled", @name = "radio-group", @id = "radio-1" })
+                                    Registered Company
+                                </label>
+                                <label class="block-label selection-button-radio " for="radio-2">
+                                    @Html.RadioButtonFor(m => m.OrganisationType, GenderPayGap.Models.GpgDatabase.Organisation.OrgTypes.Charity, new { @type = "radio", @class = "styled", @name = "radio-group", @id = "radio-2" })
+                                    Registered Charity
+                                </label>
+                                <label class="block-label selection-button-radio " for="radio-3">
+                                    @Html.RadioButtonFor(m => m.OrganisationType, GenderPayGap.Models.GpgDatabase.Organisation.OrgTypes.Government, new { @type = "radio", @class = "styled", @name = "radio-group", @id = "radio-3" })
+                                    Public Service Organisation
+                                </label>
+                            </fieldset>
+                        </div>
+                        <br>
+
+                        <input type="submit" class="button" value="Continue" />
+                    </div>
+                </div>
+            }
+            else if (string.IsNullOrWhiteSpace(Model.OrganisationName))
+            {
+                @Html.HiddenFor(m => m.OrganisationType)
+
+                <div class="column-two-thirds">
+                    <h1 class="heading-large">
+                        <span class="heading-secondary">Step 4 of 5</span>
+
+                        @if (Model.OrganisationType == GenderPayGap.Models.GpgDatabase.Organisation.OrgTypes.Company)
+                    {
+                            <div>Enter your company registration number</div>
+                        }
+                        else if (Model.OrganisationType == GenderPayGap.Models.GpgDatabase.Organisation.OrgTypes.Charity)
+                        {
+                            <div>Enter your registered charity number</div>
+                        }
+                        else if (Model.OrganisationType == GenderPayGap.Models.GpgDatabase.Organisation.OrgTypes.Government)
+                        {
+                            <div>Enter your department unique reference number (URN)</div>
+                        }
+                    </h1>
+
+                    <div class="form-group">
+                        @if (Model.OrganisationType == GenderPayGap.Models.GpgDatabase.Organisation.OrgTypes.Company)
+                    {
+                <label class="form-label" for="OrgRef">Company registration number</label>
+                    }
+                        else if (Model.OrganisationType == GenderPayGap.Models.GpgDatabase.Organisation.OrgTypes.Charity)
+                    {
+                <label class="form-label" for="OrgRef">Registered charity number</label>
+                    }
+                        else if (Model.OrganisationType == GenderPayGap.Models.GpgDatabase.Organisation.OrgTypes.Government)
+                    {
+                <label class="form-label" for="OrgRef">Department unique reference number (URN)</label>
+                    }
+                        @Html.EditorFor(model => model.OrganisationRef, new { htmlAttributes = new { @class = "form-control", @id = "OrgRef", @name = "OrgRef", @placeholder = "04394391" } })<br />
+                    </div>
+                    <details>
+                        @if (Model.OrganisationType == GenderPayGap.Models.GpgDatabase.Organisation.OrgTypes.Company)
+                    {
+            <summary>Where to find your company registration number</summary>
+                    }
+                    else if (Model.OrganisationType == GenderPayGap.Models.GpgDatabase.Organisation.OrgTypes.Charity)
+                    {
+            <summary>Where to find your registered charity number</summary>
+                    }
+                    else if (Model.OrganisationType == GenderPayGap.Models.GpgDatabase.Organisation.OrgTypes.Government)
+                    {
+            <summary>Where to find your department unique reference number (URN)</summary>
+                    }
+
+                    </details><br>
+                    <input type="submit" class="button" value="Continue" />
+                </div>
+            }
+            else
+            {
+                <div class="column-two-thirds">
+                    <h1 class="heading-large">
+                        <span class="heading-secondary">Step 5 of 5</span>
+                        Confirm your organisation’s details
+                    </h1>
+                    <table class="confirm-details">
+                        <thead>
+                            <tr>
+                                <th class="question">
+                                </th>
+                                <th class="answer">
+                                </th>
+                                <th class="other">
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Employer name
+                                </td>
+                                <td>
+                                    @Model.OrganisationName
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Company number
+                                </td>
+                                <td>
+                                    @Model.OrganisationRef
+                                </td>
+                                <td></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Registered office address
+                                </td>
+                                <td>
+                                    @Model.OrganisationAddress
+                                </td>
+                                <td></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <fieldset>
+                        <br>
+                        <p><input type="submit" class="button" value="Confirm &amp; continue" /></p>
+
+                        <p><a href="registration5">Back</a></p>
+                    </fieldset>
+                </div>
+            }
+        </div>
+    }
+</main>
