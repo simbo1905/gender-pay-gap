@@ -255,7 +255,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="AuthorizationManager.cs" />
+    <Compile Include="Classes\AuthorizationManager.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\Startup.Auth.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -274,48 +274,6 @@
     <Compile Include="Models\GPGDatabase\ReturnStatuses.cs" />
     <Compile Include="Models\GPGDatabase\User.cs" />
     <Compile Include="Models\GPGDatabase\UserStatuses.cs" />
-    <Compile Include="Models\GpgEntityModel\GpgDataEntityModel.Context.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GpgDataEntityModel.Context.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GpgEntityModel\GpgDataEntityModel.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GpgDataEntityModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GpgEntityModel\GpgDataEntityModel.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GpgDataEntityModel.edmx</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GpgEntityModel\Group.cs" />
-    <Compile Include="Models\GpgEntityModel\GroupPermissions.cs" />
-    <Compile Include="Models\GpgEntityModel\Organisation.cs">
-      <DependentUpon>GpgDataEntityModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GpgEntityModel\OrganisationAddress.cs">
-      <DependentUpon>GpgDataEntityModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GpgEntityModel\OrganisationFiles.cs" />
-    <Compile Include="Models\GpgEntityModel\OrganisationGPGReturns.cs" />
-    <Compile Include="Models\GpgEntityModel\OrganisationStatuses.cs">
-      <DependentUpon>GpgDataEntityModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GpgEntityModel\Return.cs">
-      <DependentUpon>GpgDataEntityModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GpgEntityModel\ReturnHit.cs" />
-    <Compile Include="Models\GpgEntityModel\ReturnStatuses.cs">
-      <DependentUpon>GpgDataEntityModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GpgEntityModel\User.cs">
-      <DependentUpon>GpgDataEntityModel.tt</DependentUpon>
-    </Compile>
-    <Compile Include="Models\GpgEntityModel\UserGroups.cs" />
-    <Compile Include="Models\GpgEntityModel\UserStatuses.cs">
-      <DependentUpon>GpgDataEntityModel.tt</DependentUpon>
-    </Compile>
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\RegisterViewModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
@@ -341,16 +299,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Models\GpgEntityModel\GpgDataEntityModel.Context.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>GpgDataEntityModel.edmx</DependentUpon>
-      <LastGenOutput>GpgDataEntityModel.Context.cs</LastGenOutput>
-    </Content>
-    <Content Include="Models\GpgEntityModel\GpgDataEntityModel.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <DependentUpon>GpgDataEntityModel.edmx</DependentUpon>
-      <LastGenOutput>GpgDataEntityModel.cs</LastGenOutput>
-    </Content>
     <Content Include="public\assets\images\dfe-small.png" />
     <Content Include="public\assets\images\dfe-xsmall.png" />
     <Content Include="public\assets\images\dfe.png" />
@@ -403,13 +351,6 @@
     <Content Include="Content\bootstrap.css.map" />
     <Content Include="Content\bootstrap.min.css.map" />
     <Content Include="package.json" />
-    <EntityDeploy Include="Models\GpgEntityModel\GpgDataEntityModel.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>GpgDataEntityModel.Designer.cs</LastGenOutput>
-    </EntityDeploy>
-    <Content Include="Models\GpgEntityModel\GpgDataEntityModel.edmx.diagram">
-      <DependentUpon>GpgDataEntityModel.edmx</DependentUpon>
-    </Content>
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
@@ -490,6 +431,7 @@
     <Content Include="Views\Register\Type.cshtml" />
     <Content Include="Views\Register\Organisation.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
+    <Content Include="Views\Register\Confirm.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

@@ -11,11 +11,11 @@ namespace GenderPayGap
 {
     public class MvcApplication : System.Web.HttpApplication
     {
-        public static GpgDatabase Database = new GpgDatabase();
-
         protected void Application_Start()
         {
-            Database.User.FirstOrDefault();
+#if DEBUG
+            GpgDatabase.Default.User.FirstOrDefault();//Test entity framework loads ok
+#endif
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
