@@ -6,14 +6,14 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using GenderPayGap.Models.GpgEntityModel;
 using System.Data.Entity.Validation;
+using GenderPayGap.Models.GpgDatabase;
 
 namespace GenderPayGap.Controllers
 {
     public class ReturnController : Controller
     {
-        private GpgDBEntitiesContext db = new GpgDBEntitiesContext();
+        private GpgDatabase db = new GpgDatabase();
 
         // GET: Return
         public ActionResult Index()
