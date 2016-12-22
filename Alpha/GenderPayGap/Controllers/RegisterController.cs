@@ -231,14 +231,38 @@ namespace GenderPayGap.Controllers
                 }
                 else if (string.IsNullOrWhiteSpace(model.OrganisationName))
                 {
-                    //TODO Lookup the company details
-                    var company = CompaniesHouseAPI.Lookup(model.OrganisationRef);
+                    var org=MvcApplication.Database.Organisation.FirstOrDefault(o=>o.OrganisationType==model.OrganisationType && o.OrganisationRef== model.OrganisationRef);
+                    OrganisationAddress address;
+                    if (org == null)
+                    {
+                        //Lookup the company details
+                        var company = CompaniesHouseAPI.Lookup(model.OrganisationRef);
 
-                    model.OrganisationName = company.company_name;
-                    model.OrganisationAddress = company.registered_office_address.address_line_1;
-                    model.OrganisationAddress = company.registered_office_address.address_line_2;
-                    model.OrganisationAddress = company.registered_office_address.country;
-                    model.OrganisationAddress = company.registered_office_address.post_code;
+                        //Save the new company
+                        org = new Organisation();
+                        org.OrganisationType = model.OrganisationType;
+                        org.OrganisationRef = model.OrganisationRef;
+                        org.OrganisationName = company.company_name;
+                        MvcApplication.Database.Organisation.Add(org);
+                        MvcApplication.Database.SaveChanges();
+
+                        address = new OrganisationAddress();
+                        address.OrganisationId = org.OrganisationId;
+                        address.Address1 = company.registered_office_address.address_line_1;
+                        address.Address2 = company.registered_office_address.address_line_2;
+                        address.Address3 = company.registered_office_address.locality;
+                        address.Country = company.registered_office_address.country;
+                        address.PostCode = company.registered_office_address.postal_code;
+                        MvcApplication.Database.OrganisationAddress.Add(address);
+                        MvcApplication.Database.SaveChanges();
+                    }
+                    else
+                    {
+                        address= MvcApplication.Database.OrganisationAddress.FirstOrDefault(o => o.OrganisationId == org.OrganisationId);
+                    }
+
+                    model.OrganisationName = org.OrganisationName;
+                    model.OrganisationAddress = address.GetAddress();
                 }
                 else
                 {
