@@ -1030,7 +1030,7 @@ hr {
   text-transform: none;
   font-size: 18px;
   line-height: 1.2;
-  background-image: url("/public/images/icon-pointer.png");
+  background-image: url("/public/assets/images/icon-pointer.png");
   background-repeat: no-repeat;
   background-position: 100% 50%;
   padding: 0.3684210526em 2.1578947368em 0.2105263158em 0.8421052632em;
@@ -2177,7 +2177,7 @@ input[type=number] {
 /* line 4, /app/govuk_modules/govuk-elements-sass/elements/_phase-banner.scss */
 .phase-banner-alpha {
   padding: 10px 0 8px;
-  border-bottom: 1px solid #bfc1c3;
+  /*border-bottom: 1px solid #bfc1c3;*/
 }
 
 @media (min-width: 641px) {
@@ -2562,7 +2562,7 @@ h2.type-heading {
   text-indent: -5000px;
   color: #fff;
   background-color: #005ea5;
-  background-image: url("/public/images/search-button.png");
+  background-image: url("/public/assets/images/search-button.png");
   background-repeat: no-repeat;
   background-position: -12.5% 50%;
   border: none;

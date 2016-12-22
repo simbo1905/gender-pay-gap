@@ -6,52 +6,52 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-
-using System.Security.Claims;
-using GenderPayGap.Models.GpgDatabase;
+using GenderPayGap.Models.GpgEntityModel;
+using System.Data.Entity.Validation;
 
 namespace GenderPayGap.Controllers
 {
     public class ReturnController : Controller
     {
+        private GpgDBEntitiesContext db = new GpgDBEntitiesContext();
+
         // GET: Return
         public ActionResult Index()
         {
-            return View();
+            return View(/*db.Return.ToList()*/);
         }
+
 
         //Get: Return
-        [Authorize]
         public ActionResult GpgWizardView()
         {
-            //This is how to get the UserID facebook willbe a ling string or our id will be a simple number
-            
-            //TODO IF the user is not in the database redirect to /Register
-            //TODO If the user is not verified (clicked email verification link) redirect to /Register/Verify
-            //TODO If the user is not active (confirmed via PIN) then then redirect to /Register/Confirm
-            //Load the organisation for the active user
-            //Find the Return for the current year
-            //If no return then create a new one
-            //If it has already been submitted then show a warning and submitted data
-            //if the return has not been submitted then load for editing
             return View();
         }
 
 
-        // GET: Return/Details/5
-        public ActionResult Details(long? id = 4)
+        [HttpPost]
+        public ActionResult Details([Bind(Include = "ReturnId,DiffMeanHourlyPayPercent,DiffMedianHourlyPercent,DiffMeanBonusPercent,DiffMedianBonusPercent,MaleMedianBonusPayPercent,FemaleMedianBonusPayPercent,MaleLowerPayBand,FemaleLowerPayBand,MaleMiddlePayBand,FemaleMiddlePayBand,MaleUpperPayBand,FemaleUpperPayBand,MaleUpperQuartilePayBand,FemaleUpperQuartilePayBand,CompanyLinkToGPGInfo,CurrentStatus,CurrentStatusDate,CurrentStatusDetails,Created,Modified,JobTitle,FirstName,LastName")] Return @return)
         {
+            //Create(@return);
+
+            //return View();
+
+            return RedirectToAction("SendConfirmed");
+        } 
+        // GET: Return/Details/5
+        public ActionResult Details(long? id)
+        {
+           
             if (id == null)
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Return @return = GpgDatabase.Default.Return.Find(id);
+            Return @return = db.Return.Find(id);
             if (@return == null)
             {
                 return HttpNotFound();
             }
             return View(@return);
-
         }
 
         // GET: Return/Create
@@ -65,12 +65,12 @@ namespace GenderPayGap.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ReturnId,DiffMeanHourlyPayPercent,DiffMedianHourlyPercent,DiffMeanBonusPercent,DiffMedianBonusPercent,MaleMedianBonusPayPercent,FemaleMedianBonusPayPercent,MaleLowerPayBand,FemaleLowerPayBand,MaleMiddlePayBand,FemaleMiddlePayBand,MaleUpperPayBand,FemaleUpperPayBand,MaleUpperQuartilePayBand,FemaleUpperQuartilePayBand,CompanyLinkToGPGInfo,CurrentStatus,CurrentStatusDate,CurrentStatusDetails,Created,Modified")] Return @return)
+        public ActionResult Create([Bind(Include = "ReturnId,DiffMeanHourlyPayPercent,DiffMedianHourlyPercent,DiffMeanBonusPercent,DiffMedianBonusPercent,MaleMedianBonusPayPercent,FemaleMedianBonusPayPercent,MaleLowerPayBand,FemaleLowerPayBand,MaleMiddlePayBand,FemaleMiddlePayBand,MaleUpperPayBand,FemaleUpperPayBand,MaleUpperQuartilePayBand,FemaleUpperQuartilePayBand,CompanyLinkToGPGInfo,CurrentStatus,CurrentStatusDate,CurrentStatusDetails,Created,Modified,JobTitle,FirstName,LastName")] Return @return)
         {
             if (ModelState.IsValid)
             {
-                GpgDatabase.Default.Return.Add(@return);
-                GpgDatabase.Default.SaveChanges();
+                db.Return.Add(@return);
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
@@ -84,7 +84,7 @@ namespace GenderPayGap.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Return @return = GpgDatabase.Default.Return.Find(id);
+            Return @return = db.Return.Find(id);
             if (@return == null)
             {
                 return HttpNotFound();
@@ -97,12 +97,12 @@ namespace GenderPayGap.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ReturnId,DiffMeanHourlyPayPercent,DiffMedianHourlyPercent,DiffMeanBonusPercent,DiffMedianBonusPercent,MaleMedianBonusPayPercent,FemaleMedianBonusPayPercent,MaleLowerPayBand,FemaleLowerPayBand,MaleMiddlePayBand,FemaleMiddlePayBand,MaleUpperPayBand,FemaleUpperPayBand,MaleUpperQuartilePayBand,FemaleUpperQuartilePayBand,CompanyLinkToGPGInfo,CurrentStatus,CurrentStatusDate,CurrentStatusDetails,Created,Modified")] Return @return)
+        public ActionResult Edit([Bind(Include = "ReturnId,DiffMeanHourlyPayPercent,DiffMedianHourlyPercent,DiffMeanBonusPercent,DiffMedianBonusPercent,MaleMedianBonusPayPercent,FemaleMedianBonusPayPercent,MaleLowerPayBand,FemaleLowerPayBand,MaleMiddlePayBand,FemaleMiddlePayBand,MaleUpperPayBand,FemaleUpperPayBand,MaleUpperQuartilePayBand,FemaleUpperQuartilePayBand,CompanyLinkToGPGInfo,CurrentStatus,CurrentStatusDate,CurrentStatusDetails,Created,Modified,JobTitle,FirstName,LastName")] Return @return)
         {
             if (ModelState.IsValid)
             {
-                GpgDatabase.Default.Entry(@return).State = EntityState.Modified;
-                GpgDatabase.Default.SaveChanges();
+                db.Entry(@return).State = EntityState.Modified;
+                db.SaveChanges();
                 return RedirectToAction("Index");
             }
             return View(@return);
@@ -115,7 +115,7 @@ namespace GenderPayGap.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Return @return = GpgDatabase.Default.Return.Find(id);
+            Return @return = db.Return.Find(id);
             if (@return == null)
             {
                 return HttpNotFound();
@@ -128,16 +128,65 @@ namespace GenderPayGap.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            Return @return = GpgDatabase.Default.Return.Find(id);
-            GpgDatabase.Default.Return.Remove(@return);
-            GpgDatabase.Default.SaveChanges();
+            Return @return = db.Return.Find(id);
+            db.Return.Remove(@return);
+            db.SaveChanges();
             return RedirectToAction("Index");
         }
 
-       //GET
+        protected override void Dispose(bool disposing)
+        {
+            if (disposing)
+            {
+                db.Dispose();
+            }
+            base.Dispose(disposing);
+        }
+
+
+
+
+
+
+
+        //GET
         public ActionResult PersonRespCreate()
         {
             return View();
+        }
+
+        // POST: Return/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult PersonRespCreate([Bind(Include = "ReturnId,DiffMeanHourlyPayPercent,DiffMedianHourlyPercent,DiffMeanBonusPercent,DiffMedianBonusPercent,MaleMedianBonusPayPercent,FemaleMedianBonusPayPercent,MaleLowerPayBand,FemaleLowerPayBand,MaleMiddlePayBand,FemaleMiddlePayBand,MaleUpperPayBand,FemaleUpperPayBand,MaleUpperQuartilePayBand,FemaleUpperQuartilePayBand,CompanyLinkToGPGInfo,CurrentStatus,CurrentStatusDate,CurrentStatusDetails,Created,Modified,JobTitle,FirstName,LastName")] Return @return)
+        {
+            try
+            {
+                if (ModelState.IsValid)
+                {
+                    db.Return.Add(@return);
+                    db.SaveChanges();
+                    // return RedirectToAction("Index");
+                }
+
+                return View(@return);
+            }
+            catch (DbEntityValidationException e)
+            {
+                foreach (var eve in e.EntityValidationErrors)
+                {
+                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
+                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
+                    foreach (var ve in eve.ValidationErrors)
+                    {
+                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
+                            ve.PropertyName, ve.ErrorMessage);
+                    }
+                }
+                throw;
+            }
         }
 
         //GET
@@ -145,7 +194,10 @@ namespace GenderPayGap.Controllers
         {
             return View();
         }
+
+        public ActionResult SendConfirmed()
+        {
+            return View();
+        }
     }
 }
-
-

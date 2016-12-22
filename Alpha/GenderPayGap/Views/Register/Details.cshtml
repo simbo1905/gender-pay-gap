@@ -1,0 +1,258 @@
+﻿@model GenderPayGap.Models.GpgEntityModel.User
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>User</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.UserRef)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserRef)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AuthProviderId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AuthProviderId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.AuthUserTokenId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AuthUserTokenId)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.UserType)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.UserType)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Title)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Title)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Firstname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Firstname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Lastname)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Lastname)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Address3)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Address3)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TownCity)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TownCity)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.County)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.County)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CountryCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CountryCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PostCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.PostCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkPhone1)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WorkPhone1)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.WorkPhone2)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.WorkPhone2)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HomePhone)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HomePhone)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Mobile)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Mobile)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MobileVerifyCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MobileVerifyCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MobileVerifyDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MobileVerifyDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Fax)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fax)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Web)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Web)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.EmailAddress)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.EmailAddress)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VerifyCode)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VerifyCode)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.VerifyDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.VerifyDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CurrentStatus)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CurrentStatus)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CurrentStatusDate)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CurrentStatusDate)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CurrentStatusDetails)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CurrentStatusDetails)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Created)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Created)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Modified)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Modified)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.UserId }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>

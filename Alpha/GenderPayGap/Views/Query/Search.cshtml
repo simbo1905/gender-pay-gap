@@ -1,0 +1,46 @@
+﻿@model GenderPayGap.Models.GpgEntityModel.Organisation
+
+
+<main id="content" role="main">
+   
+
+    <div class="grid-row">
+        <div class="column-full">
+            <h1 class="heading-large">
+                Gender pay gap
+            </h1>
+            <div class="tabs">
+                <div class="tabs-nav">
+                    <ul class="tabs-list">
+                        <li><a href="search" class="selected">Search for employers</a></li>
+                        <li><a href="sectors">View employers by sector</a></li>
+                        <li><a href="download">Download data</a></li>
+                    </ul>
+                </div>
+                <div class="tabs-content">
+                    <div class="tabs-panel" id="tab-1">
+                        <div class="tabs-panel-inner text">
+                            <h2 class="heading-medium">Search for employers</h2>
+                            <form class="search" action="search-results">
+                                <div class="search-bar">
+                                    <div class="searchfield">
+                                        <input type="search" class="search-input" placeholder="Enter an employers name...">
+                                        <button type="submit" class="search-submit">Search</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Styles.Render("~/Content/css")
+}
