@@ -19,7 +19,8 @@ namespace GenderPayGap.Models.GpgDatabase
             : base("GpgDatabase")
         {
         }
-        
+        public static GpgDatabase Default = new GpgDatabase();
+
         public virtual DbSet<Organisation> Organisation { get; set; }
         public virtual DbSet<OrganisationAddress> OrganisationAddress { get; set; }
         public virtual DbSet<OrganisationStatus> OrganisationStatus { get; set; }

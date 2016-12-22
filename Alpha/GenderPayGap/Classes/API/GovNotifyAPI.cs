@@ -11,6 +11,8 @@ namespace GenderPayGap
         const string ClientReference = "GpgAlphaTest";
         static string ApiKey = ConfigurationManager.AppSettings["GovNotifyApiKey"];
         static string VerifyTemplateId = ConfigurationManager.AppSettings["GovNotifyVerifyTemplateId"];
+        static string PINTemplateId = ConfigurationManager.AppSettings["GovNotifyPINTemplateId"];
+        static string ConfirmTemplateId = ConfigurationManager.AppSettings["GovNotifyConfirmTemplateId"];
 
         private static Notification SendEmail(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation)
         {
@@ -33,16 +35,41 @@ namespace GenderPayGap
         {
             string url = GetVerifyUrl(verifyCode);
 
-            var personalisation = new Dictionary<string, dynamic>{{ "url", url }};
+            var personalisation = new Dictionary<string, dynamic> { { "url", url } };
 
             var result = SendEmail(emailAddress, VerifyTemplateId, personalisation);
 
-            return result.status.EqualsI("created","sending","delivered");
+            return result.status.EqualsI("created", "sending", "delivered");
         }
 
         public static string GetVerifyUrl(string verifyCode)
         {
             return string.Format("{0}/Register/Verify?code={1}", ConfigurationManager.AppSettings["GpgWebServer"], verifyCode);
+        }
+
+        public static bool SendConfirmEmail(string emailAddress, string confirmCode)
+        {
+            string url = GetConfirmUrl(confirmCode);
+
+            var personalisation = new Dictionary<string, dynamic> { { "url", url } };
+
+            var result = SendEmail(emailAddress, ConfirmTemplateId, personalisation);
+
+            return result.status.EqualsI("created", "sending", "delivered");
+        }
+
+        public static string GetConfirmUrl(string confirmCode)
+        {
+            return string.Format("{0}/Register/Confirm?code={1}", ConfigurationManager.AppSettings["GpgWebServer"], confirmCode);
+        }
+
+        public static bool SendPinInPost(string name, string address, string pin)
+        {
+            var personalisation = new Dictionary<string, dynamic> { { "PIN", pin } };
+
+            var result = SendEmail(address, PINTemplateId, personalisation);
+
+            return result.status.EqualsI("created", "sending", "delivered");
         }
     }
 }

@@ -97,8 +97,32 @@ namespace GenderPayGap.Models
 
         public string OrganisationName { get; set; }
 
+        public long OrganisationId { get; set; }
+
         public string OrganisationAddress { get; set; }
+        public string OrganisationAddressHtml { get; set; }
+        public string UserName { get; set; }
+        public string UserTitle { get; set; }
         public long UserId { get; set; }
+
+        public string ConfirmUrl { get; set; }
+        public long PIN { get; set; }
+    }
+
+    public class ConfirmViewModel
+    {
+        public ConfirmViewModel()
+        {
+
+        }
+
+        [Display(Name = "Enter pin")]
+        public long PIN { get; set; }
+        public string ConfirmCode { get; set; }
+        public string Default { get; set; }
+
+        public bool confirmed = false;
+
     }
 
 }

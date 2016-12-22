@@ -57,6 +57,14 @@ namespace GenderPayGap.Models.GpgDatabase
         public virtual ICollection<UserToken> UserTokens { get; set; }
         public virtual ICollection<UserStatus> UserStatuses { get; set; }
 
+        [NotMapped]
+        public string Fullname {
+            get
+            {
+                return (Title + Firstname + " " + Lastname).TrimI();
+            }
+        }
+
         public static string GetUserIdentifier(IPrincipal principal)
         {
             if (principal == null || !principal.Identity.IsAuthenticated) return null;
@@ -75,11 +83,11 @@ namespace GenderPayGap.Models.GpgDatabase
 
             //If internal user the load it using the identifier as the UserID
             long userId = tokenIdentifier.ToLong();
-            if (userId > 0) return MvcApplication.Database.User.Find(userId);
+            if (userId > 0) return GpgDatabase.Default.User.Find(userId);
 
             //If external user the load it using the identifier
-            var userToken = MvcApplication.Database.UserTokens.FirstOrDefault<UserToken>(t => t.TokenIdentifier == tokenIdentifier);
-            if (userToken != null && userToken.UserId > 0) return MvcApplication.Database.User.Find(userToken.UserId);
+            var userToken = GpgDatabase.Default.UserTokens.FirstOrDefault<UserToken>(t => t.TokenIdentifier == tokenIdentifier);
+            if (userToken != null && userToken.UserId > 0) return GpgDatabase.Default.User.Find(userToken.UserId);
             return null;
         }
     }
