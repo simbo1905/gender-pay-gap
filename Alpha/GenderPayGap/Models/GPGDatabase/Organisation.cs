@@ -43,7 +43,7 @@ namespace GenderPayGap.Models.GpgDatabase
         public string Email { get; set; }
         public string Web { get; set; }
         public string CurrentStatus { get; set; }
-        public System.DateTime CurrentStatusDate { get; set; }
+        public Nullable<System.DateTime> CurrentStatusDate { get; set; }
         public string CurrentStatusDetails { get; set; }
         public Nullable<System.DateTime> Created { get; set; }
         public Nullable<System.DateTime> Modified { get; set; }

@@ -30,7 +30,7 @@ namespace GenderPayGap.Models.GpgDatabase
         [Key, Column(Order = 2)]
         public string TokenIdentifier { get; set; }
 
-        public System.DateTime Created { get; set; }
+        public Nullable<System.DateTime>  Created { get; set; }
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }

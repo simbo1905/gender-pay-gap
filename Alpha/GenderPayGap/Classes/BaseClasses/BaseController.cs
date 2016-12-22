@@ -15,7 +15,7 @@ namespace GenderPayGap
             //Check the ViewBag first 
             if (ViewData.ContainsKey("currentUser")) return (User)ViewData["currentUser"];
 
-            return User.FindCurrentUser();
+            return GenderPayGap.Models.GpgDatabase.User.FindCurrentUser(User);
         }
     }
 }

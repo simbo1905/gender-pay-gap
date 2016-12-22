@@ -1,5 +1,4 @@
 ﻿using GenderPayGap.Models.GpgDatabase;
-using GenderPayGap.Models.GpgEntityModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
