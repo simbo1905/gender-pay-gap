@@ -6,13 +6,13 @@ using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using GenderPayGap.Models.GpgEntityModel;
+using GenderPayGap.Models.GpgDatabase;
 
 namespace GenderPayGap.Controllers
 {
     public class QueryController : Controller
     {
-        private GpgDBEntitiesContext db = new GpgDBEntitiesContext();
+        
 
         public ActionResult Start()
         {
@@ -45,8 +45,9 @@ namespace GenderPayGap.Controllers
         // GET: Query
         public ActionResult Index()
         {
-            var organisation = db.Organisation.Include(o => o.Group).Include(o => o.OrganisationAddress);
-            return View(organisation.ToList());
+            // var organisation = MvcApplication.Database.Organisation.Include(o => o).Include(o => o.OrganisationAddress);
+            //return View(organisation.ToList());
+            return View();
         }
 
         // GET: Query/Details/5
@@ -56,7 +57,7 @@ namespace GenderPayGap.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Organisation organisation = db.Organisation.Find(id);
+            Organisation organisation = MvcApplication.Database.Organisation.Find(id);
             if (organisation == null)
             {
                 return HttpNotFound();
@@ -67,8 +68,7 @@ namespace GenderPayGap.Controllers
         // GET: Query/Create
         public ActionResult Create()
         {
-            ViewBag.GroupId = new SelectList(db.Group, "GroupId", "GroupRef");
-            ViewBag.OrganisationId = new SelectList(db.OrganisationAddress, "OrganisationID", "Type");
+            ViewBag.OrganisationId = new SelectList(MvcApplication.Database.OrganisationAddress, "OrganisationID", "Type");
             return View();
         }
 
@@ -81,13 +81,13 @@ namespace GenderPayGap.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Organisation.Add(organisation);
-                db.SaveChanges();
+                MvcApplication.Database.Organisation.Add(organisation);
+                MvcApplication.Database.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            ViewBag.GroupId = new SelectList(db.Group, "GroupId", "GroupRef", organisation.GroupId);
-            ViewBag.OrganisationId = new SelectList(db.OrganisationAddress, "OrganisationID", "Type", organisation.OrganisationId);
+            
+            ViewBag.OrganisationId = new SelectList(MvcApplication.Database.OrganisationAddress, "OrganisationID", "Type", organisation.OrganisationId);
             return View(organisation);
         }
 
@@ -98,13 +98,13 @@ namespace GenderPayGap.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Organisation organisation = db.Organisation.Find(id);
+            Organisation organisation = MvcApplication.Database.Organisation.Find(id);
             if (organisation == null)
             {
                 return HttpNotFound();
             }
-            ViewBag.GroupId = new SelectList(db.Group, "GroupId", "GroupRef", organisation.GroupId);
-            ViewBag.OrganisationId = new SelectList(db.OrganisationAddress, "OrganisationID", "Type", organisation.OrganisationId);
+           
+            ViewBag.OrganisationId = new SelectList(MvcApplication.Database.OrganisationAddress, "OrganisationID", "Type", organisation.OrganisationId);
             return View(organisation);
         }
 
@@ -117,12 +117,12 @@ namespace GenderPayGap.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(organisation).State = EntityState.Modified;
-                db.SaveChanges();
+                MvcApplication.Database.Entry(organisation).State = EntityState.Modified;
+                MvcApplication.Database.SaveChanges();
                 return RedirectToAction("Index");
             }
-            ViewBag.GroupId = new SelectList(db.Group, "GroupId", "GroupRef", organisation.GroupId);
-            ViewBag.OrganisationId = new SelectList(db.OrganisationAddress, "OrganisationID", "Type", organisation.OrganisationId);
+            
+            ViewBag.OrganisationId = new SelectList(MvcApplication.Database.OrganisationAddress, "OrganisationID", "Type", organisation.OrganisationId);
             return View(organisation);
         }
 
@@ -133,7 +133,7 @@ namespace GenderPayGap.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            Organisation organisation = db.Organisation.Find(id);
+            Organisation organisation = MvcApplication.Database.Organisation.Find(id);
             if (organisation == null)
             {
                 return HttpNotFound();
@@ -146,19 +146,12 @@ namespace GenderPayGap.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(long id)
         {
-            Organisation organisation = db.Organisation.Find(id);
-            db.Organisation.Remove(organisation);
-            db.SaveChanges();
+            Organisation organisation = MvcApplication.Database.Organisation.Find(id);
+            MvcApplication.Database.Organisation.Remove(organisation);
+            MvcApplication.Database.SaveChanges();
             return RedirectToAction("Index");
         }
 
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing)
-            {
-                db.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+       
     }
 }
