@@ -256,6 +256,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="AuthorizationManager.cs" />
+    <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\Startup.Auth.cs" />
     <Compile Include="Controllers\HomeController.cs" />

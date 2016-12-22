@@ -2177,7 +2177,7 @@ input[type=number] {
 /* line 4, /app/govuk_modules/govuk-elements-sass/elements/_phase-banner.scss */
 .phase-banner-alpha {
   padding: 10px 0 8px;
-  /*border-bottom: 1px solid #bfc1c3;*/
+  border-bottom: 1px solid #bfc1c3;
 }
 
 @media (min-width: 641px) {
