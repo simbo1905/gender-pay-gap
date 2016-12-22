@@ -9,6 +9,7 @@
 
 namespace GenderPayGap.Models.GpgDatabase
 {
+    using Extensions;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -31,7 +32,7 @@ namespace GenderPayGap.Models.GpgDatabase
         public string Address3 { get; set; }
         public string TownCity { get; set; }
         public string County { get; set; }
-        public string CountryCode { get; set; }
+        public string Country { get; set; }
         public string PostCode { get; set; }
         public Nullable<System.DateTime> Created { get; set; }
         public Nullable<System.DateTime> Modified { get; set; }
@@ -40,5 +41,18 @@ namespace GenderPayGap.Models.GpgDatabase
 
         [ForeignKey("OrganisationId")]
         public virtual Organisation Organisation { get; set; }
+
+        public string GetAddress(string delimiter=", ")
+        {
+            var list = new List<string>();
+            list.Add(Address1);
+            list.Add(Address2);
+            list.Add(Address3);
+            list.Add(TownCity);
+            list.Add(County);
+            list.Add(Country);
+            list.Add(PostCode);
+            return list.ToDelimitedString(delimiter);
+        }
     }
 }
