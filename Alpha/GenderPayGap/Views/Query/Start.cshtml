@@ -1,0 +1,42 @@
+﻿@model GenderPayGap.Models.GpgEntityModel.Organisation
+
+
+<main id="content" role="main">
+   
+
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <h1 class="heading-large">
+                View gender pay gap data
+            </h1>
+            <p>Use this service to:</p>
+            <ul class="list list-bullet">
+                <li>check a specific employer’s gender pay gap </li>
+                <li>view gender pay gaps by type of employer</li>
+                <li>download gender pay gap datasets</li>
+            </ul>
+            <p>
+            <a class="button button-start" href="Search" role="button">Start now</a>
+            @*<a class="button button-start" role="button" onclick="$('.next').click()">Start now</a>*@
+            </p>
+        </div>
+        <div class="column-third">
+            <aside class="govuk-related-items" role="complementary">
+                <h2 class="heading-medium" id="subsection-title">Gender pay gap guidance </h2>
+                <nav role="navigation" aria-labelledby="subsection-title">
+                    <ul class="font-xsmall">
+                        <li><a href="#">Gender pay gap: what it is</a></li>
+                        <li><a href="#">Gender pay gap: how to calculate </a></li>
+                        <li><a href="#" class="bold-xsmall">More <span class="visuallyhidden">in Subsection</span></a></li>
+                    </ul>
+                </nav>
+            </aside>
+        </div>
+    </div>
+</main>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Styles.Render("~/Content/css")
+}

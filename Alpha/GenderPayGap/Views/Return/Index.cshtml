@@ -3,34 +3,34 @@
 }
 
 <main id="content" role="main">
-    @*<div class="phase-banner-alpha">
-        <p>
-            <strong class="phase-tag">ALPHA</strong>
-            <span>This is a new service – your <a href="#">feedback</a> will help us to improve it.</span>
-        </p>
-    </div>*@
+    
+
 
 
     <div class="grid-row">
         <div class="column-two-thirds">
             <h1 class="heading-large">
-                Report your gender pay gap data
+                Register or report your gender pay gap data
+
             </h1>
             <p>Use this service to:</p>
             <ul class="list list-bullet">
+                <li>register or report your gender pay gap data</li>
                 <li>report your organisation’s gender pay gap data</li>
-                <li>amend gender pay gap data you've already submitted</li>
             </ul>
             <h2 class="heading-medium">Before you start</h2>
-            <p>You need the:</p>
+            <h3 class="heading-small">Registering to report gender pay gap data:</h3>
+            <p>You’ll need an active email address.</p>
+            <h3 class="heading-small">Reporting gender pay gap data for the first time</h3>
+            <p>You’ll need the:</p>
             <ul class="list list-bullet">
-                <li>Government Gateway sign in details linked to your organisation’s PAYE scheme</li>
+                <li>email address and password you used to register for the gender pay gap reporting service</li>
+                <li>PIN that was sent in the post to your organisation</li>
                 <li>gender pay gap data you want to report</li>
                 <li>web address (URL) for the gender pay gap information published on your organisation’s website</li>
             </ul>
             <p>
-                <a class="button button-start"  role="button" href="@Url.Action("GpgWizardView")">Start now</a>
-            </p>
+                <a class="button button-start" role="button" onclick="$('.next').click()">Start now</a>
             </p>
         </div>
         <div class="column-third">
@@ -48,4 +48,9 @@
         </div>
     </div>
 </main>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Styles.Render("~/Content/css")
+}
 
