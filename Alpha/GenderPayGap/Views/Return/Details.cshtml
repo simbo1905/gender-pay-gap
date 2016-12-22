@@ -143,7 +143,11 @@
                 </thead>
                 <tbody>
                     <tr>
-                        <td>Jane Smith <br>Director of HR</td>
+                        <td>
+                            @Html.ValueFor(model => model.FirstName) &nbsp;
+                            @Html.ValueFor(model => model.LastName) <br>
+                            @Html.ValueFor(model => model.JobTitle)
+                    </td>
                         <td> </td>
                     </tr>
 
