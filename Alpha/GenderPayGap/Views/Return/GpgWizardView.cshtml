@@ -5,25 +5,40 @@
     ViewBag.Title = "Gpg Return";
 }
 <div>
-    <form method="post" action="@Url.Action("RecruiterNewView", "Recruiter")">
-
+        @using (Html.BeginForm("Details","Return", FormMethod.Post))
+        {
         <div class="wizard">
-            <div class="step">
-                @Html.Partial("~/Views/Return/Create.cshtml", Model)
+            <div class="step active">
+                @Html.Partial("Index", Model)
+                @*@Html.Partial("~/Views/Home/Index.cshtml", Model)*@
+            </div>
+
+            <!--Steves login page goes in here -->
+            @*<div class="step" style="display:none">
+                    @Html.Partial("/Views/Account/Login.cshtml", Model)
+                </div>*@
+
+            <div class="step" style="display:none">
+                @Html.Partial("Create", Model)
             </div>
 
             <div class="step" style="display:none">
-                @Html.Partial("~/Views/Return/PersonRespCreate.cshtml", Model)
+                @Html.Partial("PersonRespCreate", Model)
             </div>
 
             <div class="step" style="display:none">
-                @Html.Partial("~/Views/Return/Details.cshtml", Model)
+                @Html.Partial("Details", Model)
             </div>
 
-            <input type="button" class="prev" style="display: none" value="Previous" />
-            <input type="button" class="next" style="" value="Next" />
+            <div class="step" style="display:none">
+                @Html.Partial("SendConfirmed", Model)
+            </div>
+
+            <input type="hidden" class="prev" style="display: none" value="Previous" />
+            <input type="hidden" class="next" style="" value="Next" />
         </div>
-    </form>
+
+        }
 </div>
 
 @*<button id="test" class="mytest"> click me</button>*@
