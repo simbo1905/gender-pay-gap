@@ -103,7 +103,11 @@ namespace GenderPayGap.Controllers
 
             var verifyCode = Encryption.EncryptQuerystring(currentUser.UserId.ToString());
             if (currentUser.EmailVerifiedDate > DateTime.MinValue)
-                return RedirectToAction("Organisation",new {code=verifyCode });
+            {
+                currentUser.EmailVerifyCode = verifyCode;
+                GpgDatabase.Default.SaveChanges();
+                return RedirectToAction("Organisation", new { code = verifyCode });
+            }
 
             //Send a verification link to the email address
             try
@@ -266,6 +270,7 @@ namespace GenderPayGap.Controllers
                             ModelState.AddModelError("OrganisationRef", "You must enter your department reference");
                             break;
                     }
+                    model.OrganisationRef = "04394391";
                     return View(model);
                 }
                 else if (string.IsNullOrWhiteSpace(model.OrganisationName))
@@ -279,6 +284,7 @@ namespace GenderPayGap.Controllers
                     //Save the new company                        
                     org.OrganisationType = model.OrganisationType;
                     org.OrganisationRef = model.OrganisationRef;
+
                     org.OrganisationName = company.company_name;
                     if (org.OrganisationId==0)GpgDatabase.Default.Organisation.Add(org);
                     GpgDatabase.Default.SaveChanges();

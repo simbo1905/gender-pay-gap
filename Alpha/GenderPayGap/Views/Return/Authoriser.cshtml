@@ -2,6 +2,24 @@
 
 
 <main id="content" role="main">
+@using (Html.BeginForm("DataConfirm", "Return", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.ReturnId)
+    @Html.HiddenFor(model => model.DiffMeanBonusPercent)
+    @Html.HiddenFor(model => model.DiffMeanHourlyPayPercent)
+    @Html.HiddenFor(model => model.DiffMedianBonusPercent)
+    @Html.HiddenFor(model => model.DiffMedianHourlyPercent)
+    @Html.HiddenFor(model => model.FemaleLowerPayBand)
+    @Html.HiddenFor(model => model.FemaleMedianBonusPayPercent)
+    @Html.HiddenFor(model => model.FemaleMiddlePayBand)
+    @Html.HiddenFor(model => model.FemaleUpperPayBand)
+    @Html.HiddenFor(model => model.FemaleUpperQuartilePayBand)
+    @Html.HiddenFor(model => model.MaleLowerPayBand)
+    @Html.HiddenFor(model => model.MaleMedianBonusPayPercent)
+    @Html.HiddenFor(model => model.MaleMiddlePayBand)
+    @Html.HiddenFor(model => model.MaleUpperPayBand)
+    @Html.HiddenFor(model => model.MaleUpperQuartilePayBand)
+
     <div class="grid-row">
         <div class="column-two-thirds">
             <h1 class="heading-large">
@@ -77,13 +95,13 @@
             </p>
 
             <p>
-                <a class="button" role="button" onclick="$('.prev').click()">Back</a>
-                <a class="button" role="button" onclick="$('.next').click()">Continue</a>
+                <input class="button" type="submit" role="button" value="Back" formaction='@Url.Action("Create")' />
+                <input class="button" type="submit" role="button" value="Continue" />
             </p>
 
         </div>
     </div>
-
+}
 </main>
 
 

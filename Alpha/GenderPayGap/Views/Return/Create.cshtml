@@ -1,9 +1,13 @@
 ﻿@model GenderPayGap.Models.GpgDatabase.Return
-hidden
-
-
 
 <main id="content" role="main">
+@using (Html.BeginForm("Authoriser", "Return", FormMethod.Post))
+{
+    @Html.HiddenFor(model => model.ReturnId)
+    @Html.HiddenFor(model => model.FirstName)
+    @Html.HiddenFor(model => model.JobTitle)
+    @Html.HiddenFor(model => model.LastName)
+
     <div class="grid-row">
         <div class="column-two-thirds">
             <h1 class="heading-large">
@@ -11,9 +15,7 @@ hidden
                 Submit your gender pay gap data for 2016 to 2017
             </h1>
 
-           
-                     @*@using (Html.BeginForm("Create", "Return", FormMethod.Post))*@
-                    
+                              
                     <div class="form-horizontal">
                         @*<h4>Return</h4>*@
                         @*<hr />*@
@@ -397,13 +399,14 @@ hidden
                     </div>
                
             <p>
-                <a class="button" role="button" onclick="$('.prev').click()">Back</a>
-                <a class="button" role="button" onclick="$('.next').click()">Continue</a>
+                <input class="button" type="submit" role="button" value="Back" formaction='@Url.Action("Index")'  />
+                <input class="button" type="submit" role="button" value="Continue" />
             </p>
             @*<a href="gpg-overview">Cancel</a>*@
         </div>
 
     </div>
+}
 </main>
 
 

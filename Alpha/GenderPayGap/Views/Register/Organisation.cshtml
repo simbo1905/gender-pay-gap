@@ -89,7 +89,7 @@
                         {
                             <label class="form-label" for="OrgRef">Department unique reference number (URN)</label>
                         }
-                        @Html.EditorFor(model => model.OrganisationRef, new { htmlAttributes = new { @class = "form-control", @id = "OrgRef", @name = "OrgRef", @placeholder = "04394391" } })<br />
+                        @Html.EditorFor(model => model.OrganisationRef, new { htmlAttributes = new { @class = "form-control", @id = "OrgRef", @name = "OrgRef" } })<br />
                     </div>
                     <details>
                         @if (Model.OrganisationType == GenderPayGap.Models.GpgDatabase.Organisation.OrgTypes.Company)

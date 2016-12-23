@@ -24,7 +24,7 @@ namespace GenderPayGap
             routes.MapRoute(
                    name: "ReturnEdit",
                    url: "{controller}/{action}/{id}",
-                   defaults: new { controller = "Return", action = "Edit", id = UrlParameter.Optional }
+                   defaults: new { controller = "Return", action = "Submit", id = UrlParameter.Optional }
                 );
 
                 //routes.MapRoute(
@@ -32,18 +32,6 @@ namespace GenderPayGap
                 //    url: "{controller}/{action}/{id}",
                 //    defaults: new { controller = "Return", action = "Index", id = UrlParameter.Optional }
                 //);
-
-                routes.MapRoute(
-                   name: "ReturnCreate",
-                   url: "{controller}/{action}/{id}",
-                   defaults: new { controller = "Return", action = "Create", id = UrlParameter.Optional }
-                );
-
-                routes.MapRoute(
-                  name: "ReturnDelete",
-                  url: "{controller}/{action}/{id}",
-                  defaults: new { controller = "Return", action = "Delete", id = UrlParameter.Optional }
-               );
 
                 routes.MapRoute(
                  name: "ReturnDetails",
