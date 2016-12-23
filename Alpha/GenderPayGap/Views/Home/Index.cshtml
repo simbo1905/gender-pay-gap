@@ -8,9 +8,14 @@
         Gender pay gap is a new service for employees to collect and store & track information on the differences wages of Male and Female employees
         within their company as well as submit this data to the government at the end of the financial year.
     </p>
-    @Html.ActionLink("Register for GPG Account", "Submit","Return", null,new { @class = "button" })
-    @Html.ActionLink("Submit GPG Return", "Start", "Query",null, new { @class = "button" })
-    @Html.ActionLink("Search GPG Returns","Start","Query",null,new { @class="button"})
-    <a href="~/API/Help" class="button">API Help</a>
-</div>
+    <p>@Html.ActionLink("Register for GPG Account", "", "Register", null, new { @class = "button" })</p>
+    <p>@Html.ActionLink("Submit GPG Return", "", "Return", null, new { @class = "button" }) </ p >
+    <p>@Html.ActionLink("Search GPG Returns", "Start", "Query", null, new { @class = "button" })</p>
+    <p>@Html.ActionLink("Search GPG Returns", "Start", "Query", null, new { @class = "button" })</p>
+    <p><a href="~/API/Help" class="button">API Help</a></p>
+    @using (Html.BeginForm("Delete", "Home", FormMethod.Post))
+    {
+        <p><input class="button" type="submit" role="button" value="Clear Database" /></p>
+    }
 
+</div>
