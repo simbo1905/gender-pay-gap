@@ -26,6 +26,7 @@ namespace GenderPayGap.Models.GpgDatabase
         public long UserId { get; set; }
         [Key, Column(Order = 1)]
         public long OrganisationId { get; set; }
+        public string ConfirmCode { get; set; }
         public long PINCode { get; set; }
         public Nullable<System.DateTime> PINSentDate { get; set; }
         public Nullable<System.DateTime> PINConfirmedDate { get; set; }

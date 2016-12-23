@@ -166,6 +166,36 @@ namespace Extensions
             return found;
         }
 
+        public static void QuickSend(string subject, string recipient, string html)
+        {
+            SmtpClient mySmtpClient = new SmtpClient("smtp.gmail.com");
+            //mySmtpClient.Port = 587;
+            mySmtpClient.EnableSsl = true;
+
+            // set smtp-client with basicAuthentication
+            mySmtpClient.UseDefaultCredentials = false;
+            System.Net.NetworkCredential basicAuthenticationInfo = new
+                System.Net.NetworkCredential("***REMOVED***", "***REMOVED***");
+            mySmtpClient.Credentials = basicAuthenticationInfo;
+
+            // add from,to mailaddresses
+            MailAddress from = new MailAddress("***REMOVED***", "Gender Pay Gap");
+            MailAddress to = new MailAddress(recipient);
+            MailMessage myMail = new System.Net.Mail.MailMessage(from, to);
+
+            // set subject and encoding
+            myMail.Subject = subject;
+            myMail.SubjectEncoding = System.Text.Encoding.UTF8;
+
+            // set body-message and encoding
+            myMail.Body = html;
+            myMail.BodyEncoding = System.Text.Encoding.UTF8;
+            // text or html
+            myMail.IsBodyHtml = true;
+
+            mySmtpClient.Send(myMail);
+        }
+
     }
 
 }

@@ -9,11 +9,14 @@ using IdentityServer3.Core.Extensions;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
 using IdentityServer3.Core.Services.Default;
+using GenderPayGap.Models.GpgDatabase;
 
 namespace GpgIdentityServer
 {
     public class LocalRegistrationUserService : UserServiceBase
     {
+        public static GpgDatabase Database = new GpgDatabase();
+
         public class CustomUser
         {
             public string Subject { get; set; }
@@ -51,23 +54,24 @@ namespace GpgIdentityServer
         private List<CustomUser> Load()
         {
             //TODO Load users from database
-
-            return new List<CustomUser>{
-                new CustomUser
+            var users = new List<CustomUser>();
+            foreach (var user in Database.User)
+            {
+                users.Add(new CustomUser
                 {
-                    Username = "Cadence",
-                    Password = "Cadence2007",
-                    Subject = "1",
+                    Username = user.EmailAddress,
+                    Password = user.Password,
+                    Subject = user.UserId.ToString(),
 
                     Claims = new List<Claim>
                     {
-                        new Claim(Constants.ClaimTypes.GivenName, "Stephen"),
-                        new Claim(Constants.ClaimTypes.FamilyName, "McCabe"),
-                        new Claim(Constants.ClaimTypes.Role, "Developer"),
-                        new Claim(Constants.ClaimTypes.Role, "Administrator")
+                        new Claim(Constants.ClaimTypes.GivenName, user.Firstname),
+                        new Claim(Constants.ClaimTypes.FamilyName, user.Lastname),
+                        new Claim(Constants.ClaimTypes.Role, "Customer")
                     }
-                }
-            };
+                });
+            }
+            return users;
         }
     }
 }
