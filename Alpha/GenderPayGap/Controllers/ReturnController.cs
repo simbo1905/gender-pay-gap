@@ -49,13 +49,13 @@ namespace GenderPayGap.Controllers
         }
 
         // GET: Return/Details/5
-        public ActionResult DataConfirm(int id = 1)
+        public ActionResult DataConfirm(int id)
         {
             var qid = GpgDatabase.Default.Return.Find(id);
             return View(qid);
         }
 
-        public ActionResult Details(int id = 1)
+        public ActionResult Details(int id)
         {
             var qid = GpgDatabase.Default.Return.Find(id);
             return View(qid);
