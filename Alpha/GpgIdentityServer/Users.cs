@@ -13,7 +13,7 @@ namespace GpgIdentityServer
             {
                 new InMemoryUser
                 {
-                    Username = "Cadence",
+                    Username = "Cadencey",
                     Password = "Cadence2007",
                     Subject = "1",
 

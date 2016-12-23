@@ -1,0 +1,58 @@
+﻿@{
+    ViewBag.Title = "Confirm PIN";
+}
+@model GenderPayGap.Models.ConfirmViewModel
+
+<main id="content" role="main">
+    <div class="grid-row">
+        @if (!ViewData.ModelState.IsValid)
+        {
+            @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
+        }
+
+        @if (!Model.confirmed)
+        {
+            using (Html.BeginForm())
+            {
+                @Html.HiddenFor(m => m.ConfirmCode)
+                @Html.HiddenFor(m => m.Default)
+
+                <div class="column-two-thirds">
+                    <h1 class="heading-large">
+                        Please enter your gender pay gap PIN
+                    </h1>
+                    <br>
+                    <div class="form-group ">
+                        @Html.LabelFor(model => model.PIN, htmlAttributes: new { @class = "form-label" })
+                        @Html.EditorFor(model => model.PIN,"", new { htmlAttributes = new { @placeholder=@Model.Default,@class = "form-control" } })
+                    </div>
+
+
+                    <details>
+                        <summary>Gender pay gap pin: what it is Problems with your gender pay gap pin</summary>
+                    </details>			<details>
+                        <summary>Problems with your activation pin?</summary>
+                        <p>
+                            Lost your pin? 			<a id="forgotten-password" href="#">Request a new pin</a>
+                        </p>
+                    </details>	<br>
+
+                    <input type="submit" class="button" value="Activate &amp; continue" />
+                </div>
+            }
+        }
+        else
+        {
+            <div class="column-two-thirds">
+                <div class="govuk-box-highlight">
+                    <h1 class="bold-large">Your service has been activated</h1>
+                </div>
+                <div class="subsection panel-indent">
+                    <div class="bold-small">Next step: Submit your gender pay gap data for 2016 to 2017.</div>
+                </div>
+                <p></p>
+                <a class="button" role="button" href="@Url.Action("Index","Return")">Continue</a>
+            </div>
+        }
+    </div>
+</main>
