@@ -10,6 +10,7 @@
 @using (Html.BeginForm("SendConfirmed", "Return", FormMethod.Post))
 {
     @Html.HiddenFor(model => model.ReturnId)
+    @Html.HiddenFor(model => model.OrganisationId)
     @Html.HiddenFor(model => model.DiffMeanBonusPercent)
     @Html.HiddenFor(model => model.DiffMeanHourlyPayPercent)
     @Html.HiddenFor(model => model.DiffMedianBonusPercent)
