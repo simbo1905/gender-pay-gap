@@ -7,6 +7,7 @@
     @using (Html.BeginForm())
     {
         @Html.HiddenFor(m => m.UserId)
+        @Html.HiddenFor(m => m.OrganisationId)
 
         <div class="grid-row">
             @if (Model.UserId == 0)

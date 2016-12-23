@@ -19,7 +19,7 @@
                 </h1>
                 @if (!User.Identity.IsAuthenticated)
                 {
-                    <p>If you already have an account, please @Html.ActionLink("sign In", "Submit", "Return").</p>
+                    <p>If you already have an account, please @Html.ActionLink("sign In", "Index", "Return").</p>
                 }
                 @using (Html.BeginForm())
                 {

@@ -8,6 +8,7 @@
 @using (Html.BeginForm("Create", "Return", FormMethod.Post))
 {
     @Html.HiddenFor(model => model.ReturnId)
+    @Html.HiddenFor(model => model.OrganisationId)
     @Html.HiddenFor(model => Model.DiffMeanBonusPercent)
     @Html.HiddenFor(model => model.DiffMeanHourlyPayPercent)
     @Html.HiddenFor(model => model.DiffMedianBonusPercent)

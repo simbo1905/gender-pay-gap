@@ -4,6 +4,7 @@
 @using (Html.BeginForm("Authoriser", "Return", FormMethod.Post))
 {
     @Html.HiddenFor(model => model.ReturnId)
+    @Html.HiddenFor(model => model.OrganisationId)
     @Html.HiddenFor(model => model.FirstName)
     @Html.HiddenFor(model => model.JobTitle)
     @Html.HiddenFor(model => model.LastName)
