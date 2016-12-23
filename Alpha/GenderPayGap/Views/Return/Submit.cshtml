@@ -5,7 +5,7 @@
     ViewBag.Title = "Gpg Return";
 }
 <div>
-        @using (Html.BeginForm("Details","Return", FormMethod.Post))
+        @using (Html.BeginForm("Submit", "Return", FormMethod.Post))
         {
         <div class="wizard">
             <div class="step active">
@@ -23,11 +23,11 @@
             </div>
 
             <div class="step" style="display:none">
-                @Html.Partial("PersonRespCreate", Model)
+                @Html.Partial("PersonResponsibleCreate", Model)
             </div>
 
             <div class="step" style="display:none">
-                @Html.Partial("Details", Model)
+                @Html.Partial("DataConfirm", Model)
             </div>
 
             <div class="step" style="display:none">
@@ -36,6 +36,8 @@
 
             <input type="hidden" class="prev" style="display: none" value="Previous" />
             <input type="hidden" class="next" style="" value="Next" />
+
+            @*<input type="submit" value="Create" class="btn btn-default" />*@
         </div>
 
         }

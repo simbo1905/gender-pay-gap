@@ -4,33 +4,46 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GenderPayGap.Models.GpgDatabase;
-
+using GenderPayGap.Models;
+using Extensions;
 
 namespace GenderPayGap.Controllers
 {
     public class QueryController : Controller
     {
-
-        private GpgDatabase db = new GpgDatabase();
-
         public ActionResult Start()
         {
             return View();
         }
 
-        public ActionResult Search()
+        public ActionResult Search(string query=null)
         {
-            return View();
+            var model = new SearchViewModel();
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                model.Results = GpgDatabase.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(query.ToLower())).ToArray();
+
+                //var x = model.Search;
+                //model.Results = GpgDatabase.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(model.Search.ToLower())).ToArray();
+                //model.Results = GpgDatabase.Default.Organisation.Where(p => p.OrganisationName.ToLower() == model.Search.ToLower()).ToArray();
+                //model.Results = (from o in GpgDatabase.Default.Organisation
+                //                 where (o.OrganisationName.ContainsI(model.Search))
+                //                 orderby o.OrganisationName
+                //                 select o).ToArray();
+
+            }
+            return View(model);
         }
 
-        public ActionResult SearchResult(FormCollection form )
+        [HttpPost]
+        public ActionResult Search(SearchViewModel model)
         {
-            var query = (from o in db.Organisation
-                         where(o.OrganisationName == form.)
-                         orderby o.OrganisationName
-                         select o).ToList();
+            if (ModelState.IsValid && !string.IsNullOrWhiteSpace(model.Search))
+            {
+                return RedirectToAction("Search", new { query = model.Search });
+            }
 
-            return View(query);
+            return View(model);
         }
          
 

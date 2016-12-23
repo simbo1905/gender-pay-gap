@@ -1,8 +1,8 @@
-﻿@model GenderPayGap.Models.GpgDatabase.Organisation
+﻿@model GenderPayGap.Models.SearchViewModel
 
 
 <main id="content" role="main">
-   
+
 
     <div class="grid-row">
         <div class="column-full">
@@ -18,23 +18,55 @@
                     </ul>
                 </div>
                 <div class="tabs-content">
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        @Html.ValidationSummary("ERROR:", new  { @class="text-danger"})
+                    }
                     <div class="tabs-panel" id="tab-1">
                         <div class="tabs-panel-inner text">
                             <h2 class="heading-medium">Search for employers</h2>
-                            <form class="search" action="SearchResult" method="get">
+
+                            <form class="search" action="Search" method="post">
                                 <div class="search-bar">
                                     <div class="searchfield">
-                                        <input type="search" class="search-input" placeholder="Enter an employers name...">
+                                        @Html.EditorFor(model => model.Search, new { htmlAttributes = new { @class = "search-input", @placeholder = "Enter an employers name..." } })
+                                        @*<input type="search" name="search" class="search-input" placeholder="Enter an employers name...">*@
                                         <button type="submit" class="search-submit">Search</button>
                                     </div>
                                 </div>
                             </form>
                         </div>
+                        <table class="table">
+                            <tr>
+                                <th>
+                                    Employer
+                                </th>
+                                @*<th>
+                                    Sector
+                                </th>*@
+                            </tr>
+
+                            @if (Model != null && Model.Results != null)
+                             {
+                                  foreach (var item in Model.Results)
+                                    {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(i => item)
+                                        </td>
+                                        @*<td>
+                                            @Html.DisplayFor(i => item.OrganisationType)
+                                        </td>*@
+                                    </tr>
+                                    }
+                             }
+
+                        </table>
+
                     </div>
                 </div>
             </div>
         </div>
-
     </div>
 </main>
 
