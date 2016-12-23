@@ -1,193 +1,163 @@
-﻿using System;
+﻿using GenderPayGap.Models;
+using GenderPayGap.Models.GpgDatabase;
+using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Web;
 using System.Web.Mvc;
-using System.Data.Entity.Validation;
-using GenderPayGap.Models.GpgDatabase;
-using Thinktecture.IdentityModel.Mvc;
 
 namespace GenderPayGap.Controllers
 {
-    [Authorize]
-    public class ReturnController : BaseController
+    public class ReturnController : Controller
     {
 
-        // GET: Return
-        public ActionResult Index()
-        {
-
-            if (!Authorise()) return RedirectToAction("Index", "Register");
-
-            return View(/*GpgDatabase.Default.Return.ToList()*/);
-        }
-
-
         //Get: Return
-        public ActionResult GpgWizardView()
+        public ActionResult Submit()
         {
             return View();
         }
 
-
         [HttpPost]
-        public ActionResult Details([Bind(Include = "ReturnId,DiffMeanHourlyPayPercent,DiffMedianHourlyPercent,DiffMeanBonusPercent,DiffMedianBonusPercent,MaleMedianBonusPayPercent,FemaleMedianBonusPayPercent,MaleLowerPayBand,FemaleLowerPayBand,MaleMiddlePayBand,FemaleMiddlePayBand,MaleUpperPayBand,FemaleUpperPayBand,MaleUpperQuartilePayBand,FemaleUpperQuartilePayBand,CompanyLinkToGPGInfo,CurrentStatus,CurrentStatusDate,CurrentStatusDetails,Created,Modified,JobTitle,FirstName,LastName")] Return @return)
+        public ActionResult Submit(Return @return)
         {
-            //Create(@return);
-
-            //return View();
-
-            return RedirectToAction("SendConfirmed");
-        } 
-        // GET: Return/Details/5
-        public ActionResult Details(long? id)
-        {
-           
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Return @return = GpgDatabase.Default.Return.Find(id);
-            if (@return == null)
-            {
-                return HttpNotFound();
-            }
-            return View(@return);
-        }
-
-        // GET: Return/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
-
-        // POST: Return/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ReturnId,DiffMeanHourlyPayPercent,DiffMedianHourlyPercent,DiffMeanBonusPercent,DiffMedianBonusPercent,MaleMedianBonusPayPercent,FemaleMedianBonusPayPercent,MaleLowerPayBand,FemaleLowerPayBand,MaleMiddlePayBand,FemaleMiddlePayBand,MaleUpperPayBand,FemaleUpperPayBand,MaleUpperQuartilePayBand,FemaleUpperQuartilePayBand,CompanyLinkToGPGInfo,CurrentStatus,CurrentStatusDate,CurrentStatusDetails,Created,Modified,JobTitle,FirstName,LastName")] Return @return)
-        {
-            if (ModelState.IsValid)
-            {
-                GpgDatabase.Default.Return.Add(@return);
-                GpgDatabase.Default.SaveChanges();
-                return RedirectToAction("Index");
-            }
-
-            return View(@return);
-        }
-
-        // GET: Return/Edit/5
-        public ActionResult Edit(long? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Return @return = GpgDatabase.Default.Return.Find(id);
-            if (@return == null)
-            {
-                return HttpNotFound();
-            }
-            return View(@return);
-        }
-
-        // POST: Return/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ReturnId,DiffMeanHourlyPayPercent,DiffMedianHourlyPercent,DiffMeanBonusPercent,DiffMedianBonusPercent,MaleMedianBonusPayPercent,FemaleMedianBonusPayPercent,MaleLowerPayBand,FemaleLowerPayBand,MaleMiddlePayBand,FemaleMiddlePayBand,MaleUpperPayBand,FemaleUpperPayBand,MaleUpperQuartilePayBand,FemaleUpperQuartilePayBand,CompanyLinkToGPGInfo,CurrentStatus,CurrentStatusDate,CurrentStatusDetails,Created,Modified,JobTitle,FirstName,LastName")] Return @return)
-        {
-            if (ModelState.IsValid)
-            {
-                GpgDatabase.Default.Entry(@return).State = EntityState.Modified;
-                GpgDatabase.Default.SaveChanges();
-                return RedirectToAction("Index");
-            }
-            return View(@return);
-        }
-
-        // GET: Return/Delete/5
-        public ActionResult Delete(long? id)
-        {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Return @return = GpgDatabase.Default.Return.Find(id);
-            if (@return == null)
-            {
-                return HttpNotFound();
-            }
-            return View(@return);
-        }
-
-        // POST: Return/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(long id)
-        {
-            Return @return = GpgDatabase.Default.Return.Find(id);
-            GpgDatabase.Default.Return.Remove(@return);
-            GpgDatabase.Default.SaveChanges();
-            return RedirectToAction("Index");
-        }
-
-        
-        //GET
-        public ActionResult PersonRespCreate()
-        {
-            return View();
-        }
-
-        // POST: Return/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult PersonRespCreate([Bind(Include = "ReturnId,DiffMeanHourlyPayPercent,DiffMedianHourlyPercent,DiffMeanBonusPercent,DiffMedianBonusPercent,MaleMedianBonusPayPercent,FemaleMedianBonusPayPercent,MaleLowerPayBand,FemaleLowerPayBand,MaleMiddlePayBand,FemaleMiddlePayBand,MaleUpperPayBand,FemaleUpperPayBand,MaleUpperQuartilePayBand,FemaleUpperQuartilePayBand,CompanyLinkToGPGInfo,CurrentStatus,CurrentStatusDate,CurrentStatusDetails,Created,Modified,JobTitle,FirstName,LastName")] Return @return)
-        {
+            int count = 2;
             try
             {
-                if (ModelState.IsValid)
+                // TODO: Add insert logic here
+                @return.Organisation = new Organisation
                 {
-                    GpgDatabase.Default.Return.Add(@return);
-                    GpgDatabase.Default.SaveChanges();
-                    // return RedirectToAction("Index");
-                }
+                    OrganisationId = ++count,
+                    OrganisationName = "testOrg2" + count.ToString()
+                };
 
-                return View(@return);
+                
+                GpgDatabase.Default.Return.Add(@return);
+                GpgDatabase.Default.SaveChanges();
+                @return.AccountingDate = DateTime.Now;
+
+                return RedirectToAction("SendConfirmed");
             }
-            catch (DbEntityValidationException e)
+            catch (Exception e)
             {
-                foreach (var eve in e.EntityValidationErrors)
-                {
-                    Console.WriteLine("Entity of type \"{0}\" in state \"{1}\" has the following validation errors:",
-                        eve.Entry.Entity.GetType().Name, eve.Entry.State);
-                    foreach (var ve in eve.ValidationErrors)
-                    {
-                        Console.WriteLine("- Property: \"{0}\", Error: \"{1}\"",
-                            ve.PropertyName, ve.ErrorMessage);
-                    }
-                }
-                throw;
+                return View(e);
             }
-        }
-
-        //GET
-        public ActionResult PersonRespEdit()
-        {
-            return View();
         }
 
         public ActionResult SendConfirmed()
         {
             return View();
         }
+
+        // GET: Return/Details/5
+        public ActionResult DataConfirm(int id = 1)
+        {
+            var qid = GpgDatabase.Default.Return.Find(id);
+            return View(qid);
+        }
+
+        public ActionResult Details(int id = 1)
+        {
+            var qid = GpgDatabase.Default.Return.Find(id);
+            return View(qid);
+        }
+
+        //// GET: Return/Create
+        //public ActionResult Create()
+        //{
+        //    return View();
+        //}
+
+
+        ////GET
+        //public ActionResult PersonResponsibleCreate()
+        //{
+        //    return View();
+        //}
+
+        //public ActionResult SendConfirmed()
+        //{
+        //    return View();
+        //}
+
+
+
+        //// GET: Return
+        ////public ActionResult Index()
+        ////{
+        ////    return View();
+        ////}
+
+        //// GET: Return/Details/5
+        //public ActionResult Details(int id = 0)
+        //{
+        //   var qid = GpgDatabase.Default.Return.Find(id);
+        //    return View(qid);
+        //}
+
+
+        //// POST: Return/Create
+        //[HttpPost]
+        //public ActionResult Create(Return model)
+        //{
+        //    try
+        //    {
+
+
+        //        // TODO: Add insert logic here
+
+        //        GpgDatabase.Default.Return.Add(model);
+        //        GpgDatabase.Default.SaveChanges();
+
+        //        return RedirectToAction("Index");
+        //    }
+        //    catch(Exception e)
+        //    {
+        //        return View(e);
+        //    }
+        //}
+
+        //// GET: Return/Edit/5
+        //public ActionResult Edit(int id)
+        //{
+        //    return View();
+        //}
+
+        //// POST: Return/Edit/5
+        //[HttpPost]
+        //public ActionResult Edit(int id, FormCollection collection)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add update logic here
+
+        //        return RedirectToAction("Index");
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
+
+        //// GET: Return/Delete/5
+        //public ActionResult Delete(int id)
+        //{
+        //    return View();
+        //}
+
+        //// POST: Return/Delete/5
+        //[HttpPost]
+        //public ActionResult Delete(int id, FormCollection collection)
+        //{
+        //    try
+        //    {
+        //        // TODO: Add delete logic here
+
+        //        return RedirectToAction("Index");
+        //    }
+        //    catch
+        //    {
+        //        return View();
+        //    }
+        //}
     }
 }
