@@ -1,4 +1,4 @@
-﻿@model GenderPayGap.Models.GpgEntityModel.Return
+﻿@model GenderPayGap.Models.GpgDatabase.Return
 
 
 
@@ -13,9 +13,8 @@
 
             @*<form method="get" name="registration" action="/signup" id="registration">*@
 
-
-                @*@using (Html.BeginForm("Create", "Return", FormMethod.Get))*@
-                @using (Html.BeginForm())
+                 @*@using (Html.BeginForm())*@
+                @using (Html.BeginForm("Create", "Return", FormMethod.Get))
                 {
                     <div class="form-horizontal">
                         @*<h4>Return</h4>*@
@@ -415,7 +414,7 @@
 
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10">
-                                @*<input type="submit" value="Create" class="btn btn-default" />*@
+                                <input type="submit" value="Create" class="btn btn-default" />
                             </div>
                         </div>
 
@@ -438,185 +437,7 @@
 
 
 
-@*@using (Html.BeginForm())
-{
-    @Html.AntiForgeryToken()
 
-    <div class="form-horizontal">
-        <h4>Return</h4>
-        <hr />
-        @Html.ValidationSummary(true, "", new { @class = "text-danger" })*@
-
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.DiffMeanHourlyPayPercent, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.DiffMeanHourlyPayPercent, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.DiffMeanHourlyPayPercent, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.DiffMedianHourlyPercent, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.DiffMedianHourlyPercent, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.DiffMedianHourlyPercent, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.DiffMeanBonusPercent, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.DiffMeanBonusPercent, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.DiffMeanBonusPercent, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.DiffMedianBonusPercent, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.DiffMedianBonusPercent, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.DiffMedianBonusPercent, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.MaleMedianBonusPayPercent, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.MaleMedianBonusPayPercent, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.MaleMedianBonusPayPercent, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.FemaleMedianBonusPayPercent, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.FemaleMedianBonusPayPercent, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.FemaleMedianBonusPayPercent, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.MaleLowerPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.MaleLowerPayBand, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.MaleLowerPayBand, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.FemaleLowerPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.FemaleLowerPayBand, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.FemaleLowerPayBand, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.MaleMiddlePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.MaleMiddlePayBand, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.MaleMiddlePayBand, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.FemaleMiddlePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.FemaleMiddlePayBand, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.FemaleMiddlePayBand, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.MaleUpperPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.MaleUpperPayBand, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.MaleUpperPayBand, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.FemaleUpperPayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.FemaleUpperPayBand, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.FemaleUpperPayBand, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.MaleUpperQuartilePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.MaleUpperQuartilePayBand, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.MaleUpperQuartilePayBand, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.FemaleUpperQuartilePayBand, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.FemaleUpperQuartilePayBand, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.FemaleUpperQuartilePayBand, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.CompanyLinkToGPGInfo, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.CompanyLinkToGPGInfo, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.CompanyLinkToGPGInfo, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.CurrentStatus, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.CurrentStatus, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.CurrentStatus, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.CurrentStatusDate, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.CurrentStatusDate, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.CurrentStatusDate, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.CurrentStatusDetails, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.CurrentStatusDetails, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.CurrentStatusDetails, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.Created, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Created, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Created, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                @Html.LabelFor(model => model.Modified, htmlAttributes: new { @class = "control-label col-md-2" })
-                <div class="col-md-10">
-                    @Html.EditorFor(model => model.Modified, new { htmlAttributes = new { @class = "form-control" } })
-                    @Html.ValidationMessageFor(model => model.Modified, "", new { @class = "text-danger" })
-                </div>
-            </div>*@
-
-        @*<div class="form-group">
-                <div class="col-md-offset-2 col-md-10">
-                    <input type="submit" value="Create" class="btn btn-default" />
-                </div>
-            </div>*@
-
-
-    @*</div>
-}*@
 
 <div>
     @Html.ActionLink("Back to List", "Index")
