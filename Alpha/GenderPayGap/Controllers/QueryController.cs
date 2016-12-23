@@ -23,6 +23,17 @@ namespace GenderPayGap.Controllers
             return View();
         }
 
+        public ActionResult SearchResult(FormCollection form )
+        {
+            var query = (from o in db.Organisation
+                         where(o.OrganisationName == form.)
+                         orderby o.OrganisationName
+                         select o).ToList();
+
+            return View(query);
+        }
+         
+
         public ActionResult Sectors()
         {
             return View();
