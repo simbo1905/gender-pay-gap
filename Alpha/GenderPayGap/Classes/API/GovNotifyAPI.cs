@@ -3,6 +3,7 @@ using System.Configuration;
 using Notify.Client;
 using Notify.Models;
 using Extensions;
+using System;
 
 namespace GenderPayGap
 {
@@ -37,8 +38,27 @@ namespace GenderPayGap
 
             var personalisation = new Dictionary<string, dynamic> { { "url", url } };
 
-            var result = SendEmail(emailAddress, VerifyTemplateId, personalisation);
-
+            Notification result = null;
+            try
+            {
+                result = SendEmail(emailAddress, VerifyTemplateId, personalisation);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.EqualsI("This Email Address is not registered with Gov Notify."))
+                {
+                    try
+                    {
+                        var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/verify.txt"));
+                        Email.QuickSend("GPG Registration Verification", emailAddress, html);
+                        result = new Notification() { status = "delivered" };
+                    }
+                    catch (Exception ex1)
+                    {
+                        
+                    }
+                }
+            }
             return result.status.EqualsI("created", "sending", "delivered");
         }
 
