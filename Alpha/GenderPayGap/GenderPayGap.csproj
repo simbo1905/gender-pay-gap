@@ -242,7 +242,6 @@
     <Compile Include="Classes\Extensions\Error.cs" />
     <Compile Include="Classes\Extensions\Extensions.cs" />
     <Compile Include="Classes\API\GovNotifyAPI.cs" />
-    <Compile Include="Classes\Extensions\FileSystem.cs" />
     <Compile Include="Classes\Extensions\Lists.cs" />
     <Compile Include="Classes\Extensions\Misc.cs" />
     <Compile Include="Classes\Extensions\NameValueList.cs" />
@@ -256,7 +255,8 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Classes\AuthorizationManager.cs" />
+    <Compile Include="AuthorizationManager.cs" />
+    <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\Startup.Auth.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -287,9 +287,6 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
-    <Content Include="App_Data\Confirm.txt" />
-    <Content Include="App_Data\Pin.txt" />
-    <Content Include="App_Data\Verify.txt" />
     <Content Include="Content\application.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
@@ -435,9 +432,21 @@
     <Content Include="Views\Register\Type.cshtml" />
     <Content Include="Views\Register\Organisation.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Register\Confirm.cshtml" />
+    <Content Include="Views\Query\Download.cshtml" />
+    <Content Include="Views\Query\Edit.cshtml" />
+    <Content Include="Views\Query\Old_Create.cshtml" />
+    <Content Include="Views\Query\Old_Delete.cshtml" />
+    <Content Include="Views\Query\Old_Details.cshtml" />
+    <Content Include="Views\Query\Old_Edit.cshtml" />
+    <Content Include="Views\Query\Old_Index.cshtml" />
+    <Content Include="Views\Query\Search.cshtml" />
+    <Content Include="Views\Query\Sectors.cshtml" />
+    <Content Include="Views\Query\Start.cshtml" />
+    <Content Include="Views\Return\Old_Index.cshtml" />
+    <Content Include="Views\Return\SendConfirmed.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="App_Data\" />
     <Folder Include="public\govuk_template\assets\javascripts\vendor\goog\" />
     <Folder Include="Views\Shared\EditorTemplates\" />
   </ItemGroup>
