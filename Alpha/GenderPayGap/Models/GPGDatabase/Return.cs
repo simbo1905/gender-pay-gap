@@ -29,7 +29,7 @@ namespace GenderPayGap.Models.GpgDatabase
 
         public long OrganisationId { get; set; }
 
-        public DateTime AccountingDate { get; set; }
+        public Nullable<System.DateTime> AccountingDate { get; set; }
 
         public decimal DiffMeanHourlyPayPercent { get; set; }
         public decimal DiffMedianHourlyPercent { get; set; }

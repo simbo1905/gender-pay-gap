@@ -233,6 +233,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\API\CompaniesHouseAPI.cs" />
+    <Compile Include="Classes\AuthorizationManager.cs" />
     <Compile Include="Classes\BaseClasses\BaseController.cs" />
     <Compile Include="Classes\Extensions\ConcurrentList.cs" />
     <Compile Include="Classes\Extensions\Crypto.cs" />
@@ -242,6 +243,7 @@
     <Compile Include="Classes\Extensions\Error.cs" />
     <Compile Include="Classes\Extensions\Extensions.cs" />
     <Compile Include="Classes\API\GovNotifyAPI.cs" />
+    <Compile Include="Classes\Extensions\FileSystem.cs" />
     <Compile Include="Classes\Extensions\Lists.cs" />
     <Compile Include="Classes\Extensions\Misc.cs" />
     <Compile Include="Classes\Extensions\NameValueList.cs" />
@@ -255,7 +257,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="AuthorizationManager.cs" />
     <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\Startup.Auth.cs" />
@@ -278,6 +279,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\RegisterViewModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -418,10 +420,10 @@
     <Content Include="Views\Return\OldIndex.cshtml" />
     <Content Include="Views\Home\_Index.cshtml" />
     <Content Include="Views\Return\Create.cshtml" />
-    <Content Include="Views\Return\Details.cshtml" />
+    <Content Include="Views\Return\DataConfirm.cshtml" />
     <Content Include="Views\Return\Edit.cshtml" />
-    <Content Include="Views\Return\GpgWizardView.cshtml" />
-    <Content Include="Views\Return\PersonRespCreate.cshtml" />
+    <Content Include="Views\Return\Submit.cshtml" />
+    <Content Include="Views\Return\PersonResponsibleCreate.cshtml" />
     <Content Include="Views\Return\PersonRespEdit.cshtml" />
     <Content Include="Views\Return\PersonRespDelete.cshtml" />
     <Content Include="Views\Return\PersonRespDetails.cshtml" />
@@ -438,6 +440,7 @@
     <Content Include="Views\Query\Start.cshtml" />
     <Content Include="Views\Return\Old_Index.cshtml" />
     <Content Include="Views\Return\SendConfirmed.cshtml" />
+    <Content Include="Views\Return\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />

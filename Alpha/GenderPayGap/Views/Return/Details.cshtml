@@ -1,345 +1,212 @@
 ﻿@model GenderPayGap.Models.GpgDatabase.Return
 
+<div>
+    <h4>Return</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Organisation.OrganisationRef)
+        </dt>
 
+        <dd>
+            @Html.DisplayFor(model => model.Organisation.OrganisationRef)
+        </dd>
 
-<main id="content" role="main">
-    <h1 class="heading-large">
-        <span class="heading-secondary">Step 3 of 3</span>
-        Review your gender pay gap data
-    </h1>
-    <div class="grid-row">
-        <div class="column-two-thirds">
-            <table class="gpg-data">
-                <thead>
-                    <tr>
-                        <th class="question" colspan="3">
-                            1. Your organisation’s 2016 to 2017 gender pay gap data <span class="edit">@*@Html.ActionLink("Edit", "Edit", new { id = Model.ReturnId })*@</span>
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            1. Difference in mean hourly rate of pay between male and female employees
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.DiffMeanHourlyPayPercent)%
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            2. Difference in median hourly rate of pay between male and female employees
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.DiffMedianHourlyPercent)%
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            3. Difference in mean bonus pay between male and female employees
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.DiffMeanBonusPercent)%
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            4. Difference in median bonus pay between male and female employees
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.DiffMedianBonusPercent)%
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            5. Percentage of male and female employees who received bonus pay
-                        </td>
-                        <td>Male <br>@Html.ValueFor(model => model.MaleMedianBonusPayPercent)%</td>
-                        <td>Female <br>@Html.ValueFor(model => model.FemaleMedianBonusPayPercent)%</td>
-                    </tr>
-                    <tr class="row">
-                        <td>
-                            6. Male and female employees by pay quartile
-                        </td>
-                        <td>Male </td>
-                        <td>Female</td>
-                    </tr>
-                    <tr class="row">
-                        <td>
-                            Lower quartile
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.MaleLowerPayBand)%
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.FemaleLowerPayBand)%
-                        </td>
-                    </tr>
-                    <tr class="row">
-                        <td>
-                            Lower middle quartile
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.MaleMiddlePayBand)%
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.FemaleMiddlePayBand)%
-                        </td>
-                    </tr>
-                    <tr class="row">
-                        <td>
-                            Upper middle quartile
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.MaleUpperPayBand)%
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.FemaleUpperPayBand)%
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Top quartile
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.MaleUpperQuartilePayBand)%
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.FemaleUpperQuartilePayBand)%
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <p>7. Link to your gender pay gap information</p>
-                            @*<a href='#'>http://home.kpmg.com/gender-pay-gap-report-16-17.html</a>*@
-                            @Html.ValueFor(model => model.CompanyLinkToGPGInfo)
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <dt>
+            @Html.DisplayNameFor(model => model.AccountingDate)
+        </dt>
 
-            <table class="signedby">
-                <thead>
-                    <tr>
-                        <th class="question" colspan="3">
-                            2. Person responsible in your organisation @*<span class="edit"><a href='edit-approval'>Edit</a></span>*@
-                            @*@Html.ActionLink("Edit", "Edit", new { id = Model.ReturnId })*@
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            @Html.ValueFor(model => model.FirstName) &nbsp;
-                            @Html.ValueFor(model => model.LastName) <br>
-                            @Html.ValueFor(model => model.JobTitle)
-                    </td>
-                        <td> </td>
-                    </tr>
+        <dd>
+            @Html.DisplayFor(model => model.AccountingDate)
+        </dd>
 
-                </tbody>
-            </table>
+        <dt>
+            @Html.DisplayNameFor(model => model.DiffMeanHourlyPayPercent)
+        </dt>
 
-            <p>
-              <a class="button" role="button" onclick="$('.prev').click()">Back</a>
-              @*<a class="button" role="button" onclick="$('.next').click()">Confirm and send</a>*@
+        <dd>
+            @Html.DisplayFor(model => model.DiffMeanHourlyPayPercent)
+        </dd>
 
-                @*Save all the information to the database in the controller/action and redirect to SendConfirm*@
-                @*<input type="submit" role="button" value="Confirm and send"/>*@
-                <input class="button" type="submit" role="button" value="Confirm and send"/>
-             
-              
-            </p>
-        </div>
-    </div>
-   
-</main>
+        <dt>
+            @Html.DisplayNameFor(model => model.DiffMedianHourlyPercent)
+        </dt>
 
-@section Scripts {
-    @Scripts.Render("~/bundles/jqueryval")
-    @Styles.Render("~/Content/css")
-}
+        <dd>
+            @Html.DisplayFor(model => model.DiffMedianHourlyPercent)
+        </dd>
 
-@*@model GenderPayGap.Models.GpgDatabase.Return
+        <dt>
+            @Html.DisplayNameFor(model => model.DiffMeanBonusPercent)
+        </dt>
 
-    @{
-        ViewBag.Title = "Details";
-    }
+        <dd>
+            @Html.DisplayFor(model => model.DiffMeanBonusPercent)
+        </dd>
 
-    <h2>Details</h2>
+        <dt>
+            @Html.DisplayNameFor(model => model.DiffMedianBonusPercent)
+        </dt>
 
-    <div>
-        <h4>Return</h4>
-        <hr />
-        <dl class="dl-horizontal">*@
+        <dd>
+            @Html.DisplayFor(model => model.DiffMedianBonusPercent)
+        </dd>
 
-@*<dt>
-        @Html.DisplayNameFor(model => model.DiffMeanHourlyPayPercent)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.MaleMedianBonusPayPercent)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.DiffMeanHourlyPayPercent)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.MaleMedianBonusPayPercent)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.DiffMedianHourlyPercent)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.FemaleMedianBonusPayPercent)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.DiffMedianHourlyPercent)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.FemaleMedianBonusPayPercent)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.DiffMeanBonusPercent)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.MaleLowerPayBand)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.DiffMeanBonusPercent)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.MaleLowerPayBand)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.DiffMedianBonusPercent)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.FemaleLowerPayBand)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.DiffMedianBonusPercent)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.FemaleLowerPayBand)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.MaleMedianBonusPayPercent)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.MaleMiddlePayBand)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.MaleMedianBonusPayPercent)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.MaleMiddlePayBand)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.FemaleMedianBonusPayPercent)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.FemaleMiddlePayBand)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.FemaleMedianBonusPayPercent)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.FemaleMiddlePayBand)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.MaleLowerPayBand)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.MaleUpperPayBand)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.MaleLowerPayBand)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.MaleUpperPayBand)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.FemaleLowerPayBand)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.FemaleUpperPayBand)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.FemaleLowerPayBand)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.FemaleUpperPayBand)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.MaleMiddlePayBand)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.MaleUpperQuartilePayBand)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.MaleMiddlePayBand)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.MaleUpperQuartilePayBand)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.FemaleMiddlePayBand)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.FemaleUpperQuartilePayBand)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.FemaleMiddlePayBand)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.FemaleUpperQuartilePayBand)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.MaleUpperPayBand)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.CompanyLinkToGPGInfo)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.MaleUpperPayBand)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.CompanyLinkToGPGInfo)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.FemaleUpperPayBand)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.CurrentStatus)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.FemaleUpperPayBand)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.CurrentStatus)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.MaleUpperQuartilePayBand)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.CurrentStatusDate)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.MaleUpperQuartilePayBand)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.CurrentStatusDate)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.FemaleUpperQuartilePayBand)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.CurrentStatusDetails)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.FemaleUpperQuartilePayBand)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.CurrentStatusDetails)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.CompanyLinkToGPGInfo)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Created)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.CompanyLinkToGPGInfo)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Created)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.CurrentStatus)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.Modified)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.CurrentStatus)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.Modified)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.CurrentStatusDate)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.JobTitle)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.CurrentStatusDate)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.JobTitle)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.CurrentStatusDetails)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.FirstName)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.CurrentStatusDetails)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.FirstName)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.Created)
-    </dt>
+        <dt>
+            @Html.DisplayNameFor(model => model.LastName)
+        </dt>
 
-    <dd>
-        @Html.DisplayFor(model => model.Created)
-    </dd>
+        <dd>
+            @Html.DisplayFor(model => model.LastName)
+        </dd>
 
-    <dt>
-        @Html.DisplayNameFor(model => model.Modified)
-    </dt>
-
-    <dd>
-        @Html.DisplayFor(model => model.Modified)
-    </dd>*@
-
-@*</dl>
-    </div>*@
-@*<p>
+    </dl>
+</div>
+<p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ReturnId }) |
     @Html.ActionLink("Back to List", "Index")
-</p>*@
+</p>
