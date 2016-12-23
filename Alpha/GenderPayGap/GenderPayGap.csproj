@@ -256,6 +256,7 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="AuthorizationManager.cs" />
+    <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\Startup.Auth.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -432,12 +433,6 @@
     <Content Include="Views\Register\Organisation.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Query\Download.cshtml" />
-    <Content Include="Views\Query\Edit.cshtml" />
-    <Content Include="Views\Query\Old_Create.cshtml" />
-    <Content Include="Views\Query\Old_Delete.cshtml" />
-    <Content Include="Views\Query\Old_Details.cshtml" />
-    <Content Include="Views\Query\Old_Edit.cshtml" />
-    <Content Include="Views\Query\Old_Index.cshtml" />
     <Content Include="Views\Query\Search.cshtml" />
     <Content Include="Views\Query\Sectors.cshtml" />
     <Content Include="Views\Query\Start.cshtml" />
