@@ -8,6 +8,7 @@ using GenderPayGap;
 using Extensions;
 using GenderPayGap.Models;
 using Newtonsoft.Json;
+using IdentityServer3.Core;
 
 namespace GenderPayGap.Controllers
 {
@@ -18,8 +19,17 @@ namespace GenderPayGap.Controllers
         {
 
             //The user can then go through the process of changing their details and email then sending another verification email
+
             var currentUser = GetCurrentUser();
             var model = new Models.RegisterViewModel(currentUser);
+
+            if (currentUser == null)
+            {
+                model.EmailAddress = Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.Email);
+                model.FirstName= Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.GivenName);
+                model.LastName= Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.FamilyName);
+            }
+            model.ConfirmEmailAddress = model.EmailAddress;
             if (currentUser!=null) ViewData["currentUser"] = currentUser;
             
             //The user can then go through the process of changing their details and email then sending another verification email
@@ -67,10 +77,37 @@ namespace GenderPayGap.Controllers
             if (currentUser.UserId==0)GpgDatabase.Default.User.Add(currentUser);
             GpgDatabase.Default.SaveChanges();
 
+            var authProviderId = Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.IdentityProvider);
+            var tokenIdentifier = Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.ExternalProviderUserId);
+
+            if (authProviderId.EqualsI("google"))
+            {
+                var token = GpgDatabase.Default.UserTokens.FirstOrDefault(ut=>ut.AuthProviderId==authProviderId);
+                if (token == null)
+                {
+                    token = new UserToken()
+                    {
+                        UserId= currentUser.UserId,
+                        AuthProviderId = authProviderId,
+                        TokenIdentifier = tokenIdentifier,
+                        Created = DateTime.Now
+                    };
+                    GpgDatabase.Default.UserTokens.Add(token);
+
+                }
+                if (model.EmailAddress == Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.Email))
+                    currentUser.EmailVerifiedDate = DateTime.Now;
+
+            }
+            GpgDatabase.Default.SaveChanges();
+
+            var verifyCode = Encryption.EncryptQuerystring(currentUser.UserId.ToString());
+            if (currentUser.EmailVerifiedDate > DateTime.MinValue)
+                return RedirectToAction("Organisation",new {code=verifyCode });
+
             //Send a verification link to the email address
             try
             {
-                var verifyCode = Encryption.EncryptQuerystring(currentUser.UserId.ToString());
                 if (!GovNotifyAPI.SendVerifyEmail(currentUser.EmailAddress, verifyCode))
                     throw new Exception("Could not send verification email. Please try again later.");
 

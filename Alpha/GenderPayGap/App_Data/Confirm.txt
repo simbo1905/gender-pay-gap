@@ -124,7 +124,7 @@
             <tr>
               <td style="font-family: Helvetica, Arial, sans-serif; font-size: 19px; line-height: 1.315789474;">
         <![endif]-->
-            <p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">You have been sent a PIN in the post which should arrive in the next 7 days.</p><p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">When you receive this PIN follow the link below to complete your GPG registration:</p><blockquote style="Margin: 0 0 20px 0; border-left: 10px solid #BFC1C3;padding: 15px 0 0.1px 15px; font-size: 19px; line-height: 25px;"><p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;"><a style="word-wrap: break-word;" href="https://localhost:44371//Register/Confirm?code=LiCT1LJQNGRbRIHtycsiaA%21%21">https://localhost:44371//Register/Confirm?code=LiCT1LJQNGRbRIHtycsiaA!!</a></p></blockquote>
+            <p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">You have been sent a PIN in the post which should arrive in the next 7 days.</p><p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;">When you receive this PIN follow the link below to complete your GPG registration:</p><blockquote style="Margin: 0 0 20px 0; border-left: 10px solid #BFC1C3;padding: 15px 0 0.1px 15px; font-size: 19px; line-height: 25px;"><p style="Margin: 0 0 20px 0; font-size: 19px; line-height: 25px; color: #0B0C0C;"><a style="word-wrap: break-word;" href="((ConfirmUrl))">https://localhost:44371//Register/Confirm?code=LiCT1LJQNGRbRIHtycsiaA!!</a></p></blockquote>
         <!--[if (gte mso 9)|(IE)]>
               </td>
             </tr>

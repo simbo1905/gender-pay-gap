@@ -64,7 +64,6 @@ namespace GenderPayGap
                             n.ProtocolMessage.AccessToken);
 
                         var userInfo = await userInfoClient.GetAsync();
-                        userInfo.Claims.ToList().ForEach(ui => nid.AddClaim(new Claim(ui.Item1, ui.Item2)));
 
                         // keep the id_token for logout
                         nid.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
@@ -77,6 +76,9 @@ namespace GenderPayGap
 
                         // add some other app specific claim
                         nid.AddClaim(new Claim("app_specific", "some data"));
+
+                        foreach (var claim in userInfo.Claims)
+                            nid.AddClaim(new Claim(claim.Item1, claim.Item2));
 
                         n.AuthenticationTicket = new AuthenticationTicket(
                             nid,

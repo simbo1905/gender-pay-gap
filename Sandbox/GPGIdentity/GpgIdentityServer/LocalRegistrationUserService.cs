@@ -48,6 +48,11 @@ namespace GpgIdentityServer
             return Task.FromResult(0);
         }
 
+        public override Task AuthenticateExternalAsync(ExternalAuthenticationContext context)
+        {
+            return base.AuthenticateExternalAsync(context);
+        }
+
         private List<CustomUser> Load()
         {
             //TODO Load users from database
