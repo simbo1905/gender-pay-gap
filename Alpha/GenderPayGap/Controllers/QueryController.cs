@@ -1,28 +1,51 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
-using System.Data.Entity;
 using System.Linq;
-using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using GenderPayGap.Models.GpgDatabase;
+using GenderPayGap.Models;
+using Extensions;
 
 namespace GenderPayGap.Controllers
 {
     public class QueryController : Controller
     {
-        
-
         public ActionResult Start()
         {
             return View();
         }
 
-        public ActionResult Search()
+        public ActionResult Search(string query=null)
         {
-            return View();
+            var model = new SearchViewModel();
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                model.Results = GpgDatabase.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(query.ToLower())).ToArray();
+
+                //var x = model.Search;
+                //model.Results = GpgDatabase.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(model.Search.ToLower())).ToArray();
+                //model.Results = GpgDatabase.Default.Organisation.Where(p => p.OrganisationName.ToLower() == model.Search.ToLower()).ToArray();
+                //model.Results = (from o in GpgDatabase.Default.Organisation
+                //                 where (o.OrganisationName.ContainsI(model.Search))
+                //                 orderby o.OrganisationName
+                //                 select o).ToArray();
+
+            }
+            return View(model);
         }
+
+        [HttpPost]
+        public ActionResult Search(SearchViewModel model)
+        {
+            if (ModelState.IsValid && !string.IsNullOrWhiteSpace(model.Search))
+            {
+                return RedirectToAction("Search", new { query = model.Search });
+            }
+
+            return View(model);
+        }
+         
 
         public ActionResult Sectors()
         {
@@ -35,123 +58,82 @@ namespace GenderPayGap.Controllers
         }
 
 
-
-
-
-
-
-
-
         // GET: Query
         public ActionResult Index()
         {
-            // var organisation = GpgDatabase.Default.Organisation.Include(o => o).Include(o => o.OrganisationAddress);
-            //return View(organisation.ToList());
             return View();
         }
 
         // GET: Query/Details/5
-        public ActionResult Details(long? id)
+        public ActionResult Details(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Organisation organisation = GpgDatabase.Default.Organisation.Find(id);
-            if (organisation == null)
-            {
-                return HttpNotFound();
-            }
-            return View(organisation);
+            return View();
         }
 
         // GET: Query/Create
         public ActionResult Create()
         {
-            ViewBag.OrganisationId = new SelectList(GpgDatabase.Default.OrganisationAddress, "OrganisationID", "Type");
             return View();
         }
 
         // POST: Query/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "OrganisationId,GroupId,URN,OrganisationName,OrganisationType,OrganisationPhase,OrganisationPolicy,OrganisationDescription,Capacity,Population,Phone,Email,Web,CurrentStatus,CurrentStatusDate,CurrentStatusDetails,Created,Modified")] Organisation organisation)
+        public ActionResult Create(FormCollection collection)
         {
-            if (ModelState.IsValid)
+            try
             {
-                GpgDatabase.Default.Organisation.Add(organisation);
-                GpgDatabase.Default.SaveChanges();
+                // TODO: Add insert logic here
+
                 return RedirectToAction("Index");
             }
-
-            
-            ViewBag.OrganisationId = new SelectList(GpgDatabase.Default.OrganisationAddress, "OrganisationID", "Type", organisation.OrganisationId);
-            return View(organisation);
+            catch
+            {
+                return View();
+            }
         }
 
         // GET: Query/Edit/5
-        public ActionResult Edit(long? id)
+        public ActionResult Edit(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Organisation organisation = GpgDatabase.Default.Organisation.Find(id);
-            if (organisation == null)
-            {
-                return HttpNotFound();
-            }
-           
-            ViewBag.OrganisationId = new SelectList(GpgDatabase.Default.OrganisationAddress, "OrganisationID", "Type", organisation.OrganisationId);
-            return View(organisation);
+            return View();
         }
 
         // POST: Query/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "OrganisationId,GroupId,URN,OrganisationName,OrganisationType,OrganisationPhase,OrganisationPolicy,OrganisationDescription,Capacity,Population,Phone,Email,Web,CurrentStatus,CurrentStatusDate,CurrentStatusDetails,Created,Modified")] Organisation organisation)
+        public ActionResult Edit(int id, FormCollection collection)
         {
-            if (ModelState.IsValid)
+            try
             {
-                GpgDatabase.Default.Entry(organisation).State = EntityState.Modified;
-                GpgDatabase.Default.SaveChanges();
+                // TODO: Add update logic here
+
                 return RedirectToAction("Index");
             }
-            
-            ViewBag.OrganisationId = new SelectList(GpgDatabase.Default.OrganisationAddress, "OrganisationID", "Type", organisation.OrganisationId);
-            return View(organisation);
+            catch
+            {
+                return View();
+            }
         }
 
         // GET: Query/Delete/5
-        public ActionResult Delete(long? id)
+        public ActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
-            }
-            Organisation organisation = GpgDatabase.Default.Organisation.Find(id);
-            if (organisation == null)
-            {
-                return HttpNotFound();
-            }
-            return View(organisation);
+            return View();
         }
 
         // POST: Query/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public ActionResult DeleteConfirmed(long id)
+        [HttpPost]
+        public ActionResult Delete(int id, FormCollection collection)
         {
-            Organisation organisation = GpgDatabase.Default.Organisation.Find(id);
-            GpgDatabase.Default.Organisation.Remove(organisation);
-            GpgDatabase.Default.SaveChanges();
-            return RedirectToAction("Index");
-        }
+            try
+            {
+                // TODO: Add delete logic here
 
-       
+                return RedirectToAction("Index");
+            }
+            catch
+            {
+                return View();
+            }
+        }
     }
 }

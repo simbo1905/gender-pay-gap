@@ -279,6 +279,7 @@
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\RegisterViewModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
   </ItemGroup>
@@ -422,10 +423,10 @@
     <Content Include="Views\Return\OldIndex.cshtml" />
     <Content Include="Views\Home\_Index.cshtml" />
     <Content Include="Views\Return\Create.cshtml" />
-    <Content Include="Views\Return\Details.cshtml" />
+    <Content Include="Views\Return\DataConfirm.cshtml" />
     <Content Include="Views\Return\Edit.cshtml" />
-    <Content Include="Views\Return\GpgWizardView.cshtml" />
-    <Content Include="Views\Return\PersonRespCreate.cshtml" />
+    <Content Include="Views\Return\Submit.cshtml" />
+    <Content Include="Views\Return\PersonResponsibleCreate.cshtml" />
     <Content Include="Views\Return\PersonRespEdit.cshtml" />
     <Content Include="Views\Return\PersonRespDelete.cshtml" />
     <Content Include="Views\Return\PersonRespDetails.cshtml" />
@@ -437,17 +438,12 @@
     <Content Include="Views\Register\Organisation.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Query\Download.cshtml" />
-    <Content Include="Views\Query\Edit.cshtml" />
-    <Content Include="Views\Query\Old_Create.cshtml" />
-    <Content Include="Views\Query\Old_Delete.cshtml" />
-    <Content Include="Views\Query\Old_Details.cshtml" />
-    <Content Include="Views\Query\Old_Edit.cshtml" />
-    <Content Include="Views\Query\Old_Index.cshtml" />
     <Content Include="Views\Query\Search.cshtml" />
     <Content Include="Views\Query\Sectors.cshtml" />
     <Content Include="Views\Query\Start.cshtml" />
     <Content Include="Views\Return\Old_Index.cshtml" />
     <Content Include="Views\Return\SendConfirmed.cshtml" />
+    <Content Include="Views\Return\Details.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="public\govuk_template\assets\javascripts\vendor\goog\" />
