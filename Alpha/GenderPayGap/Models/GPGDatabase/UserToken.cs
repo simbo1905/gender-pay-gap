@@ -25,7 +25,7 @@ namespace GenderPayGap.Models.GpgDatabase
         public long UserId { get; set; }
 
         [Key, Column(Order = 1)]
-        public int AuthProviderId { get; set; }
+        public string AuthProviderId { get; set; }
 
         [Key, Column(Order = 2)]
         public string TokenIdentifier { get; set; }

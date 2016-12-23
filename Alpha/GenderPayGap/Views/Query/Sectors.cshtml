@@ -1,4 +1,5 @@
-﻿@model GenderPayGap.Models.GpgDatabase.Organisation
+﻿@*@model GenderPayGap.Models.GpgDatabase.Organisation*@
+@model GenderPayGap.Models.SearchViewModel
 
 <main id="content" role="main">
    
@@ -79,6 +80,22 @@
                                             </tr>
                                         </thead>
                                         <tbody>
+
+                                            @*@{
+                                                if (Model != null )
+                                                {
+                                                    foreach (var item in Model.Results)
+                                                    {
+                                                    <tr>
+                                                        <td><a href='employer-details-sector'>@Html.ValueFor(model => model.Results) </a><span>Kingsmead, Upton Road, Birkenhead, Merseyside, CH43 7QQ</span></td>
+                                                        <td>
+                                                            Agriculture, Forestry and Fishing
+                                                        </td>
+                                                    </tr>
+                                                        }
+                                                    }
+                                                }*@
+
                                             <tr>
                                                 <td><a href='employer-details-sector'>Abalan limited</a><span>Kingsmead, Upton Road, Birkenhead, Merseyside, CH43 7QQ</span></td>
                                                 <td>
