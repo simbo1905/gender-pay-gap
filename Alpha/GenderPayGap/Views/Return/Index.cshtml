@@ -7,26 +7,6 @@
     
 @using (Html.BeginForm("Create", "Return", FormMethod.Post))
 {
-    @Html.HiddenFor(model => model.ReturnId)
-    @Html.HiddenFor(model => model.OrganisationId)
-    @Html.HiddenFor(model => Model.DiffMeanBonusPercent)
-    @Html.HiddenFor(model => model.DiffMeanHourlyPayPercent)
-    @Html.HiddenFor(model => model.DiffMedianBonusPercent)
-    @Html.HiddenFor(model => model.DiffMedianHourlyPercent)
-    @Html.HiddenFor(model => model.FemaleLowerPayBand)
-    @Html.HiddenFor(model => model.FemaleMedianBonusPayPercent)
-    @Html.HiddenFor(model => model.FemaleMiddlePayBand)
-    @Html.HiddenFor(model => model.FemaleUpperPayBand)
-    @Html.HiddenFor(model => model.FemaleUpperQuartilePayBand)
-    @Html.HiddenFor(model => model.FirstName)
-    @Html.HiddenFor(model => model.JobTitle)
-    @Html.HiddenFor(model => model.LastName)
-    @Html.HiddenFor(model => model.MaleLowerPayBand)
-    @Html.HiddenFor(model => model.MaleMedianBonusPayPercent)
-    @Html.HiddenFor(model => model.MaleMiddlePayBand)
-    @Html.HiddenFor(model => model.MaleUpperPayBand)
-    @Html.HiddenFor(model => model.MaleUpperQuartilePayBand)
-
     <div class="grid-row">
         <div class="column-two-thirds">
             <h1 class="heading-large">
@@ -50,7 +30,7 @@
                 <li>web address (URL) for the gender pay gap information published on your organisation’s website</li>
             </ul>
             <p>
-                <input class="button button-start" type="submit" role="button" value="Start now" />
+                @Html.ActionLink("Start now", "Create",null,new {@class="button button-start" })
             </p>
         </div>
         <div class="column-third">

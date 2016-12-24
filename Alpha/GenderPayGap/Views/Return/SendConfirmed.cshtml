@@ -4,7 +4,12 @@
     var returnid = 1; //Model.ReturnId;
 }
 
-<main id="content" role="main">
+<main id="content" role="main
+    @if (!ViewData.ModelState.IsValid)
+    {
+        @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
+    }
+
     <div class="grid-row">
 
         <div class="column-two-thirds">

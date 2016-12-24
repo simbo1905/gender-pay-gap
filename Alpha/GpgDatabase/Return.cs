@@ -11,6 +11,7 @@ namespace GenderPayGap.Models.GpgDatabase
 {
     using System;
     using System.Collections.Generic;
+    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -31,28 +32,66 @@ namespace GenderPayGap.Models.GpgDatabase
 
         public Nullable<System.DateTime> AccountingDate { get; set; }
 
+        [DefaultValue("")]
+        [Required]
+        [Display(Name= "Enter the difference in mean hourly rate")]
         public decimal DiffMeanHourlyPayPercent { get; set; }
+        [Required]
+        [Display(Name = "Enter the difference in median hourly rate")]
         public decimal DiffMedianHourlyPercent { get; set; }
+        [Required]
+        [Display(Name = "Enter the difference in mean bonus pay")]
         public decimal DiffMeanBonusPercent { get; set; }
+        [Required]
+        [Display(Name = "Enter the difference in median bonus pay")]
         public decimal DiffMedianBonusPercent { get; set; }
+        [Required]
+        [Display(Name = "Males who received bonus pay %")]
         public decimal MaleMedianBonusPayPercent { get; set; }
+        [Required]
+        [Display(Name = "Females who received bonus pay %")]
         public decimal FemaleMedianBonusPayPercent { get; set; }
+        [Required]
+        [Display(Name = "Male")]
         public decimal MaleLowerPayBand { get; set; }
+        [Required]
+        [Display(Name = "Female")]
         public decimal FemaleLowerPayBand { get; set; }
+        [Required]
+        [Display(Name = "Male")]
         public decimal MaleMiddlePayBand { get; set; }
+        [Required]
+        [Display(Name = "Female")]
         public decimal FemaleMiddlePayBand { get; set; }
+        [Required]
+        [Display(Name = "Male")]
         public decimal MaleUpperPayBand { get; set; }
+        [Required]
+        [Display(Name = "Female")]
         public decimal FemaleUpperPayBand { get; set; }
+        [Required]
+        [Display(Name = "Male")]
         public decimal MaleUpperQuartilePayBand { get; set; }
+        [Required]
+        [Display(Name = "Female")]
         public decimal FemaleUpperQuartilePayBand { get; set; }
+        [Required]
+        [Url]
+        [Display(Name = "Enter the web address (URL) for the gender pay gap information published on your organisation’s website. The person with responsibility for gender pay gap reporting in your organisation will have this.")]
         public string CompanyLinkToGPGInfo { get; set; }
         public string CurrentStatus { get; set; }
         public Nullable<System.DateTime> CurrentStatusDate { get; set; }
         public string CurrentStatusDetails { get; set; }
         public Nullable<System.DateTime> Created { get; set; }
         public Nullable<System.DateTime> Modified { get; set; }
+        [Required]
+        [Display(Name = "Job Title")]
         public string JobTitle { get; set; }
+        [Required]
+        [Display(Name = "First name")]
         public string FirstName { get; set; }
+        [Required]
+        [Display(Name = "Last name")]
         public string LastName { get; set; }
         public virtual ICollection<ReturnStatus> ReturnStatuses { get; set; }
 
