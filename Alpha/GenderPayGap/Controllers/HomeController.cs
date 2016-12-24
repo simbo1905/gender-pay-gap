@@ -18,12 +18,7 @@ namespace GenderPayGap.Controllers
         [HttpPost]
         public ActionResult Delete()
         {
-            GpgDatabase.Default.Return.RemoveRange(GpgDatabase.Default.Return);
-            GpgDatabase.Default.UserOrganisations.RemoveRange(GpgDatabase.Default.UserOrganisations);
-            GpgDatabase.Default.Organisation.RemoveRange(GpgDatabase.Default.Organisation);
-            GpgDatabase.Default.UserTokens.RemoveRange(GpgDatabase.Default.UserTokens);
-            GpgDatabase.Default.User.RemoveRange(GpgDatabase.Default.User);
-            GpgDatabase.Default.SaveChanges();
+            GpgDatabase.Truncate();
             return RedirectToAction("Index");
         }
 

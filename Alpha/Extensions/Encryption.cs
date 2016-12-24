@@ -19,7 +19,7 @@ namespace Extensions
             get { return MasterEncryptionKey.FromBase64(); }
         }
 
-        internal static Encoding EncryptionEncoding = Encoding.UTF8;
+        public static Encoding EncryptionEncoding = Encoding.UTF8;
 
         #region Shared Functions
 
@@ -109,7 +109,7 @@ namespace Extensions
             return bytes.IsWrapped(PrimerBytes, PrimerBytes);
         }
 
-        internal static byte[] Encrypt(byte[] bytes, string password = null)
+        public static byte[] Encrypt(byte[] bytes, string password = null)
         {
             password = DefaultEncryptionKey + password;
 
@@ -125,7 +125,7 @@ namespace Extensions
             return Compress(bytes);
         }
 
-        internal static string Encrypt(string text, string password = null, bool base64Encode = true)
+        public static string Encrypt(string text, string password = null, bool base64Encode = true)
         {
             if (string.IsNullOrWhiteSpace(text)) return text;
 
@@ -146,7 +146,7 @@ namespace Extensions
         /// <param name="password">String password.</param>
         /// <param name="base64reply">Encrypted Base64 string.</param>
         /// <returns>Decrypted string.</returns>
-        internal static string EncryptQuerystring(string querystring, string password = null, params string[] excludeNames)
+        public static string EncryptQuerystring(string querystring, string password = null, params string[] excludeNames)
         {
             if (string.IsNullOrWhiteSpace(querystring)) return querystring;
 
@@ -180,13 +180,13 @@ namespace Extensions
         #region AES-256 Decryption
 
         //[DebuggerStepThrough]
-        internal static byte[] Decrypt(byte[] bytes, params string[] passwords)
+        public static byte[] Decrypt(byte[] bytes, params string[] passwords)
         {
             return Decrypt(bytes, new List<string>(passwords));
         }
 
         //[DebuggerStepThrough]
-        internal static byte[] Decrypt(byte[] encryptedBytes, List<string> passwords)
+        public static byte[] Decrypt(byte[] encryptedBytes, List<string> passwords)
         {
             //Ensure the bytes are decompressed
             encryptedBytes = Decompress(encryptedBytes);
@@ -250,13 +250,13 @@ namespace Extensions
         }
 
         //[DebuggerStepThrough]
-        internal static string Decrypt(string text, params string[] passwords)
+        public static string Decrypt(string text, params string[] passwords)
         {
             return Decrypt(text, true, passwords);
         }
 
         [DebuggerStepThrough]
-        internal static string Decrypt(string text, bool base64Encoded = true, params string[] passwords)
+        public static string Decrypt(string text, bool base64Encoded = true, params string[] passwords)
         {
             if (string.IsNullOrWhiteSpace(text)) return text;
 
@@ -289,7 +289,7 @@ namespace Extensions
         /// <param name="querystring">Encrypted Base64 string.</param>
         /// <returns>Decrypted string.</returns>
         //[DebuggerStepThrough]
-        internal static string DecryptQuerystring(string querystring, params string[] passwords)
+        public static string DecryptQuerystring(string querystring, params string[] passwords)
         {
             if (string.IsNullOrWhiteSpace(querystring)) return querystring;
 
@@ -330,7 +330,7 @@ namespace Extensions
             return header.SequenceEqual(GZipHeaderBytes) || header.SequenceEqual(GZipLevel10HeaderBytes);
         }
 
-        internal static string Compress(string text, bool mandatory = false)
+        public static string Compress(string text, bool mandatory = false)
         {
             return Encoding.UTF8.GetString(Compress(Encoding.UTF8.GetBytes(text), mandatory));
         }
@@ -340,7 +340,7 @@ namespace Extensions
         /// </summary>
         /// <param name="text">The text.</param>
         /// <returns></returns>
-        internal static byte[] Compress(byte[] buffer, bool mandatory = false)
+        public static byte[] Compress(byte[] buffer, bool mandatory = false)
         {
             using (var memoryStream = new MemoryStream())
             {
@@ -362,7 +362,7 @@ namespace Extensions
             }
         }
 
-        internal static string Decompress(string text, bool mandatory = false)
+        public static string Decompress(string text, bool mandatory = false)
         {
             return Encoding.UTF8.GetString(Decompress(Encoding.UTF8.GetBytes(text)));
         }
@@ -372,7 +372,7 @@ namespace Extensions
         /// </summary>
         /// <param name="compressedText">The compressed text.</param>
         /// <returns></returns>
-        internal static byte[] Decompress(byte[] gZipBuffer)
+        public static byte[] Decompress(byte[] gZipBuffer)
         {
             if (gZipBuffer == null || gZipBuffer.Length < 1 || !gZipBuffer.IsCompressed()) return gZipBuffer;
 
@@ -396,19 +396,19 @@ namespace Extensions
         #endregion
 
         #region Public General Encryption Methods
-        internal static bool IsEncryptedData(string data)
+        public static bool IsEncryptedData(string data)
         {
             if (string.IsNullOrWhiteSpace(data)) return false;
             return data.StartsWith("===") && data.EndsWith("===");
         }
 
-        internal static bool IsEncrypted(string data)
+        public static bool IsEncrypted(string data)
         {
             if (string.IsNullOrWhiteSpace(data)) return false;
             return data.StartsWith("+++") && data.EndsWith("+++");
         }
 
-        internal static bool IsPrivateData(this string data, params string[] passwords)
+        public static bool IsPrivateData(this string data, params string[] passwords)
         {
             if (string.IsNullOrWhiteSpace(data)) return false;
             if (IsEncryptedData(data)) data = Decrypt(data.Substring(3, data.Length - 6), true, passwords);
@@ -417,12 +417,12 @@ namespace Extensions
             return false;
         }
 
-        internal static string EncryptData(string data, string password, bool isPrivate = false)
+        public static string EncryptData(string data, string password, bool isPrivate = false)
         {
             return EncryptData(data, isPrivate, password);
         }
 
-        internal static string EncryptData(string data, bool isPrivate = false, string password = null)
+        public static string EncryptData(string data, bool isPrivate = false, string password = null)
         {
             if (IsEncryptedData(data)) data = Decrypt(data.Substring(3, data.Length - 6), true, password);
             if (string.IsNullOrWhiteSpace(data)) return null;
@@ -430,19 +430,19 @@ namespace Extensions
             return "===" + Encrypt(data, password) + "===";
         }
 
-        internal static string DecryptData(string data)
+        public static string DecryptData(string data)
         {
             bool isPrivate;
             return DecryptData(data, out isPrivate);
         }
 
-        internal static string DecryptData(string data, string password)
+        public static string DecryptData(string data, string password)
         {
             bool isPrivate;
             return DecryptData(data, out isPrivate, password);
         }
 
-        internal static string DecryptData(string data, out bool isPrivate, params string[] passwords)
+        public static string DecryptData(string data, out bool isPrivate, params string[] passwords)
         {
             if (string.IsNullOrWhiteSpace(data))
             {
@@ -456,7 +456,7 @@ namespace Extensions
         }
         #endregion
 
-        internal static string GetChecksum(string text, bool base64Encode = true)
+        public static string GetChecksum(string text, bool base64Encode = true)
         {
             var checksumData = Encoding.UTF8.GetBytes(text + DefaultEncryptionKey);
             var hash = SHA1.Create().ComputeHash(checksumData);

@@ -7,7 +7,6 @@
     @using (Html.BeginForm())
     {
         @Html.HiddenFor(m => m.UserId)
-        @Html.HiddenFor(m => m.OrganisationId)
 
         <div class="grid-row">
             @if (Model.UserId == 0)
@@ -116,6 +115,7 @@
                 @Html.HiddenFor(m => m.OrganisationName)
                 @Html.HiddenFor(m => m.OrganisationRef)
                 @Html.HiddenFor(m => m.OrganisationAddress)
+                @Html.HiddenFor(m => m.OrganisationId)
 
                 <div class="column-two-thirds">
                     <h1 class="heading-large">

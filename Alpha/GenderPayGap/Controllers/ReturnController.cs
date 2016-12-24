@@ -1,4 +1,5 @@
-﻿using GenderPayGap.Models;
+﻿using Extensions;
+using GenderPayGap.Models;
 using GenderPayGap.Models.GpgDatabase;
 using System;
 using System.Collections.Generic;
@@ -8,73 +9,98 @@ using System.Web.Mvc;
 
 namespace GenderPayGap.Controllers
 {
-    [Authorize]
     public class ReturnController : BaseController
     {
         //Get: Return
         [HttpGet]
         public ActionResult Index()
         {
+            return View();
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult Create()
+        {
             if (!Authorise()) return RedirectToAction("Index", "Register");
             var currentUser = GetCurrentUser();
             var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
             var model = GpgDatabase.Default.Return.FirstOrDefault(r => r.OrganisationId == userOrg.UserId);
-            if (model==null)model = new Return();
+            if (model == null) model = new Return();
+            model.OrganisationId = userOrg.OrganisationId;
             return View(model);
         }
 
+        [Authorize]
         [HttpPost]
-        public ActionResult Index(Return @return)
+        public ActionResult Create(Return model)
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
-            return View(@return);
+            if (!ModelState.IsValid) return View(model);
+
+            return View(model);
         }
 
-
+        [Authorize]
         [HttpPost]
-        public ActionResult Create(Return @return)
+        public ActionResult Authoriser(Return model)
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
-            return View(@return);
+
+            if (Request.UrlReferrer.PathAndQuery.ContainsI("Create") && string.IsNullOrWhiteSpace(model.FirstName) && string.IsNullOrWhiteSpace(model.LastName) && string.IsNullOrWhiteSpace(model.JobTitle))
+                ModelState.Clear();
+
+            if (!ModelState.IsValid)
+                return View(model);
+            return View(model);
         }
 
+        [Authorize]
         [HttpPost]
-        public ActionResult Authoriser(Return @return)
+        public ActionResult Confirm(Return model)
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
-            return View(@return);
+            if (!ModelState.IsValid) return View(model);
+            return View(model);
         }
 
-        [HttpPost]
-        public ActionResult DataConfirm(Return @return)
-        {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
-            return View(@return);
-        }
-
+        [Authorize]
         [HttpGet]
         public ActionResult SendConfirmed()
         {
+            if (!Authorise()) return RedirectToAction("Index", "Register");
             return View();
         }
 
+        [Authorize]
         [HttpPost]
-        public ActionResult SendConfirmed(Return @return)
+        public ActionResult SendConfirmed(Return model)
         {
-            if (@return.ReturnId == 0)
+            if (!Authorise()) return RedirectToAction("Index", "Register");
+
+            if (model.ReturnId == 0)
             {
                 var currentUser = GetCurrentUser();
                 var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
-                @return.OrganisationId = userOrg.OrganisationId;
-                GpgDatabase.Default.Return.Add(@return);
+                model.OrganisationId = userOrg.OrganisationId;
+                GpgDatabase.Default.Return.Add(model);
             }
-            @return.AccountingDate = DateTime.Now;
-            GpgDatabase.Default.SaveChanges();
+            model.Organisation = GpgDatabase.Default.Organisation.Find(model.OrganisationId);
+            model.AccountingDate = DateTime.Now;
+            try
+            {
+                GpgDatabase.Default.SaveChanges();
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+                return View(model);
+            }
             return RedirectToAction("SendConfirmed");
         }
 
         // GET: Return/Details/5
-        public ActionResult DataConfirm(int id = 1)
+        public ActionResult Confirm(int id = 1)
         {
             var qid = GpgDatabase.Default.Return.Find(id);
             return View(qid);

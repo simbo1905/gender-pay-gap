@@ -2,7 +2,7 @@
 
 
 <main id="content" role="main">
-@using (Html.BeginForm("DataConfirm", "Return", FormMethod.Post))
+@using (Html.BeginForm("Confirm", "Return", FormMethod.Post))
 {
     @Html.HiddenFor(model => model.ReturnId)
     @Html.HiddenFor(model => model.OrganisationId)
@@ -20,6 +20,7 @@
     @Html.HiddenFor(model => model.MaleMiddlePayBand)
     @Html.HiddenFor(model => model.MaleUpperPayBand)
     @Html.HiddenFor(model => model.MaleUpperQuartilePayBand)
+    @Html.HiddenFor(model => model.CompanyLinkToGPGInfo)
 
     <div class="grid-row">
         <div class="column-two-thirds">

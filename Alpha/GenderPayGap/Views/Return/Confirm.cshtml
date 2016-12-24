@@ -28,6 +28,8 @@
     @Html.HiddenFor(model => model.MaleMiddlePayBand)
     @Html.HiddenFor(model => model.MaleUpperPayBand)
     @Html.HiddenFor(model => model.MaleUpperQuartilePayBand)
+    @Html.HiddenFor(model => model.CompanyLinkToGPGInfo)
+
 
     <div class="grid-row">
         <div class="column-two-thirds">
@@ -168,7 +170,7 @@
 
             <p>
                 <input class="button" type="submit" role="button" value="Back" formaction='@Url.Action("Authoriser")' />
-                <input class="button" type="submit" role="button" value="Confirm and send"/>              
+                <input class="button" type="submit" role="button" value="Confirm and submit"/>              
             </p>
         </div>
     </div>
