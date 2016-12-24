@@ -107,6 +107,7 @@ namespace GenderPayGap.Models
 
         public string ConfirmUrl { get; set; }
         public long PIN { get; set; }
+        public string Code { get; internal set; }
     }
 
     public class ConfirmViewModel

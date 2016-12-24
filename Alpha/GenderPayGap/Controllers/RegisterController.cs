@@ -207,7 +207,8 @@ namespace GenderPayGap.Controllers
             var currentUser = GpgDatabase.Default.User.FirstOrDefault(u => u.EmailVerifyCode == code);
 
             var model = new OrganisationViewModel();
-            
+            model.Code = code;
+
             //Show an error if the code doesnt exist in db
             if (currentUser == null)
             {

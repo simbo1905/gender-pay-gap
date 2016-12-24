@@ -41,7 +41,8 @@ namespace GpgIdentityServer
         public override Task AuthenticateLocalAsync(LocalAuthenticationContext context)
         {
             InternalUsers = LoadInternal();
-            var user = InternalUsers.SingleOrDefault(x => x.Username == context.UserName && x.Password == context.Password);
+            //var user = InternalUsers.SingleOrDefault(x => x.Username == context.UserName && x.Password == context.Password);
+            var user = InternalUsers.FirstOrDefault(x => x.Username == context.UserName && x.Password == context.Password);
             if (user != null)
             {
                 user.Claims.Add(new Claim(Constants.ClaimTypes.IdentityProvider, "GPG"));
