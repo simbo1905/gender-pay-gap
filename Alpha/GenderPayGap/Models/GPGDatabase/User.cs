@@ -10,6 +10,7 @@
 namespace GenderPayGap.Models.GpgDatabase
 {
     using Extensions;
+    using IdentityServer3.Core;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
@@ -72,7 +73,19 @@ namespace GenderPayGap.Models.GpgDatabase
             var claims = (principal as ClaimsPrincipal).Claims;
 
             //Use this to lookup the long UserID from the db - ignore the authProvider for now
-            return claims.FirstOrDefault().Value;
+            var claim = claims.FirstOrDefault(c => c.Type == Constants.ClaimTypes.ExternalProviderUserId);
+            return claim == null ? null : claim.Value;
+        }
+
+        public static string GetUserClaim(IPrincipal principal, string claimType)
+        {
+            if (principal == null || !principal.Identity.IsAuthenticated) return null;
+
+            var claims = (principal as ClaimsPrincipal).Claims;
+
+            //Use this to lookup the long UserID from the db - ignore the authProvider for now
+            var claim = claims.FirstOrDefault(c => c.Type.ToLower() == claimType.ToLower());
+            return claim==null ? null : claim.Value;
         }
 
         public static GenderPayGap.Models.GpgDatabase.User FindCurrentUser(IPrincipal principal)

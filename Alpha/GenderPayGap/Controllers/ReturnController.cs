@@ -8,54 +8,79 @@ using System.Web.Mvc;
 
 namespace GenderPayGap.Controllers
 {
-    public class ReturnController : Controller
+    [Authorize]
+    public class ReturnController : BaseController
     {
-
         //Get: Return
-        public ActionResult Submit()
+        [HttpGet]
+        public ActionResult Index()
         {
-            return View();
+            if (!Authorise()) return RedirectToAction("Index", "Register");
+            var currentUser = GetCurrentUser();
+            var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+            var model = GpgDatabase.Default.Return.FirstOrDefault(r => r.OrganisationId == userOrg.UserId);
+            if (model==null)model = new Return();
+            return View(model);
         }
 
         [HttpPost]
-        public ActionResult Submit(Return @return)
+        public ActionResult Index(Return @return)
         {
-            int count = 2;
-            try
-            {
-                // TODO: Add insert logic here
-                @return.Organisation = new Organisation
-                {
-                    OrganisationId = ++count,
-                    OrganisationName = "testOrg2" + count.ToString()
-                };
-
-                
-                GpgDatabase.Default.Return.Add(@return);
-                GpgDatabase.Default.SaveChanges();
-                @return.AccountingDate = DateTime.Now;
-
-                return RedirectToAction("SendConfirmed");
-            }
-            catch (Exception e)
-            {
-                return View(e);
-            }
+            if (!Authorise()) return RedirectToAction("Index", "Register");
+            return View(@return);
         }
 
+
+        [HttpPost]
+        public ActionResult Create(Return @return)
+        {
+            if (!Authorise()) return RedirectToAction("Index", "Register");
+            return View(@return);
+        }
+
+        [HttpPost]
+        public ActionResult Authoriser(Return @return)
+        {
+            if (!Authorise()) return RedirectToAction("Index", "Register");
+            return View(@return);
+        }
+
+        [HttpPost]
+        public ActionResult DataConfirm(Return @return)
+        {
+            if (!Authorise()) return RedirectToAction("Index", "Register");
+            return View(@return);
+        }
+
+        [HttpGet]
         public ActionResult SendConfirmed()
         {
             return View();
         }
 
+        [HttpPost]
+        public ActionResult SendConfirmed(Return @return)
+        {
+            if (@return.ReturnId == 0)
+            {
+                var currentUser = GetCurrentUser();
+                var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+                @return.OrganisationId = userOrg.OrganisationId;
+                GpgDatabase.Default.Return.Add(@return);
+            }
+            @return.AccountingDate = DateTime.Now;
+            GpgDatabase.Default.SaveChanges();
+            return RedirectToAction("SendConfirmed");
+        }
+
         // GET: Return/Details/5
-        public ActionResult DataConfirm(int id)
+        public ActionResult DataConfirm(int id = 1)
         {
             var qid = GpgDatabase.Default.Return.Find(id);
             return View(qid);
         }
 
-        public ActionResult Details(int id)
+        public ActionResult Details(int id = 1)
         {
             var qid = GpgDatabase.Default.Return.Find(id);
             return View(qid);
@@ -69,7 +94,7 @@ namespace GenderPayGap.Controllers
 
 
         ////GET
-        //public ActionResult PersonResponsibleCreate()
+        //public ActionResult Authoriser()
         //{
         //    return View();
         //}

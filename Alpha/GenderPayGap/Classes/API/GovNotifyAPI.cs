@@ -45,11 +45,12 @@ namespace GenderPayGap
             }
             catch (Exception ex)
             {
-                if (ex.Message.EqualsI("This Email Address is not registered with Gov Notify."))
+                if (ex.Message.ContainsI("This Email Address is not registered with Gov Notify.", "Can’t send to this recipient", "invalid token"))
                 {
                     try
                     {
                         var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/verify.txt"));
+                        html = html.Replace("((VerifyUrl))", url);
                         Email.QuickSend("GPG Registration Verification", emailAddress, html);
                         result = new Notification() { status = "delivered" };
                     }
@@ -73,7 +74,29 @@ namespace GenderPayGap
 
             var personalisation = new Dictionary<string, dynamic> { { "url", url } };
 
-            var result = SendEmail(emailAddress, ConfirmTemplateId, personalisation);
+
+            Notification result = null;
+            try
+            {
+                result = SendEmail(emailAddress, ConfirmTemplateId, personalisation);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.ContainsI("This Email Address is not registered with Gov Notify.", "Can’t send to this recipient", "invalid token"))
+                {
+                    try
+                    {
+                        var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/Confirm.txt"));
+                        html = html.Replace("((ConfirmUrl))", url);
+                        Email.QuickSend("GPG Registration Confirmation", emailAddress, html);
+                        result = new Notification() { status = "delivered" };
+                    }
+                    catch (Exception ex1)
+                    {
+
+                    }
+                }
+            }
 
             return result.status.EqualsI("created", "sending", "delivered");
         }
@@ -87,7 +110,28 @@ namespace GenderPayGap
         {
             var personalisation = new Dictionary<string, dynamic> { { "PIN", pin } };
 
-            var result = SendEmail(address, PINTemplateId, personalisation);
+            Notification result = null;
+            try
+            {
+                result = SendEmail(address, PINTemplateId, personalisation);
+            }
+            catch (Exception ex)
+            {
+                if (ex.Message.ContainsI("This Email Address is not registered with Gov Notify.", "Can’t send to this recipient", "invalid token"))
+                {
+                    try
+                    {
+                        var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/Pin.txt"));
+                        html = html.Replace("((PIN))", pin);
+                        Email.QuickSend("GPG Registration Confirmation", address, html);
+                        result = new Notification() { status = "delivered" };
+                    }
+                    catch (Exception ex1)
+                    {
+
+                    }
+                }
+            }
 
             return result.status.EqualsI("created", "sending", "delivered");
         }
