@@ -1,4 +1,7 @@
-﻿using System.Linq;
+﻿using GenderPayGap.Models.GpgDatabase;
+using System;
+using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using Thinktecture.IdentityModel.Owin.ResourceAuthorization;
 
@@ -10,24 +13,27 @@ namespace GenderPayGap
         {
             switch (context.Resource.First().Value)
             {
-                case "ContactDetails":
-                    return AuthorizeContactDetails(context);
+                case "Return":
+                    return AuthoriseReturn(context);
                 default:
                     return Nok();
             }
         }
 
-        private Task<bool> AuthorizeContactDetails(ResourceAuthorizationContext context)
+        private Task<bool> AuthoriseReturn(ResourceAuthorizationContext context)
         {
             switch (context.Action.First().Value)
             {
                 case "Read":
-                    return Eval(context.Principal.HasClaim("role", "Developer"));
-                case "Write":
-                    return Eval(context.Principal.HasClaim("role", "Administrator"));
-                default:
-                    return Nok();
+                    return Ok();
+                case "Submit":
+                    var user = User.FindCurrentUser(context.Principal);
+                    if (user == null || user.EmailVerifiedDate == null || user.EmailVerifiedDate == DateTime.MinValue) return Nok();
+                    var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(u => u.UserId == user.UserId);
+                    if (userOrg == null || userOrg.PINConfirmedDate==null || userOrg.PINConfirmedDate==DateTime.MinValue) return Nok();
+                    return Ok();
             }
+            return Nok();
         }
     }
 }
