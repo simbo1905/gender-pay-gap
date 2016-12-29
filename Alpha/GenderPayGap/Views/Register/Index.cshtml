@@ -2,7 +2,7 @@
     ViewBag.Title = "Register";
 }
 @model GenderPayGap.Models.RegisterViewModel
-
+@using Extensions
 <main id="content" role="main">
     <div class="grid-row">
 
@@ -23,6 +23,8 @@
                 }
                 @using (Html.BeginForm())
                 {
+                    @Html.HiddenFor(m => m.IdentityProvider)
+
                     <h2 class="heading-medium">Email address</h2>
                     <legend class="visuallyhidden">Email</legend>
                     <p>Enter an email address that you have access to. The service will send you an email to verify your identity.</p>
@@ -75,6 +77,8 @@
                         </div>
                     </fieldset>
 
+                    if (!User.Identity.IsAuthenticated || Model.IdentityProvider.EqualsI("GPG"))
+                    {
                     <h2 class="heading-medium">Create password</h2>
                     <fieldset>
                         <legend class="visuallyhidden">Password</legend>
@@ -103,7 +107,7 @@
                             </div>
                         </div>
                     </fieldset>
-
+                    }
                     <fieldset>
                         <div class="form-group">
                             <input type="submit" class="button" value="Continue" />

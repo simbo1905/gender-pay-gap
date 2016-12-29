@@ -3,6 +3,7 @@ using GenderPayGap.Models;
 using GenderPayGap.Models.GpgDatabase;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -25,7 +26,7 @@ namespace GenderPayGap.Controllers
             if (!Authorise()) return RedirectToAction("Index", "Register");
             var currentUser = GetCurrentUser();
             var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
-            var model = GpgDatabase.Default.Return.FirstOrDefault(r => r.OrganisationId == userOrg.UserId);
+            var model = GpgDatabase.Default.Return.FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
             if (model == null) model = new Return();
             model.OrganisationId = userOrg.OrganisationId;
             return View(model);
@@ -78,12 +79,17 @@ namespace GenderPayGap.Controllers
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
 
-            if (model.ReturnId == 0)
+            var original = GpgDatabase.Default.Return.Find(model.ReturnId);
+            if (original == null)
             {
                 var currentUser = GetCurrentUser();
                 var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
                 model.OrganisationId = userOrg.OrganisationId;
                 GpgDatabase.Default.Return.Add(model);
+            }
+            else
+            {
+                GpgDatabase.Default.Entry(original).CurrentValues.SetValues(model);
             }
             model.Organisation = GpgDatabase.Default.Organisation.Find(model.OrganisationId);
             model.AccountingDate = DateTime.Now;

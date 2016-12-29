@@ -63,6 +63,7 @@ namespace GenderPayGap.Models
 
         public string VerifyUrl { get; internal set; }
 
+        public string IdentityProvider { get; set; }
     }
 
     public class VerifyViewModel

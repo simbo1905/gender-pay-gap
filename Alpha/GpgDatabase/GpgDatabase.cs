@@ -98,6 +98,11 @@ namespace GenderPayGap.Models.GpgDatabase
                 .Select(x => x.Name).ToList();
         }
 
+        public static void RefreshAll()
+        {
+            Default = new GpgDatabase();
+        }
+
         public override int SaveChanges()
         {
             int c = 0;
