@@ -16,8 +16,6 @@ namespace GpgIdentityServer
 {
     public class LocalRegistrationUserService : UserServiceBase
     {
-        public static GpgDatabase Database = new GpgDatabase();
-
         public class ExternalUser
         {
             public string Subject { get; set; }
@@ -145,7 +143,9 @@ namespace GpgIdentityServer
         {
             //TODO Load users from database
             var users = new List<LocalUser>();
-            foreach (var user in Database.User)
+            GpgDatabase.RefreshAll();
+
+            foreach (var user in GpgDatabase.Default.User)
             {
                 users.Add(new LocalUser
                 {
@@ -167,9 +167,10 @@ namespace GpgIdentityServer
         {
             //TODO Load users from database
             var users = new List<ExternalUser>();
-            foreach (var userToken in Database.UserTokens)
+            GpgDatabase.RefreshAll();
+            foreach (var userToken in GpgDatabase.Default.UserTokens)
             {
-                var user = Database.User.Find(userToken.UserId);
+                var user = GpgDatabase.Default.User.Find(userToken.UserId);
                 if (user == null) continue;
                 users.Add(new ExternalUser
                 {

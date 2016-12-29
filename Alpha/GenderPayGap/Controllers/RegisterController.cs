@@ -28,7 +28,9 @@ namespace GenderPayGap.Controllers
                 model.EmailAddress = Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.Email);
                 model.FirstName= Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.GivenName);
                 model.LastName= Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.FamilyName);
+                model.IdentityProvider = Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.IdentityProvider);
             }
+
             model.ConfirmEmailAddress = model.EmailAddress;
             if (currentUser!=null) ViewData["currentUser"] = currentUser;
             
@@ -39,6 +41,13 @@ namespace GenderPayGap.Controllers
         [HttpPost]
         public ActionResult Index(Models.RegisterViewModel model)
         {
+            //Skip google password validations
+            if (model.IdentityProvider.EqualsI("google"))
+            {
+                ModelState.Remove("Password");
+                ModelState.Remove("ConfirmPassword");
+            }
+
             //TODO validate the submitted fields
             if (!ModelState.IsValid)return View(model);
             model.EmailAddress = model.EmailAddress.ToLower();
@@ -59,7 +68,7 @@ namespace GenderPayGap.Controllers
                 }
             }
 
-            else if (currentUser.EmailVerifiedDate>DateTime.MinValue)
+            else if (currentUser.EmailVerifiedDate==DateTime.MinValue)
             {
                 //Go to the verification process
                 return RedirectToAction("Verify", new { code = currentUser.EmailVerifyCode });
