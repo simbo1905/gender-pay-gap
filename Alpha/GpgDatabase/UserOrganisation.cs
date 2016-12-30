@@ -33,5 +33,14 @@ namespace GenderPayGap.Models.GpgDatabase
 
         public Nullable<System.DateTime> Created { get; set; }
         public Nullable<System.DateTime> Modified { get; set; }
+
+        [ForeignKey("OrganisationId")]
+        public virtual Organisation Organisation { get; set; }
+
+
+        [ForeignKey("UserId")]
+        public virtual User User { get; set; }
+
+
     }
 }

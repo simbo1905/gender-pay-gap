@@ -407,6 +407,20 @@ namespace Extensions
             catch { }
         }
 
+        public static void CopyProperties(this object source, object target)
+        {
+            var targetType = target.GetType();
+            foreach (var sourceProperty in source.GetType().GetProperties())
+            {
+                var propGetter = sourceProperty.GetGetMethod();
+                var targetProperty = targetType.GetProperty(sourceProperty.Name);
+                if (targetProperty == null) continue;
+                var propSetter = targetProperty.GetSetMethod();
+                var valueToSet = propGetter.Invoke(source, null);
+                propSetter.Invoke(target, new[] { valueToSet });
+            }
+        }
+
         public static void HideColumn(this Table table, int index)
         {
             foreach (TableRow row in table.Rows)

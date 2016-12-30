@@ -14,6 +14,7 @@ namespace Api
 
         protected void Application_Start(object sender, EventArgs e)
         {
+            GlobalConfiguration.Configuration.IncludeErrorDetailPolicy = IncludeErrorDetailPolicy.Default;
             // Add this code, if not present.
             AreaRegistration.RegisterAllAreas();
             GlobalConfiguration.Configure(WebApiConfig.Register);

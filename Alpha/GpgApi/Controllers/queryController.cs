@@ -1,4 +1,6 @@
-﻿using System;
+﻿using GenderPayGap.Models.GpgDatabase;
+using System;
+using Extensions;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
@@ -20,9 +22,16 @@ namespace Api
         /// <param name="organisation">The name of the organisation</param>
         /// <returns>Array of GPG Returns for the current organisation</returns>
         [HttpGet]
-        public IEnumerable<string> List(int startYear=0, int endYear=0, string organisation=null)
+        public IEnumerable<ReturnModel> List(int startYear=0, int endYear=0, string organisation=null)
         {
-            return null;
+            foreach (var ret in GpgDatabase.Default.Return.ToList())
+            {
+                var result = new ReturnModel();
+                var org = GpgDatabase.Default.Organisation.Find(ret.OrganisationId);
+                result.OrganisationName = org==null ? "UNKNOWN" : org.OrganisationName;
+                ret.CopyProperties(result);
+                yield return result;
+            }
         }
    
     }
