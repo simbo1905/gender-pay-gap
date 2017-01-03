@@ -9,7 +9,7 @@ namespace GenderPayGap.Models
 {
     public class SearchViewModel
     {
-        [Required]
+        //[Required]
         public string Search { get; set;}
         public Organisation[] Results { get; set; }
     }
