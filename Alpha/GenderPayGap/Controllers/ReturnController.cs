@@ -39,21 +39,27 @@ namespace GenderPayGap.Controllers
         [HttpPost]
         public ActionResult Create(Return @return)
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
+            if (!Authorise())
+                return RedirectToAction("Index", "Register");
+
             return View(@return);
         }
 
         [HttpPost]
         public ActionResult Authoriser(Return @return)
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
+            if (!Authorise())
+                return RedirectToAction("Index", "Register");
+
             return View(@return);
         }
 
         [HttpPost]
         public ActionResult DataConfirm(Return @return)
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
+            if (!Authorise())
+                return RedirectToAction("Index", "Register");
+
             return View(@return);
         }
 
