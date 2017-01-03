@@ -16,7 +16,7 @@ namespace GenderPayGap.Controllers
             return View();
         }
 
-        public ActionResult Search(string query=null)
+        public ActionResult Search(string query = null)
         {
             var model = new SearchViewModel();
             if (!string.IsNullOrWhiteSpace(query))
@@ -32,6 +32,8 @@ namespace GenderPayGap.Controllers
                 //                 select o).ToArray();
 
             }
+            
+
             return View(model);
         }
 
@@ -41,6 +43,10 @@ namespace GenderPayGap.Controllers
             if (ModelState.IsValid && !string.IsNullOrWhiteSpace(model.Search))
             {
                 return RedirectToAction("Search", new { query = model.Search });
+            }
+            else if (ModelState.IsValid && string.IsNullOrWhiteSpace(model.Search))
+            {
+                  model.Results = GpgDatabase.Default.Organisation.Select(o => o).ToArray();
             }
 
             return View(model);
