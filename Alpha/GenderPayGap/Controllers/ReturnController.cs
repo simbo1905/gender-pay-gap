@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace GenderPayGap.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class ReturnController : BaseController
     {
         //Get: Return
@@ -28,6 +28,11 @@ namespace GenderPayGap.Controllers
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
             return View(@return);
+        }
+
+        public ActionResult Create()
+        {
+            return View();
         }
 
 
@@ -80,7 +85,7 @@ namespace GenderPayGap.Controllers
             return View(qid);
         }
 
-        public ActionResult Details(int id = 1)
+        public ActionResult Details(int id /*= 1*/)
         {
             var qid = GpgDatabase.Default.Return.Find(id);
             return View(qid);

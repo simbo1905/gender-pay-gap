@@ -41,9 +41,9 @@
                                 <th>
                                     Employer
                                 </th>
-                                @*<th>
+                                <th>
                                     Sector
-                                </th>*@
+                                </th>
                             </tr>
 
                             @if (Model != null && Model.Results != null)
@@ -52,11 +52,14 @@
                                     {
                                     <tr>
                                         <td>
-                                            @Html.DisplayFor(i => item)
+                                            @Html.ActionLink(item.Web, "Details", "Return", new { Id = item.OrganisationId }, null)
+                                            @*<a href="@Url.Action("Details", "Return", new { Id = item.OrganisationId})">@Html.DisplayFor(modelItem => item.Web)</a>*@<br/>
+                                            @Html.DisplayFor(i => item.OrganisationAddresses.FirstOrDefault().Address1)
+                                            
                                         </td>
-                                        @*<td>
+                                        <td>
                                             @Html.DisplayFor(i => item.OrganisationType)
-                                        </td>*@
+                                        </td>
                                     </tr>
                                         }
                                     

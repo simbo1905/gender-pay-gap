@@ -375,6 +375,7 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Views\Return\Authoriser.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -426,7 +427,6 @@
     <Content Include="Views\Return\Create.cshtml" />
     <Content Include="Views\Return\DataConfirm.cshtml" />
     <Content Include="Views\Return\Edit.cshtml" />
-    <Content Include="Views\Return\Authoriser.cshtml" />
     <Content Include="Views\Return\PersonRespEdit.cshtml" />
     <Content Include="Views\Return\PersonRespDelete.cshtml" />
     <Content Include="Views\Return\PersonRespDetails.cshtml" />
