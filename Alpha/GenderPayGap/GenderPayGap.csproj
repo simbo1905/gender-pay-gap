@@ -375,7 +375,6 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
-    <Content Include="Views\Return\Authoriser.cshtml" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
@@ -444,6 +443,7 @@
     <Content Include="Views\Return\SendConfirmed.cshtml" />
     <Content Include="Views\Return\Details.cshtml" />
     <Content Include="Views\Register\Confirm.cshtml" />
+    <Content Include="Views\Return\Authoriser.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="public\govuk_template\assets\javascripts\vendor\goog\" />
