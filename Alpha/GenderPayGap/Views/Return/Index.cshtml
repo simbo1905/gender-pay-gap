@@ -4,7 +4,8 @@
 
 <main id="content" role="main">
     
-
+@using (Html.BeginForm("Create", "Return", FormMethod.Post))
+{
 
 
     <div class="grid-row">
@@ -30,7 +31,8 @@
                 <li>web address (URL) for the gender pay gap information published on your organisation’s website</li>
             </ul>
             <p>
-                <a class="button button-start" role="button" onclick="$('.next').click()">Start now</a>
+                @*<a class="button button-start" role="button" onclick="$('.next').click()">Start now</a>*@
+                <input class="button button-start" type="submit" role="button" value="Start now" />
             </p>
         </div>
         <div class="column-third">
@@ -47,6 +49,7 @@
             </aside>
         </div>
     </div>
+}
 </main>
 
 @section Scripts {
