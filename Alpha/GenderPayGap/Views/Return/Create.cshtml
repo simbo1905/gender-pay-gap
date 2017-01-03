@@ -363,8 +363,11 @@
                 </div>
 
                     <p>
-                        <a class="button" role="button" onclick="$('.prev').click()">Back</a>
-                        <a class="button" role="button" onclick="$('.next').click()">Continue</a>
+                        @*<a class="button" role="button" onclick="$('.prev').click()">Back</a>
+                        <a class="button" role="button" onclick="$('.next').click()">Continue</a>*@
+
+                        <input class="button" type="submit" role="button" value="Back" formaction='@Url.Action("Index")' />
+                        <input class="button" type="submit" role="button" value="Continue" />
                     </p>
                     @*<a href="gpg-overview">Cancel</a>*@
 
