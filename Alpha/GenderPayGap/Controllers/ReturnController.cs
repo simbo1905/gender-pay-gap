@@ -67,10 +67,22 @@ namespace GenderPayGap.Controllers
 
         [Authorize]
         [HttpGet]
-        public ActionResult SendConfirmed()
+        public ActionResult SendConfirmed(long id = 0)
         {
+            try
+            {
+                if (id < 1)
+                {
+                    return View(id);
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError(string.Empty, ex.Message);
+            }
+
             if (!Authorise()) return RedirectToAction("Index", "Register");
-            return View();
+            return View(id);
         }
 
         [Authorize]
@@ -102,7 +114,7 @@ namespace GenderPayGap.Controllers
                 ModelState.AddModelError("", ex.Message);
                 return View(model);
             }
-            return RedirectToAction("SendConfirmed");
+            return RedirectToAction("SendConfirmed",new { id=model.ReturnId});
         }
 
         // GET: Return/Details/5

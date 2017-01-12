@@ -47,16 +47,22 @@
                             </tr>
 
                             @if (Model != null && Model.Results != null)
+                            {
+                                foreach (var item in Model.Results)
                                 {
-                                    foreach (var item in Model.Results)
-                                    {
                                     <tr>
                                         <td>
-                                            @Html.ActionLink(item.Web, "Details", "Return", new { Id = item.OrganisationId }, null)
-                                            @*<a href="@Url.Action("Details", "Return", new { Id = item.OrganisationId})">@Html.DisplayFor(modelItem => item.Web)</a>*@<br/>
-                                            @Html.DisplayFor(i => item.OrganisationAddresses.FirstOrDefault().Address1)
-                                            
+                                            @{
+                                                //check there is a value before doing a search.
+                                                if (item != null && item.Web != null)
+                                                {
+                                                    @Html.ActionLink(item.Web, "Details", "Return", new { Id = item.OrganisationId }, null)
+                                                    @*<a href="@Url.Action("Details", "Return", new { Id = item.OrganisationId})">@Html.DisplayFor(modelItem => item.Web)</a>*@<br />
+                                                    @Html.DisplayFor(i => item.OrganisationAddresses.FirstOrDefault().Address1)
+                                                }
+                                            }
                                         </td>
+
                                         <td>
                                             @Html.DisplayFor(i => item.OrganisationType)
                                         </td>
