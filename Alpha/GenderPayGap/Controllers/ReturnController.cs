@@ -8,7 +8,7 @@ using System.Web.Mvc;
 
 namespace GenderPayGap.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class ReturnController : BaseController
     {
         //Get: Return
