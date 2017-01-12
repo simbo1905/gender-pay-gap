@@ -21,7 +21,7 @@ namespace GenderPayGap
 
         public bool Authorise()
         {
-            var user = Models.GpgDatabase.User.FindCurrentUser(User);
+            var user = Models.GpgDatabase.User.FindCurrentUser(User); //TODO:There is BUG Here
             if (user == null || user.EmailVerifiedDate == null || user.EmailVerifiedDate == DateTime.MinValue)
                 return false;
 
