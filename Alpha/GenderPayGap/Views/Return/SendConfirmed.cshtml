@@ -1,7 +1,9 @@
 ﻿@model GenderPayGap.Models.GpgDatabase.Return
 
 @{ 
-//var returnid = Model.ReturnId;
+   // var returnid = Model.ReturnId = 3;
+   // long x = returnid;
+    
 }
 
 <main id="content" role="main">
@@ -14,8 +16,8 @@
             <!--       <p>We have sent you a confirmation email.</p>
              -->
             <p>You can view or amend this submission any time before the 5 April 2018 deadline.</p>
-            @*<p><a href="Details/3">See your gender pay gap data</a></p>*@
-            <p><a href='@string.Format("Details/{0}", 3)'>See your gender pay gap data</a></p>
+            <p><a href='@string.Format("Details/{0}", Model.ReturnId)'>See your gender pay gap data</a></p>
+            @*@Html.ValueFor(model => model.Organisation.OrganisationName)*@
             @*<a href='@string.Format("http://myurltest.com/{0}/go/5/true", returnid)'>*@
                 <!--       <p><a href="edit-data">Amend your data</a></p>
          -->
