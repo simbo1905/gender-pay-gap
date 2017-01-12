@@ -8,6 +8,9 @@
 *.userosscache
 *.sln.docstates
 
+# Ignore application host 
+applicationhost.config
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
