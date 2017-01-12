@@ -54,15 +54,14 @@
                                         <td>
                                             @Html.ActionLink(item.Web, "Details", "Return", new { Id = item.OrganisationId }, null)
                                             @*<a href="@Url.Action("Details", "Return", new { Id = item.OrganisationId})">@Html.DisplayFor(modelItem => item.Web)</a>*@<br/>
-                                            @Html.DisplayFor(i => item.OrganisationAddresses.FirstOrDefault().Address1)
-                                            
+                                            @Html.DisplayFor(i => item.OrganisationAddresses.FirstOrDefault().Address1)&nbsp;
+                                            @Html.DisplayFor(i => item.OrganisationAddresses.FirstOrDefault().PostCode)
                                         </td>
                                         <td>
                                             @Html.DisplayFor(i => item.OrganisationType)
                                         </td>
                                     </tr>
                                         }
-                                    
                                 }
 
                         </table>

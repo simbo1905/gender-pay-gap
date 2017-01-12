@@ -50,9 +50,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="tabs-content">
                     <div class="tabs-panel" id="tab-2">
                         <div class="tabs-panel-inner text">
                             <h2 class="heading-medium ">Pay scales </h2>
@@ -119,9 +117,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="tabs-content">
                     <div class="tabs-panel" id="tab-3">
                         <div class="tabs-panel-inner text">
                             <div class="block ">
@@ -155,6 +151,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <div class="column-third">
@@ -163,11 +160,14 @@
                     <h3 class="heading-medium">About this employer </h3>
                     <div class="section flush">
                         <h3 class="heading-small">Registered office address </h3>
-                        <p class="font-xsmall">65 Market Place, London, N2 8DD  </p>
+                        <p class="font-xsmall">
+                            @Html.ValueFor(model => model.Organisation.OrganisationAddresses.FirstOrDefault().Address1)&nbsp;
+                            @Html.DisplayFor(model => model.Organisation.OrganisationAddresses.FirstOrDefault().PostCode)
+                        </p>
                     </div>
                     <div class="section flush">
                         <h3 class="heading-small">Sector </h3>
-                        <p class="font-xsmall">Contruction</p>
+                        <p class="font-xsmall">@Html.DisplayFor(model => model.Organisation.OrganisationType)</p>
                     </div>
                     <div class="section flush">
                         <h3 class="heading-small">Employer's gender pay gap report </h3>
