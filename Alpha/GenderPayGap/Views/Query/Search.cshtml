@@ -54,11 +54,12 @@
                                         <td>
                                             @{
                                                 //check there is a value before doing a search.
-                                                if (item != null && item.Web != null)
+                                                if ( (item != null) && (item.Returns.Select( l => l.CompanyLinkToGPGInfo) != null) )
                                                 {
-                                                    @Html.ActionLink(item.Web, "Details", "Return", new { Id = item.OrganisationId }, null)
-                                                    @*<a href="@Url.Action("Details", "Return", new { Id = item.OrganisationId})">@Html.DisplayFor(modelItem => item.Web)</a>*@<br />
+                                                    @Html.ActionLink(item.OrganisationName, "Details", "Return", new { Id = item.OrganisationId }, null) <br/>
                                                     @Html.DisplayFor(i => item.OrganisationAddresses.FirstOrDefault().Address1)
+                                                    <text>&nbsp;</text>
+                                                    @Html.DisplayFor(i => item.OrganisationAddresses.FirstOrDefault().PostCode)
                                                 }
                                             }
                                         </td>

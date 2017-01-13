@@ -77,7 +77,7 @@ namespace GenderPayGap.Models.GpgDatabase
         public decimal FemaleUpperQuartilePayBand { get; set; }
         [Required]
         [Url]
-        [Display(Name = "Enter the web address (URL) for the gender pay gap information published on your organisation’s website. The person with responsibility for gender pay gap reporting in your organisation will have this.")]
+        //[Display(Name = "Enter the web address (URL) for the gender pay gap information published on your organisation’s website. The person with responsibility for gender pay gap reporting in your organisation will have this.")]
         public string CompanyLinkToGPGInfo { get; set; }
         public string CurrentStatus { get; set; }
         public Nullable<System.DateTime> CurrentStatusDate { get; set; }
