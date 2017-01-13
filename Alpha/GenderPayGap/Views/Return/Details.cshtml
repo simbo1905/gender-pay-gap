@@ -50,9 +50,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="tabs-content">
                     <div class="tabs-panel" id="tab-2">
                         <div class="tabs-panel-inner text">
                             <h2 class="heading-medium ">Pay scales </h2>
@@ -119,9 +117,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="tabs-content">
                     <div class="tabs-panel" id="tab-3">
                         <div class="tabs-panel-inner text">
                             <div class="block ">
@@ -155,6 +151,7 @@
                         </div>
                     </div>
                 </div>
+
             </div>
         </div>
         <div class="column-third">
@@ -163,17 +160,37 @@
                     <h3 class="heading-medium">About this employer </h3>
                     <div class="section flush">
                         <h3 class="heading-small">Registered office address </h3>
-                        <p class="font-xsmall">65 Market Place, London, N2 8DD  </p>
+                        <p class="font-xsmall">
+                            @{
+                                if (Model != null && Model.Organisation != null)
+                                {
+                                    @Html.ValueFor(model => model.Organisation.OrganisationAddresses.FirstOrDefault().Address1);
+                                    <text>&nbsp;</text>
+                                    @Html.ValueFor(model => model.Organisation.OrganisationAddresses.FirstOrDefault().PostCode);
+                                }
+                            }
+                        </p>
                     </div>
                     <div class="section flush">
                         <h3 class="heading-small">Sector </h3>
-                        <p class="font-xsmall">Contruction</p>
+                        <p class="font-xsmall">@{
+                            if (Model != null && Model.Organisation != null)
+                            {
+                                @Html.ValueFor(model => model.Organisation.OrganisationType);  
+                            }
+                        }</p>
                     </div>
                     <div class="section flush">
                         <h3 class="heading-small">Employer's gender pay gap report </h3>
                         <p class="font-xsmall">
                             View the employer's 2016 to 2017 gender pay gap report on their website.
-                            <a rel="external" href="#">http://www.smithsltd.co.uk/genderpaygap-16-17</a>
+                            @{ 
+                                if (Model != null)
+                                {
+                                   <a rel="external" href="#">@Html.ValueFor(model => model.Organisation.Returns.FirstOrDefault().CompanyLinkToGPGInfo)</a>
+                                }   
+                                
+                              }
                         </p>
                     </div>
                 </nav>
@@ -184,7 +201,7 @@
 
 <script>
     function tab(i) {
-        if (i == 1) {
+                                if (i == 1) {
             $("#tab-1").show();
             $("#t1").addClass("selected");
 
@@ -195,9 +212,9 @@
             $("3tab3").hide();
             $("#t3").removeClass("selected");
             $("#t3").removeAttr("class");
-        }
+                                }
 
-        if (i == 2) {
+                                if (i == 2) {
             $("#tab-1").hide();
             $("#t1").removeClass("selected");
             $("#t1").removeAttr("class");
@@ -208,9 +225,9 @@
             $("3tab3").hide();
             $("#t3").removeClass("selected");
             $("#t3").removeAttr("class");
-        }
+                                }
 
-        if (i == 3) {
+                                if (i == 3) {
             $("#tab-1").hide();
             $("#t1").removeClass("selected");
 
@@ -219,8 +236,8 @@
 
             $("3tab3").show();
             $("#t3").addClass("selected");
-        }
-    }
+                                }
+                            }
 </script>
 
 
