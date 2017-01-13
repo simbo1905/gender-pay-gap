@@ -279,10 +279,12 @@
     <Content Include="public\assets\images\icon-denom.png" />
     <Content Include="public\assets\images\icon-gender-mixed.png" />
     <Content Include="public\assets\images\icon-location.png" />
+    <Content Include="public\assets\images\icon-pointer.png" />
     <Content Include="public\assets\images\icon-pupils.png" />
     <Content Include="public\assets\images\ofsted-logo-sm.jpeg" />
     <Content Include="public\assets\images\ofsted-logo-x-small.jpeg" />
     <Content Include="public\assets\images\ofsted-logo.jpg" />
+    <Content Include="public\assets\images\search-button.png" />
     <Content Include="public\govuk_template\assets\images\apple-touch-icon-120x120.png" />
     <Content Include="public\govuk_template\assets\images\apple-touch-icon-152x152.png" />
     <Content Include="public\govuk_template\assets\images\apple-touch-icon-60x60.png" />
