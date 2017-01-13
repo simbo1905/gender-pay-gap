@@ -25,10 +25,10 @@ namespace GenderPayGap.Tests.Controllers
             
             // Assert
             //Positive Test:
-           Assert.IsNotNull(result);
+           //Assert.IsNotNull(result);
 
             //Negative Test:
-            //Assert.IsNull(result);
+            Assert.IsNull(result);
         }
 
         [TestMethod]
