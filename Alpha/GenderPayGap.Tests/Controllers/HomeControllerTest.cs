@@ -12,15 +12,16 @@ namespace GenderPayGap.Tests.Controllers
     [TestClass]
     public class HomeControllerTest
     {
+       
         [TestMethod]
         public void Index()
         {
+            //TDD:
             // Arrange
             HomeController controller = new HomeController();
 
             // Act
             ViewResult result = controller.Index() as ViewResult;
-
             
             // Assert
             //Positive Test:
