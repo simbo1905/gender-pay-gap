@@ -16,8 +16,6 @@ namespace GenderPayGap.Tests.Controllers
         {
             // TODO: Add your test code here
             Assert.Pass("Your first passing test");
-            
-          
         }
     }
 }
