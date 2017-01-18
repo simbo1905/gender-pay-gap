@@ -1,0 +1,70 @@
+
+Test Plan
+
+1.Registration Tests:
+ Register link should take you to the registration page
+
+	External Components Test
+		Identity Server Auth ?
+
+
+
+2.Login Tests:
+	login validation Tests
+		positive login test: sign in --> i should be logged in
+		negative login test: sign in --> i wont  be able to logged in
+	External Components Test
+ 
+
+3. Data input Tests:
+	Data Validation tests
+		positive validation test
+		negative validation test
+		GpgData:
+			Valid values tests
+			invalid values test
+			no value tests
+			special characters val test
+		Person Responsible:
+			Valid values tests
+			invalid values test
+			no value tests
+			special characters val test
+
+4.Send Tests:
+	Confirmation Test
+
+5.View GPGData Tests:
+	validate data input with data viewed test.
+	Edited Data Tests:
+
+6.Querying Data Tests:
+	Search Tests
+	empty search field test
+	negative tests
+	positive tests
+	partial match search
+	exact match  search
+	wrong search criteria --> should not return anything
+
+7.Navigation Tests:
+	 Forward Navigation:
+		All page navigation tests --> validate page to page navigation
+	 Backward Navigation:
+		All page navigation tests --> validate page to page navigation
+
+8.All link navigation test --> vaidate all all Links go to intended destination
+
+List needed attributes and test Fixtures and Methods:
+Setups and Tear down Structuring
+Description attribute
+
+Setups and Tear down:
+SetUpAttribute is now used exclusively for per-test setup.
+TearDownAttribute is now used exclusively for per-test teardown.
+OneTimeSetUpAttribute is used for one-time setup.
+OneTimeTearDownAttribute is used for one-time teardown.
+SetUpFixtureAttribute continues to be used as at before, but with changed method attributes.
+
+Create group and categories:
+Then categorize the tests into Folder, Namespace, Files, classes Set up and tear down methods, and test methods as well as appropriate attributes
