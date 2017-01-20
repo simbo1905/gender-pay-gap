@@ -13,12 +13,14 @@ namespace GenderPayGap.Tests.Navigation.Controllers
     [TestFixture]
     public class HomeControllerTest : AssertionHelper
     {
+
         [Test]
+        [Description("This test is to verify that the user successfully logged in")]
         public void TestMethod()
         {
             // TODO: Add your test code here
             //Use the Constrain Model only
-            Assert.That(true, "");
+            Assert.That(false, "Error Message");
         }
 
         [Test]
@@ -37,8 +39,8 @@ namespace GenderPayGap.Tests.Navigation.Controllers
             //break these out into individual test methods to have one assert each
             // Asserts:
             //Positive Tests:
-            Assert.That(result != null, "");
-            Assert.That(result.ViewBag.Title == "Home Page", "The HomeController View Title is not set as 'Home Page'!");
+            //Assert.That(result != null, "");
+            //Assert.That(result.ViewBag.Title == "Home Page", "The HomeController View Title is not set as 'Home Page'!");
 
             //Negative Tests:
             Assert.That(result == null, "");

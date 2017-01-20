@@ -1,9 +1,11 @@
-﻿using NUnit.Framework;
+﻿using GenderPayGap.Controllers;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web.Mvc;
 
 namespace GenderPayGap.Tests._7.Navigation.Controllers
 {
@@ -16,6 +18,23 @@ namespace GenderPayGap.Tests._7.Navigation.Controllers
             // TODO: Add your test code here
             //Assert.Pass("Your first passing test");
             Assert.That("Your first passing test", Is.EqualTo(true));
+        }
+
+        [Test]
+        public void Index()
+        {
+            //TDD:
+            // Arrange
+            RegisterController controller = new RegisterController();
+
+            // Act
+            ViewResult result = controller.Index() as ViewResult;
+
+            // Assert
+            //Assert.That(result != null, "Error Message");
+
+            //Negative Test:
+            Assert.That(result == null, "Error Message");
         }
     }
 }

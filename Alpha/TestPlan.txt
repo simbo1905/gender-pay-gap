@@ -13,7 +13,11 @@ Test Plan
 	login validation Tests
 		positive login test: sign in --> i should be logged in
 		negative login test: sign in --> i wont  be able to logged in
-	External Components Test
+	External Components Test:
+		These may be grouped into integration test.
+	 Google sign in / social media sign in, face book etc test -->
+	 Open ID connect test? --> 
+	 GG3 -> compatibility ?
  
 
 3. Data input Tests:
@@ -25,14 +29,22 @@ Test Plan
 			invalid values test
 			no value tests
 			special characters val test
+			Data Values:
+			Range  and boundaries Test 0% to 100%  
+				within Range Test: > 0% and or < 100%
+				outside range test: < 0% and or < 1%,  > 100%
+				1. positive  values 0% to 100%
+				2. negative values  -100% to 0%
+
 		Person Responsible:
-			Valid values tests
-			invalid values test
-			no value tests
-			special characters val test
+			Valid values tests: Allowed characters
+			invalid values test: Non allowed characters
+			no value tests:
+			special characters val test:
+
 
 4.Send Tests:
-	Confirmation Test
+	Confirmation Test:
 
 5.View GPGData Tests:
 	validate data input with data viewed test.
@@ -53,18 +65,59 @@ Test Plan
 	 Backward Navigation:
 		All page navigation tests --> validate page to page navigation
 
-8.All link navigation test --> vaidate all all Links go to intended destination
+		integration test
 
+Note:All link navigation test --> vaidate all Links go to intended destination
+
+
+8.Integration
 List needed attributes and test Fixtures and Methods:
 Setups and Tear down Structuring
+
+Attributes used:
+Test attribute
+Order attribute
 Description attribute
 
-Setups and Tear down:
+Setups and Tear down attribute:
 SetUpAttribute is now used exclusively for per-test setup.
 TearDownAttribute is now used exclusively for per-test teardown.
 OneTimeSetUpAttribute is used for one-time setup.
 OneTimeTearDownAttribute is used for one-time teardown.
 SetUpFixtureAttribute continues to be used as at before, but with changed method attributes.
 
+Structure:
 Create group and categories:
 Then categorize the tests into Folder, Namespace, Files, classes Set up and tear down methods, and test methods as well as appropriate attributes
+categorise Red Green refactor in such a way to be able to run all reds and then all greens
+
+logical Structure:
+Folder
+	|-> NameSpace
+				[Attributes]
+			|-> Test Class 1
+
+					Asserts
+							|-> TestMethod1
+								|->Assert.That(true, message)
+							|-> TestMethod2
+								|->Assert.That(true, message)
+							|-> TestMethod3
+								|->Assert.That(true, message)
+
+		  |-> End Test Class
+		     
+			  [Attributes]
+		  |-> Test Class 1
+
+					Asserts
+							|-> TestMethod1
+								|->Assert.That(true, message)
+							|-> TestMethod2
+								|->Assert.That(true, message)
+							|-> TestMethod3
+								|->Assert.That(true, message)
+
+						
+		  |-> End Test Class
+	|-> End NameSpace
