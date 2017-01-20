@@ -54,6 +54,7 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Extensions" />
@@ -99,10 +100,8 @@
     <Compile Include="7.Navigation\Controllers\QueryControllerTest.cs" />
     <Compile Include="7.Navigation\Controllers\RegisterControllerTest.cs" />
     <Compile Include="7.Navigation\Controllers\ReturnControllerTest.cs" />
-    <Compile Include="7.Navigation\Controllers\TestClass1.cs" />
     <Compile Include="8.Integration\IntegrationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="7.Navigation\Controllers\_HomeControllerTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />

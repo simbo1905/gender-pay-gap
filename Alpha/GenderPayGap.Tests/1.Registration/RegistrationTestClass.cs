@@ -5,26 +5,28 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+
 namespace GenderPayGap.Tests.Registeration
 {
     [TestFixture]
     public class RegistrationTestClass : AssertionHelper
     {
-        [Test]
-        [Description("When user clicks on the register link from Sign-in, user is taken to register page (1 of 6)")]
-        public void RegisterLinkValidation()
-        {
-            // TODO: Add your test code here
-            Assert.Pass("Your first passing test");
-            
-        }
+        //[Test]
+        //[Description("When user clicks on the register link from Sign-in, user is taken to register page (1 of 6)")]
+        //public void RegisterLinkValidation()
+        //{
+        //    // TODO: Add your test code here
+        //    //Use the Constrain Model only
+        //    Assert.That(false, "Error Message");
+
+        //}
 
         [Test, Order(1)]
         [Description("Verify that the user is not already logged in")]
         public void VerifyUserIsNotLoggedIn()
         {
             // TODO: Add your test code here
-            Assert.Pass("Your first passing test");
+            Assert.That(false, "Error Message");
         }
 
         [Test, Order(2)]
@@ -32,7 +34,7 @@ namespace GenderPayGap.Tests.Registeration
         public void VerifyUserDoesNotExist()
         {
             // TODO: Add your test code here
-            Assert.Pass("Your first passing test");
+            Assert.That(false, "Error Message");
         }
 
         [Test, Order(3)]
@@ -40,7 +42,7 @@ namespace GenderPayGap.Tests.Registeration
         public void VerifyUserFormFieldsAreEmpty()
         {
             // TODO: Add your test code here
-            Assert.Pass("Your first passing test");
+            Assert.That(false, "Error Message");
         }
 
     }
