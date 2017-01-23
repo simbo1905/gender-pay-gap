@@ -16,23 +16,22 @@ namespace GenderPayGap.Tests.Login
        // Asserts
 
         [Test]
-        [TestCase()]
+        [TestCase("www.feedbacklink.com")] //surveyMonkey
         [Description("This test is to verify that feedback link links to/opens the feed back page")]
-        public void VerifyFeedBackLink()
+        public void VerifyFeedBackLink(string link)
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.That(false, "Error Message");
         }
 
         [Test]
-        [Description("This test is to verify that register link  links to/ opens the registeration page")]
+        [TestCase("https://localhost:44371/Register")]
+        [Description("This test is to verify When user clicks on the register link from Sign-in, user is taken to register page (1 of 6)")]
         public void VerifyRegisterLink()
-        {
-            Assert.That(false, "Error Message");
-        }
-
-        [Test]
-        [Description("When user clicks on the register link from Sign-in, user is taken to register page (1 of 6)")]
-        public void RegisterLinkValidation()
         {
             // TODO: Add your test code here
 
@@ -53,6 +52,11 @@ namespace GenderPayGap.Tests.Login
         [Description("This test is to verify that the email field is empty")]
         public void VerifyEmailFieldIsEmpty()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.That(false, "Error Message");
         }
 
@@ -60,6 +64,11 @@ namespace GenderPayGap.Tests.Login
         [Description("This test is to verify that password field is empty")]
         public void VerifyPasswordFieldIsEmpty()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.That(false, "Error Message");
         }
 
@@ -68,6 +77,11 @@ namespace GenderPayGap.Tests.Login
         [Description("This test is to verify that the user failed to / successfully logged in")]
         public void VerifyLogin()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.That(false, "Error Message");
         }
 
@@ -75,6 +89,11 @@ namespace GenderPayGap.Tests.Login
         [Description("This test is to verify that the forgotten password link links to/ open appropriate page")]
         public void VerifyForgottenPasswordLink()
         {
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.That(false, "Error Message");
         }
 
