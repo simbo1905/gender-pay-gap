@@ -20,6 +20,8 @@ namespace GenderPayGap.Tests._7.Navigation.Controllers
             Assert.That("Your first passing test", Is.EqualTo(true));
         }
 
+
+        // Test Action Methods and Views
         [Test]
         public void Index()
         {
@@ -35,6 +37,21 @@ namespace GenderPayGap.Tests._7.Navigation.Controllers
 
             //Negative Test:
             Assert.That(result == null, "Error Message");
+        }
+
+        public void Index( object model)
+        {
+
+        }
+
+        public void Verify(string code=null)
+        {
+
+        }
+
+        public void Verify()
+        {
+
         }
     }
 }

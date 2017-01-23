@@ -10,11 +10,26 @@ namespace GenderPayGap.Tests._6.Query
     [TestFixture]
     public class QueryTest
     {
+
         [Test]
-        public void TestMethod()
+        [Description("")]
+        public void VerifyEmptySearchDataReturnsAllAvailableData()
         {
-            // TODO: Add your test code here
-            Assert.Pass("Your first passing test");
+            Assert.That(false, "Error Message");
+        } 
+
+        [Test]
+        [Description("")]
+        public void VerifyFullSearchDataIsReturned()
+        {
+            Assert.That(false, "Error Message");
+        }
+
+        [Test]
+        [Description("")]
+        public void VerifyPartialSearchDataReturnsAllMatchingData()
+        {
+            Assert.That(false, "Error Message");
         }
     }
 }

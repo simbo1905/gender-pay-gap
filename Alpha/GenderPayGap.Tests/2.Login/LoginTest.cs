@@ -16,6 +16,7 @@ namespace GenderPayGap.Tests.Login
        // Asserts
 
         [Test]
+        [TestCase()]
         [Description("This test is to verify that feedback link links to/opens the feed back page")]
         public void VerifyFeedBackLink()
         {
@@ -76,8 +77,6 @@ namespace GenderPayGap.Tests.Login
         {
             Assert.That(false, "Error Message");
         }
-       
-
 
 
     }
