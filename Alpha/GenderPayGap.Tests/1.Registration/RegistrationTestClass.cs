@@ -17,7 +17,7 @@ namespace GenderPayGap.Tests.Registeration
        private User user = null;
        private RegisterController reg = null;
 
-       [SetUp]
+        [SetUp]
         [Description("")]
         public void Setup()
         {
@@ -34,13 +34,21 @@ namespace GenderPayGap.Tests.Registeration
         }
 
         [Test]
+        [TestCase("https://localhost:44371/Return")]
         [Description("When user clicks on the Sign in link, user is taken to Sign in page")]
         public void SignInLinkValidation()
         {
             // TODO: Add your test code here
             //Use the Constrain Model only
             //verify that you are navigated to the sign-in page
+            
+            // Arrange
+
+            // Act
+           
+            // Assert
             Assert.That(false, "Error Message");
+           
 
         }
 
@@ -49,15 +57,25 @@ namespace GenderPayGap.Tests.Registeration
         public void VerifyUserIsNotLoggedIn()
         {
             // TODO: Add your test code here
+            // Arrange
+
+            // Act
+
+            // Assert
             //Assert.That(false, "Error Message");
             Assert.That(user != null, "Error Message");
         }
 
         [Test, Order(2)]
         [Description("Verify that the user does not exist")]
-        public void VerifyUserDoesNotExist()
+        public void VerifyRegisteringUserDoesNotExist()
         {
             // TODO: Add your test code here
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.That(false, "Error Message");
         }
 
@@ -66,6 +84,11 @@ namespace GenderPayGap.Tests.Registeration
         public void VerifyUserFormFieldsAreEmpty()
         {
             // TODO: Add your test code here
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.That(false, "Error Message");
         }
 
@@ -74,6 +97,11 @@ namespace GenderPayGap.Tests.Registeration
         public void VerifyUserFormFieldsInputs()
         {
             // TODO: Add your test code here
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.That(false, "Error Message");
         }
 
@@ -82,6 +110,11 @@ namespace GenderPayGap.Tests.Registeration
         public void VerifyPasswordRule()
         {
             // TODO: Add your test code here
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.That(false, "Error Message");
         }
 
@@ -90,6 +123,11 @@ namespace GenderPayGap.Tests.Registeration
         public void VerifyPasswordAndConfirmPasswordEquality()
         {
             // TODO: Add your test code here
+            // Arrange
+
+            // Act
+
+            // Assert
             Assert.That(false, "Error Message");
         }
 
@@ -99,6 +137,11 @@ namespace GenderPayGap.Tests.Registeration
         public void VerifyContinueButton()
         {
             // TODO: Add your test code here
+            // Arrange
+
+            // Act
+
+            // Assert
             //Verify all fields
             //verify confirmation email is sent
             //verifu confirmation email is received ?

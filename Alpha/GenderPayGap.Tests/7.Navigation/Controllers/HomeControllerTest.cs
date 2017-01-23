@@ -14,14 +14,6 @@ namespace GenderPayGap.Tests.Navigation.Controllers
     public class HomeControllerTest : AssertionHelper
     {
 
-        [Test]
-        [Description("This test is to verify that the user successfully logged in")]
-        public void TestMethod()
-        {
-            // TODO: Add your test code here
-            //Use the Constrain Model only
-            Assert.That(false, "Error Message");
-        }
 
         [Test]
         public void Index()

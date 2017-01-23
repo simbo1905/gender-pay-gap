@@ -146,7 +146,6 @@ namespace GenderPayGap.Controllers
             return View(model);
         }
 
-
         [HttpGet]
         public ActionResult Verify(string code=null)
         {

@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Web.Mvc;
 
-namespace GenderPayGap.Tests._7.Navigation.Controllers
+namespace GenderPayGap.Tests.Navigation.Controllers
 {
     [TestFixture]
     public class QueryControllerTest
@@ -21,7 +21,7 @@ namespace GenderPayGap.Tests._7.Navigation.Controllers
             QueryController controller = new QueryController();
 
             // Act
-            ViewResult result = controller.Start() as ViewResult;
+            var result = (ViewResult)controller.Index();
 
             // Assert
             //Positive Test:
