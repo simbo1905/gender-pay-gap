@@ -1,5 +1,10 @@
 
-Test Plan
+Test Plan / Strategy
+
+Some Notes:
+1.Numbers entered must be to 1 decimal point.
+2.Strategise on error messages with Chris and Tarik
+
 
 1.Registration Tests:
  Register link should take you to the registration page

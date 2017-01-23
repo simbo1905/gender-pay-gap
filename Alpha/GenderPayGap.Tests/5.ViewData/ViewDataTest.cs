@@ -11,10 +11,10 @@ namespace GenderPayGap.Tests._5.ViewData
     public class ViewDataTest
     {
         [Test]
-        public void TestMethod()
+        [Description("This test is to verify that submitted data is viewable")]
+        public void VerifyDataSubmitedIsViewable()
         {
-            // TODO: Add your test code here
-            Assert.Pass("Your first passing test");
+            Assert.That(false, "Error Message");
         }
     }
 }

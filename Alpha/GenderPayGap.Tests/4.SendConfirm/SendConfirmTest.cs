@@ -11,10 +11,10 @@ namespace GenderPayGap.Tests._4.SendConfirm
     public class SendConfirmTest
     {
         [Test]
-        public void TestMethod()
+        [Description("This test is to verify that the user 's data has sent")]
+        public void VerifyLoginPassed()
         {
-            // TODO: Add your test code here
-            Assert.Pass("Your first passing test");
+            Assert.That(false, "Error Message");
         }
     }
 }

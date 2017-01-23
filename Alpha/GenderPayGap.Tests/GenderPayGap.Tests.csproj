@@ -111,6 +111,10 @@
       <Project>{E1578D37-94CD-4716-A68C-A66980A567D2}</Project>
       <Name>GenderPayGap</Name>
     </ProjectReference>
+    <ProjectReference Include="..\GpgDatabase\GpgDatabase.csproj">
+      <Project>{3073DF11-5D99-45A7-9CBA-836FD758C319}</Project>
+      <Name>GpgDatabase</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
