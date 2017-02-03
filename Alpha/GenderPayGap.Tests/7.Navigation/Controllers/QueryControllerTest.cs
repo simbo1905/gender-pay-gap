@@ -12,9 +12,10 @@ namespace GenderPayGap.Tests.Navigation.Controllers
     [TestFixture]
     public class QueryControllerTest
     {
+        #region Test: Action methods return Views
         [Test]
-        [Description("This test is to verify that the user successfully logged in")]
-        public void Index()
+        [Description("Index action should call the index View")]
+        public void IndexActionReturnsIndexView()
         {
             //TDD:
             // Arrange
@@ -25,16 +26,13 @@ namespace GenderPayGap.Tests.Navigation.Controllers
 
             // Assert
             //Positive Test:
-            //Assert.That(result != null, "Error Message");
-
-
             //Negative Test:
-            Assert.That(result == null, "Error Message");
+            Assert.That(result, Is.EqualTo("Index"), "Error Message");
         }
 
-
         [Test]
-        public void Start()
+        [Description("Start action should call the start View")]
+        public void StartActionReturnsStartView()
         {
             //TDD:
             // Arrange
@@ -45,11 +43,56 @@ namespace GenderPayGap.Tests.Navigation.Controllers
 
             // Assert
             //Positive Test:
-            //Assert.That(result != null, "Error Message");
-            
-
             //Negative Test:
-            Assert.That(result == null, "Error Message");
+            Assert.That(result, Is.EqualTo("Start"), "Error Message");
         }
+
+        [Test]
+        [Description("Search action should call the search View")]
+        public void SearchActionReturnSearchView()
+        {
+            //Add HTTPOST test
+
+            //TDD:
+            // Arrange
+            QueryController controller = new QueryController();
+
+            // Act
+            ViewResult result = controller.Search() as ViewResult;
+
+            // Assert
+            Assert.That(result, Is.EqualTo("Search"), "Error Message");
+        }
+
+        [Test]
+        [Description("Sectors action should call the sectors View")]
+        public void SectorsActionReturnSectorsView()
+        {
+            //TDD:
+            // Arrange
+            QueryController controller = new QueryController();
+
+            // Act
+            ViewResult result = controller.Sectors() as ViewResult;
+
+            // Assert
+            Assert.That(result, Is.EqualTo("Sectors"), "Error Message");
+        }
+
+        [Test]
+        [Description("Download action should call the download View")]
+        public void DownloadActionReturnsDownloadView()
+        {
+            //TDD:
+            // Arrange
+            QueryController controller = new QueryController();
+
+            // Act
+            ViewResult result = controller.Download() as ViewResult;
+
+            // Assert
+            Assert.That(result, Is.EqualTo("Download"), "Error Message");
+        } 
+        #endregion
     }
 }

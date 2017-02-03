@@ -126,3 +126,6 @@ Folder
 						
 		  |-> End Test Class
 	|-> End NameSpace
+
+
+	| -> HTTPPOST and Testing the form fields
