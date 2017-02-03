@@ -4,29 +4,50 @@ using GenderPayGap.Models.GpgDatabase;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace GenderPayGap.Tests.Navigation.Controllers
 {
     [TestFixture]
     public class RegisterControllerTest
     {
-        [SetUp]
+
+        RegisterController controller;
+        VerifyViewModel verifyViewModel;
+
+      [SetUp]
         public void Setup()
         {
-            RegisterController controller = new RegisterController();
-            VerifyViewModel verifyViewModel = new VerifyViewModel();
+             controller = new RegisterController();
+             verifyViewModel = new VerifyViewModel();
         }
 
-        // Test Action Methods and Views
+        public void createContext()
+        {
+            //Mock Request.Url.AbsoluteUri 
+            HttpRequest httpRequest = new HttpRequest("", "http://mySomething", "");
+            StringWriter stringWriter = new StringWriter();
+            HttpResponse httpResponse = new HttpResponse(stringWriter);
+            HttpContext httpContextMock = new HttpContext(httpRequest, httpResponse);
+            controller.ControllerContext = new ControllerContext(new HttpContextWrapper(httpContextMock), new RouteData(), controller);
+            string methodContext = controller.HttpContext.Request.HttpMethod;
+        }
 
+
+        #region Test: Action methods return Views
         [Test]
         [Description("Test to validate Index view")]
-        public void Index()
+        public void IndexActionReturnsIndexView()
         {
+
+            //Add HTTPPOST logic here 
+
             // TDD:
             // Arrange
             RegisterController controller = new RegisterController();
@@ -37,13 +58,15 @@ namespace GenderPayGap.Tests.Navigation.Controllers
             // Assert
             // TODO: RED GREEN REFACTOR
             // Negative Test:
-            Assert.That(result == null, "Error Message");
+            Assert.That(result, Is.EqualTo("Index"), "Error Message");
         }
 
         [Test]
         [Description("Test to validate Verify view")]
         public void Verify()
         {
+            //Add HTTPPOST logic here
+
             // TDD:
             // Arrange
             RegisterController controller = new RegisterController();
@@ -66,6 +89,8 @@ namespace GenderPayGap.Tests.Navigation.Controllers
         [Description("Test to validate Organisation view")]
         public void Organisation()
         {
+            //Add HTTPPOST logic here
+
             // TDD:
             // Arrange
             RegisterController controller = new RegisterController();
@@ -88,6 +113,8 @@ namespace GenderPayGap.Tests.Navigation.Controllers
         [Description("Test to validate Confirmed")]
         public void Confirm()
         {
+            //Add HTTPPOST logic here
+
             // TDD:
             // Arrange
             RegisterController controller = new RegisterController();
@@ -105,6 +132,7 @@ namespace GenderPayGap.Tests.Navigation.Controllers
             Assert.That(resultWithSuppliedID == null, "Error Message");
             Assert.That(resultWithSuppliedModel == null, "Error Message");
         }
+        #endregion
 
 
     }

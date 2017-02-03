@@ -13,31 +13,23 @@ namespace GenderPayGap.Tests.Navigation.Controllers
     [TestFixture]
     public class HomeControllerTest : AssertionHelper
     {
+        HomeController controller;
 
-
+        #region Test: Action methods return Views
         [Test]
-        public void Index()
+        [Description("Index action should call the index View")]
+        public void IndexActionReturnsIndexView()
         {
-
-            //TDD:
-
-            // Arrange
-            HomeController controller = new HomeController();
-            //Assert.That<HomeController>(controller, null, "" );
-
-            // Act
+            //Arrange
+            controller = new HomeController();
+            //Act
             ViewResult result = controller.Index() as ViewResult;
-
-            //break these out into individual test methods to have one assert each
-            // Asserts:
-            //Positive Tests:
-            //Assert.That(result != null, "");
-            //Assert.That(result.ViewBag.Title == "Home Page", "The HomeController View Title is not set as 'Home Page'!");
-
-            //Negative Tests:
-            Assert.That(result == null, "");
-            Assert.That(result.ViewBag.Title != "Home Page" || result.ViewBag.Title != "", "");
+            //Assert
+            Assert.That(result.ViewName, Is.EqualTo("index"));
         }
+        #endregion
+
+
 
     }
 }

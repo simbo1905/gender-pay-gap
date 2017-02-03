@@ -3,29 +3,57 @@ using GenderPayGap.Models.GpgDatabase;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
+using System.Web.Routing;
 
 namespace GenderPayGap.Tests.Navigation.Controllers
 {
     [TestFixture]
     public class ReturnControllerTest
     {
+
+        private ReturnController controller;
+        private  Return myReturn;
+        private User user;
+
+        #region Helper Methods
+        public void UserLoggedIn(User _user)
+        {
+
+        }
+
+        public void UserLoggedNotIn(User _user)
+        {
+
+        } 
+
+        #endregion
+
         [SetUp]
         public void Setup()
         {
-            ReturnController controller = new ReturnController();
-            Return myReturn = new Return();
+            controller = new ReturnController();
+            myReturn = new Return();
+
+            //Mock Request.Url.AbsoluteUri 
+            HttpRequest httpRequest      = new HttpRequest("", "http://mySomething", "");
+            StringWriter stringWriter    = new StringWriter();
+            HttpResponse httpResponse    = new HttpResponse(stringWriter);
+            HttpContext httpContextMock  = new HttpContext(httpRequest, httpResponse);
+            controller.ControllerContext = new ControllerContext(new HttpContextWrapper(httpContextMock), new RouteData(), controller);
+            string methodContext = controller.HttpContext.Request.HttpMethod;
         }
 
         [Test]
         [Description("This test is to verify that the user successfully logged in")]
         public void VerifyLoginPassed()
         {
-            //Note: FEEDBACK Link is not ready yet. So this cannot be Tested
-            
             // TDD:
             // Arrange
             
@@ -37,13 +65,14 @@ namespace GenderPayGap.Tests.Navigation.Controllers
             Assert.That(false, "Error Message");
         }
 
+        #region Test: Action methods return Views
         [Test]
         [Description("Test to validate index view")]
-        public void Index()
+        public void IndexActionReturnsIndexView()
         {
             // TDD:
             // Arrange
-             var controller = new ReturnController();
+             controller = new ReturnController();
 
             // Act
             ViewResult result = controller.Index() as ViewResult;
@@ -51,19 +80,25 @@ namespace GenderPayGap.Tests.Navigation.Controllers
             // Assert
             // TODO: RED GREEN REFACTOR
             // Negative Test:
-            Assert.That(result == null, "Error Message");
+            Assert.That(result, Is.EqualTo("Index"), "Error Message");
            
         }
 
         [Test]
         [TestCase("1")]
         [Description("Test to validate Create view")]
-        public void Create()
+        public void CreateActionReturnsCreateView()
         {
+
+            //Add HTTPOST test for Create in return
+            
+	
+
+
             // TDD:
             // Arrange
-            ReturnController controller = new ReturnController();
-            Return myReturn = new Return();
+            controller = new ReturnController();
+            myReturn = new Return();
 
             // Act
             var result = controller.Create() as ViewResult;
@@ -72,8 +107,8 @@ namespace GenderPayGap.Tests.Navigation.Controllers
             // Assert
             // TODO: RED GREEN REFACTOR
             // Negative Test:
-            Assert.That(result == null, "Error Message");
-            Assert.That(resultWithSuppliedModel == null, "Error Message");
+            Assert.That(result, Is.EqualTo("Create"),  "Error Message");
+            Assert.That(resultWithSuppliedModel, Is.EqualTo("Create"), "Error Message");
         }
 
         [Test]
@@ -81,6 +116,8 @@ namespace GenderPayGap.Tests.Navigation.Controllers
         [Description("Test to validate Authoriser view")]
         public void Authoriser()
         {
+            //Add HTTPOST test for Authoriser
+
             // TDD:
             // Arrange
             ReturnController controller = new ReturnController();
@@ -99,6 +136,7 @@ namespace GenderPayGap.Tests.Navigation.Controllers
         [Description("Test to validate Confirmed")]
         public void Confirm()
         {
+            //Add HTTPOST test for Confirm in return
             // TDD:
             // Arrange
             ReturnController controller = new ReturnController();
@@ -121,6 +159,8 @@ namespace GenderPayGap.Tests.Navigation.Controllers
         [Description("Test to Validate SendConfirmed")]
         public void SendConfirm()
         {
+            //Add HTTPOST test for Create in return
+
             // TDD:
             // Arrange
             ReturnController controller = new ReturnController();
@@ -159,5 +199,19 @@ namespace GenderPayGap.Tests.Navigation.Controllers
             Assert.That(resultWithSuppliedID == null, "Error Message");
         }
 
+        [HttpGet]
+        [Test]
+        [TestCase(0)]
+        [TestCase(1)]
+        [TestCase(2)]
+        [TestCase(null)]
+        [Description("Details action should call the details View")]
+        public void DetailsActionReturnsDetailsView( int param)
+        {
+            var controller = new ReturnController();
+            var result = controller.Details(param) as ViewResult;
+            Assert.That(result.ViewName, Is.EqualTo("Details"));
+        }
+        #endregion
     }
 }
