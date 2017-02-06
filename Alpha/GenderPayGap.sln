@@ -18,6 +18,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReadMe", "ReadMe", "{446E2070-0B97-42D5-B3E3-5AA48CCE213C}"
 	ProjectSection(SolutionItems) = preProject
 		TestPlan.txt = TestPlan.txt
+		TestPlan2.txt = TestPlan2.txt
 	EndProjectSection
 EndProject
 Global

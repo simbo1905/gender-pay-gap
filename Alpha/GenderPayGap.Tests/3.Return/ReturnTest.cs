@@ -1,25 +1,49 @@
-﻿using NUnit.Framework;
+﻿using GenderPayGap.Models.GpgDatabase;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Principal;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 
 namespace GenderPayGap.Tests._3.DataInput
 {
-    [TestFixture]
-    public class DataInputTest
+
+
+    public class MockHttpContext : HttpContextBase
     {
+        private readonly IPrincipal _user = new GenericPrincipal(new GenericIdentity("2"), null /* roles */);
+        public override IPrincipal User
+        {
+            get { return _user; }
+            set { base.User = value; }
+        }
+    }
+
+
+    [TestFixture]
+    public class ReturnTest
+    {
+        #region Helper Method
+        private HttpContext GetHttpContext()
+        {
+            throw new NotImplementedException();
+        }
+
+        private User GetLoggedInUser()
+        {
+            throw new NotImplementedException();
+        } 
+        #endregion
+
         [SetUp]
         public void Setup()
         {
-            //this.SetupTest(session => // the NH/EF session to attach the objects to
-            //{
-            //    var user = new UserAccount("Mr", "Joe", "Bloggs");
-            //    session.Save(user);
-            //    this.UserID = user.UserID;
-            //});
-           
+           //Call required helper methods
+           HttpContext httpContext = GetHttpContext();
+           User currUser = GetLoggedInUser();
         }
 
 

@@ -1,9 +1,11 @@
-﻿using NUnit.Framework;
+﻿using GenderPayGap.Models.GpgDatabase;
+using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Web;
 using System.Web.Mvc;
 
 namespace GenderPayGap.Tests.Login
@@ -11,9 +13,40 @@ namespace GenderPayGap.Tests.Login
     [TestFixture]
     public class LoginTest
     {
+
+        #region Helper Method
+        private HttpContext GetHttpContext()
+        {
+            throw new NotImplementedException();
+        }
+
+        private User GetLoggedInUser()
+        {
+            throw new NotImplementedException();
+        }
+        #endregion
+
+        [SetUp]
+        public void Setup()
+        {
+            //this.SetupTest(session => // the NH/EF session to attach the objects to
+            //{
+            //    var user = new UserAccount("Mr", "Joe", "Bloggs");
+            //    session.Save(user);
+            //    this.UserID = user.UserID;
+            //});
+
+            //Helper Methods
+            HttpContext httpContext = GetHttpContext();
+            User currUser = GetLoggedInUser();
+        }
+
+
+
+
         //TODO: Use the Constrain Model only
 
-       // Asserts
+        // Asserts
 
         [Test]
         [TestCase("www.feedbacklink.com")] //surveyMonkey

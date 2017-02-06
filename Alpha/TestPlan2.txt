@@ -1,0 +1,90 @@
+								Returns Test
+Assumptions:
+User is logged in.
+
+Setup:
+ mock repository and Controller class with overloaded controller to be able to call Mock controller with (user , org) calling mock IRepository
+ or real Repository
+ mock user
+ mock org
+
+
+################################# LOAD TEST BEGIN: #######################################################
+Test Case:
+	1.User clicks the start page
+Result:
+RED: The corresponding view does not load or exist, Appropriate Error message is given.
+GREEN: The Correct view is loaded.
+
+
+Test Case:
+	2.Verify the model does not load any data into the form fields
+Result:
+RED: Model or ViewModel is not empty and returns data to populate fields, Appropriate Error message is given.
+GREEN: Model or ViewModel is empty and returns data to populate fields
+
+
+Test Case:
+	3.page check a database for the user if user Iprinciple is not set or null, redirect to login page
+Result:
+RED: 
+GREEN: 
+
+
+Test Case:
+	4.if principle is set and principle not exist in the mock, throw an exception 
+Result:
+RED: 
+GREEN: 
+
+
+Test Case:
+5.if user exist in the database but have not been verified / confirmed (confirmed email)
+Result:
+RED: 
+GREEN: 
+
+
+Test Case:
+6.if user exist in the database but have not been been associated with an organisation
+Result:
+RED: 
+GREEN:
+
+######################### LOAD TEST END ######################################
+
+
+
+
+
+Test Case:
+7.if user exist in the database but have not been been associated with an organisation which will affect the deadline date for submission 
+if Private: Deadline date: 6/4/2018: -> more tests for these deadline date
+if Public: Deadline date:  1/4/2018: -> more tests for this deadline date 
+Result:
+RED: 
+GREEN:
+
+
+Test Case:
+	8. if user fills in form before the just deadline date, and clicks continue just after the deadline date, 
+		before submission once continue is clicked Datetime.now must be verified against deadline date for if company is public or private.
+Result:
+RED: 
+GREEN:
+
+
+
+########################################### DESIGN PATTERN: ####################################
+create controllers to use default constructor to call child constructors with Irepository so that you can call real repo and mock repo
+mock user
+mock user without confirmation
+mock user with confirmation without organisation
+mock user with organisation without pin e.t.c
+
+Helper methods:
+GetHttpContext()
+GetLoggedInUser()
+
+######################################### END DESIGN PATTERN ##################################
+

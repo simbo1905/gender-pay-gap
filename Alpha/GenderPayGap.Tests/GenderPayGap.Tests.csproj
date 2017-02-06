@@ -98,9 +98,10 @@
     <Reference Include="System.Net.Http.WebRequest" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="1.Registration\RegistrationTestClass.cs" />
+    <Compile Include="0.Submission\SubmissionTest.cs" />
+    <Compile Include="1.Registration\RegistrationTest.cs" />
     <Compile Include="2.Login\LoginTest.cs" />
-    <Compile Include="3.DataInput\DataInputTest.cs" />
+    <Compile Include="3.Return\ReturnTest.cs" />
     <Compile Include="4.SendConfirm\SendConfirmTest.cs" />
     <Compile Include="5.ViewData\ViewDataTest.cs" />
     <Compile Include="6.Query\QueryTest.cs" />
