@@ -18,7 +18,25 @@ using System.Web.Routing;
 namespace GenderPayGap.Tests.Registeration
 {
 
-    class MockHttpContext : HttpContextBase
+
+    //public class MockingHttpContext 
+    //{
+    //    private Mock<HttpContextBase> moqContext;
+    //    private Mock<HttpRequestBase> moqRequest;
+
+    //    [SetUp]
+    //    public void SetupTests()
+    //    {  
+    //        // Setup Moq 
+    //        moqContext = new Mock<HttpContextBase>();
+    //        moqRequest = new Mock<HttpRequestBase>();
+    //        moqContext.Setup(x => x.Request).Returns(moqRequest.Object);
+    //    }
+    //}
+
+
+
+    public class MockHttpContext : HttpContextBase
     {
         private readonly IPrincipal _user = new GenericPrincipal(new GenericIdentity("2"), null /* roles */);
         public override IPrincipal User
@@ -27,6 +45,8 @@ namespace GenderPayGap.Tests.Registeration
             set { base.User = value; }
         }
     }
+
+
 
 
     [TestFixture]
@@ -55,6 +75,7 @@ namespace GenderPayGap.Tests.Registeration
         [Description("Setup variables for class and test methods of this class")]
         public void Setup()
         {
+
             controller = GetRegisterController();
             bool resultAuth = controller.Authorise();
 
@@ -126,6 +147,7 @@ namespace GenderPayGap.Tests.Registeration
             // Assert
             Assert.That(false, "Error Message");
         }
+
 
         [Test, Order(3)]
         [Description("Verify that all fields are now populated")]
