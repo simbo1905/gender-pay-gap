@@ -15,7 +15,7 @@ using System.Web;
 using System.Security.Principal;
 using System.Web.Routing;
 
-namespace GenderPayGap.Tests.Registeration
+namespace GenderPayGap.Tests.Registration
 {
 
 
@@ -47,8 +47,6 @@ namespace GenderPayGap.Tests.Registeration
     }
 
 
-
-
     [TestFixture]
     public class RegistrationTestClass : AssertionHelper
     {
@@ -75,7 +73,6 @@ namespace GenderPayGap.Tests.Registeration
         [Description("Setup variables for class and test methods of this class")]
         public void Setup()
         {
-
             controller = GetRegisterController();
             bool resultAuth = controller.Authorise();
 
@@ -85,7 +82,6 @@ namespace GenderPayGap.Tests.Registeration
 
             //user
             user = controller.GetCurrentUser();
-
         }
 
         [Test, Order(1)]

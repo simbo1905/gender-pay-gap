@@ -110,6 +110,9 @@
     <Compile Include="7.Navigation\Controllers\RegisterControllerTest.cs" />
     <Compile Include="7.Navigation\Controllers\ReturnControllerTest.cs" />
     <Compile Include="8.Integration\IntegrationTest.cs" />
+    <Compile Include="SubmissionTest.cs" />
+    <Compile Include="TestHelpers.cs" />
+    <Compile Include="TestRespository\TestEF_DBRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
