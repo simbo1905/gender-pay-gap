@@ -42,12 +42,8 @@ namespace GenderPayGap.Tests.Login
         }
 
 
-
-
         //TODO: Use the Constrain Model only
-
         // Asserts
-
         [Test]
         [TestCase("www.feedbacklink.com")] //surveyMonkey
         [Description("This test is to verify that feedback link links to/opens the feed back page")]

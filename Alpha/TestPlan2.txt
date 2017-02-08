@@ -1,4 +1,6 @@
-								Returns Test
+										Breadth Returns Test
+								
+								
 Assumptions:
 User is logged in.
 
@@ -88,3 +90,5 @@ GetLoggedInUser()
 
 ######################################### END DESIGN PATTERN ##################################
 
+SCENARIOS
+1.Register and email sent, then log back in:
