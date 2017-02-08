@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GenderPayGap.Models.GpgDatabase
+namespace GpgDB.Models.GpgDatabase
 {
     using Extensions;
     using System;

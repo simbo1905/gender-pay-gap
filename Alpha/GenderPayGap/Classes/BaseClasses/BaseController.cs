@@ -1,5 +1,8 @@
-﻿using Extensions;
-using GenderPayGap.Models.GpgDatabase;
+﻿using Autofac;
+using Extensions;
+using GenderPayGap.Core.Interfaces;
+using GenderPayGap.WebUI.Classes;
+using GpgDB.Models.GpgDatabase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,17 +14,39 @@ namespace GenderPayGap
 {
     public class BaseController:Controller
     {
+        public BaseController():this(MvcApplication.ContainerIOC)
+        {
+
+        }
+
+        public BaseController(IContainer containerIOC)
+        {
+            this.containerIOC = containerIOC;
+        }
+
+        protected IContainer containerIOC;
+
+        IRepository _Repository;
+        protected IRepository Repository
+        {
+            get
+            {
+                if (_Repository==null)_Repository = containerIOC.Resolve<IRepository>();
+                return _Repository;
+            }
+        }
+
         public User GetCurrentUser()
         {
             //Check the ViewBag first 
             if (ViewData.ContainsKey("currentUser")) return (User)ViewData["currentUser"];
-            
-            return GenderPayGap.Models.GpgDatabase.User.FindCurrentUser(User);
+
+            return Repository.FindUser(User);
         }
 
         public bool Authorise()
         {
-            var user = Models.GpgDatabase.User.FindCurrentUser(User); //TODO:There is BUG Here
+            var user = Repository.FindUser(User); //TODO:There is BUG Here
             if (user == null || user.EmailVerifiedDate == null || user.EmailVerifiedDate == DateTime.MinValue)
                 return false;
 

@@ -1,4 +1,4 @@
-﻿using GenderPayGap.Models.GpgDatabase;
+﻿using GpgDB.Models.GpgDatabase;
 using System;
 using System.Linq;
 using System.Security.Claims;
@@ -27,10 +27,10 @@ namespace GenderPayGap
                 case "Read":
                     return Ok();
                 case "Submit":
-                    var user = User.FindCurrentUser(context.Principal);
-                    if (user == null || user.EmailVerifiedDate == null || user.EmailVerifiedDate == DateTime.MinValue) return Nok();
-                    var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(u => u.UserId == user.UserId);
-                    if (userOrg == null || userOrg.PINConfirmedDate==null || userOrg.PINConfirmedDate==DateTime.MinValue) return Nok();
+                    //var user = User.FindCurrentUser(context.Principal);
+                    //if (user == null || user.EmailVerifiedDate == null || user.EmailVerifiedDate == DateTime.MinValue) return Nok();
+                    //var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(u => u.UserId == user.UserId);
+                    //if (userOrg == null || userOrg.PINConfirmedDate==null || userOrg.PINConfirmedDate==DateTime.MinValue) return Nok();
                     return Ok();
             }
             return Nok();

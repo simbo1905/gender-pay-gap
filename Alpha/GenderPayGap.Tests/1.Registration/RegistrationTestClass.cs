@@ -1,85 +1,45 @@
-﻿using GenderPayGap.Controllers;
-using GenderPayGap.Models;
-using GenderPayGap.Models.GpgDatabase;
+﻿using GenderPayGap.WebUI.Controllers;
+using GenderPayGap.WebUI.Models;
 using NUnit.Framework;
-using NUnit.Framework.Constraints;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.Mvc;
-using Moq;
 using System.Web;
 using System.Security.Principal;
 using System.Web.Routing;
+using System.Security.Claims;
+using GpgDB.Models.GpgDatabase;
+using System;
+using Autofac;
 
 namespace GenderPayGap.Tests.Registeration
 {
-
-    class MockHttpContext : HttpContextBase
-    {
-        private readonly IPrincipal _user = new GenericPrincipal(new GenericIdentity("2"), null /* roles */);
-        public override IPrincipal User
-        {
-            get { return _user; }
-            set { base.User = value; }
-        }
-    }
-
-
     [TestFixture]
     public class RegistrationTestClass : AssertionHelper
     {
-        private User user = null;
-        private RegisterController controller = null;
-
-        //public RegisterController SetupContext(long userid = 0)
-        //{
-        //    return null;
-        //}
-
-        private static RegisterController GetRegisterController()
-        {
-            RegisterController controller = new RegisterController();
-            controller.ControllerContext = new ControllerContext()
-            {
-                Controller = controller, RequestContext = new RequestContext(new MockHttpContext(), new RouteData())
-            };
-            return controller;
-        }
 
 
         [SetUp]
         [Description("Setup variables for class and test methods of this class")]
         public void Setup()
         {
-            controller = GetRegisterController();
-            bool resultAuth = controller.Authorise();
-
-            ConfirmViewModel model = new ConfirmViewModel();
-            ViewResult resultRegPost = controller.Confirm(model) as ViewResult;
-            ViewResult resultRegGet = controller.Confirm(null, 0) as ViewResult;
-
-            //user
-            user = controller.GetCurrentUser();
 
         }
 
         [Test, Order(1)]
-        [Description("Verify that the user is not already logged in")]
-        public void VerifyUserIsNotLoggedIn()
+        [Description("Ensure the register.Index action the user is not already logged in")]
+        public void EnsureRegisterControllerReturned()
         {
             // Arrange
-            var expected = user;
+            var user = new User() { UserId = 1,EmailVerifiedDate=DateTime.Now };
+            var organisation = new Organisation() { OrganisationId = 1 };
+            var userorganisation = new UserOrganisation() { OrganisationId = 1, UserId=1 };
+
+            var controller = TestHelper.GetController<RegisterController>(1,user,organisation,userorganisation);
 
             // Act
-            User actual = null;
+            var result= controller.Index();
 
             // Assert
-            Assert.That(actual == expected, "Error Message");
-
+            Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
         }
 
         [Test, Order(2)]
@@ -89,7 +49,7 @@ namespace GenderPayGap.Tests.Registeration
             // TODO: Add your test code here
             // Arrange
             //Setup controller with mock httpcontext and no user logged in
-           var controller = GetRegisterController();
+           var controller = TestHelper.GetController<RegisterController>();
 
             // Act
             // call the controller
@@ -146,14 +106,14 @@ namespace GenderPayGap.Tests.Registeration
         {
             // Arrange
             //use regular expression for validation
-            var expected = user.Password; //"Password thst matches this regexp rule";
+            //var expected = user.Password; //"Password thst matches this regexp rule";
 
             // Act
-            User actual = new User();
-            actual.Password = formPassword.Get("PasswordKey");
+            //User actual = new User();
+            //actual.Password = formPassword.Get("PasswordKey");
 
             // Assert
-            Assert.That(actual.Password == expected, "Error Message");
+            //Assert.That(actual.Password == expected, "Error Message");
         }
 
         [Test]
@@ -161,15 +121,15 @@ namespace GenderPayGap.Tests.Registeration
         public void VerifyPasswordAndConfirmPasswordEquality(FormCollection formPassword)
         {
             // Arrange
-            User actual = new User();
+            //User actual = new User();
             var expected = formPassword.Get("PasswordConfirmKey");
 
             // Act
             //use regular expression for validation
-            actual.Password = user.Password; //"Password thst matches this regexp rule";
+            //actual.Password = user.Password; //"Password thst matches this regexp rule";
 
             // Assert
-            Assert.That(actual.Password == expected, "Error Message");
+            //Assert.That(actual.Password == expected, "Error Message");
         }
 
         [Test]
@@ -192,12 +152,12 @@ namespace GenderPayGap.Tests.Registeration
 
         public void TestModelIsEmptywhenUserNotLoggedIn()
         {
-            controller = GetRegisterController();
+            //controller = GetRegisterController();
         }
 
         public void TestModelIsCorrectAndFilledWhenUserLoggedIn()
         {
-            controller = GetRegisterController();
+            //controller = GetRegisterController();
         }
     }
 

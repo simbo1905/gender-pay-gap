@@ -1,11 +1,11 @@
-﻿using GenderPayGap.Models.GpgDatabase;
+﻿using GpgDB.Models.GpgDatabase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace GenderPayGap.Controllers
+namespace GenderPayGap.WebUI.Controllers
 {
     public class HomeController : Controller
     {
