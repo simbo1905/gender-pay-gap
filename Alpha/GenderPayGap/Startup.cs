@@ -14,12 +14,14 @@ using IdentityServer3.Core;
 using IdentityModel.Client;
 using System.Threading.Tasks;
 using System.Configuration;
+using Autofac;
 
 [assembly: OwinStartupAttribute(typeof(GenderPayGap.Startup))]
 namespace GenderPayGap
 {
     public partial class Startup
     {
+
         public void Configuration(IAppBuilder app)
         {
             // todo: replace with serilog

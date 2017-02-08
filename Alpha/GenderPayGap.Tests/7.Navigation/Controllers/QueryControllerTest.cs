@@ -1,4 +1,4 @@
-﻿using GenderPayGap.Controllers;
+﻿using GenderPayGap.WebUI.Controllers;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

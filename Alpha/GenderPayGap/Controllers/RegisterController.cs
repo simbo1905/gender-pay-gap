@@ -1,23 +1,29 @@
-﻿using GenderPayGap.Models.GpgDatabase;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GenderPayGap;
 using Extensions;
-using GenderPayGap.Models;
 using Newtonsoft.Json;
 using IdentityServer3.Core;
+using GenderPayGap.Core.Interfaces;
+using GpgDB.Models.GpgDatabase;
+using Autofac;
+using GenderPayGap.WebUI.Models;
+using GenderPayGap.WebUI.Classes;
 
-namespace GenderPayGap.Controllers
+namespace GenderPayGap.WebUI.Controllers
 {
     public class RegisterController : BaseController
     {
+        public RegisterController():base(){}
+        public RegisterController(IContainer container): base(container){}
+
         [HttpGet]
         public ActionResult Index()
         {
-
+            
             //The user can then go through the process of changing their details and email then sending another verification email
 
             var currentUser = GetCurrentUser();
@@ -25,10 +31,10 @@ namespace GenderPayGap.Controllers
 
             if (currentUser == null)
             {
-                model.EmailAddress = Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.Email);
-                model.FirstName= Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.GivenName);
-                model.LastName= Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.FamilyName);
-                model.IdentityProvider = Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.IdentityProvider);
+                model.EmailAddress = User.GetClaim(Constants.ClaimTypes.Email);
+                model.FirstName= User.GetClaim(Constants.ClaimTypes.GivenName);
+                model.LastName= User.GetClaim(Constants.ClaimTypes.FamilyName);
+                model.IdentityProvider = User.GetClaim(Constants.ClaimTypes.IdentityProvider);
             }
 
             model.ConfirmEmailAddress = model.EmailAddress;
@@ -56,7 +62,7 @@ namespace GenderPayGap.Controllers
 
             if (currentUser == null) currentUser = GpgDatabase.Default.User.FirstOrDefault(u => u.EmailAddress == model.EmailAddress);
 
-            if (currentUser == null) currentUser = new Models.GpgDatabase.User();
+            if (currentUser == null) currentUser = new GpgDB.Models.GpgDatabase.User();
 
             if (currentUser.UserId==0)
             {
@@ -86,8 +92,8 @@ namespace GenderPayGap.Controllers
             if (currentUser.UserId==0)GpgDatabase.Default.User.Add(currentUser);
             GpgDatabase.Default.SaveChanges();
 
-            var authProviderId = Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.IdentityProvider);
-            var tokenIdentifier = Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.ExternalProviderUserId);
+            var authProviderId = User.GetClaim(Constants.ClaimTypes.IdentityProvider);
+            var tokenIdentifier = User.GetClaim(Constants.ClaimTypes.ExternalProviderUserId);
 
             if (authProviderId.EqualsI("google"))
             {
@@ -104,7 +110,7 @@ namespace GenderPayGap.Controllers
                     GpgDatabase.Default.UserTokens.Add(token);
 
                 }
-                if (model.EmailAddress == Models.GpgDatabase.User.GetUserClaim(User, Constants.ClaimTypes.Email))
+                if (model.EmailAddress == User.GetClaim(Constants.ClaimTypes.Email))
                     currentUser.EmailVerifiedDate = DateTime.Now;
 
             }
@@ -263,19 +269,19 @@ namespace GenderPayGap.Controllers
             if (currentUser == null && model.UserId > 0) currentUser = GpgDatabase.Default.User.Find(model.UserId);
 
 
-            if (model.OrganisationType != Models.GpgDatabase.Organisation.OrgTypes.Unknown)
+            if (model.OrganisationType != GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Unknown)
             {
                 if (string.IsNullOrWhiteSpace(model.OrganisationRef))
                 {
                     switch (model.OrganisationType)
                     {
-                        case Models.GpgDatabase.Organisation.OrgTypes.Company:
+                        case GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Company:
                             ModelState.AddModelError("OrganisationRef", "You must enter your company number");
                             break;
-                        case Models.GpgDatabase.Organisation.OrgTypes.Charity:
+                        case GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Charity:
                             ModelState.AddModelError("OrganisationRef", "You must enter your charity number");
                             break;
-                        case Models.GpgDatabase.Organisation.OrgTypes.Government:
+                        case GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Government:
                             ModelState.AddModelError("OrganisationRef", "You must enter your department reference");
                             break;
                     }
@@ -319,7 +325,7 @@ namespace GenderPayGap.Controllers
                     var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(uo => uo.OrganisationId == model.OrganisationId && uo.UserId == model.UserId);
                     if (userOrg == null)
                     {
-                        userOrg = new Models.GpgDatabase.UserOrganisation()
+                        userOrg = new GpgDB.Models.GpgDatabase.UserOrganisation()
                         {
                             UserId = model.UserId,
                             OrganisationId = model.OrganisationId,

@@ -1,6 +1,6 @@
 ﻿using Extensions;
-using GenderPayGap.Models;
-using GenderPayGap.Models.GpgDatabase;
+using GenderPayGap.WebUI.Models;
+using GpgDB.Models.GpgDatabase;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -8,7 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 
-namespace GenderPayGap.Controllers
+namespace GenderPayGap.WebUI.Controllers
 {
     public class ReturnController : BaseController
     {

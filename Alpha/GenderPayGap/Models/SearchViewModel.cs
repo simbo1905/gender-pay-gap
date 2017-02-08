@@ -1,11 +1,11 @@
-﻿using GenderPayGap.Models.GpgDatabase;
+﻿using GpgDB.Models.GpgDatabase;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Web;
 
-namespace GenderPayGap.Models
+namespace GenderPayGap.WebUI.Models
 {
     public class SearchViewModel
     {

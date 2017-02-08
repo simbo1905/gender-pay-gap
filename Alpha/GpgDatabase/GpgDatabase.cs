@@ -7,8 +7,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace GenderPayGap.Models.GpgDatabase
+namespace GpgDB.Models.GpgDatabase
 {
+    using GenderPayGap.Core.Interfaces;
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
@@ -16,7 +17,7 @@ namespace GenderPayGap.Models.GpgDatabase
     using System.Linq;
     using System.Threading;
 
-    public partial class GpgDatabase : DbContext
+    public partial class GpgDatabase : DbContext, IDbContext
     {
         public GpgDatabase()
             : base("GpgDatabase")
@@ -118,6 +119,12 @@ namespace GenderPayGap.Models.GpgDatabase
                 if (c<10)goto retry;
                 throw;
             }
+        }
+
+        public new IDbSet<TEntity> Set<TEntity>() where TEntity : class
+        {
+            return base.Set<TEntity>();
+
         }
     }
 }
