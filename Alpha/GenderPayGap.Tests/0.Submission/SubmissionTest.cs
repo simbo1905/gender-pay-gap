@@ -15,6 +15,9 @@ using System.Web.Routing;
 using System.Security.Claims;
 using GenderPayGap.Tests.DBRespository;
 
+using GenderPayGap.Tests;
+using GenderPayGap.WebUI.Controllers;
+
 namespace GenderPayGap.Tests.Submission
 {
 
@@ -36,10 +39,18 @@ namespace GenderPayGap.Tests.Submission
     [TestFixture]
     public class SubmissionTest
     {
+
+
+        public SubmissionTest()
+        {
+            var c = TestHelper.BuildContainerIoC(null);
+            var controller = TestHelper.GetController<ReturnController>(0, null);
+        }
+
         //Class Variables
         //Mock<TestEF_DBRepository> dbRepository = null;
         TestEF_DBRepository dbRepository = null;
-        ReturnController returnController = null;
+        ReturnController returnController = TestHelper.GetController<ReturnController>(0, null);
         Mock<ControllerContext> contextMock = null;
         MockHttpContext httpContextMock = null;
         IPrincipal principal = null;
@@ -48,10 +59,10 @@ namespace GenderPayGap.Tests.Submission
         User loggedOutUser = null;
 
 
-
+       
         #region Helper Methods
 
-        
+
         [Description("Get the current user")]
         private User GetCurrentUser()
         {
@@ -66,6 +77,7 @@ namespace GenderPayGap.Tests.Submission
             {
                 result  = mockUser;
             }
+            
             return result;
         }
 
