@@ -17,6 +17,7 @@ using GenderPayGap.Tests.DBRespository;
 
 using GenderPayGap.Tests;
 using GenderPayGap.WebUI.Controllers;
+using GpgDB.Models.GpgDatabase;
 
 namespace GenderPayGap.Tests.Submission
 {
