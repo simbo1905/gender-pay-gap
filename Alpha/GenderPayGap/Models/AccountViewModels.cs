@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace GenderPayGap.Models
+namespace GenderPayGap.WebUI.Models
 {
     public class ExternalLoginConfirmationViewModel
     {
