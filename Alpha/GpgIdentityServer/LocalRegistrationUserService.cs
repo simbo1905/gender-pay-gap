@@ -9,7 +9,7 @@ using IdentityServer3.Core.Extensions;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
 using IdentityServer3.Core.Services.Default;
-using GenderPayGap.Models.GpgDatabase;
+using GpgDB.Models.GpgDatabase;
 using System.Configuration;
 
 namespace GpgIdentityServer
@@ -82,7 +82,7 @@ namespace GpgIdentityServer
                 user.Claims.Add(new Claim(Constants.ClaimTypes.ExternalProviderUserId, context.ExternalIdentity.ProviderId));
                 ExternalUsers.Add(user);
 
-                var newUser = new GenderPayGap.Models.GpgDatabase.User();
+                var newUser = new GpgDB.Models.GpgDatabase.User();
                 var nameClaim = context.ExternalIdentity.Claims.First(x => x.Type == Constants.ClaimTypes.GivenName);
                 if (nameClaim != null) newUser.Firstname = nameClaim.Value;
 

@@ -251,9 +251,9 @@
       <Project>{50d3dd00-e740-410b-87f6-c4f5fbd0657c}</Project>
       <Name>Extensions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GpgDatabase\GpgDatabase.csproj">
+    <ProjectReference Include="..\GpgDatabase\GenderPayGap.Database.csproj">
       <Project>{3073df11-5d99-45a7-9cba-836fd758c319}</Project>
-      <Name>GpgDatabase</Name>
+      <Name>GenderPayGap.Database</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

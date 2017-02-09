@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>GpgIdentityServer</RootNamespace>
     <AssemblyName>GpgIdentityServer</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <UseIISExpress>true</UseIISExpress>
     <IISExpressSSLPort>44334</IISExpressSSLPort>
     <IISExpressAnonymousAuthentication />
@@ -139,13 +139,17 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Extensions\Extensions.csproj">
+    <ProjectReference Include="..\Extensions\GenderPayGap.Extensions.csproj">
       <Project>{50d3dd00-e740-410b-87f6-c4f5fbd0657c}</Project>
-      <Name>Extensions</Name>
+      <Name>GenderPayGap.Extensions</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GpgDatabase\GpgDatabase.csproj">
+    <ProjectReference Include="..\GenderPayGap.Core\GenderPayGap.Core.csproj">
+      <Project>{1d7f0e3c-97d7-4ef4-bd3b-683249f67802}</Project>
+      <Name>GenderPayGap.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GpgDatabase\GenderPayGap.Database.csproj">
       <Project>{3073df11-5d99-45a7-9cba-836fd758c319}</Project>
-      <Name>GpgDatabase</Name>
+      <Name>GenderPayGap.Database</Name>
     </ProjectReference>
   </ItemGroup>
   <PropertyGroup>

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using GenderPayGap.Models.GpgDatabase;
+using GpgDB.Models.GpgDatabase;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
-using static GenderPayGap.Models.GpgDatabase.Organisation;
+using static GpgDB.Models.GpgDatabase.Organisation;
 
-namespace GenderPayGap.Models
+namespace GenderPayGap.WebUI.Models
 {
 
     public class RegisterViewModel

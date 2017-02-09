@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GenderPayGap.Models.GpgDatabase;
-using GenderPayGap.Models;
+using GpgDB.Models.GpgDatabase;
+using GenderPayGap.WebUI.Models;
 using Extensions;
 
-namespace GenderPayGap.Controllers
+namespace GenderPayGap.WebUI.Controllers
 {
     public class QueryController : Controller
     {
