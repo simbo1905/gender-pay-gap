@@ -1,7 +1,4 @@
-﻿using GenderPayGap.Controllers;
-using GenderPayGap.Models;
-using GenderPayGap.Models.GpgDatabase;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using System;
 using System.Collections.Generic;
@@ -14,6 +11,11 @@ using Moq;
 using System.Web;
 using System.Security.Principal;
 using System.Web.Routing;
+using GenderPayGap.WebUI.Controllers;
+using GenderPayGap.WebUI.Models;
+using System.Security.Claims;
+using GpgDB.Models.GpgDatabase;
+using Autofac;
 
 namespace GenderPayGap.Tests.Registration
 {
