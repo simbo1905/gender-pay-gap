@@ -1,6 +1,4 @@
-﻿using GenderPayGap.Controllers;
-using GenderPayGap.Models;
-using GenderPayGap.Models.GpgDatabase;
+﻿
 using NUnit.Framework;
 using NUnit.Framework.Constraints;
 using System;
