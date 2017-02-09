@@ -7,6 +7,8 @@ using GpgDB.Models.GpgDatabase;
 using GenderPayGap.WebUI.Models;
 using Extensions;
 
+using GenderPayGap;
+
 namespace GenderPayGap.WebUI.Controllers
 {
     public class QueryController : Controller
@@ -22,6 +24,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (!string.IsNullOrWhiteSpace(query))
             {
                 model.Results = GpgDatabase.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(query.ToLower())).ToArray();
+               // model.Results = 
 
                 //var x = model.Search;
                 //model.Results = GpgDatabase.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(model.Search.ToLower())).ToArray();
@@ -32,7 +35,7 @@ namespace GenderPayGap.WebUI.Controllers
                 //                 select o).ToArray();
 
             }
-            
+
 
             return View(model);
         }

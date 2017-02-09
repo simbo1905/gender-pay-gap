@@ -1,15 +1,17 @@
-﻿using System;
+﻿using GpgDB.Models.GpgDatabase;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using GenderPayGap.Models.GpgDatabase;
-using GenderPayGap.Models.GPGDatabase.ModelRepository;
+//using GenderPayGap.Models.GpgDatabase;
+//using GenderPayGap.Models.GPGDatabase.ModelRepository;
+
 
 
 namespace GenderPayGap.Tests.DBRespository
 {
-    public class TestEF_DBRepository : IDBUserRepository
+    public class TestEF_DBRepository //: IDBUserRepository
     {
         private List<User> _db = new List<User>();
         public Exception ExceptionToThrow { get; set; }

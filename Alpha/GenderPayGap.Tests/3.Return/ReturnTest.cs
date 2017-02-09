@@ -1,4 +1,5 @@
-﻿using GenderPayGap.Models.GpgDatabase;
+﻿//using GenderPayGap.Models.GpgDatabase;
+using GpgDB.Models.GpgDatabase;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
