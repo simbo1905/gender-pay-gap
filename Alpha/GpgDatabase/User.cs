@@ -48,7 +48,8 @@ namespace GpgDB.Models.GpgDatabase
         public string EmailVerifyCode { get; set; }
         public Nullable<System.DateTime> EmailVerifySendDate { get; set; }
         public Nullable<System.DateTime> EmailVerifiedDate { get; set; }
-        public string CurrentStatus { get; set; }
+        [Column("CurrentStatusId")]
+        public UserStatuses CurrentStatus { get; set; }
         public Nullable<System.DateTime> CurrentStatusDate { get; set; }
         public string CurrentStatusDetails { get; set; }
         public Nullable<System.DateTime> Created { get; set; }

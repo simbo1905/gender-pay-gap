@@ -33,6 +33,11 @@ namespace GenderPayGap.WebUI.Classes
         #endregion
 
         #region User Entity
+        public static UserOrganisation GetUserOrg(this IRepository repository, User user)
+        {
+            return repository.GetAll<UserOrganisation>().FirstOrDefault(uo=>uo.UserId==user.UserId);
+        }
+
         public static User FindUser(this IRepository repository, IPrincipal principal)
         {
             //GEt the logged in users identifier
@@ -42,6 +47,22 @@ namespace GenderPayGap.WebUI.Classes
             if (userId > 0) return repository.GetAll<User>().FirstOrDefault(u=>u.UserId==userId);
 
             return null;
+        }
+
+        public static User FindUserByEmail(this IRepository repository, string emailAddress)
+        {
+            if (string.IsNullOrWhiteSpace(emailAddress))throw new ArgumentNullException("emailAddress");
+            
+            //If internal user the load it using the identifier as the UserID
+            return repository.GetAll<User>().FirstOrDefault(u => u.EmailAddress == emailAddress);
+        }
+
+        public static User FindUserByVerifyCode(this IRepository repository, string verifyCode)
+        {
+            if (string.IsNullOrWhiteSpace(verifyCode)) throw new ArgumentNullException("verifyCode");
+
+            //If internal user the load it using the identifier as the UserID
+            return repository.GetAll<User>().FirstOrDefault(u => u.EmailVerifyCode == verifyCode);
         }
 
         public static UserOrganisation FindUserOrganisation(this IRepository repository, IPrincipal principal)

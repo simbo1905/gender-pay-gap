@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "Register: Step 2";
+}
+@model GenderPayGap.WebUI.Models.VerifyViewModel
+@using Extensions
+<main id="content" role="main">
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            @if (Model.Verified)
+            {
+                <div class="govuk-box-highlight">
+                    <h1 class="bold-large">Your email has been confirmed</h1>
+                </div>
+
+                <div class="subsection panel-indent">
+                    <div class="bold-small">Next step: Tell us about your organisation.</div>
+                </div>
+                <p></p>
+                <a class="button" href="@Url.Action("Step3")" role="button">Continue</a>
+            }
+            else
+            {
+                <h1 class="heading-large">
+                    <span class="heading-secondary">Step 2 of 6</span>
+                    Confirm your email address
+                </h1>
+                 if (Model.Expired)
+                 {
+                     <p>
+                         To resend another verification email to <b>@Model.EmailAddress</b> click the button below:
+                     </p>
+                     using (Html.BeginForm())
+                     {
+                         <input type="submit" class="button" value="Resend"/>
+                     }
+                 }
+                 else
+                 {
+                     <p>
+                         We have sent you a verification email to <b>@Model.EmailAddress</b>
+                     </p>
+                     <p>Please follow the instructions in your email to continue your registration.</p>
+                 }
+            }
+        </div>
+    </div>
+</main>

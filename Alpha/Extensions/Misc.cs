@@ -139,8 +139,17 @@ namespace Extensions
             }
         }
 
+        public static bool EqualsI(this object item, params object[] values)
+        {
+            if (item == null && values.Contains(null)) return true;
+            foreach (var value in values)
+                if (item.Equals(value)) return true;
+            return false;
+        }
+
         public static bool IsAny(this object item, params object[] values)
         {
+            if (item == null && values.Contains(null)) return true;
             foreach (var value in values)
                 if (item.Equals(value)) return true; 
             return false;

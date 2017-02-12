@@ -30,5 +30,15 @@ namespace GenderPayGap
             return json;
         }
 
+        static async Task<List<string>> GetCompanies(string companyName, int page, int pageSize=10)
+        {
+            var startIndex = (page * pageSize)-10;
+            var client = new HttpClient();
+            client.SetBasicAuthentication(ConfigurationManager.AppSettings["CompaniesHouseApiKey"], "");
+            string url = string.Format("{0}/search/companies/q={1}&items_per_page={2}&start_index={3}", ConfigurationManager.AppSettings["CompaniesHouseApiServer"], companyName,pageSize,startIndex);
+            var json = await client.GetStringAsync(url);
+            return json;
+        }
+
     }
 }

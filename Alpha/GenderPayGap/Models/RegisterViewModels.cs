@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using GpgDB;
 using GpgDB.Models.GpgDatabase;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
@@ -73,11 +75,15 @@ namespace GenderPayGap.WebUI.Models
 
         }
 
-        public long UserId { get; set; }
+        public bool Expired { get; set; }
+        public bool Verified { get; set; }
+        public string EmailAddress { get; set; }
     }
 
     public class OrganisationViewModel
     {
+        public bool PINSent;
+
         public OrganisationViewModel()
         {
 
@@ -87,15 +93,21 @@ namespace GenderPayGap.WebUI.Models
         {
             if (organisation != null)
             {
-                this.OrganisationType = organisation.OrganisationType;
+                this.SectorType = organisation.SectorType;
                 this.OrganisationRef = organisation.OrganisationRef;
             }
         }
 
-        public OrgTypes OrganisationType { get; set; }
+        [Required]
+        [EnumDataType(typeof(SectorTypes), ErrorMessage = "You must select the type of your organisation")]
+        public SectorTypes? SectorType { get; set; }
+
+        [Required]
+        [StringLength(100,ErrorMessage = "You must enter an employers name or company number between 3 and 100 characters in length",MinimumLength = 3)]
+        [DisplayName("Search")]
+        public string SearchText { get; set; }
 
         public string OrganisationRef { get; set; }
-
         public string OrganisationName { get; set; }
 
         public long OrganisationId { get; set; }
@@ -108,7 +120,6 @@ namespace GenderPayGap.WebUI.Models
 
         public string ConfirmUrl { get; set; }
         public long PIN { get; set; }
-        public string Code { get; internal set; }
     }
 
     public class ConfirmViewModel

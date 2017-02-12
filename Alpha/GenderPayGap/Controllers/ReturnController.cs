@@ -7,6 +7,7 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -24,7 +25,7 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Create()
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
-            var currentUser = GetCurrentUser();
+            var currentUser = Repository.FindUser(User);
             var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
             var model = GpgDatabase.Default.Return.FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
             if (model == null) model = new Return();
@@ -94,7 +95,7 @@ namespace GenderPayGap.WebUI.Controllers
             var original = GpgDatabase.Default.Return.Find(model.ReturnId);
             if (original == null)
             {
-                var currentUser = GetCurrentUser();
+                var currentUser = Repository.FindUser(User);
                 var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
                 model.OrganisationId = userOrg.OrganisationId;
                 GpgDatabase.Default.Return.Add(model);

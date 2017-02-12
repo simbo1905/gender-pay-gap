@@ -29,7 +29,7 @@ namespace GenderPayGap.Tests.Navigation.Controllers
             RegisterController controller = new RegisterController();
 
             // Act
-            ViewResult result = controller.Index() as ViewResult;
+            ViewResult result = controller.Step1() as ViewResult;
 
             // Assert
             // TODO: RED GREEN REFACTOR
