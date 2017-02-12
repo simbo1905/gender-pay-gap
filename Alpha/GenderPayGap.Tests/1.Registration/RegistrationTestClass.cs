@@ -36,7 +36,7 @@ namespace GenderPayGap.Tests.Registeration
             var controller = TestHelper.GetController<RegisterController>(1,user,organisation,userorganisation);
 
             // Act
-            var result= controller.Index();
+            var result= controller.Step1();
 
             // Assert
             Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
@@ -54,7 +54,7 @@ namespace GenderPayGap.Tests.Registeration
             // Act
             // call the controller
             //var controller = new RegisterController();
-            var result = controller.Index() as ViewResult;
+            var result = controller.Step1() as ViewResult;
             var model = result.Model as RegisterViewModel;
 
             // Assert

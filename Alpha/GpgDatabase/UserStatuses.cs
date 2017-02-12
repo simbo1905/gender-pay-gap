@@ -24,7 +24,9 @@ namespace GpgDB.Models.GpgDatabase
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long UserStatusId { get; set; }
         public long UserId { get; set; }
-        public byte StatusId { get; set; }
+
+        [Column("StatusId")]
+        public UserStatuses Status { get; set; }
         public Nullable<System.DateTime>  StatusDate { get; set; }
         public string StatusMessage { get; set; }
         public Nullable<long> ByUserId { get; set; }    

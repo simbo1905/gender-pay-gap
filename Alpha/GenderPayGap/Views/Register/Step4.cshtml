@@ -1,0 +1,69 @@
+﻿@{
+    ViewBag.Title = "Register";
+}
+@model GenderPayGap.WebUI.Models.OrganisationViewModel
+
+<main id="content" role="main">
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(m => m.UserId)
+
+        <div class="grid-row">
+            if (!ViewData.ModelState.IsValid)
+            {
+                @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
+            }
+
+            <div class="column-two-thirds">
+                <h1 class="heading-large">
+                    <span class="heading-secondary">Step 4 of 5</span>
+
+                    @if (Model.OrganisationType == GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Company)
+                {
+                        <div>Enter your company registration number</div>
+                    }
+                    else if (Model.OrganisationType == GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Charity)
+                    {
+                        <div>Enter your registered charity number</div>
+                    }
+                    else if (Model.OrganisationType == GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Government)
+                    {
+                        <div>Enter your department unique reference number (URN)</div>
+                    }
+                </h1>
+
+                <div class="form-group">
+                    @if (Model.OrganisationType == GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Company)
+                {
+                        <label class="form-label" for="OrgRef">Company registration number</label>
+                    }
+                    else if (Model.OrganisationType == GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Charity)
+                    {
+                        <label class="form-label" for="OrgRef">Registered charity number</label>
+                    }
+                    else if (Model.OrganisationType == GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Government)
+                    {
+                        <label class="form-label" for="OrgRef">Department unique reference number (URN)</label>
+                    }
+                    @Html.EditorFor(model => model.OrganisationRef, new { htmlAttributes = new { @class = "form-control", @id = "OrgRef", @name = "OrgRef" } })<br />
+                </div>
+                <details>
+                    @if (Model.OrganisationType == GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Company)
+                {
+                        <summary>Where to find your company registration number</summary>
+                    }
+                    else if (Model.OrganisationType == GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Charity)
+                    {
+                        <summary>Where to find your registered charity number</summary>
+                    }
+                    else if (Model.OrganisationType == GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Government)
+                    {
+                        <summary>Where to find your department unique reference number (URN)</summary>
+                    }
+
+                </details><br>
+                <input type="submit" class="button" value="Continue" />
+            </div>
+        </div>
+    }
+</main>

@@ -121,14 +121,19 @@
     <Compile Include="7.Navigation\Controllers\QueryControllerTest.cs" />
     <Compile Include="7.Navigation\Controllers\RegisterControllerTest.cs" />
     <Compile Include="7.Navigation\Controllers\ReturnControllerTest.cs" />
-    <Compile Include="8.Integration\IntegrationTest.cs" />
+    <Compile Include="4.SendConfirm\8.Integration\IntegrationTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RegistrationTests.cs" />
     <Compile Include="TestHelpers.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Extensions\GenderPayGap.Extensions.csproj">
+      <Project>{50d3dd00-e740-410b-87f6-c4f5fbd0657c}</Project>
+      <Name>GenderPayGap.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GenderPayGap.Core\GenderPayGap.Core.csproj">
       <Project>{1D7F0E3C-97D7-4EF4-BD3B-683249F67802}</Project>
       <Name>GenderPayGap.Core</Name>

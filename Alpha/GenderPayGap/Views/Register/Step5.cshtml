@@ -1,0 +1,88 @@
+﻿@{
+    ViewBag.Title = "Register";
+}
+@model GenderPayGap.WebUI.Models.OrganisationViewModel
+
+<main id="content" role="main">
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(m => m.OrganisationType)
+        @Html.HiddenFor(m => m.OrganisationName)
+        @Html.HiddenFor(m => m.OrganisationRef)
+        @Html.HiddenFor(m => m.OrganisationAddress)
+        @Html.HiddenFor(m => m.OrganisationId)
+
+        <div class="grid-row">
+        @if (!Model.PINSent)
+        {
+            <div class="column-two-thirds">
+                <h1 class="heading-large">
+                    <span class="heading-secondary">Step 5 of 5</span>
+                    Confirm your organisation’s details
+                </h1>
+                <table class="confirm-details">
+                    <thead>
+                        <tr>
+                            <th class="question">
+                            </th>
+                            <th class="answer">
+                            </th>
+                            <th class="other">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Employer name
+                            </td>
+                            <td>
+                                @Model.OrganisationName
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Company number
+                            </td>
+                            <td>
+                                @Model.OrganisationRef
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Registered office address
+                            </td>
+                            <td>
+                                @Model.OrganisationAddress
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <fieldset>
+                    <br>
+                    <p><input type="submit" class="button" value="Confirm &amp; continue" /></p>
+
+                    <p>
+                        <a href="@Url.Action("Step3",)">Back</a>
+                    </p>
+                </fieldset>
+            </div>
+        }
+        else
+        {
+            <div class="column-two-thirds">
+                <div class="govuk-box-highlight">
+                    <h1 class="bold-medium">Your organisation’s details have been accepted</h1>
+                </div>
+                <div class="bold-small">What happens next.</div>
+                <p>A gender pay gap PIN will be sent by post to the following name &amp; address:</p>
+                <p>@Model.UserName (@Model.UserTitle),<br> @Model.OrganisationName,<br> @Html.Raw(Model.OrganisationAddressHtml)</p>
+                <p>When you get the PIN, sign into the&nbsp;<a href="@Model.ConfirmUrl&PIN=@Model.PIN">gender pay gap reporting service</a>&nbsp;using your email, password and PIN. </p>
+            </div>
+        }
+    </div>
+    }
+</main>

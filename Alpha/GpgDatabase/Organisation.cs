@@ -25,19 +25,13 @@ namespace GpgDB.Models.GpgDatabase
             Modified = DateTime.Now;
         }
 
-        public enum OrgTypes:int
-        {
-            Unknown=0,
-            Company=1,
-            Charity=2,
-            Government=3
-        }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long OrganisationId { get; set; }
         public string OrganisationRef { get; set; }
         public string OrganisationName { get; set; }
+        public SectorTypes SectorType { get; set; }
         public OrgTypes OrganisationType { get; set; }
         public string Phone { get; set; }
         public string Email { get; set; }

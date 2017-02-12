@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Authentication;
 using System.Web;
 using System.Web.Mvc;
 using GenderPayGap;
@@ -12,6 +13,8 @@ using GpgDB.Models.GpgDatabase;
 using Autofac;
 using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Classes;
+using System.Security.Principal;
+using GpgDB;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -21,112 +24,89 @@ namespace GenderPayGap.WebUI.Controllers
         public RegisterController(IContainer container): base(container){}
 
         [HttpGet]
-        public ActionResult Index()
+        public ActionResult Step1()
         {
-            
+            User currentUser;
             //The user can then go through the process of changing their details and email then sending another verification email
-
-            var currentUser = GetCurrentUser();
-            var model = new Models.RegisterViewModel(currentUser);
-
-            if (currentUser == null)
+            if (User.Identity.IsAuthenticated)
             {
-                model.EmailAddress = User.GetClaim(Constants.ClaimTypes.Email);
-                model.FirstName= User.GetClaim(Constants.ClaimTypes.GivenName);
-                model.LastName= User.GetClaim(Constants.ClaimTypes.FamilyName);
-                model.IdentityProvider = User.GetClaim(Constants.ClaimTypes.IdentityProvider);
+                //Ensure user has completed the registration process
+                var result = CheckUserRegisteredOk(out currentUser);
+                if (result != null) return result;
+
+                //If user is fully registered then start submit process
+                return View("Error", new ErrorViewModel()
+                {
+                    Title = "Registration Complete",
+                    Description = "You have already completed registration.",
+                    CallToAction = "Next Step: Submit your Gender Pay Gap data",
+                    ActionUrl = Url.Action("Create", "Return")
+                });
             }
 
-            model.ConfirmEmailAddress = model.EmailAddress;
-            if (currentUser!=null) ViewData["currentUser"] = currentUser;
-            
-            //The user can then go through the process of changing their details and email then sending another verification email
-            return View(model);
+            //Start new user registration
+            return View("Step1",new Models.RegisterViewModel());
         }
 
         [HttpPost]
-        public ActionResult Index(Models.RegisterViewModel model)
+        [ValidateAntiForgeryToken]
+        public ActionResult Step1(Models.RegisterViewModel model)
         {
-            //Skip google password validations
-            if (model.IdentityProvider.EqualsI("google"))
-            {
-                ModelState.Remove("Password");
-                ModelState.Remove("ConfirmPassword");
-            }
-
             //TODO validate the submitted fields
-            if (!ModelState.IsValid)return View(model);
+            if (!ModelState.IsValid)return View("Step1",model);
+
+            //Ensure email is always lower case
             model.EmailAddress = model.EmailAddress.ToLower();
 
-            var currentUser = GetCurrentUser();
-
-            if (currentUser == null) currentUser = GpgDatabase.Default.User.FirstOrDefault(u => u.EmailAddress == model.EmailAddress);
-
-            if (currentUser == null) currentUser = new GpgDB.Models.GpgDatabase.User();
-
-            if (currentUser.UserId==0)
+            //Check this email address isnt already assigned to another user
+            var currentUser = Repository.FindUserByEmail(model.EmailAddress);
+            if (currentUser!=null)
             {
-                //Check the email doesnt already exist
-                if (GpgDatabase.Default.User.Any(u => u.EmailAddress==model.EmailAddress))
+                if (currentUser.EmailVerifiedDate != null)
                 {
-                    ModelState.AddModelError("EmailAddress", "A user with this email already exists");
-                    return View(model);
+                    ModelState.AddModelError("EmailAddress", "A registered user with this email already exists. Please enter a different email address.");
+                    return View("Step1", model);
+                }
+                if (currentUser.EmailVerifySendDate!=null && currentUser.EmailVerifySendDate.Value.AddHours(Properties.Settings.Default.EmailVerificationExpiryHours) > DateTime.Now)
+                {
+                    ModelState.AddModelError("EmailAddress", "This email address is currently awaiting verification. Please try again later.");
+                    return View("Step1", model);
                 }
             }
-
-            else if (currentUser.EmailVerifiedDate==DateTime.MinValue)
+            else
             {
-                //Go to the verification process
-                return RedirectToAction("Verify", new { code = currentUser.EmailVerifyCode });
+                currentUser=new User();
             }
 
             //Save the submitted fields
+            currentUser.Created = DateTime.Now;
+            currentUser.Modified = currentUser.Created;
             currentUser.Firstname = model.FirstName;
             currentUser.Lastname = model.LastName;
             currentUser.JobTitle = model.JobTitle;
             currentUser.EmailAddress = model.EmailAddress;
             currentUser.Password = model.Password;
+            currentUser.EmailVerifySendDate = null;
             currentUser.EmailVerifiedDate = null;
+            currentUser.EmailVerifyCode = null;
+            currentUser.CurrentStatus=UserStatuses.New;
+            currentUser.CurrentStatusDate = DateTime.Now;
 
             //Save the user to DB
             if (currentUser.UserId==0)GpgDatabase.Default.User.Add(currentUser);
             GpgDatabase.Default.SaveChanges();
 
-            var authProviderId = User.GetClaim(Constants.ClaimTypes.IdentityProvider);
-            var tokenIdentifier = User.GetClaim(Constants.ClaimTypes.ExternalProviderUserId);
+            //Send the verification code and showconfirmation
+            return ResendVerifyCode(currentUser);
+        }
 
-            if (authProviderId.EqualsI("google"))
-            {
-                var token = GpgDatabase.Default.UserTokens.FirstOrDefault(ut=>ut.AuthProviderId==authProviderId);
-                if (token == null)
-                {
-                    token = new UserToken()
-                    {
-                        UserId= currentUser.UserId,
-                        AuthProviderId = authProviderId,
-                        TokenIdentifier = tokenIdentifier,
-                        Created = DateTime.Now
-                    };
-                    GpgDatabase.Default.UserTokens.Add(token);
-
-                }
-                if (model.EmailAddress == User.GetClaim(Constants.ClaimTypes.Email))
-                    currentUser.EmailVerifiedDate = DateTime.Now;
-
-            }
-            GpgDatabase.Default.SaveChanges();
-
-            var verifyCode = Encryption.EncryptQuerystring(currentUser.UserId.ToString());
-            if (currentUser.EmailVerifiedDate > DateTime.MinValue)
-            {
-                currentUser.EmailVerifyCode = verifyCode;
-                GpgDatabase.Default.SaveChanges();
-                return RedirectToAction("Organisation", new { code = verifyCode });
-            }
-
+        ////Send the verification code and show confirmation
+        ActionResult ResendVerifyCode(User currentUser)
+        {
             //Send a verification link to the email address
             try
             {
+                var verifyCode = Encryption.EncryptQuerystring(currentUser.EmailAddress + ":" + currentUser.Created.Value.Ticks);
                 if (!GovNotifyAPI.SendVerifyEmail(currentUser.EmailAddress, verifyCode))
                     throw new Exception("Could not send verification email. Please try again later.");
 
@@ -142,153 +122,198 @@ namespace GenderPayGap.WebUI.Controllers
                     ModelState.AddModelError(string.Empty, ex.Message);
             }
 
-            //Set the verification link and save it to the db
-            ViewData["currentUser"] = currentUser;
-
-            //Pass the verify url back to the view for confirmation
-            model.VerifyUrl = string.IsNullOrWhiteSpace(currentUser.EmailVerifyCode) ? null : GovNotifyAPI.GetVerifyUrl(currentUser.EmailVerifyCode);
-
-            //Prompt user to click verification link
-            return View(model);
+            //Prompt user to open email and verification link
+            return View("Step2", new VerifyViewModel() { EmailAddress = currentUser.EmailAddress });
         }
 
         [HttpGet]
-        public ActionResult Verify(string code=null)
+        public ActionResult Step2()
         {
-            if (string.IsNullOrWhiteSpace(code))code = Request.Url.Query.TrimStartI(" ?");
+            //Ensure the user is logged in
+            if (!User.Identity.IsAuthenticated)throw new AuthenticationException();
 
-            //Load the user from the verification code
-            var currentUser = GpgDatabase.Default.User.FirstOrDefault(u=>u.EmailVerifyCode==code);
+            //Ensure user has completed the registration process
+            User currentUser;
+            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
+            var model = result.Model as ErrorViewModel;
+            if (result == null || model == null) throw new AuthenticationException();
+            if (model.ActionUrl != Url.Action("Step2", "Register"))return result;
 
-            var model = new VerifyViewModel();
+            //Send verification if never sent
+            if (currentUser.EmailVerifySendDate.EqualsI(null, DateTime.MinValue))
+            {
+                //Send the verification code and show confirmation
+                return ResendVerifyCode(currentUser);
+            }
+
+            //Allow resend of verification if sent over 24 hours ago
+            return View("Step2", new VerifyViewModel() { EmailAddress = currentUser.EmailAddress,Expired = true});
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult Step2(VerifyViewModel model)
+        {
+            //Ensure the user is logged in
+            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
+
+            //Ensure user has completed the registration process
+            User currentUser;
+            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
+            var errorViewModel = result.Model as ErrorViewModel;
+            if (result == null || errorViewModel == null) throw new AuthenticationException();
+            if (errorViewModel.ActionUrl != Url.Action("Step2", "Register")) return result;
+
+            //Reset the verification send date
+            currentUser.EmailVerifySendDate = null;
+            currentUser.EmailVerifyCode = null;
+            Repository.SaveChanges();
+
+            //Call GET action which will automatically resend
+            return Step2();
+        }
+
+        [HttpGet]
+        [Authorize]
+        public ActionResult Step2(string code)
+        {
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                ModelState.AddModelError("", "Invalid email verification code");
+                return View("Step2");
+            }
+
+            //Ensure the user is logged in
+            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
+
+            //Ensure user has completed the registration process
+            User currentUser;
+            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
+            var errorViewModel = result.Model as ErrorViewModel;
+            if (result == null || errorViewModel == null) throw new AuthenticationException();
+            if (!currentUser.EmailVerifiedDate.EqualsI(null, DateTime.MinValue)) return result;
+            if (errorViewModel.ActionUrl == Url.Action("Step2", "Register"))
+            {
+                return Step2();
+            }
 
             //Show an error if the code doesnt exist in db
-            if (currentUser == null)
+            if (currentUser.EmailVerifyCode!=code)
             {
-                ModelState.AddModelError("", "Invalid email verification code");
-                return View(model);
-            }
+                var attempts = Session["EmailVerificationAttempts:" + currentUser.EmailAddress].ToInt32();
+                if (attempts > 3)
+                {
+                    return View("Error", new ErrorViewModel()
+                    {
+                        Title = "Invalid Verification Code",
+                        Description = "You have failed too many verification attempts. Please logout and try again later.",
+                        CallToAction = "Please log out of the system.",
+                        ActionUrl = Url.Action("LogOff", "Account")
+                    });
+                }
 
-            if (currentUser.EmailVerifySendDate<DateTime.Now.AddDays(-6))
-            {
-                //TODO Resend verification code and prompt user
-                ModelState.AddModelError("", "This verification link has expired. A new link has been sent to " + currentUser.EmailAddress);
-                return View(model);
-            }
-
-            try
-            {
-                code = Encryption.DecryptQuerystring(code);
-            }
-            catch 
-            {
-                ModelState.AddModelError("", "Invalid email verification code");
-                return View(model);
-            }
-
-            //Show an error if the code doesnt match the userId
-            if (currentUser.UserId != code.ToLong())
-            {
-                ModelState.AddModelError("", "Invalid email verification code");
-                return View(model);
+                return View("Error", new ErrorViewModel()
+                {
+                    Title = "Invalid Verification Code",
+                    Description = "The verification code you have entered is invalid."
+                });
             }
 
             //Set the user as verified
             currentUser.EmailVerifiedDate = DateTime.Now;
 
             //Save the current user
-            GpgDatabase.Default.SaveChanges();
-            ViewData["currentUser"] = currentUser;
+            Repository.SaveChanges();
 
-            //Take the user through the process of lookup address and send pin code
-
-            model.UserId = currentUser.UserId;
-            return View(model);
-        }
-
-        [HttpPost]
-        public ActionResult Verify(VerifyViewModel model)
-        {
-            return View(model);
+            //Prompt the user with confirmation
+            return View("Step2", new VerifyViewModel() { EmailAddress = currentUser.EmailAddress, Verified = true});
         }
 
         [HttpGet]
-        public ActionResult Organisation(string code=null)
+        [Authorize]
+        public ActionResult Step3()
         {
-            if (string.IsNullOrWhiteSpace(code)) code = Request.Url.Query.TrimStartI(" ?");
 
-            //Load the user from the verification code
-            var currentUser = GpgDatabase.Default.User.FirstOrDefault(u => u.EmailVerifyCode == code);
+            //Ensure the user is logged in
+            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
 
-            var model = new OrganisationViewModel();
-            model.Code = code;
+            //Ensure user needs to select an organisation
+            User currentUser;
+            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
+            var errorViewModel = result.Model as ErrorViewModel;
+            if (result == null || errorViewModel == null) throw new AuthenticationException();
+            if (errorViewModel.ActionUrl.IsAny(Url.Action("Step3", "Register")))
+                return result;
 
-            //Show an error if the code doesnt exist in db
-            if (currentUser == null)
-            {
-                ModelState.AddModelError("", "Invalid request");
-                return View(model);
-            }
-
-            try
-            {
-                code = Encryption.DecryptQuerystring(code);
-            }
-            catch
-            {
-                ModelState.AddModelError("", "Invalid email verification code");
-                return View(model);
-            }
-
-            //Show an error if the code doesnt match the userId
-            if (currentUser.UserId != code.ToLong())
-            {
-                ModelState.AddModelError("", "Invalid email verification code");
-                return View(model);
-            }
-            model.UserId = currentUser.UserId;
-
-            if (currentUser != null) ViewData["currentUser"] = currentUser;
-
-            return View(model);
+            return View("Step3", new OrganisationViewModel());
         }
 
+        /// <summary>
+        /// Get the sector type
+        /// </summary>
         [HttpPost]
-        public ActionResult Organisation(OrganisationViewModel model)
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public ActionResult Step3(OrganisationViewModel model)
         {
-            if (model == null || model.UserId==0)
-            {
-                ModelState.AddModelError("", "Invalid request");
-                return View(model);
-            }
+            //Ensure the user is logged in
+            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
+
+            //Ensure user needs to select an organisation
+            User currentUser;
+            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
+            var errorViewModel = result.Model as ErrorViewModel;
+            if (result == null || errorViewModel == null) throw new AuthenticationException();
+            if (errorViewModel.ActionUrl.IsAny(Url.Action("Step3", "Register")))
+                return result;
 
             //TODO validate the submitted fields
             if (!ModelState.IsValid) return View(model);
 
-            var currentUser = GetCurrentUser();
-            if (currentUser == null && model.UserId > 0) currentUser = GpgDatabase.Default.User.Find(model.UserId);
+            if (!model.SectorType.EqualsI(SectorTypes.Private, SectorTypes.Public))
+            {
+                ModelState.AddModelError("SectorType", "You must select your organisation type");
+                return View(model);
+            }
 
+            //TODO Remove this when public sector is available
+            if (!model.SectorType.EqualsI(SectorTypes.Public))throw new NotImplementedException();
 
+            return View("Step4", model);
+        }
+
+        /// <summary>
+        /// Get the search text
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Step4(OrganisationViewModel model)
+        {
+            //TODO validate the submitted fields
+            if (!ModelState.IsValid) return View(model);
+
+            switch (model.SectorType)
+            {
+                case SectorTypes.Private:
+                    model.Employers = CompaniesHouseAPI.Lookup(model.OrganisationRef);
+                    break;
+                default:
+                    throw new NotImplementedException();
+            }
+            return View("Step4", model);
+        }
+
+        /// <summary>
+        /// Get the search text
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Step5(OrganisationViewModel model)
+        {
             if (model.OrganisationType != GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Unknown)
             {
-                if (string.IsNullOrWhiteSpace(model.OrganisationRef))
-                {
-                    switch (model.OrganisationType)
-                    {
-                        case GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Company:
-                            ModelState.AddModelError("OrganisationRef", "You must enter your company number");
-                            break;
-                        case GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Charity:
-                            ModelState.AddModelError("OrganisationRef", "You must enter your charity number");
-                            break;
-                        case GpgDB.Models.GpgDatabase.Organisation.OrgTypes.Government:
-                            ModelState.AddModelError("OrganisationRef", "You must enter your department reference");
-                            break;
-                    }
-                    model.OrganisationRef = "04394391";
-                    return View(model);
-                }
-                else if (string.IsNullOrWhiteSpace(model.OrganisationName))
+                if (string.IsNullOrWhiteSpace(model.OrganisationName))
                 {
                     var org=GpgDatabase.Default.Organisation.FirstOrDefault(o=>o.OrganisationType==model.OrganisationType && o.OrganisationRef== model.OrganisationRef);
                     //Lookup the company details
@@ -372,7 +397,7 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Confirm(string code = null, long pin=0)
         {
             UserOrganisation userOrg=null;
-            var currentUser = GetCurrentUser();
+            var currentUser = Repository.FindUser(User);
             if (string.IsNullOrWhiteSpace(code))
             {
                 if (currentUser == null)

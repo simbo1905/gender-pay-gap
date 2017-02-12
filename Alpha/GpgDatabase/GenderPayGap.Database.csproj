@@ -68,6 +68,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
     <Compile Include="GpgDatabase.cs" />
     <Compile Include="Organisation.cs" />
     <Compile Include="OrganisationAddress.cs" />
