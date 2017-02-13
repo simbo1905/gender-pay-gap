@@ -23,7 +23,6 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            
             //The user can then go through the process of changing their details and email then sending another verification email
 
             var currentUser = GetCurrentUser();
