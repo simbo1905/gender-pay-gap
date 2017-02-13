@@ -28,7 +28,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [Authorize]
         [HttpGet]
-        public ActionResult Create()
+        public ActionResult Step1 /*Create*/() 
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
             var currentUser = GetCurrentUser();
@@ -43,7 +43,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult Create(Return model)
+        public ActionResult Step1/*Create*/(Return model)
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
             if (!ModelState.IsValid) return View(model);
@@ -53,7 +53,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult Authoriser(Return model)
+        public ActionResult Step2 /*Authoriser*/(Return model)
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
 
@@ -67,7 +67,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult Confirm(Return model)
+        public ActionResult Step3 /*Confirm*/(Return model)
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
             if (!ModelState.IsValid) return View(model);
@@ -76,7 +76,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [Authorize]
         [HttpGet]
-        public ActionResult SendConfirmed(long id = 0)
+        public ActionResult Step4 /*SendConfirmed*/(long id = 0)
         {
             try
             {
@@ -96,7 +96,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult SendConfirmed(Return model)
+        public ActionResult Step4 /*SendConfirmed*/(Return model)
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
 
@@ -123,11 +123,11 @@ namespace GenderPayGap.WebUI.Controllers
                 ModelState.AddModelError("", ex.Message);
                 return View(model);
             }
-            return RedirectToAction("SendConfirmed",new { id=model.ReturnId});
+            return RedirectToAction("Step4", new { id=model.ReturnId});
         }
 
         // GET: Return/Details/5
-        public ActionResult Confirm(int id = 1)
+        public ActionResult Step3 /*Confirm*/(int id = 1)
         {
             var qid = GpgDatabase.Default.Return.Find(id);
             return View(qid);

@@ -262,6 +262,7 @@
     <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\RegisterViewModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
+    <Compile Include="Models\ReturnViewModel.cs" />
     <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
@@ -405,10 +406,10 @@
     <Content Include="Views\GOVUK\Partials\phase\beta.cshtml" />
     <Content Include="Views\Return\Delete.cshtml" />
     <Content Include="Views\Home\_Index.cshtml" />
-    <Content Include="Views\Return\Create.cshtml" />
-    <Content Include="Views\Return\Confirm.cshtml" />
+    <Content Include="Views\Return\Step1.cshtml" />
+    <Content Include="Views\Return\Step3.cshtml" />
     <Content Include="Views\Return\Edit.cshtml" />
-    <Content Include="Views\Return\Authoriser.cshtml" />
+    <Content Include="Views\Return\Step2.cshtml" />
     <Content Include="Views\Return\PersonRespEdit.cshtml" />
     <Content Include="Views\Return\PersonRespDelete.cshtml" />
     <Content Include="Views\Return\PersonRespDetails.cshtml" />
@@ -422,7 +423,7 @@
     <Content Include="Views\Query\Search.cshtml" />
     <Content Include="Views\Query\Sectors.cshtml" />
     <Content Include="Views\Query\Start.cshtml" />
-    <Content Include="Views\Return\SendConfirmed.cshtml" />
+    <Content Include="Views\Return\Step4.cshtml" />
     <Content Include="Views\Return\Details.cshtml" />
     <Content Include="Views\Register\Confirm.cshtml" />
   </ItemGroup>
