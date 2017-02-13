@@ -1,88 +1,109 @@
 ﻿@{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Register: Step 5";
 }
 @model GenderPayGap.WebUI.Models.OrganisationViewModel
 
 <main id="content" role="main">
     @using (Html.BeginForm())
     {
-        @Html.HiddenFor(m => m.OrganisationType)
-        @Html.HiddenFor(m => m.OrganisationName)
-        @Html.HiddenFor(m => m.OrganisationRef)
-        @Html.HiddenFor(m => m.OrganisationAddress)
-        @Html.HiddenFor(m => m.OrganisationId)
+        @Html.HiddenFor(m => m.EmployerCurrentPage)
+        @Html.HiddenFor(m => m.EmployerPages)
+        @Html.HiddenFor(m => m.Employers)
+        @Html.HiddenFor(m => m.EmployerPageSize)
+        @Html.HiddenFor(m => m.EmployerEndIndex)
+        @Html.HiddenFor(m => m.EmployerRecords)
+        @Html.HiddenFor(m => m.SectorType)
 
+        <input type="submit" style="display:none" name="command" value="">
         <div class="grid-row">
-        @if (!Model.PINSent)
-        {
-            <div class="column-two-thirds">
-                <h1 class="heading-large">
-                    <span class="heading-secondary">Step 5 of 5</span>
-                    Confirm your organisation’s details
-                </h1>
-                <table class="confirm-details">
-                    <thead>
-                        <tr>
-                            <th class="question">
-                            </th>
-                            <th class="answer">
-                            </th>
-                            <th class="other">
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                Employer name
-                            </td>
-                            <td>
-                                @Model.OrganisationName
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Company number
-                            </td>
-                            <td>
-                                @Model.OrganisationRef
-                            </td>
-                            <td></td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Registered office address
-                            </td>
-                            <td>
-                                @Model.OrganisationAddress
-                            </td>
-                            <td></td>
-                        </tr>
-                    </tbody>
-                </table>
-                <fieldset>
-                    <br>
-                    <p><input type="submit" class="button" value="Confirm &amp; continue" /></p>
+            if (!ViewData.ModelState.IsValid)
+            @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
 
-                    <p>
-                        <a href="@Url.Action("Step3",)">Back</a>
-                    </p>
-                </fieldset>
-            </div>
-        }
-        else
-        {
-            <div class="column-two-thirds">
-                <div class="govuk-box-highlight">
-                    <h1 class="bold-medium">Your organisation’s details have been accepted</h1>
+            <div class="column-full">
+                <h1 class="heading-large">
+                    <span class="heading-secondary">Step 5 of 6</span>
+                    Choose your company
+                </h1>
+
+                <div class="search-bar">
+                    <div class="searchfield">
+                        <input type="search" value="Smiths" class="search-input" placeholder="Enter an employers name or company no">
+                        @Html.EditorFor(model => model.SearchText, new { htmlAttributes = new { @class = "search-input", @placeholder = "Enter an employers name or company no" } })<br />
+
+                        <button type="submit" class="search-submit" name="command" data-argument="search">Search</button>
+                    </div>
                 </div>
-                <div class="bold-small">What happens next.</div>
-                <p>A gender pay gap PIN will be sent by post to the following name &amp; address:</p>
-                <p>@Model.UserName (@Model.UserTitle),<br> @Model.OrganisationName,<br> @Html.Raw(Model.OrganisationAddressHtml)</p>
-                <p>When you get the PIN, sign into the&nbsp;<a href="@Model.ConfirmUrl&PIN=@Model.PIN">gender pay gap reporting service</a>&nbsp;using your email, password and PIN. </p>
+
+                @if (Model.EmployerRecords < 1)
+                {
+                    <p>No records found</p>
+                }
+                else
+                {
+                    <br>
+                    <table class="search search3">
+                        <caption class="visuallyhidden">Customer and Business search listing</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Employer</th>
+                                <th scope="col">Company number</th>
+                                <th scope="col"></th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (var i = 0; i < Model.Employers.Count; i++)
+                            {
+<tr>
+                                    <td>@Model.Employers[i].Name <span>@Model.Employers[i].FullAddress</span></td>
+                                    <td>
+                                        @Model.Employers[i].CompanyNumber
+                                    </td>
+                                    <td>
+                                        <a href="#" data-argument="employer_@i">Choose company</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    <div class="pager">
+                        <div class="pager-controls">
+                            @if (Model.EmployerCurrentPage > 1)
+                            {
+<a class="pager-next" href="#" data-argument="pagePrev">Previous</a>
+                            }
+                            <ul class="pager-items">
+                                @for (var i = Model.PagerStartIndex; i <= Model.PagerEndIndex; i++)
+                                {
+                                    if (i == Model.EmployerCurrentPage)
+                                    {
+<li>@i</li>
+                                    }
+                                    else
+                                    {
+                                        <li><a href="#" data-argument="page_@i">@i</a></li>
+                                    }
+                                }
+                            </ul>
+                            @if (Model.EmployerCurrentPage < Model.EmployerPages)
+                            {
+<a class="pager-next" href="#" data-argument="pageNext">Next</a>
+                            }
+                        </div>
+                        <div class="pager-summary">Showing @Model.EmployerStartIndex – @Model.EmployerEndIndex of @Model.EmployerRecords employers</div>
+                    </div>
+                }
+                <br>
             </div>
-        }
-    </div>
+        </div>
     }
 </main>
+<script>
+    $('[data-argument]').click(function () {
+
+        $('input[name=command').val($(this).data("argument")).click();
+
+     });
+
+</script>

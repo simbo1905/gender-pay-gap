@@ -239,7 +239,7 @@ namespace GenderPayGap.Tests
 
         #region Test start of enrollment
         [Test]
-        [Description("Ensure the register.Step1 action returns an empty form when there is no user logged in")]
+        [Description("Ensure the ++;.Step1 action returns an empty form when there is no user logged in")]
         public void RegisterStep1_NotLoggedIn_ShowEmptyForm()
         {
             // Arrange
