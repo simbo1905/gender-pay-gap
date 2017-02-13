@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Extensions;
 using GpgDB;
 using GpgDB.Models.GpgDatabase;
 using Microsoft.AspNet.Identity;
@@ -83,19 +85,16 @@ namespace GenderPayGap.WebUI.Models
     public class OrganisationViewModel
     {
         public bool PINSent;
+        public bool PINExpired;
 
         public OrganisationViewModel()
         {
 
         }
 
-        public OrganisationViewModel(Organisation organisation)
+        public OrganisationViewModel(int pageSize)
         {
-            if (organisation != null)
-            {
-                this.SectorType = organisation.SectorType;
-                this.OrganisationRef = organisation.OrganisationRef;
-            }
+            EmployerPageSize = pageSize;
         }
 
         [Required]
@@ -107,19 +106,83 @@ namespace GenderPayGap.WebUI.Models
         [DisplayName("Search")]
         public string SearchText { get; set; }
 
-        public string OrganisationRef { get; set; }
-        public string OrganisationName { get; set; }
+        public List<EmployerRecord> Employers { get; internal set; }
 
-        public long OrganisationId { get; set; }
+        public int SelectedEmployerIndex { get; set; }
 
-        public string OrganisationAddress { get; set; }
-        public string OrganisationAddressHtml { get; set; }
-        public string UserName { get; set; }
-        public string UserTitle { get; set; }
-        public long UserId { get; set; }
+        public int EmployerRecords { get; internal set; }
 
-        public string ConfirmUrl { get; set; }
-        public long PIN { get; set; }
+        public int EmployerCurrentPage { get; internal set; }
+
+        public int EmployerPageSize { get; set; }=10;
+
+        public int EmployerPages
+        {
+            get
+            {
+                return (int) Math.Ceiling((double) EmployerRecords / EmployerPageSize); 
+            }
+        }
+        public int EmployerStartIndex
+        {
+            get
+            {
+                return ((EmployerCurrentPage * EmployerPageSize) - EmployerPageSize) + 1;
+            }
+        }
+        public int EmployerEndIndex
+        {
+            get
+            {
+                return EmployerStartIndex + Employers.Count;
+            }
+        }
+        public int PagerStartIndex
+        {
+            get
+            {
+                if (EmployerCurrentPage < 4) return 1;
+                if (EmployerCurrentPage > EmployerPages-3) return EmployerPages-4;
+
+                return EmployerCurrentPage-2;
+            }
+        }
+        public int PagerEndIndex
+        {
+            get
+            {
+                if (EmployerPages < 5) return EmployerPages;
+                return 5;
+            }
+        }
+    }
+
+    public class EmployerRecord
+    {
+        public string CompanyNumber { get; set; }
+        public string CompanyStatus { get; set; }
+        public string Name { get; internal set; }
+        public string Address1 { get; set; }
+        public string Address2 { get; set; }
+        public string Address3 { get; set; }
+        public string Country { get; set; }
+        public string PostCode { get; set; }
+        public string PoBox { get; set; }
+
+        public string FullAddress
+        {
+            get
+            {
+                var list = new List<string>();
+                list.Add(Address1);
+                list.Add(Address2);
+                list.Add(Address3);
+                list.Add(Country);
+                list.Add(PostCode);
+                list.Add(PoBox);
+                return list.ToDelimitedString(", ");
+            }
+        }
     }
 
     public class ConfirmViewModel

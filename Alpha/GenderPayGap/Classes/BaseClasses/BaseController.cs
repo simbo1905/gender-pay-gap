@@ -166,7 +166,7 @@ namespace GenderPayGap
                         Title = "Incomplete Registration",
                         Description = "You did not confirm the PIN sent to you in the post in the allowed time.",
                         CallToAction = "Please click the button below to request a new PIN to be sent to your organisations address.",
-                        ActionUrl = Url.Action("Step6", "Register")
+                        ActionUrl = Url.Action("Confirm", "Register")
                     });
                 return View("Error", new ErrorViewModel()
                 {

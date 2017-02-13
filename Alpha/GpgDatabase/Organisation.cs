@@ -36,7 +36,9 @@ namespace GpgDB.Models.GpgDatabase
         public string Phone { get; set; }
         public string Email { get; set; }
         public string Web { get; set; }
-        public string CurrentStatus { get; set; }
+
+        [Column("CurrentStatusID")]
+        public OrganisationStatuses CurrentStatus { get; set; }
         public Nullable<System.DateTime> CurrentStatusDate { get; set; }
         public string CurrentStatusDetails { get; set; }
         public Nullable<System.DateTime> Created { get; set; }

@@ -1,0 +1,126 @@
+﻿@{
+    ViewBag.Title = "Register";
+}
+@model GenderPayGap.WebUI.Models.OrganisationViewModel
+
+<main id="content" role="main">
+    @using (Html.BeginForm())
+    {
+        @Html.HiddenFor(m => m.EmployerCurrentPage)
+        @Html.HiddenFor(m => m.EmployerPages)
+        @Html.HiddenFor(m => m.Employers)
+        @Html.HiddenFor(m => m.SearchText)
+        @Html.HiddenFor(m => m.SelectedEmployerIndex)
+        @Html.HiddenFor(m => m.EmployerPageSize)
+        @Html.HiddenFor(m => m.EmployerEndIndex)
+        @Html.HiddenFor(m => m.EmployerRecords)
+        @Html.HiddenFor(m => m.SectorType)
+
+        <div class="grid-row">
+        @if (!Model.PINSent)
+        {
+            <div class="column-two-thirds">
+                <h1 class="heading-large">
+                    <span class="heading-secondary">Step 6 of 6</span>
+                    Confirm your organisation’s details
+                </h1>
+                <table class="confirm-details">
+                    <thead>
+                        <tr>
+                            <th class="question">
+                            </th>
+                            <th class="answer">
+                            </th>
+                            <th class="other">
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                Employer name
+                            </td>
+                            <td>
+                                @Model.Employers[Model.SelectedEmployerIndex].Name
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Company number
+                            </td>
+                            <td>
+                                @Model.Employers[Model.SelectedEmployerIndex].CompanyNumber
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Registered office address
+                            </td>
+                            <td>
+                                @@Model.Employers[Model.SelectedEmployerIndex].FullAddress
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <fieldset>
+                    <br>
+                    <p><input type="submit" class="button" value="Confirm &amp; continue" /></p>
+
+                    <p>
+                        <input type="submit" class="button" name="command" value="back" />
+                        <a href="@Url.Action("Step3")">Back</a>
+                    </p>
+                </fieldset>
+            </div>
+        }
+        else if (!Model.PINExpired)
+        {
+            <div class="column-two-thirds">
+                <div class="govuk-box-highlight">
+                    <h1 class="bold-medium">A gender pay gap PIN will be sent by post to the following name &amp; address:</h1>
+                </div>
+                <div class="bold-small">What happens next.</div>
+                <p>A gender pay gap PIN will be sent by post to the following name &amp; address:</p>
+
+                <div id="default-content" class="dynamic-content default-content ltd" style="display: block;">
+                    <p>@ViewBag.UserFullName (@ViewBag.UserJobTitle),<br> @ViewBag.Address</p>
+
+                </div>
+
+                <div class="panel-indent text dynamic-content default-content ltd plc public charity" style="display: block;">
+                    <p>When you get the PIN, sign into the&nbsp; <a href="@Url.Action("Create","Return")">gender pay gap reporting service</a>&nbsp;using your email, password and PIN.</p><p>
+                    </p>
+                </div>
+
+
+            </div>
+        }
+        else 
+        {
+            <div class="column-two-thirds">
+                <div class="govuk-box-highlight">
+                    <h1 class="bold-medium">A gender pay gap PIN was previous sent by post to the following name &amp; address:</h1>
+                </div>
+                <div class="bold-small">What happens next.</div>
+                <p>A gender pay gap PIN was previously sent by post to the following name &amp; address:</p>
+
+                <div id="default-content" class="dynamic-content default-content ltd" style="display: block;">
+                    <p>@ViewBag.UserFullName (@ViewBag.UserJobTitle),<br> @ViewBag.Address</p>
+
+                </div>
+
+                <div class="panel-indent text dynamic-content default-content ltd plc public charity" style="display: block;">
+                    <p>To receive a new PIN click the button below.</p><p>
+                    </p>
+                    <button type="submit" class="button">Resend</button>
+                </div>
+
+
+            </div>
+        }
+    </div>
+    }
+</main>
