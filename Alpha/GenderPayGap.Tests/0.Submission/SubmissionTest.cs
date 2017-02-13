@@ -42,72 +42,6 @@ namespace GenderPayGap.Tests.Submission
     public class SubmissionTest
     {
 
-
-        public SubmissionTest()
-        {
-            //var c = TestHelper.BuildContainerIoC(null);
-            //var controller = TestHelper.GetController<ReturnController>(0, null);
-        }
-
-        //Class Variables
-        //Mock<TestEF_DBRepository> dbRepository = null;
-        //TestEF_DBRepository dbRepository = null;
-        //ReturnController returnController = null; // TestHelper.GetController<ReturnController>(0, null);
-        //Mock<ControllerContext> contextMock = null;
-        //MockHttpContext httpContextMock = null;
-        //IPrincipal principal = null;
-        //User currUser = null;
-        //User loggedInUser = null;
-        //User loggedOutUser = null;
-        #region Helper Methods
-        //[Description("Get the current user")]
-        //private User GetCurrentUser()
-        //{
-        //    User result = null;
-        //    MockHttpContext context = new MockHttpContext();
-        //    var user = long.Parse(context.User.Identity.Name);
-
-        //    //do look up on the mock repository
-        //    //dbRepository
-        //    User mockUser = dbRepository.GetUserByID(2);
-        //    if (user == mockUser.UserId)
-        //    {
-        //        result = mockUser;
-        //    }
-
-        //    return result;
-        //}
-
-        //[Description("Get the mock controller context")]
-        //private Mock<ControllerContext> GetControllerContext()
-        //{
-        //    var contextMock = new Mock<ControllerContext>();
-        //    return contextMock;
-        //}
-
-        //[Description("Get the mock Http context")]
-        //private MockHttpContext GetHttpContextMock()
-        //{
-        //    var httpContextMock = new MockHttpContext();
-        //    return httpContextMock;
-        //}
-
-        //[Description("User not logged in")]
-        //private User GetLoggedInUser()
-        //{
-        //    HttpContext.Current.User = new GenericPrincipal(new GenericIdentity(String.Empty), new string[0]);
-        //    return (User)HttpContext.Current.User;
-        //}
-
-        //[Description("User logged in")]
-        //private User GetLoggedoutUser()
-        //{
-        //    HttpContext.Current.User = new GenericPrincipal(new GenericIdentity("2"), new string[0]);
-        //    return (User)HttpContext.Current.User;
-        //}
-        #endregion
-
-
         [SetUp]
         public void Setup()
         {
@@ -124,6 +58,18 @@ namespace GenderPayGap.Tests.Submission
             //loggedOutUser    = GetLoggedInUser();
 
         }
+
+        #region Examples
+        [Test]
+        public void TestRegEx1()
+        {
+            string input = "0.0";
+            string pattern = "^[0-9]([.][0-9]{1,1})?$"; //Pattern of "0.0" decimal format and place
+
+            //Assert.IsTrue(Regex.IsMatch(input, pattern));
+            Assert.That(Regex.IsMatch(input, pattern), "Error Message");
+        }
+        #endregion
 
         //PAGE LOAD TEST
         //View Load Test:
@@ -152,15 +98,15 @@ namespace GenderPayGap.Tests.Submission
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
-            //var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
+            var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
 
             //Act
-            var result = controller.Create();
+            var result = (ViewResult)controller.Create();
 
             // Assert
-            Assert.That(result, Is.EqualTo("Create"), "Error Message");
+            Assert.That(result.ViewName, Is.EqualTo("Create"), "Error Message");
 
         }
 
@@ -172,19 +118,21 @@ namespace GenderPayGap.Tests.Submission
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
-            //var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
+            var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
             //Act
             var result = (ViewResult)controller.Create();
 
+            var model = result.Model as Return;
+
             // Assert
-            Assert.That(result.Model.ToString(), Is.EqualTo("GpgDB.Models.GpgDatabase.Return"), "Error Message");
+            Assert.IsNotNull(result.Model, "Error Message");
         }
 
         [Test]
         [Description("Start page should call the create action should call the create view")]
-        public void CreateActionValidateReturnModelValue()
+        public void CreateActionValidateReturnModelValues()
         {
             // Arrange
             // Mock user, Organisation, user organisation and Return
@@ -193,20 +141,6 @@ namespace GenderPayGap.Tests.Submission
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
             var @return = new Return()
             {
-                MaleLowerPayBand = 0.0M,
-                MaleMedianBonusPayPercent = 0.0M,
-                MaleMiddlePayBand = 0.0M,
-                MaleUpperPayBand = 0.0M,
-                MaleUpperQuartilePayBand = 0.0M,
-                FemaleLowerPayBand = 0.0M,
-                FemaleMedianBonusPayPercent = 0.0M,
-                FemaleMiddlePayBand = 0.0M,
-                FemaleUpperPayBand = 0.0M,
-                FemaleUpperQuartilePayBand = 0.0M,
-                DiffMeanBonusPercent = 0.0M,
-                DiffMeanHourlyPayPercent = 0.0M,
-                DiffMedianBonusPercent = 0.0M,
-                DiffMedianHourlyPercent = 0.0M,
                 FirstName = null,
                 JobTitle = null,
                 LastName = null,
@@ -283,72 +217,31 @@ namespace GenderPayGap.Tests.Submission
             Assert.That(result, Is.EqualTo("Create"), "Error Message");
         }
 
-        #region Hidden Section
-        //Model is Empty Test:
-        //Verify model is empty and form fields are empty test
-        //2.Verify the model does not load any data into the form fields
-        public void ModelMustReturnNullOrEmpty()
-        {
-
-        }
-
-        //User Logged in Test:
-        //if user is not logged in redirect to login page test
-        //3.page check a database for the user if user Iprinciple is not set or null, redirect to login page
-        public void RedirectUserToLoginPageIfUserNotLogged()
-        {
-
-        }
-
-        //User exception mock testing
-        //4.if principle is set and principle not exist in the mock, throw an exception
-        public void IfPrincipleIsSetAndIsNotInMock()
-        {
-
-        }
-
-        //User unconfirmed:
-        //5.if user exist in the database but have not been verified / confirmed(confirmed email)
-        public void IfUserExistInDBAndNotBeenConfirmed()
-        {
-
-        }
-
-        //User unassociated:
-        //6.if user exist in the database but have not been been associated with an organisation
-        public void IfUserExistInDBAndNotBeenAssociatedWithAnOrganisation()
-        {
-
-        }
-        #endregion
-
-        #region Example
-        [Test]
-        public void TestRegEx1()
-        {
-            string input = "0.0";
-            string pattern = "^[0-9]([.][0-9]{1,1})?$"; //Pattern of "0.0" decimal format and place
-
-            //Assert.IsTrue(Regex.IsMatch(input, pattern));
-            Assert.That(Regex.IsMatch(input, pattern), "Error Message");
-        }
-        #endregion
+      
 
 
 
         #region When GPG Page Loads
         //Verify user is logged in from above
-        //Tests for the gpg return form fields page:
+        //Tests for the gpg return form page:
 
-        //verify the feedback link
-       
+        #region FeedBackLink for all Pages
         [Test]
         [Description("Verify the feedback link")]
         public void VerifyFeedBackLinkForAllPages()
         {
 
-            Assert.That(false, "Error Message");
-        }
+
+            // Arrange
+            ReturnController controller = new ReturnController();
+
+            // Act
+            var result = (ViewResult)controller.Create();
+
+            // Assert
+            Assert.That(result, Is.EqualTo("Create"), "Error Message");
+        } 
+        #endregion
 
         #region Guidance Test
         //Verify the link for the gender paygap guidance:
@@ -356,16 +249,40 @@ namespace GenderPayGap.Tests.Submission
         [Description("How to enter your figures ( verify link to that page)")]
         public void VerifyGenderPayGapGuidanceLink()
         {
+            // Arrange
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var organisation = new Organisation() { OrganisationId = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
+            var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
-            Assert.That(false, "Error Message");
+            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation, @return);
+
+            // Act
+            var result = (ViewResult)controller.Create();
+            //var instructionLink = result.Get the HowToEnterFiguresLink from the Create Page
+
+            // Assert
+            Assert.That(result, Is.EqualTo("GenderPayGapGuidanceLink"), "Error Message");
         } 
        
         [Test]
         [Description("How to calculate you data page( verify link to that page")]
         public void VerifyHowToEnterFiguresLink()
         {
+            // Arrange
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var organisation = new Organisation() { OrganisationId = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
+            var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
-            Assert.That(false, "Error Message");
+            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation, @return);
+
+            // Act
+            var result = (ViewResult)controller.Create();
+            //var instructionLink = result.Get the HowToEnterFiguresLink from the Create Page
+
+            // Assert
+            Assert.That(result, Is.EqualTo("HowToEnterFiguresLink"), "Error Message");
         }
         #endregion
 
@@ -384,9 +301,9 @@ namespace GenderPayGap.Tests.Submission
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation, @return);
 
             //Act
-            var prevReferrer = controller.Request.UrlReferrer.ToString();
             var result = (ViewResult)controller.Create();
-
+            var prevReferrer = controller.Request.UrlReferrer.ToString();
+            
 
             //Assert
             Assert.That(prevReferrer, Is.EqualTo("https://localhost:44371/"), "Error Message");
@@ -406,32 +323,84 @@ namespace GenderPayGap.Tests.Submission
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation, @return);
 
             //Act
-            var currReferrer = controller.Request.Url.ToString();
             var result = (ViewResult)controller.Create();
-
+            var currReferrer = controller.Request.Url.ToString();
+            
             //Assert
             Assert.That(currReferrer, Is.EqualTo("https://localhost:44371/Return"), "Error Message");
         }
+
+
 
         //How to calculate you data page(verify link to that page)
         [Test]
         [Description
         ("verify loaded (HTTPGET) Empty fields test :-> validate that the fields are empty or have 0.0 except  *use regular expression")]
-        public void VerifyGPGReturnFormFieldsAreEmptyWhenPageLoads(FormCollection form)
+        public void VerifyGPGReturnFormFieldsAreEmptyWhenPageLoads()
         {
 
-            Assert.That(false, "Error Message");
+            {
+                // Arrange
+                // Mock user, Organisation, user organisation and Return
+                var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+                var organisation = new Organisation() { OrganisationId = 0 };
+                var userOrganisation = new UserOrganisation() { OrganisationId = 0, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
+                var @return = new Return();
+                var zeroVal = 0;
+                
+                var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
+
+                //Act
+                var result = (ViewResult)controller.Create();
+                var returnModel = (Return)result.Model;
+
+                // Assert
+                Assert.That(returnModel.MaleLowerPayBand, Is.EqualTo(zeroVal), "Error Message");
+                Assert.That(returnModel.MaleMedianBonusPayPercent, Is.EqualTo(zeroVal), "Error Message");
+                Assert.That(returnModel.MaleMiddlePayBand, Is.EqualTo(zeroVal), "Error Message");
+                Assert.That(returnModel.MaleUpperPayBand, Is.EqualTo(zeroVal), "Error Message");
+                Assert.That(returnModel.MaleUpperQuartilePayBand, Is.EqualTo(zeroVal), "Error Message");
+
+                Assert.That(returnModel.FemaleLowerPayBand, Is.EqualTo(zeroVal), "Error Message");
+                Assert.That(returnModel.FemaleMedianBonusPayPercent, Is.EqualTo(zeroVal), "Error Message");
+                Assert.That(returnModel.FemaleMiddlePayBand, Is.EqualTo(zeroVal), "Error Message");
+                Assert.That(returnModel.FemaleUpperPayBand, Is.EqualTo(zeroVal), "Error Message");
+                Assert.That(returnModel.FemaleUpperQuartilePayBand, Is.EqualTo(zeroVal), "Error Message");
+
+                Assert.That(returnModel.DiffMeanBonusPercent, Is.EqualTo(zeroVal), "Error Message");
+                Assert.That(returnModel.DiffMeanHourlyPayPercent, Is.EqualTo(zeroVal), "Error Message");
+                Assert.That(returnModel.DiffMedianBonusPercent, Is.EqualTo(zeroVal), "Error Message");
+                Assert.That(returnModel.DiffMedianHourlyPercent, Is.EqualTo(zeroVal), "Error Message");
+                
+                Assert.That(returnModel.JobTitle, Is.EqualTo(null), "Error Message");
+                Assert.That(returnModel.FirstName, Is.EqualTo(null), "Error Message");
+                Assert.That(returnModel.LastName, Is.EqualTo(null), "Error Message");
+
+                Assert.That(returnModel.AccountingDate, Is.EqualTo(@return.AccountingDate), "Error Message");
+
+                Assert.That(((DateTime)(returnModel.Created)).Date, Is.EqualTo(((DateTime)(@return.Created)).Date), "Error Message");
+                Assert.That(((DateTime)(returnModel.Modified)).Date, Is.EqualTo(((DateTime)(@return.Modified)).Date), "Error Message");
+
+                Assert.That(returnModel.CurrentStatusDate, Is.EqualTo(null), "Error Message");
+
+                Assert.That(returnModel.CurrentStatus, Is.EqualTo(null), "Error Message");
+                Assert.That(returnModel.CurrentStatusDetails, Is.EqualTo(null), "Error Message");
+
+                Assert.That(returnModel.Organisation, Is.EqualTo(null), "Error Message");
+
+                Assert.That(returnModel.OrganisationId, Is.EqualTo(0), "Error Message");
+                Assert.That(returnModel.ReturnId, Is.EqualTo(0), "Error Message");
+            }
         }
 
-        //Numeric validation test : -> validate one decimal place -> 
-        //if a user enters a whole number it should automatically convert to 1 decimal place *use regular expression
         [Test]
         [Description("Verify all fields have one decimal place format")]
         public void ValidatedOneDecimalPlaceforAllNumericDataPointsFields()
         {
             // Arrange
-            string pattern = "^[0-9]([.][0-9]{1,1})?$"; //Pattern of "0.0" decimal format and place
+            string pattern = "^[0-9]([.][0-9]{1,1})?$"; //Pattern of "0.0" decimal format and place should allow "000.0 as well"
 
+            var 
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
@@ -463,6 +432,9 @@ namespace GenderPayGap.Tests.Submission
         }
         #endregion
 
+
+
+
         #region Submitting
         // test to validate all the data entered into the form:
         public void ValidteAllEnteredValuesIntoGPGForm()
@@ -471,10 +443,15 @@ namespace GenderPayGap.Tests.Submission
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
-            //var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
+            var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation, @return);
+
             //Act
+            var result = (ViewResult)controller.Authoriser(@return);
+
+            //Assert
+
         }
 
         //verify when you click on the continue button->
@@ -485,6 +462,16 @@ namespace GenderPayGap.Tests.Submission
         #endregion
 
 
+
+
+//        Load person responsible:
+//Make sure it came from previous page and all the hidden fields in the formcollection or model(including hidden fields are not empty they hold previous info collected)
+//fields load up empty first name last name and title feilds from the model /form collection fields
+
+//Submitting person responsible:
+//verify when you click on the continue button->
+//All the fields are not empty and validated i.e text use reg expressions for text allowed only, and all fields are mandatory
+//opens up links to you gender pay gap information page(the next page)
 
 
 

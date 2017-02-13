@@ -21,8 +21,6 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            //var prevReferrer = Request.UrlReferrer.ToString();
-            //var currReferrer = Request.Url.ToString();
             
             var view = View("Index");
             return view;

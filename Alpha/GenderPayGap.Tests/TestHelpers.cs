@@ -42,6 +42,7 @@ namespace GenderPayGap.Tests
 
             T controller = (T)Activator.CreateInstance(typeof(T), builder);
             controller.ControllerContext = controllerContextMock.Object;
+
             return controller;
         }
 
