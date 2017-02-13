@@ -103,7 +103,7 @@ namespace GenderPayGap.Tests.Submission
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
 
             //Act
-            var result = (ViewResult)controller.Create();
+            var result = (ViewResult)controller.Step1();
 
             // Assert
             Assert.That(result.ViewName, Is.EqualTo("Create"), "Error Message");
@@ -122,7 +122,7 @@ namespace GenderPayGap.Tests.Submission
 
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
             //Act
-            var result = (ViewResult)controller.Create();
+            var result = (ViewResult)controller.Step1();
 
             var model = result.Model as Return;
 
@@ -159,7 +159,7 @@ namespace GenderPayGap.Tests.Submission
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation, @return);
 
             //Act
-            var result = (ViewResult)controller.Create();
+            var result = (ViewResult)controller.Step1();
             var returnModel = (Return)result.Model;
 
             // Assert
@@ -211,7 +211,7 @@ namespace GenderPayGap.Tests.Submission
             ReturnController controller = new ReturnController();
 
             // Act
-            var result = (ViewResult)controller.Create();
+            var result = (ViewResult)controller.Step1();
 
             // Assert
             Assert.That(result, Is.EqualTo("Create"), "Error Message");
@@ -222,8 +222,6 @@ namespace GenderPayGap.Tests.Submission
 
 
         #region When GPG Page Loads
-        //Verify user is logged in from above
-        //Tests for the gpg return form page:
 
         #region FeedBackLink for all Pages
         [Test]
@@ -236,56 +234,12 @@ namespace GenderPayGap.Tests.Submission
             ReturnController controller = new ReturnController();
 
             // Act
-            var result = (ViewResult)controller.Create();
+            var result = (ViewResult)controller.Step1();
 
             // Assert
             Assert.That(result, Is.EqualTo("Create"), "Error Message");
         } 
         #endregion
-
-        #region Guidance Test
-        //Verify the link for the gender paygap guidance:
-        [Test]
-        [Description("How to enter your figures ( verify link to that page)")]
-        public void VerifyGenderPayGapGuidanceLink()
-        {
-            // Arrange
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
-            var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
-            var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
-
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation, @return);
-
-            // Act
-            var result = (ViewResult)controller.Create();
-            //var instructionLink = result.Get the HowToEnterFiguresLink from the Create Page
-
-            // Assert
-            Assert.That(result, Is.EqualTo("GenderPayGapGuidanceLink"), "Error Message");
-        } 
-       
-        [Test]
-        [Description("How to calculate you data page( verify link to that page")]
-        public void VerifyHowToEnterFiguresLink()
-        {
-            // Arrange
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
-            var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
-            var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
-
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation, @return);
-
-            // Act
-            var result = (ViewResult)controller.Create();
-            //var instructionLink = result.Get the HowToEnterFiguresLink from the Create Page
-
-            // Assert
-            Assert.That(result, Is.EqualTo("HowToEnterFiguresLink"), "Error Message");
-        }
-        #endregion
-
 
         //Verify previous page that loaded this returns page
         [Test]
@@ -301,7 +255,7 @@ namespace GenderPayGap.Tests.Submission
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation, @return);
 
             //Act
-            var result = (ViewResult)controller.Create();
+            var result = (ViewResult)controller.Step1();
             var prevReferrer = controller.Request.UrlReferrer.ToString();
             
 
@@ -323,7 +277,7 @@ namespace GenderPayGap.Tests.Submission
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation, @return);
 
             //Act
-            var result = (ViewResult)controller.Create();
+            var result = (ViewResult)controller.Step1();
             var currReferrer = controller.Request.Url.ToString();
             
             //Assert
@@ -351,7 +305,7 @@ namespace GenderPayGap.Tests.Submission
                 var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
 
                 //Act
-                var result = (ViewResult)controller.Create();
+                var result = (ViewResult)controller.Step1();
                 var returnModel = (Return)result.Model;
 
                 // Assert
@@ -400,7 +354,6 @@ namespace GenderPayGap.Tests.Submission
             // Arrange
             string pattern = "^[0-9]([.][0-9]{1,1})?$"; //Pattern of "0.0" decimal format and place should allow "000.0 as well"
 
-            var 
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
@@ -409,7 +362,7 @@ namespace GenderPayGap.Tests.Submission
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
 
             //Act
-            var result = (ViewResult)controller.Create();
+            var result = (ViewResult)controller.Step1();
             var returnModel = (Return)result.Model;
 
             //Assert
@@ -448,7 +401,7 @@ namespace GenderPayGap.Tests.Submission
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation, @return);
 
             //Act
-            var result = (ViewResult)controller.Authoriser(@return);
+            var result = (ViewResult)controller.Step2(@return);
 
             //Assert
 
@@ -463,15 +416,6 @@ namespace GenderPayGap.Tests.Submission
 
 
 
-
-//        Load person responsible:
-//Make sure it came from previous page and all the hidden fields in the formcollection or model(including hidden fields are not empty they hold previous info collected)
-//fields load up empty first name last name and title feilds from the model /form collection fields
-
-//Submitting person responsible:
-//verify when you click on the continue button->
-//All the fields are not empty and validated i.e text use reg expressions for text allowed only, and all fields are mandatory
-//opens up links to you gender pay gap information page(the next page)
 
 
 
@@ -488,7 +432,7 @@ namespace GenderPayGap.Tests.Submission
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
 
             //Act
-            var result = (ViewResult)controller.Create();
+            var result = (ViewResult)controller.Step1();
             var returnModel = (Return)result.Model;
 
             //Assert

@@ -101,7 +101,7 @@ namespace GenderPayGap.Tests.Navigation.Controllers
             myReturn = new Return();
 
             // Act
-            var result = controller.Create() as ViewResult;
+            var result = controller.Step1() as ViewResult;
             //var resultWithSuppliedModel = controller.Create(myReturn) as ViewResult;
 
             // Assert
@@ -143,7 +143,7 @@ namespace GenderPayGap.Tests.Navigation.Controllers
             Return myReturn = new Return();
 
             // Act
-            var resultWithDefaultID = controller.Confirm() as ViewResult;
+            var resultWithDefaultID = controller.Step3() as ViewResult;
             //var resultWithSuppliedID = controller.Confirm(1) as ViewResult;
             //var resultWithSuppliedModel = controller.Confirm(myReturn) as ViewResult;
 
@@ -167,7 +167,7 @@ namespace GenderPayGap.Tests.Navigation.Controllers
             Return myReturn = new Return();
 
             // Act
-            var resultWithDefaultID = controller.SendConfirmed() as ViewResult;
+            var resultWithDefaultID = controller.Step4() as ViewResult;
             //var resultWithSuppliedID = controller.SendConfirmed(1) as ViewResult;
             //var resultWithSuppliedModel = controller.SendConfirmed(myReturn) as ViewResult;
 
