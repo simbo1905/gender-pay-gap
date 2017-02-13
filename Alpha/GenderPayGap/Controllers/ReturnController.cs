@@ -7,16 +7,25 @@ using System.Data.Entity;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Autofac;
 
 namespace GenderPayGap.WebUI.Controllers
 {
     public class ReturnController : BaseController
     {
+
+        public ReturnController():base(){ }
+        public ReturnController(IContainer container): base(container){ }
+
         //Get: Return
         [HttpGet]
         public ActionResult Index()
         {
-            return View();
+            //var prevReferrer = Request.UrlReferrer.ToString();
+            //var currReferrer = Request.Url.ToString();
+            
+            var view = View("Index");
+            return view;
         }
 
         [Authorize]
@@ -25,11 +34,13 @@ namespace GenderPayGap.WebUI.Controllers
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
             var currentUser = GetCurrentUser();
-            var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
-            var model = GpgDatabase.Default.Return.FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
+            var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+            var model = Repository.GetAll<Return>().FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
+
             if (model == null) model = new Return();
             model.OrganisationId = userOrg.OrganisationId;
-            return View(model);
+            var result = View(model);
+            return result;
         }
 
         [Authorize]

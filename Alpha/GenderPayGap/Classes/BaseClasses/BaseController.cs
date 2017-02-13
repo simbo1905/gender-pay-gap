@@ -31,7 +31,8 @@ namespace GenderPayGap
         {
             get
             {
-                if (_Repository==null)_Repository = containerIOC.Resolve<IRepository>();
+                if (_Repository == null)
+                    _Repository = containerIOC.Resolve<IRepository>();
                 return _Repository;
             }
         }
@@ -50,7 +51,9 @@ namespace GenderPayGap
             if (user == null || user.EmailVerifiedDate == null || user.EmailVerifiedDate == DateTime.MinValue)
                 return false;
 
-            var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(u => u.UserId == user.UserId);
+            //var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(u => u.UserId == user.UserId);
+            var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(u => u.UserId == user.UserId);
+
             if (userOrg == null || userOrg.PINConfirmedDate == null || userOrg.PINConfirmedDate == DateTime.MinValue)
                 return false;
 

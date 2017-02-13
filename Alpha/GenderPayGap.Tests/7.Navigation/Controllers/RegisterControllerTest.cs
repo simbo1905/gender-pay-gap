@@ -59,6 +59,7 @@ namespace GenderPayGap.Tests.Navigation.Controllers
             //Assert.That(resultWithDefaultID == null, "Error Message");
             //Assert.That(resultWithSuppliedID == null, "Error Message");
             //Assert.That(resultWithSuppliedModel == null, "Error Message");
+            Assert.That(false, "Error Message");
         }
 
         [Test]
@@ -83,6 +84,7 @@ namespace GenderPayGap.Tests.Navigation.Controllers
             //Assert.That(resultWithDefaultID == null, "Error Message");
             //Assert.That(resultWithSuppliedID == null, "Error Message");
             //Assert.That(resultWithSuppliedModel == null, "Error Message");
+            Assert.That(false, "Error Message");
         }
 
         [Test]
@@ -93,7 +95,7 @@ namespace GenderPayGap.Tests.Navigation.Controllers
 
             // TDD:
             // Arrange
-            //RegisterController controller = new RegisterController();
+            RegisterController controller = new RegisterController();
             //ConfirmViewModel confirmViewModel = new ConfirmViewModel();
 
             //// Act
@@ -107,6 +109,7 @@ namespace GenderPayGap.Tests.Navigation.Controllers
             //Assert.That(resultWithDefaultID == null, "Error Message");
             //Assert.That(resultWithSuppliedID == null, "Error Message");
             //Assert.That(resultWithSuppliedModel == null, "Error Message");
+            Assert.That(false, "Error Message");
         }
         #endregion
 

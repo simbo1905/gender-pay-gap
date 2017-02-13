@@ -86,6 +86,25 @@ namespace GenderPayGap.Tests.Registration
             user = controller.GetCurrentUser();
         }
 
+        [Test]
+        [Description("Ensure the register.Index action the user is not already logged in")]
+        public void EnsureRegisterControllerReturned()
+        {
+            // Arrange
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var organisation = new Organisation() { OrganisationId = 1 };
+            var userorganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1 };
+
+            var controller = TestHelper.GetController<RegisterController>(1, user, organisation, userorganisation);
+
+            // Act
+            var result = controller.Index();
+
+            // Assert
+            Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
+        }
+
+
         [Test, Order(1)]
         [Description("Verify that the user is not already logged in")]
         public void VerifyUserIsNotLoggedIn()

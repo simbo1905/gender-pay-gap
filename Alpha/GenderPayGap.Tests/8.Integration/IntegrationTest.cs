@@ -14,7 +14,8 @@ namespace GenderPayGap.Tests._8.Integration
         public void TestMethod()
         {
             // TODO: Add your test code here
-            Assert.Pass("Your first passing test");
+           // Assert.Pass("Your first passing test");
+            Assert.That(false, "Error Message");
         }
     }
 }

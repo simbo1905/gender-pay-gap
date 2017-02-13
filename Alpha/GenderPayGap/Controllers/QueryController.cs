@@ -6,14 +6,18 @@ using System.Web.Mvc;
 using GpgDB.Models.GpgDatabase;
 using GenderPayGap.WebUI.Models;
 using Extensions;
+using Autofac;
 
 using GenderPayGap;
 
 namespace GenderPayGap.WebUI.Controllers
 {
-    public class QueryController : Controller
+    public class QueryController : BaseController
     {
-        public ActionResult Start()
+        public QueryController():base(){ }
+    public QueryController(IContainer container): base(container){ }
+
+    public ActionResult Start()
         {
             return View();
         }
@@ -23,8 +27,8 @@ namespace GenderPayGap.WebUI.Controllers
             var model = new SearchViewModel();
             if (!string.IsNullOrWhiteSpace(query))
             {
-                model.Results = GpgDatabase.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(query.ToLower())).ToArray();
-               // model.Results = 
+                //model.Results = GpgDatabase.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(query.ToLower())).ToArray();
+                model.Results = Repository.GetAll<Organisation>().Where(o => o.OrganisationName.ToLower().Contains(query.ToLower())).ToArray();
 
                 //var x = model.Search;
                 //model.Results = GpgDatabase.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(model.Search.ToLower())).ToArray();
