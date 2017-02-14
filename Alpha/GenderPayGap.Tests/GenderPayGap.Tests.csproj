@@ -111,6 +111,7 @@
     <Reference Include="System.Net.Http.WebRequest" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="0.Submission\SubmissionTest.cs.old" />
     <Compile Include="0.Submission\SubmissionTest.cs" />
     <Compile Include="1.Registration\RegistrationTest.cs" />
     <Compile Include="2.Login\LoginTest.cs" />
