@@ -37,7 +37,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             if (model == null) model = new Return();
             model.OrganisationId = userOrg.OrganisationId;
-            var result = View(model);
+            var result = View("Step1", model);
             return result;
         }
 
