@@ -66,7 +66,7 @@ namespace Extensions
         public static bool IsNumber(this string input)
         {
             if (string.IsNullOrWhiteSpace(input)) return false;
-            return !Regex.IsMatch(input, "^[0-9]");
+            return Regex.IsMatch(input, "^[0-9]");
         }
 
         public static bool ContainsNumber(this string input)

@@ -10,6 +10,8 @@
         {
             @using (Html.BeginForm())
             {
+                @Html.AntiForgeryToken()
+
                 <div class="column-two-thirds">
                     <div class="govuk-box-highlight">
                         <h1 class="bold-large">Your email has been confirmed</h1>
@@ -27,6 +29,7 @@
         {
             @using (Html.BeginForm())
             {
+                @Html.AntiForgeryToken()
                 <div class="column-two-thirds">
                     <h1 class="heading-large">
                         <span class="heading-secondary">Step 3 of 5</span>

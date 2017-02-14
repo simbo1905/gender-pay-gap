@@ -6,8 +6,10 @@
 <main id="content" role="main">
     @using (Html.BeginForm())
     {
+        @Html.AntiForgeryToken()
+
         <div class="grid-row">
-            if (!ViewData.ModelState.IsValid)
+            @if (!ViewData.ModelState.IsValid)
             {
                 @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
             }
@@ -26,9 +28,9 @@
                         <fieldset>
                             <label class="block-label selection-button-radio" for="radio-1">
                                 @Html.RadioButtonFor(m=>m.SectorType, GpgDB.SectorTypes.Private, new { @type = "radio", @class = "styled", @name = "radio-group", @id = "radio-1" })
-                                Private limited company,
-                                Limited liability partnership,
-                                Charity,
+                                Private limited company,<br/>
+                                Limited liability partnership,<br />
+                                Charity,<br />
                                 Public limited company
                             </label>
                             <label class="block-label selection-button-radio " for="radio-2">

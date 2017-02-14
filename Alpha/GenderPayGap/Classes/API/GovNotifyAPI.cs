@@ -4,6 +4,7 @@ using Notify.Client;
 using Notify.Models;
 using Extensions;
 using System;
+using System.Threading.Tasks;
 
 namespace GenderPayGap
 {
@@ -32,11 +33,9 @@ namespace GenderPayGap
 
         }
 
-        public static bool SendVerifyEmail(string emailAddress, string verifyCode)
+        public static bool SendVerifyEmail(string verifyUrl,string emailAddress, string verifyCode)
         {
-            string url = GetVerifyUrl(verifyCode);
-
-            var personalisation = new Dictionary<string, dynamic> { { "url", url } };
+            var personalisation = new Dictionary<string, dynamic> { { "url", verifyUrl } };
 
             Notification result = null;
             try
@@ -50,7 +49,7 @@ namespace GenderPayGap
                     try
                     {
                         var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/verify.txt"));
-                        html = html.Replace("((VerifyUrl))", url);
+                        html = html.Replace("((VerifyUrl))", verifyUrl);
                         Email.QuickSend("GPG Registration Verification", emailAddress, html);
                         result = new Notification() { status = "delivered" };
                     }
@@ -63,16 +62,9 @@ namespace GenderPayGap
             return result.status.EqualsI("created", "sending", "delivered");
         }
 
-        public static string GetVerifyUrl(string verifyCode)
+        public static bool SendConfirmEmail(string confirmUrl,string emailAddress, string confirmCode)
         {
-            return string.Format("{0}/Register/Verify?code={1}", ConfigurationManager.AppSettings["GpgWebServer"], verifyCode);
-        }
-
-        public static bool SendConfirmEmail(string emailAddress, string confirmCode)
-        {
-            string url = GetConfirmUrl(confirmCode);
-
-            var personalisation = new Dictionary<string, dynamic> { { "url", url } };
+            var personalisation = new Dictionary<string, dynamic> { { "url", confirmUrl } };
 
 
             Notification result = null;
@@ -87,7 +79,7 @@ namespace GenderPayGap
                     try
                     {
                         var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/Confirm.txt"));
-                        html = html.Replace("((ConfirmUrl))", url);
+                        html = html.Replace("((ConfirmUrl))", confirmUrl);
                         Email.QuickSend("GPG Registration Confirmation", emailAddress, html);
                         result = new Notification() { status = "delivered" };
                     }
@@ -101,19 +93,14 @@ namespace GenderPayGap
             return result.status.EqualsI("created", "sending", "delivered");
         }
 
-        public static string GetConfirmUrl(string confirmCode)
-        {
-            return string.Format("{0}/Register/Confirm?code={1}", ConfigurationManager.AppSettings["GpgWebServer"], confirmCode);
-        }
-
-        public static bool SendPinInPost(string name, string address, string pin)
+        public static bool SendPinInPost(string returnUrl,string name, string address, string pin)
         {
             var personalisation = new Dictionary<string, dynamic> { { "PIN", pin } };
 
             Notification result = null;
             try
             {
-                result = SendEmail(address, PINTemplateId, personalisation);
+                result=SendEmail(address, PINTemplateId, personalisation);
             }
             catch (Exception ex)
             {

@@ -6,21 +6,22 @@
 <main id="content" role="main">
     @using (Html.BeginForm())
     {
+        @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.SectorType)
 
         <div class="grid-row">
-            if (!ViewData.ModelState.IsValid)
-            @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
-
+            @if (!ViewData.ModelState.IsValid)
+            {
+                @Html.ValidationSummary("ERRORS:", new {@class = "text-danger"})
+            }
             <div class="column-full">
                 <h1 class="heading-large">
-                    <span class="heading-secondary">Step 5 of 6</span>
+                    <span class="heading-secondary">Step 4 of 6</span>
                     Choose your company
                 </h1>
 
                 <div class="search-bar">
                     <div class="searchfield">
-                        <input type="search" value="Smiths" class="search-input" placeholder="Enter an employers name or company no">
                         @Html.EditorFor(model => model.SearchText, new { htmlAttributes = new { @class = "search-input", @placeholder = "Enter an employers name or company no" } })<br />
 
                         <button type="submit" class="search-submit">Search</button>
@@ -38,7 +39,7 @@
                         </ul>
                     </div>
                 </details>
-                @if (string.IsNullOrWhiteSpace(Model.SearchText))
+                @if (!string.IsNullOrWhiteSpace(Model.SearchText))
                 {
                     <p>No records found</p>
                 }

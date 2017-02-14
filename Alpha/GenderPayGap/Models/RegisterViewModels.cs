@@ -112,7 +112,7 @@ namespace GenderPayGap.WebUI.Models
 
         public int EmployerRecords { get; internal set; }
 
-        public int EmployerCurrentPage { get; internal set; }
+        public int EmployerCurrentPage { get; internal set; } = 1;
 
         public int EmployerPageSize { get; set; }=10;
 
@@ -127,6 +127,7 @@ namespace GenderPayGap.WebUI.Models
         {
             get
             {
+                if (Employers == null || Employers.Count < 1) return 1;
                 return ((EmployerCurrentPage * EmployerPageSize) - EmployerPageSize) + 1;
             }
         }
@@ -134,6 +135,7 @@ namespace GenderPayGap.WebUI.Models
         {
             get
             {
+                if (Employers == null || Employers.Count < 1) return 1;
                 return EmployerStartIndex + Employers.Count;
             }
         }
@@ -157,6 +159,7 @@ namespace GenderPayGap.WebUI.Models
         }
     }
 
+    [Serializable]
     public class EmployerRecord
     {
         public string CompanyNumber { get; set; }

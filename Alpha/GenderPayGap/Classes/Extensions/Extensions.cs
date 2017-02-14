@@ -8,6 +8,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Web;
+using System.Web.Mvc;
+using GenderPayGap.WebUI.Controllers;
 
 namespace GenderPayGap.WebUI.Classes
 {
@@ -27,7 +29,7 @@ namespace GenderPayGap.WebUI.Classes
 
         public static long GetUserId(this IPrincipal principal)
         {
-            return principal.GetClaim(Constants.ClaimTypes.ExternalProviderUserId).ToLong();
+            return principal.GetClaim(Constants.ClaimTypes.Subject).ToLong();
         }
 
         #endregion
@@ -78,6 +80,25 @@ namespace GenderPayGap.WebUI.Classes
 
         #endregion
 
+        #region Registraion Helpers
 
+        public static bool SendVerifyEmail(this RegisterController controller, string emailAddress, string verifyCode)
+        {
+            var verifyUrl=controller.Url.Action("Step2", new {code= verifyCode });
+            return GovNotifyAPI.SendVerifyEmail(verifyUrl,emailAddress, verifyCode);
+        }
+        public static bool SendConfirmEmail(this RegisterController controller, string emailAddress, string confirmCode)
+        {
+            var confirmUrl = controller.Url.Action("Step2", new { code = confirmCode });
+            return GovNotifyAPI.SendConfirmEmail(confirmUrl, emailAddress,confirmCode);
+        }
+
+        public static bool SendPinInPost(this RegisterController controller, string name, string address, string pin)
+        {
+            var returnUrl = controller.Url.Action("Step6");
+            return GovNotifyAPI.SendPinInPost(returnUrl, name, address, pin);
+        }
+
+        #endregion
     }
 }

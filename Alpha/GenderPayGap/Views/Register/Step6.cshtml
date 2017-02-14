@@ -6,6 +6,8 @@
 <main id="content" role="main">
     @using (Html.BeginForm())
     {
+        @Html.AntiForgeryToken()
+
         @Html.HiddenFor(m => m.EmployerCurrentPage)
         @Html.HiddenFor(m => m.EmployerPages)
         @Html.HiddenFor(m => m.Employers)
@@ -41,7 +43,7 @@
                                 Employer name
                             </td>
                             <td>
-                                @Model.Employers[Model.SelectedEmployerIndex].Name
+                                @(Model.Employers[Model.SelectedEmployerIndex].Name)
                             </td>
                             <td></td>
                         </tr>
@@ -50,7 +52,7 @@
                                 Company number
                             </td>
                             <td>
-                                @Model.Employers[Model.SelectedEmployerIndex].CompanyNumber
+                                @(Model.Employers[Model.SelectedEmployerIndex].CompanyNumber)
                             </td>
                             <td></td>
                         </tr>
@@ -59,7 +61,7 @@
                                 Registered office address
                             </td>
                             <td>
-                                @@Model.Employers[Model.SelectedEmployerIndex].FullAddress
+                                @(Model.Employers[Model.SelectedEmployerIndex].FullAddress)
                             </td>
                             <td></td>
                         </tr>
@@ -71,7 +73,6 @@
 
                     <p>
                         <input type="submit" class="button" name="command" value="back" />
-                        <a href="@Url.Action("Step3")">Back</a>
                     </p>
                 </fieldset>
             </div>
