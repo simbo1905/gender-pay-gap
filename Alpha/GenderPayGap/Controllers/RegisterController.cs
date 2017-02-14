@@ -93,8 +93,8 @@ namespace GenderPayGap.WebUI.Controllers
             currentUser.CurrentStatusDate = DateTime.Now;
 
             //Save the user to DB
-            if (currentUser.UserId==0)GpgDatabase.Default.User.Add(currentUser);
-            GpgDatabase.Default.SaveChanges();
+            if (currentUser.UserId==0)Repository.Insert(currentUser);
+            Repository.SaveChanges();
 
             //Send the verification code and showconfirmation
             return ResendVerifyCode(currentUser);
@@ -106,13 +106,13 @@ namespace GenderPayGap.WebUI.Controllers
             //Send a verification link to the email address
             try
             {
-                var verifyCode = Encryption.EncryptQuerystring(currentUser.EmailAddress + ":" + currentUser.Created.Value.Ticks);
-                if (!GovNotifyAPI.SendVerifyEmail(currentUser.EmailAddress, verifyCode))
+                var verifyCode = Encryption.EncryptQuerystring(currentUser.UserId + ":" + currentUser.Created.Value.ToSmallDateTime());
+                if (!this.SendVerifyEmail(currentUser.EmailAddress, verifyCode))
                     throw new Exception("Could not send verification email. Please try again later.");
 
                 currentUser.EmailVerifyCode = verifyCode;
                 currentUser.EmailVerifySendDate = DateTime.Now;
-                GpgDatabase.Default.SaveChanges();
+                Repository.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -127,28 +127,61 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpGet]
-        public ActionResult Step2()
+        [Authorize]
+        public ActionResult Step2(string code=null)
         {
             //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated)throw new AuthenticationException();
+            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
 
             //Ensure user has completed the registration process
             User currentUser;
             var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
             if (result == null) throw new AuthenticationException();
-            var model = result.Model as ErrorViewModel;
-            if (model == null) throw new AuthenticationException();
-            if (model.ActionUrl != Url.Action("Step2", "Register"))return result;
-
-            //Send verification if never sent
-            if (currentUser.EmailVerifySendDate.EqualsI(null, DateTime.MinValue))
-            {
-                //Send the verification code and show confirmation
-                return ResendVerifyCode(currentUser);
-            }
+            var errorViewModel = result.Model as ErrorViewModel;
+            if (errorViewModel == null) throw new AuthenticationException();
+            if (errorViewModel.ActionUrl != Url.Action("Step2", "Register") && errorViewModel.Description!= "You have not verified your email address.")
+                return result;
 
             //Allow resend of verification if sent over 24 hours ago
-            return View("Step2", new VerifyViewModel() { EmailAddress = currentUser.EmailAddress,Expired = true});
+            if (currentUser.EmailVerifySendDate.Value.AddHours(WebUI.Properties.Settings.Default.EmailVerificationExpiryHours) < DateTime.Now)
+                return View("Step2", new VerifyViewModel() { EmailAddress = currentUser.EmailAddress, Expired = true });
+
+            if (string.IsNullOrWhiteSpace(code) )
+            {
+                ModelState.AddModelError("", "Invalid email verification code");
+                return View("Step2");
+            }
+
+            //Show an error if the code doesnt exist in db
+            if (currentUser.EmailVerifyCode!=code)
+            {
+                var attempts = Session["EmailVerificationAttempts:" + currentUser.EmailAddress].ToInt32();
+                if (attempts > 3)
+                {
+                    return View("Error", new ErrorViewModel()
+                    {
+                        Title = "Invalid Verification Code",
+                        Description = "You have failed too many verification attempts.",
+                        CallToAction = "Please log out of the system and try again later.",
+                        ActionUrl = Url.Action("LogOut", "Home")
+                    });
+                }
+                Session["EmailVerificationAttempts:" + currentUser.EmailAddress] = attempts + 1;
+                return View("Error", new ErrorViewModel()
+                {
+                    Title = "Invalid Verification Code",
+                    Description = "The verification code you have entered is invalid."
+                });
+            }
+
+            //Set the user as verified
+            currentUser.EmailVerifiedDate = DateTime.Now;
+
+            //Save the current user
+            Repository.SaveChanges();
+
+            //Prompt the user with confirmation
+            return View("Step2", new VerifyViewModel() { EmailAddress = currentUser.EmailAddress, Verified = true});
         }
 
         [HttpPost]
@@ -177,62 +210,6 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Authorize]
-        public ActionResult Step2(string code)
-        {
-            if (string.IsNullOrWhiteSpace(code))
-            {
-                ModelState.AddModelError("", "Invalid email verification code");
-                return View("Step2");
-            }
-
-            //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
-
-            //Ensure user has completed the registration process
-            User currentUser;
-            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
-            var errorViewModel = result.Model as ErrorViewModel;
-            if (result == null || errorViewModel == null) throw new AuthenticationException();
-            if (!currentUser.EmailVerifiedDate.EqualsI(null, DateTime.MinValue)) return result;
-            if (errorViewModel.ActionUrl == Url.Action("Step2", "Register"))
-            {
-                return Step2();
-            }
-
-            //Show an error if the code doesnt exist in db
-            if (currentUser.EmailVerifyCode!=code)
-            {
-                var attempts = Session["EmailVerificationAttempts:" + currentUser.EmailAddress].ToInt32();
-                if (attempts > 3)
-                {
-                    return View("Error", new ErrorViewModel()
-                    {
-                        Title = "Invalid Verification Code",
-                        Description = "You have failed too many verification attempts. Please logout and try again later.",
-                        CallToAction = "Please log out of the system.",
-                        ActionUrl = Url.Action("LogOff", "Account")
-                    });
-                }
-
-                return View("Error", new ErrorViewModel()
-                {
-                    Title = "Invalid Verification Code",
-                    Description = "The verification code you have entered is invalid."
-                });
-            }
-
-            //Set the user as verified
-            currentUser.EmailVerifiedDate = DateTime.Now;
-
-            //Save the current user
-            Repository.SaveChanges();
-
-            //Prompt the user with confirmation
-            return View("Step2", new VerifyViewModel() { EmailAddress = currentUser.EmailAddress, Verified = true});
-        }
-
-        [HttpGet]
-        [Authorize]
         public ActionResult Step3()
         {
 
@@ -247,7 +224,6 @@ namespace GenderPayGap.WebUI.Controllers
             if (errorViewModel == null) throw new AuthenticationException();
             if (!errorViewModel.ActionUrl.IsAny(Url.Action("Step3", "Register")))
                 return result;
-
             return View("Step3", new OrganisationViewModel());
         }
 
@@ -267,28 +243,31 @@ namespace GenderPayGap.WebUI.Controllers
             var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
             var errorViewModel = result.Model as ErrorViewModel;
             if (result == null || errorViewModel == null) throw new AuthenticationException();
-            if (errorViewModel.ActionUrl.IsAny(Url.Action("Step3", "Register")))
+            if (!errorViewModel.ActionUrl.IsAny(Url.Action("Step3", "Register")))
                 return result;
 
             //TODO validate the submitted fields
-            if (!ModelState.IsValid) return View(model);
+            ModelState.Clear();
 
             if (!model.SectorType.EqualsI(SectorTypes.Private, SectorTypes.Public))
             {
                 ModelState.AddModelError("SectorType", "You must select your organisation type");
-                return View(model);
+                return View("Step3", model);
             }
 
             //TODO Remove this when public sector is available
-            if (!model.SectorType.EqualsI(SectorTypes.Public))throw new NotImplementedException();
+            if (!model.SectorType.EqualsI(SectorTypes.Private))throw new NotImplementedException();
 
-            return View("Step4", model);
+            TempData["Model"] = model;
+            return RedirectToAction("Step4");
         }
 
         [HttpGet]
         [Authorize]
         public ActionResult Step4()
         {
+            var model=TempData["Model"] as OrganisationViewModel;
+
             //Ensure the user is logged in
             if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
 
@@ -298,7 +277,9 @@ namespace GenderPayGap.WebUI.Controllers
             if (result == null) throw new AuthenticationException();
             var errorViewModel = result.Model as ErrorViewModel;
             if (errorViewModel == null) throw new AuthenticationException();
-            return result;
+            if (model==null || !errorViewModel.ActionUrl.IsAny(Url.Action("Step3", "Register"))) return result;
+
+            return View("Step4", model);
         }
 
 
@@ -322,7 +303,8 @@ namespace GenderPayGap.WebUI.Controllers
             if (!errorModel.ActionUrl.IsAny(Url.Action("Step3", "Register"))) return result;
 
             //TODO validate the submitted fields
-            model.SearchText = model.SearchText.Trim();
+            model.SearchText = model.SearchText.TrimI();
+            ModelState.Clear();
             if (string.IsNullOrWhiteSpace(model.SearchText))
             {
                 ModelState.AddModelError("SearchText", "You must enter an employer name or company number");
@@ -348,14 +330,17 @@ namespace GenderPayGap.WebUI.Controllers
             }
             if (model.EmployerRecords<=0)return View("Step4", model);
 
-
-            return View("Step5", model);
+            TempData["Model"] = model;
+            return RedirectToAction("Step5");
         }
 
         [HttpGet]
         [Authorize]
         public ActionResult Step5()
         {
+            var model = TempData["Model"] as OrganisationViewModel;
+            if (model != null) return Step5(model,null);
+
             //Ensure the user is logged in
             if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
 
@@ -376,8 +361,11 @@ namespace GenderPayGap.WebUI.Controllers
         [Authorize]
         public ActionResult Step5(OrganisationViewModel model, string command)
         {
+            var m = TempData["Model"] as OrganisationViewModel;
+            if (m != null && m.Employers!=null && m.Employers.Count>0) model.Employers = m.Employers;
+
             //Go back if requested
-            if (command != "back") return View("Step4", model);
+            if (command == "back") return View("Step4", model);
 
             //Ensure the user is logged in
             if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
@@ -390,11 +378,9 @@ namespace GenderPayGap.WebUI.Controllers
             if (errorModel == null) throw new AuthenticationException();
             if (!errorModel.ActionUrl.IsAny(Url.Action("Step3", "Register"))) return result;
 
-            model.SelectedEmployerIndex = 0;
+            model.SelectedEmployerIndex = -1;
 
-            //TODO validate the submitted fields
-            if (!ModelState.IsValid) return View(model);
-
+            
             bool doSearch = false;
             if (command == "search")
             {
@@ -431,7 +417,7 @@ namespace GenderPayGap.WebUI.Controllers
                 model.EmployerCurrentPage--;
                 doSearch = true;
             }
-            else if (command.StartsWith("page_"))
+            else if (command.StartsWithI("page_"))
             {
                 var page = command.AfterFirst("page_").ToInt32();
                 if (page<1 || page>model.EmployerPages)
@@ -462,25 +448,31 @@ namespace GenderPayGap.WebUI.Controllers
                 return View("Step5", model);
             }
 
-            if (command.StartsWith("employer_"))
+            if (command.StartsWithI("employer_"))
             {
                 var employerIndex = command.AfterFirst("employer_").ToInt32();
                 if (employerIndex>0 && model.Employers.Count>0 && employerIndex <= model.Employers.Count)
                     model.SelectedEmployerIndex = employerIndex;
             }
 
-            if (model.SelectedEmployerIndex == 0)
-            {
-                ModelState.AddModelError("", "Invalid employer index");
+            TempData["Model"] = model;
+            if (model.SelectedEmployerIndex<0)
                 return View("Step5", model);
-            }
-            return View("Step6", model);
+
+            return RedirectToAction("Step6");
         }
 
         [HttpGet]
         [Authorize]
         public ActionResult Step6()
         {
+            var model = TempData["Model"] as OrganisationViewModel;
+            if (model != null)
+            {
+                TempData["Model"] = model;
+                return View("Step6",model);
+            }
+
             //Ensure the user is logged in
             if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
 
@@ -501,6 +493,9 @@ namespace GenderPayGap.WebUI.Controllers
         [Authorize]
         public ActionResult Step6(OrganisationViewModel model)
         {
+            var m = TempData["Model"] as OrganisationViewModel;
+            if (m != null && m.Employers != null && m.Employers.Count > 0) model.Employers = m.Employers;
+
             //Ensure the user is logged in
             if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
 
@@ -531,7 +526,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
 
             //Save the new address
-            var address = Repository.GetAll<OrganisationAddress>().FirstOrDefault(a => a.OrganisationId == org.OrganisationId && a.PostCode.EqualsI(employer.PostCode));
+            var address = Repository.GetAll<OrganisationAddress>().FirstOrDefault(a => a.OrganisationId == org.OrganisationId && a.PostCode==employer.PostCode);
             if (address == null)
             {
                 address = new OrganisationAddress();
@@ -568,12 +563,12 @@ namespace GenderPayGap.WebUI.Controllers
             try
             {
                 var pin = Numeric.Rand(0,999999);
-                if (!GovNotifyAPI.SendPinInPost(currentUser.Fullname + " ("+currentUser.JobTitle + ")",currentUser.EmailAddress, pin.ToString()))
+                if (!this.SendPinInPost(currentUser.Fullname + " ("+currentUser.JobTitle + ")",currentUser.EmailAddress, pin.ToString()))
                     throw new Exception("Could not send PIN in the POST. Please try again later.");
 
                 //Send a confirmation link to the email address
                 var confirmCode = Encryption.EncryptQuerystring(string.Format("{0}:{1}:{2}", userOrg.UserId, userOrg.OrganisationId, DateTime.Now.Ticks));
-                if (!GovNotifyAPI.SendConfirmEmail(currentUser.EmailAddress, confirmCode))
+                if (!this.SendConfirmEmail(currentUser.EmailAddress, confirmCode))
                     throw new Exception("Could not send confirmation email. Please try again later.");
 
                 userOrg.PINCode = pin;

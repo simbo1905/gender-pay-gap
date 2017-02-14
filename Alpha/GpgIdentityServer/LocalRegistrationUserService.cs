@@ -28,6 +28,7 @@ namespace GpgIdentityServer
         public class LocalUser
         {
             public string Subject { get; set; }
+            public string Name { get; set; }
             public string Username { get; set; }
             public string Password { get; set; }
             public List<Claim> Claims { get; set; }
@@ -43,9 +44,10 @@ namespace GpgIdentityServer
             var user = InternalUsers.FirstOrDefault(x => x.Username == context.UserName && x.Password == context.Password);
             if (user != null)
             {
-                user.Claims.Add(new Claim(Constants.ClaimTypes.IdentityProvider, "GPG"));
-                user.Claims.Add(new Claim(Constants.ClaimTypes.ExternalProviderUserId, user.Subject));
-                context.AuthenticateResult = new AuthenticateResult(user.Subject, user.Username,claims:user.Claims,identityProvider:"GPG");
+                //user.Claims.Add(new Claim(Constants.ClaimTypes.IdentityProvider, "GPG"));
+                //user.Claims.Add(new Claim(Constants.ClaimTypes.Subject, user.Subject));
+                //context.AuthenticateResult = new AuthenticateResult(user.Subject, user.Username,claims:user.Claims,identityProvider:"GPG");
+                context.AuthenticateResult = new AuthenticateResult(user.Subject, user.Username);
             }
 
             return Task.FromResult(0);
@@ -122,6 +124,14 @@ namespace GpgIdentityServer
         {
             // issue the claims for the user
             var internaluser = InternalUsers.SingleOrDefault(x => x.Subject == context.Subject.GetSubjectId());
+            // issue the claims for the user
+            var user = InternalUsers.SingleOrDefault(x => x.Subject == context.Subject.GetSubjectId());
+            if (user != null)
+            {
+                context.IssuedClaims = user.Claims.Where(x => context.RequestedClaimTypes.Contains(x.Type));
+            }
+
+            return Task.FromResult(0);
             if (internaluser != null)
             {
                 context.IssuedClaims = internaluser.Claims;
@@ -131,7 +141,7 @@ namespace GpgIdentityServer
                 var externaluser = ExternalUsers.SingleOrDefault(x => x.Subject == context.Subject.GetSubjectId());
                 if (externaluser != null)
                 {
-                    //context.IssuedClaims = externaluser.Claims.Where(x => context.RequestedClaimTypes.Contains(x.Type));
+                    context.IssuedClaims = externaluser.Claims.Where(x => context.RequestedClaimTypes.Contains(x.Type));
                     context.IssuedClaims = externaluser.Claims;
                 }
             }
@@ -152,9 +162,10 @@ namespace GpgIdentityServer
                     Username = user.EmailAddress,
                     Password = user.Password,
                     Subject = user.UserId.ToString(),
-
+                    Name=user.Fullname,
                     Claims = new List<Claim>
                     {
+                        new Claim(Constants.ClaimTypes.Subject, user.UserId.ToString()),
                         new Claim(Constants.ClaimTypes.GivenName, user.Firstname),
                         new Claim(Constants.ClaimTypes.FamilyName, user.Lastname),
                         new Claim(Constants.ClaimTypes.Role, "Customer")

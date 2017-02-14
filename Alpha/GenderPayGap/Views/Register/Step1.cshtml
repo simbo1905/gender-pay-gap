@@ -20,6 +20,7 @@
             }
             @using (Html.BeginForm())
             {
+                @Html.AntiForgeryToken()
                 @Html.HiddenFor(m => m.IdentityProvider)
 
                 <h2 class="heading-medium">Email address</h2>

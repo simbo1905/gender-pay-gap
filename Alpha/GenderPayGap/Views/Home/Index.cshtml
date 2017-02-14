@@ -15,6 +15,7 @@
     <p><a href="@System.Configuration.ConfigurationManager.AppSettings["GpgApiServer"]query" class="button">API Search</a></p>
     @using (Html.BeginForm("Delete", "Home", FormMethod.Post))
     {
+        @Html.AntiForgeryToken()
         <p><input class="button" type="submit" role="button" value="Clear Database" /></p>
     }
 

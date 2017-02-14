@@ -6,6 +6,8 @@
 <main id="content" role="main">
     @using (Html.BeginForm())
     {
+        @Html.AntiForgeryToken()
+
         @Html.HiddenFor(m => m.EmployerCurrentPage)
         @Html.HiddenFor(m => m.EmployerPages)
         @Html.HiddenFor(m => m.Employers)
@@ -16,9 +18,10 @@
 
         <input type="submit" style="display:none" name="command" value="">
         <div class="grid-row">
-            if (!ViewData.ModelState.IsValid)
-            @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
-
+            @if (!ViewData.ModelState.IsValid)
+            {
+                @Html.ValidationSummary("ERRORS:", new {@class = "text-danger"})
+            }
             <div class="column-full">
                 <h1 class="heading-large">
                     <span class="heading-secondary">Step 5 of 6</span>
@@ -27,7 +30,6 @@
 
                 <div class="search-bar">
                     <div class="searchfield">
-                        <input type="search" value="Smiths" class="search-input" placeholder="Enter an employers name or company no">
                         @Html.EditorFor(model => model.SearchText, new { htmlAttributes = new { @class = "search-input", @placeholder = "Enter an employers name or company no" } })<br />
 
                         <button type="submit" class="search-submit" name="command" data-argument="search">Search</button>
@@ -60,7 +62,7 @@
                                         @Model.Employers[i].CompanyNumber
                                     </td>
                                     <td>
-                                        <a href="#" data-argument="employer_@i">Choose company</a>
+                                        <a href="#" data-argument="employer_@(i+1)">Choose company</a>
                                     </td>
                                 </tr>
                             }
@@ -100,10 +102,11 @@
     }
 </main>
 <script>
-    $('[data-argument]').click(function () {
+    $(document).ready(function () {
+        $('[data-argument]').click(function () {
 
-        $('input[name=command').val($(this).data("argument")).click();
+            $('input[name=command').val($(this).data("argument")).click();
 
-     });
-
+        });
+    });
 </script>

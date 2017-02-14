@@ -45,23 +45,23 @@ namespace GenderPayGap
                 task = Task.Run<string>(async () => await GetCompanies(searchText,page, pageSize));
 
                 dynamic companies = JsonConvert.DeserializeObject(task.Result);
-                if (!string.IsNullOrWhiteSpace(companies))
+                if (companies!=null)
                 {
-                    totalRecords = companies.total_results.ToInt32();
+                    totalRecords = companies.total_results;
                     if (totalRecords > 0)
                     {
                         foreach (dynamic company in companies.items)
                         {
                             var employer = new EmployerRecord();
-                            employer.Name = company.company_name;
+                            employer.Name = company.title;
                             employer.CompanyNumber = company.company_number;
                             employer.CompanyStatus = company.company_status;
-                            employer.Address1 = company.registered_office_address.address_line_1;
-                            employer.Address2 = company.registered_office_address.address_line_2;
-                            employer.Address3 = company.registered_office_address.locality;
-                            employer.Country = company.registered_office_address.country;
-                            employer.PostCode = company.registered_office_address.postal_code;
-                            employer.PoBox = company.registered_office_address.po_box;
+                            employer.Address1 = company.address.address_line_1;
+                            employer.Address2 = company.address.address_line_2;
+                            employer.Address3 = company.address.locality;
+                            employer.Country = company.address.country;
+                            employer.PostCode = company.address.postal_code;
+                            employer.PoBox = company.address.po_box;
                             employers.Add(employer);
                         }
                     }
@@ -86,8 +86,9 @@ namespace GenderPayGap
             var startIndex = (page * pageSize)-10;
             var client = new HttpClient();
             client.SetBasicAuthentication(ConfigurationManager.AppSettings["CompaniesHouseApiKey"], "");
-            string url = string.Format("{0}/search/companies/q={1}&items_per_page={2}&start_index={3}", ConfigurationManager.AppSettings["CompaniesHouseApiServer"], companyName,pageSize,startIndex);
+            string url = string.Format("{0}/search/companies/?q={1}&items_per_page={2}&start_index={3}", ConfigurationManager.AppSettings["CompaniesHouseApiServer"], companyName,pageSize,startIndex);
             var json = await client.GetStringAsync(url);
+
             return json;
         }
 
