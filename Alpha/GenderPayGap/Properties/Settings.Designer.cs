@@ -49,5 +49,23 @@ namespace GenderPayGap.WebUI.Properties {
                 return ((string)(this["LogErrorFile"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int PinInPostMinRepostDays {
+            get {
+                return ((int)(this["PinInPostMinRepostDays"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int EmailVerificationMinResendHours {
+            get {
+                return ((int)(this["EmailVerificationMinResendHours"]));
+            }
+        }
     }
 }

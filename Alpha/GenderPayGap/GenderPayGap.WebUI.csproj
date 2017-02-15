@@ -253,6 +253,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Classes\Extensions\Extensions.cs" />
+    <Compile Include="Classes\SpamProtectionAttribute.cs" />
     <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -434,12 +435,13 @@
     <Content Include="Views\Query\Start.cshtml" />
     <Content Include="Views\Return\SendConfirmed.cshtml" />
     <Content Include="Views\Return\Details.cshtml" />
-    <Content Include="Views\Register\Confirm.cshtml" />
+    <Content Include="Views\Register\Complete.cshtml" />
     <Content Include="Views\Register\Error.cshtml" />
     <Content Include="Views\Register\Step2.cshtml" />
     <Content Include="Views\Register\Step5.cshtml" />
     <Content Include="Views\Register\Step6.cshtml" />
     <Content Include="Views\Register\Step4.cshtml" />
+    <Content Include="Views\Register\SendPIN.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\GPGDatabase\" />

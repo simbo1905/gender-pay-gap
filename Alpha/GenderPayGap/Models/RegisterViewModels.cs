@@ -33,33 +33,35 @@ namespace GenderPayGap.WebUI.Models
             }
         }
 
-        [Required]
+        [Required(AllowEmptyStrings = false)]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
 
-        [Required]
+        [Required(AllowEmptyStrings = false)]
         [Display(Name = "Last Name")]
         public string LastName { get; set; }
 
-        [Required]
+        [Required(AllowEmptyStrings = false)]
         [Display(Name = "Job Title")]
         public string JobTitle { get; set; }
 
-        [Required]
+        [Required(AllowEmptyStrings = false)]
         [EmailAddress]
         [Display(Name = "Email Address")]
         public string EmailAddress { get; set; }
 
+        [Required(AllowEmptyStrings = false)]
         [Display(Name = "Confirm your email address")]
         [Compare("EmailAddress", ErrorMessage = "The email address and confirmation do not match.")]
         public string ConfirmEmailAddress { get; set; }
 
-        [Required]
+        [Required(AllowEmptyStrings = false)]
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
         public string Password { get; set; }
 
+        [Required(AllowEmptyStrings = false)]
         [DataType(DataType.Password)]
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
@@ -188,20 +190,19 @@ namespace GenderPayGap.WebUI.Models
         }
     }
 
-    public class ConfirmViewModel
+    public class CompleteViewModel
     {
-        public ConfirmViewModel()
+        public CompleteViewModel()
         {
 
         }
 
         [Display(Name = "Enter pin")]
-        public long PIN { get; set; }
-        public string ConfirmCode { get; set; }
-        public string Default { get; set; }
-
-        public bool confirmed = false;
-
+        [Range(1,999999,ErrorMessage = "Pin code must be between 1 and 999999")]
+        public string PIN { get; set; }
+        public bool Confirmed { get; set; }
+        public bool AllowResend { get; set; }
+        public string Remaining { get; set; }
     }
 
 }

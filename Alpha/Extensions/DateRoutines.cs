@@ -606,49 +606,66 @@ namespace Extensions
 
         #endregion
 
-        public static string ToFriendly(this TimeSpan interval, string zeroText = null)
+        public static string ToFriendly(this TimeSpan interval, string zeroText = null,int maxParts=4)
         {
             if (interval <= TimeSpan.Zero) return zeroText;
 
             string result = null;
+            int parts = 0;
             if (interval.Days > 0)
             {
                 result += interval.Days;
                 result += " day" + (interval.Days > 1 ? "s" : "");
+                parts++;
             }
 
-            if (interval.Hours > 0)
+            if (interval.Hours > 0 && parts<=maxParts)
             {
-                if (result != null) result += ", ";
+                if (result != null) result += parts == maxParts ? " and " : ", ";
                 result += interval.Hours;
                 result += " hour" + (interval.Hours > 1 ? "s" : "");
+                parts++;
             }
 
-            if (interval.Minutes > 0)
+            if (interval.Minutes > 0 && parts <= maxParts)
             {
-                if (result != null) result += ", ";
+                if (result != null) result += parts == maxParts ? " and " : ", ";
                 result += interval.Minutes;
                 result += " minute" + (interval.Minutes > 1 ? "s" : "");
+                parts++;
             }
 
-            if (interval.Days==0 && interval.Hours==0 && interval.Seconds > 0)
+            if (interval.Days==0 && interval.Hours==0 && interval.Seconds > 0 && parts <= maxParts)
             {
-                if (result != null) result += ", ";
+                if (result != null) result += parts == maxParts ? " and " : ", ";
                 result += interval.Seconds;
                 result += "second" + (interval.Seconds > 1 ? "s" : "");
             }
             return result;
         }
 
-        public static string ToSmallDateTime(this DateTime dateTime)
+        public static string ToShortDateTime(this DateTime dateTime)
         {
-            return dateTime.ToString(Time.SmallDateFormat);
+            return dateTime.ToString(Time.ShortDateFormat);
         }
 
-        public static DateTime FromSmallDateTime(this string smallDateTime)
+        public static DateTime FromShortDateTime(this string shortDateTime, bool defaultMaxDateTime=false)
         {
             DateTime dateTime;
-            if (DateTime.TryParseExact(smallDateTime, Time.SmallDateFormat, null, System.Globalization.DateTimeStyles.AssumeLocal, out dateTime))
+            if (DateTime.TryParseExact(shortDateTime, Time.ShortDateFormat, null, System.Globalization.DateTimeStyles.AssumeLocal, out dateTime))
+                return dateTime;
+            return defaultMaxDateTime ? DateTime.MaxValue : DateTime.MinValue;
+        }
+
+        public static string ToShorterDateTime(this DateTime dateTime)
+        {
+            return dateTime.ToString(Time.ShorterDateFormat);
+        }
+
+        public static DateTime FromShorterDateTime(this string shorterDateTime)
+        {
+            DateTime dateTime;
+            if (DateTime.TryParseExact(shorterDateTime, Time.ShorterDateFormat, null, System.Globalization.DateTimeStyles.AssumeLocal, out dateTime))
                 return dateTime;
             return DateTime.MinValue;
         }
