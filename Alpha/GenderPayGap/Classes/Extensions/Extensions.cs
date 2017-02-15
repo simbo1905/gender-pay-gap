@@ -84,21 +84,33 @@ namespace GenderPayGap.WebUI.Classes
 
         public static bool SendVerifyEmail(this RegisterController controller, string emailAddress, string verifyCode)
         {
-            var verifyUrl=controller.Url.Action("Step2", new {code= verifyCode });
+            var verifyUrl=controller.Url.Action("Step2", null, new {code= verifyCode },"https");
             return GovNotifyAPI.SendVerifyEmail(verifyUrl,emailAddress, verifyCode);
         }
         public static bool SendConfirmEmail(this RegisterController controller, string emailAddress, string confirmCode)
         {
-            var confirmUrl = controller.Url.Action("Step2", new { code = confirmCode });
+            var confirmUrl = controller.Url.Action("Step2", null, new { code = confirmCode },"https");
             return GovNotifyAPI.SendConfirmEmail(confirmUrl, emailAddress,confirmCode);
         }
 
         public static bool SendPinInPost(this RegisterController controller, string name, string address, string pin)
         {
-            var returnUrl = controller.Url.Action("Step6");
+            var returnUrl = controller.Url.Action("Step6",null,null,"https");
             return GovNotifyAPI.SendPinInPost(returnUrl, name, address, pin);
         }
 
+        #endregion
+
+        #region AntiSpam
+        public static string SpamProtectionTimeStamp(this HtmlHelper helper)
+        {
+            var builder = new TagBuilder("input");
+            builder.MergeAttribute("id", "SpamProtectionTimeStamp");
+            builder.MergeAttribute("name", "SpamProtectionTimeStamp");
+            builder.MergeAttribute("type", "hidden");
+            builder.MergeAttribute("value", Encryption.EncryptData(DateTime.Now.ToShortTimeString()));
+            return builder.ToString(TagRenderMode.SelfClosing);
+        }
         #endregion
     }
 }

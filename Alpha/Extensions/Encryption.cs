@@ -6,18 +6,20 @@ using System.IO.Compression;
 using System.Security.Cryptography;
 using System.Text;
 using System.Linq;
+using System.Configuration;
 using System.Collections.Specialized;
+using System.Web.Configuration;
 
 namespace Extensions
 {
     public static class Encryption
     {
-        private const string MasterEncryptionKey = "2343CF5A-2DA3-4B5F-9D57-66C58B43AC63";
-
-        private static string DefaultEncryptionKey
+        static Encryption()
         {
-            get { return MasterEncryptionKey.FromBase64(); }
+            DefaultEncryptionKey = WebConfigurationManager.AppSettings["DefaultEncryptionKey"];
         }
+
+        private static string DefaultEncryptionKey = "BA9138B8C0724F168A05482456802405";
 
         public static Encoding EncryptionEncoding = Encoding.UTF8;
 

@@ -15,6 +15,7 @@ using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Classes;
 using System.Security.Principal;
 using GpgDB;
+using System.Net;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -49,7 +50,9 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpPost]
+        [Authorize]
         [ValidateAntiForgeryToken]
+        [SpamProtection()]
         public ActionResult Step1(Models.RegisterViewModel model)
         {
             //TODO validate the submitted fields
@@ -106,7 +109,7 @@ namespace GenderPayGap.WebUI.Controllers
             //Send a verification link to the email address
             try
             {
-                var verifyCode = Encryption.EncryptQuerystring(currentUser.UserId + ":" + currentUser.Created.Value.ToSmallDateTime());
+                var verifyCode = Encryption.EncryptQuerystring(currentUser.UserId + ":" + currentUser.Created.Value.ToShortDateTime());
                 if (!this.SendVerifyEmail(currentUser.EmailAddress, verifyCode))
                     throw new Exception("Could not send verification email. Please try again later.");
 
@@ -148,7 +151,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             if (string.IsNullOrWhiteSpace(code) )
             {
-                ModelState.AddModelError("", "Invalid email verification code");
+                ModelState.AddModelError("Diffmean", "Invalid email verification code");
                 return View("Step2");
             }
 
@@ -258,7 +261,7 @@ namespace GenderPayGap.WebUI.Controllers
             //TODO Remove this when public sector is available
             if (!model.SectorType.EqualsI(SectorTypes.Private))throw new NotImplementedException();
 
-            TempData["Model"] = model;
+            StashModel(model);
             return RedirectToAction("Step4");
         }
 
@@ -330,7 +333,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
             if (model.EmployerRecords<=0)return View("Step4", model);
 
-            TempData["Model"] = model;
+            StashModel(model);
             return RedirectToAction("Step5");
         }
 
@@ -455,7 +458,7 @@ namespace GenderPayGap.WebUI.Controllers
                     model.SelectedEmployerIndex = employerIndex;
             }
 
-            TempData["Model"] = model;
+            StashModel(model);
             if (model.SelectedEmployerIndex<0)
                 return View("Step5", model);
 
@@ -469,7 +472,7 @@ namespace GenderPayGap.WebUI.Controllers
             var model = TempData["Model"] as OrganisationViewModel;
             if (model != null)
             {
-                TempData["Model"] = model;
+                StashModel(model);
                 return View("Step6",model);
             }
 
@@ -483,6 +486,7 @@ namespace GenderPayGap.WebUI.Controllers
             var errorViewModel = result.Model as ErrorViewModel;
             if (errorViewModel == null) throw new AuthenticationException();
             return result;
+
         }
 
         /// <summary>
@@ -493,9 +497,6 @@ namespace GenderPayGap.WebUI.Controllers
         [Authorize]
         public ActionResult Step6(OrganisationViewModel model)
         {
-            var m = TempData["Model"] as OrganisationViewModel;
-            if (m != null && m.Employers != null && m.Employers.Count > 0) model.Employers = m.Employers;
-
             //Ensure the user is logged in
             if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
 
@@ -505,7 +506,12 @@ namespace GenderPayGap.WebUI.Controllers
             if (result == null) throw new AuthenticationException();
             var errorModel = result.Model as ErrorViewModel;
             if (errorModel == null) throw new AuthenticationException();
-            if (!errorModel.ActionUrl.IsAny(Url.Action("Step3", "Register"), Url.Action("Step6", "Register"))) return result;
+            if (errorModel.ActionUrl != Url.Action("Step3", "Register")) return result;
+
+            //Load the employers from session
+            var m = UnstashModel<OrganisationViewModel>();
+            if (m == null) throw new HttpException((int)HttpStatusCode.BadRequest,"Missing session data");
+            if (m.Employers != null && m.Employers.Count > 0) model.Employers = m.Employers;
 
             var employer = model.Employers[model.SelectedEmployerIndex];
             //Save the new organisation
@@ -539,7 +545,6 @@ namespace GenderPayGap.WebUI.Controllers
                 Repository.Insert(address);
                 Repository.SaveChanges();
             }
-
      
             //TODO Send the PIN and confirm when sent
             var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.OrganisationId == org.OrganisationId && uo.UserId == currentUser.UserId);
@@ -552,128 +557,168 @@ namespace GenderPayGap.WebUI.Controllers
                     Created = DateTime.Now
                 };
                 Repository.Insert(userOrg);
-                Repository.SaveChanges();
             }
+            userOrg.PINCode = null;
+            userOrg.ConfirmCode = null;
+            userOrg.PINSentDate = null;
+            Repository.SaveChanges();
 
-            //Send a PIN link to the email address
-            model.PINSent = userOrg.PINSentDate != null && userOrg.PINSentDate.Value > DateTime.MinValue;
-            model.PINExpired = userOrg.PINSentDate != null && userOrg.PINSentDate.Value.AddDays(Properties.Settings.Default.PinInPostExpiryDays) < DateTime.Now;
+            return RedirectToAction("SendPIN");
+        }
 
-            if (!model.PINSent || model.PINExpired)
+        bool SendPIN(User user, UserOrganisation userOrg)
+        {
             try
             {
-                var pin = Numeric.Rand(0,999999);
-                if (!this.SendPinInPost(currentUser.Fullname + " ("+currentUser.JobTitle + ")",currentUser.EmailAddress, pin.ToString()))
+                //Marke the user org as ready to send a pin
+                userOrg.PINCode = null;
+                userOrg.PINSentDate = null;
+                userOrg.ConfirmCode = null;
+                Repository.SaveChanges();
+
+                //Generate a new pin
+                var pin = Numeric.Rand(0, 999999);
+
+                //Try and send the PIN in post
+                if (!this.SendPinInPost(user.Fullname + " (" + user.JobTitle + ")", user.EmailAddress, pin.ToString()))
                     throw new Exception("Could not send PIN in the POST. Please try again later.");
 
-                //Send a confirmation link to the email address
-                var confirmCode = Encryption.EncryptQuerystring(string.Format("{0}:{1}:{2}", userOrg.UserId, userOrg.OrganisationId, DateTime.Now.Ticks));
-                if (!this.SendConfirmEmail(currentUser.EmailAddress, confirmCode))
+                //Generate a confimation link
+                var confirmCode = Encryption.EncryptQuerystring(string.Format("{0}:{1}:{2}", userOrg.UserId, userOrg.OrganisationId, DateTime.Now.ToShortDateTime()));
+
+                //Try and send the confirmation email
+                if (!this.SendConfirmEmail(user.EmailAddress, confirmCode))
                     throw new Exception("Could not send confirmation email. Please try again later.");
 
-                userOrg.PINCode = pin;
+                //Save the PIN and confirm code
+                userOrg.PINCode = pin.ToString("000000");
                 userOrg.PINSentDate = DateTime.Now;
                 userOrg.ConfirmCode = confirmCode;
                 Repository.SaveChanges();
-                model.PINSent = true;
-                model.PINExpired = false;
             }
             catch (Exception ex)
             {
                 ModelState.AddModelError(string.Empty, ex.Message);
+                return false;
             }
-            ViewBag.UserFullName = currentUser.Fullname;
-            ViewBag.UserJobTitle = currentUser.JobTitle;
-            ViewBag.Address = employer.FullAddress.Replace(", ",",<br>");
-            return View("Step6",model);
+            //Prompt user to open email and verification link
+            return true;
+        }
+
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
+        public ActionResult SendPIN()
+        {
+            //Ensure the user is logged in
+            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
+
+            //Ensure user has completed the registration process up to PIN confirmation
+            User currentUser;
+            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
+            if (result == null) throw new AuthenticationException();
+            var errorModel = result.Model as ErrorViewModel;
+            if (errorModel == null) throw new AuthenticationException();
+            if (!errorModel.ActionUrl.IsAny(Url.Action("SendPIN", "Register"))) return result;
+
+            //Get the user organisation
+            var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+
+            //Get the latest address for the organisation
+            var address = Repository.GetAll<OrganisationAddress>().OrderByDescending(oa=>oa.Modified).FirstOrDefault(oa => oa.OrganisationId==userOrg.OrganisationId);
+
+            //If a pin has never been sent or resend button submitted then send one immediately
+            if (string.IsNullOrWhiteSpace(userOrg.PINCode) || userOrg.PINSentDate.EqualsI(null,DateTime.MinValue) || Request.HttpMethod.EqualsI("POST")) SendPIN(currentUser, userOrg);
+
+            //Prepare view parameters
+            ViewBag.Resend = !string.IsNullOrWhiteSpace(userOrg.PINCode) && !userOrg.PINSentDate.EqualsI(null, DateTime.MinValue)
+                && userOrg.PINSentDate.Value.AddDays(Properties.Settings.Default.PinInPostMinRepostDays) < DateTime.Now;
+            ViewBag.UserFullName=currentUser.Fullname;
+            ViewBag.Address = address.GetAddress(",<br/>");
+            return View("SendPIN");
         }
 
         [HttpGet]
-        public ActionResult Confirm(string code = null, long pin=0)
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult Complete()
         {
-            UserOrganisation userOrg=null;
-            var currentUser = Repository.FindUser(User);
-            if (string.IsNullOrWhiteSpace(code))
-            {
-                if (currentUser == null)
-                {
-                    ModelState.AddModelError("", "Invalid user");
-                    return View(code);
-                }
-                userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId && uo.PINSentDate > DateTime.MinValue && uo.PINConfirmedDate == null);
-                if (userOrg!=null)code = userOrg.ConfirmCode;
-            }
-            if (string.IsNullOrWhiteSpace(code)) code = Request.Url.Query.TrimStartI(" ?");
+            //Ensure the user is logged in
+            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
 
-            //Load the user from the verification code
-            if (userOrg == null) userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(u => u.ConfirmCode == code);
+            //Ensure user has completed the registration process
+            User currentUser;
+            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
+            if (result == null) throw new AuthenticationException();
+            var errorViewModel = result.Model as ErrorViewModel;
+            if (errorViewModel == null) throw new AuthenticationException();
+            if (errorViewModel.ActionUrl != Url.Action("Complete", "Register"))
+                return result;
 
-            var model = new ConfirmViewModel();
-            model.Default = pin>0 ? pin.ToString() : null;
-            model.ConfirmCode = code;
+            //Get the user organisation
+            var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
 
-            //Show an error if the code doesnt exist in db
-            if (userOrg == null)
-            {
-                ModelState.AddModelError("", "Invalid confirmation link");
-                return View(model);
-            }
-
-            var user = GpgDatabase.Default.User.Find(userOrg.UserId);
-            if (user == null)
-            {
-                ModelState.AddModelError("", "Invalid confirmation link");
-                return View(model);
-            }
-
-            if (currentUser!=null && currentUser.UserId != user.UserId)
-            {
-                ModelState.AddModelError("", "Invalid confirmation link");
-                return View(model);
-            }
-
-            if (userOrg.PINSentDate < DateTime.Now.AddDays(-6))
-            {
-                //TODO Resend verification code and prompt user
-                ModelState.AddModelError("", "This confirmation link has expired. A new link has been sent to " + currentUser.EmailAddress);
-                return View(model);
-            }
-
-            try
-            {
-                code = Encryption.DecryptQuerystring(code);
-            }
-            catch
-            {
-                ModelState.AddModelError("", "Invalid confirmation code");
-                return View(model);
-            }
-
-            //Show an error if the code doesnt match the userId
-            if (!string.Format("{0}:{1}", userOrg.UserId, userOrg.OrganisationId).EqualsI(code,Server.UrlDecode(code)))
-            {
-                ModelState.AddModelError("", "Invalid confirmation code");
-                return View(model);
-            }
-
-            return View(model);
+            var remainingTime = userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
+            var model=new CompleteViewModel();
+            model.PIN = null;
+            model.AllowResend = remainingTime <= TimeSpan.Zero;
+            model.Remaining = remainingTime.ToFriendly(maxParts:2);
+            //Show the PIN textbox and button
+            return View("Complete");
         }
 
         [HttpPost]
-        public ActionResult Confirm(ConfirmViewModel model)
+        [Authorize]
+        [ValidateAntiForgeryToken]
+        public ActionResult Complete(CompleteViewModel model)
         {
-            var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(u => u.ConfirmCode == model.ConfirmCode);
+            //Ensure the user is logged in
+            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
 
-            if (model.PIN != userOrg.PINCode)
+            //Ensure user has completed the registration process
+            User currentUser;
+            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
+            if (result == null) throw new AuthenticationException();
+            var errorViewModel = result.Model as ErrorViewModel;
+            if (errorViewModel == null) throw new AuthenticationException();
+            if (errorViewModel.ActionUrl != Url.Action("Complete", "Register"))
+                return result;
+
+            //Ensure they have entered a PIN
+            if (ModelState.IsValid) return View("Complete", model);
+
+            //Get the user organisation
+            var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+
+            //Show an error if the code doesnt exist in db
+            if (userOrg.PINCode != model.PIN)
             {
-                ModelState.AddModelError("PIN", "Invalid PIN code");
-                return View(model);
+                var attempts = Session["PINAttempts:" + currentUser.EmailAddress].ToInt32();
+                if (attempts > 3)
+                {
+                    return View("Error", new ErrorViewModel()
+                    {
+                        Title = "Invalid PIN Code",
+                        Description = "You have tried too many incorrect PIN codes.",
+                        CallToAction = "Please log out of the system and try again later.",
+                        ActionUrl = Url.Action("LogOut", "Home")
+                    });
+                }
+                Session["PIN:" + currentUser.EmailAddress] = attempts + 1;
+                ModelState.AddModelError("PIN","This PIN code is incorrect.");
+                return View("Complete",model);
             }
-            userOrg.PINConfirmedDate = DateTime.Now;
-            model.confirmed = true;
+
+            //Set the user as verified
+            currentUser.EmailVerifiedDate = DateTime.Now;
+
             //Save the current user
-            GpgDatabase.Default.SaveChanges();
-            return View(model);
+            Repository.SaveChanges();
+
+
+            //Prompt the user with confirmation
+            model.Confirmed = true;
+            return View("Complete", model);
         }
     }
 }

@@ -239,7 +239,7 @@ namespace GenderPayGap.Tests
 
         #region Test start of enrollment
         [Test]
-        [Description("Ensure the ++;.Step1 action returns an empty form when there is no user logged in")]
+        [Description("Ensure the Step1 action returns an empty form when there is no user logged in")]
         public void RegisterStep1_NotLoggedIn_ShowEmptyForm()
         {
             // Arrange
@@ -258,6 +258,39 @@ namespace GenderPayGap.Tests
             Assert.Null(model.LastName, "Expected empty last name");
             Assert.Null(model.JobTitle, "Expected empty job title");
         }
+
+        [Test]
+        [Description("Ensure the Step1 action fails all empty fields")]
+        public void RegisterStep1_NotLoggedIn_ShowPopulatedForm()
+        {
+            // Arrange
+            var model = new RegisterViewModel();
+            model.EmailAddress = "";
+            model.ConfirmEmailAddress = " ";
+            model.FirstName = "";
+            model.LastName = "";
+            model.JobTitle = "";
+            model.Password = "";
+            model.ConfirmPassword = " ";
+            var controller = TestHelper.GetController<RegisterController>();
+
+            // Act
+            var result = controller.Step1(model) as ViewResult;
+            
+            // Assert
+            Assert.NotNull(result, "Expected ViewResult");
+            Assert.That(result.ViewName == "Step1", "Incorrect view returned");
+            Assert.NotNull(model, "Expected RegisterViewModel");
+            Assert.Null(model.EmailAddress, "Expected empty email address");
+            Assert.Equals(result.ViewData.ModelState.IsValidField("EmailAddress"), "Expected first name failure");
+            Assert.Equals(result.ViewData.ModelState.IsValidField("ConfirmEmailAddress"), "Expected first name failure");
+            Assert.Equals(result.ViewData.ModelState.IsValidField("FirstName"), "Expected first name failure");
+            Assert.Equals(result.ViewData.ModelState.IsValidField("LastName"), "Expected last name failure");
+            Assert.Equals(result.ViewData.ModelState.IsValidField("JobTitle"), "Expected jobtitle failure");
+            Assert.Equals(result.ViewData.ModelState.IsValidField("Password"), "Expected password failure");
+            Assert.Equals(result.ViewData.ModelState.IsValidField("ConfirmPassword"), "Expected confirm password failure");
+        }
+
         #endregion
 
         #region Test enrollment step 1 - send verification email

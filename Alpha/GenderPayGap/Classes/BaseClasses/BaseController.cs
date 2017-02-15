@@ -128,11 +128,20 @@ namespace GenderPayGap
                     });
 
                 //Otherwise prompt user to check account only
+                var remainingTime = currentUser.EmailVerifySendDate.Value.AddDays(WebUI.Properties.Settings.Default.EmailVerificationMinResendHours) - DateTime.Now;
+                if (remainingTime > TimeSpan.Zero)
+                    return View("Error", new ErrorViewModel()
+                    {
+                        Title = "Incomplete Registration",
+                        Description = "You have not yet verified your email address.",
+                        CallToAction = "Please check your email account and follow the instructions to verify your email address.<br/>Alternatively, try again in {" + remainingTime.ToFriendly(maxParts: 2) + "} to request another verification email."
+                    });
                 return View("Error", new ErrorViewModel()
                 {
                     Title = "Incomplete Registration",
-                    Description = "You have not verified your email address.",
+                    Description = "You have not yet verified your email address.",
                     CallToAction = "Please check your email account and follow the instructions to verify your email address.",
+                    ActionUrl = Url.Action("Step2", "Register")
                 });
             }
 
@@ -157,8 +166,8 @@ namespace GenderPayGap
                     {
                         Title = "Incomplete Registration",
                         Description = "You have not been sent a PIN in the post.",
-                        CallToAction = "Please click the button below to request a PIN be sent to your organisations address.",
-                        ActionUrl = Url.Action("Step3", "Register")
+                        CallToAction = "Please click the button below to send a PIN to your organisations address.",
+                        ActionUrl = Url.Action("SendPIN", "Register")
                     });
                 if (userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostExpiryDays) < DateTime.Now)
                     return View("Error", new ErrorViewModel()
@@ -166,13 +175,23 @@ namespace GenderPayGap
                         Title = "Incomplete Registration",
                         Description = "You did not confirm the PIN sent to you in the post in the allowed time.",
                         CallToAction = "Please click the button below to request a new PIN to be sent to your organisations address.",
-                        ActionUrl = Url.Action("Confirm", "Register")
+                        ActionUrl = Url.Action("SendPIN", "Register")
+                    });
+                var remainingTime = userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
+                if (remainingTime > TimeSpan.Zero)
+                    return View("Error", new ErrorViewModel()
+                    {
+                        Title = "Incomplete Registration",
+                        Description = "You have not yet confirmed the PIN sent to you in the post.",
+                        CallToAction = "Click the button below to enter the PIN you have received in the post or try again in {"+ remainingTime.ToFriendly(maxParts:2) +"} to request another PIN.",
+                        ActionUrl = Url.Action("Complete", "Register")
                     });
                 return View("Error", new ErrorViewModel()
                 {
                     Title = "Incomplete Registration",
                     Description = "You have not confirmed the PIN sent to you in the post.",
-                    CallToAction = "Please check your mail for this letter and follow the instructions to complete registration.",
+                    CallToAction = "Click the button below to enter the PIN you have received in the post or to request another PIN.",
+                    ActionUrl = Url.Action("Complete", "Register")
                 });
             }
 
@@ -241,6 +260,20 @@ namespace GenderPayGap
             });
         }
         #endregion
+
+        #region Session Handling
+
+        public void StashModel<T>(T model)
+        {
+            ViewData[this+":Model"] = model;
+        }
+        public T UnstashModel<T>()
+        {
+            return (T)ViewData[this + ":Model"];
+        }
+
+        #endregion
+
 
     }
 }

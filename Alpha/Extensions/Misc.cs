@@ -329,7 +329,7 @@ namespace Extensions
                 if (DateTime.TryParseExact(str, Time.ShortDateFormat, null, System.Globalization.DateTimeStyles.AssumeLocal, out parsedValue))
                     return parsedValue;
 
-                if (DateTime.TryParseExact(str, Time.SmallDateFormat, null, System.Globalization.DateTimeStyles.AssumeLocal, out parsedValue))
+                if (DateTime.TryParseExact(str, Time.ShortDateFormat, null, System.Globalization.DateTimeStyles.AssumeLocal, out parsedValue))
                     return parsedValue;
 
                 if (DateTime.TryParse(str, out parsedValue)) return parsedValue;
