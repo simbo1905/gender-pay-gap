@@ -17,82 +17,96 @@ namespace GpgDB.Models.GpgDatabase
 
     public partial class Return
     {
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2214:DoNotCallOverridableMethodsInConstructors")]
         public Return()
         {
             this.ReturnStatuses = new HashSet<ReturnStatus>();
-            Created = DateTime.Now;
-            Modified = DateTime.Now;
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long ReturnId { get; set; }
 
+        [Required]
+        [Index]
+
         public long OrganisationId { get; set; }
 
-        public Nullable<System.DateTime> AccountingDate { get; set; }
+        [Required]
+        [Index]
+        public System.DateTime AccountingDate { get; set; }
 
-        [DefaultValue("")]
         [Required]
-        [Display(Name= "Enter the difference in mean hourly rate")]
         public decimal DiffMeanHourlyPayPercent { get; set; }
+
         [Required]
-        [Display(Name = "Enter the difference in median hourly rate")]
         public decimal DiffMedianHourlyPercent { get; set; }
+
         [Required]
-        [Display(Name = "Enter the difference in mean bonus pay")]
         public decimal DiffMeanBonusPercent { get; set; }
+
         [Required]
-        [Display(Name = "Enter the difference in median bonus pay")]
         public decimal DiffMedianBonusPercent { get; set; }
+
         [Required]
-        [Display(Name = "Males who received bonus pay %")]
         public decimal MaleMedianBonusPayPercent { get; set; }
+
         [Required]
-        [Display(Name = "Females who received bonus pay %")]
         public decimal FemaleMedianBonusPayPercent { get; set; }
+
         [Required]
-        [Display(Name = "Male")]
         public decimal MaleLowerPayBand { get; set; }
+
         [Required]
-        [Display(Name = "Female")]
         public decimal FemaleLowerPayBand { get; set; }
+
         [Required]
-        [Display(Name = "Male")]
         public decimal MaleMiddlePayBand { get; set; }
+
         [Required]
-        [Display(Name = "Female")]
         public decimal FemaleMiddlePayBand { get; set; }
+
         [Required]
-        [Display(Name = "Male")]
         public decimal MaleUpperPayBand { get; set; }
+
         [Required]
-        [Display(Name = "Female")]
         public decimal FemaleUpperPayBand { get; set; }
+
         [Required]
-        [Display(Name = "Male")]
         public decimal MaleUpperQuartilePayBand { get; set; }
+
         [Required]
-        [Display(Name = "Female")]
         public decimal FemaleUpperQuartilePayBand { get; set; }
-        [Required]
-        [Url]
-        [Display(Name = "Link to your gender pay gap information")]
+
+        [MaxLength(255)]
         public string CompanyLinkToGPGInfo { get; set; }
-        public string CurrentStatus { get; set; }
-        public Nullable<System.DateTime> CurrentStatusDate { get; set; }
+
+        [Required]
+        [Column("CurrentStatusId")]
+        public ReturnStatuses CurrentStatus { get; set; }
+
+        [Required]
+        public System.DateTime CurrentStatusDate { get; set; } = DateTime.Now;
+
+        [MaxLength(255)]
         public string CurrentStatusDetails { get; set; }
-        public Nullable<System.DateTime> Created { get; set; }
-        public Nullable<System.DateTime> Modified { get; set; }
+
         [Required]
-        [Display(Name = "Job Title")]
+        public System.DateTime Created { get; set; } = DateTime.Now;
+
+        [Required]
+        public System.DateTime Modified { get; set; } = DateTime.Now;
+
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(100)]
         public string JobTitle { get; set; }
-        [Required]
-        [Display(Name = "First name")]
+
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(50)]
         public string FirstName { get; set; }
-        [Required]
-        [Display(Name = "Last name")]
+
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(50)]
         public string LastName { get; set; }
+
         public virtual ICollection<ReturnStatus> ReturnStatuses { get; set; }
 
         [ForeignKey("OrganisationId")]

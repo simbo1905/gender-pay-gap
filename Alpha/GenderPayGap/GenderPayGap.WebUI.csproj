@@ -442,6 +442,7 @@
     <Content Include="Views\Register\Step6.cshtml" />
     <Content Include="Views\Register\Step4.cshtml" />
     <Content Include="Views\Register\SendPIN.cshtml" />
+    <Content Include="Views\Register\ConfirmPIN.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\GPGDatabase\" />

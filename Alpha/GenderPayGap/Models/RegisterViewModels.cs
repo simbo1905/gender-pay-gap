@@ -6,6 +6,7 @@ using Extensions;
 using GpgDB;
 using GpgDB.Models.GpgDatabase;
 using Microsoft.AspNet.Identity;
+using Microsoft.IdentityModel;
 using Microsoft.Owin.Security;
 using static GpgDB.Models.GpgDatabase.Organisation;
 
@@ -59,6 +60,7 @@ namespace GenderPayGap.WebUI.Models
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}", ErrorMessage="Password must contain at least one upper case, 1 lower case and 1 digit and 1 symbol characters")]
         public string Password { get; set; }
 
         [Required(AllowEmptyStrings = false)]
@@ -200,7 +202,6 @@ namespace GenderPayGap.WebUI.Models
         [Display(Name = "Enter pin")]
         [Range(1,999999,ErrorMessage = "Pin code must be between 1 and 999999")]
         public string PIN { get; set; }
-        public bool Confirmed { get; set; }
         public bool AllowResend { get; set; }
         public string Remaining { get; set; }
     }

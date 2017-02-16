@@ -6,7 +6,9 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
@@ -27,7 +29,7 @@ namespace GenderPayGap.Tests
             //Mock UserId as claim
             var claims = new List<Claim>();
 
-            if (userId>0)claims.Add(new Claim(Constants.ClaimTypes.ExternalProviderUserId, userId.ToString()));
+            if (userId>0)claims.Add(new Claim(Constants.ClaimTypes.Subject, userId.ToString()));
             
             var mockPrincipal = new Mock<ClaimsPrincipal>();
             mockPrincipal.Setup(m => m.Claims).Returns(claims);
@@ -59,7 +61,6 @@ namespace GenderPayGap.Tests
 
             T controller = (T)Activator.CreateInstance(typeof(T), builder);
             controller.ControllerContext = controllerContextMock.Object;
-
             controller.Url = new UrlHelper(
                 new RequestContext(contextMock.Object, new RouteData()),
                 routes
@@ -79,6 +80,17 @@ namespace GenderPayGap.Tests
 
 
             return builder.Build();
+        }
+
+        public static void Bind(this Controller controller, object Model)
+        {
+            ValidationContext validationContext = new ValidationContext(Model, null, null);
+            List<ValidationResult> validationResults = new List<ValidationResult>();
+            Validator.TryValidateObject(Model, validationContext, validationResults, true);
+            foreach (ValidationResult validationResult in validationResults)
+            {
+                controller.ModelState.AddModelError(String.Join(", ", validationResult.MemberNames), validationResult.ErrorMessage);
+            }
         }
     }
 
