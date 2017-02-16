@@ -97,7 +97,6 @@
     <Compile Include="User.cs" />
     <Compile Include="UserOrganisation.cs" />
     <Compile Include="UserStatuses.cs" />
-    <Compile Include="UserToken.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

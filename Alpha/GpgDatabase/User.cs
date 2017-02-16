@@ -25,45 +25,66 @@ namespace GpgDB.Models.GpgDatabase
         public User()
         {
             this.UserStatuses = new HashSet<UserStatus>();
-            this.UserTokens = new HashSet<UserToken>();
             this.Organisations = new HashSet<Organisation>();
-            Created = DateTime.Now;
-            Modified = DateTime.Now;
         }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long UserId { get; set; }
-        public string UserRef { get; set; }
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(50)]
         public string JobTitle { get; set; }
-        public string Title { get; set; }
-        public string Firstname { get; set; }
-        public string Lastname { get; set; }
-        public string Mobile { get; set; }
-        public string MobileVerifyCode { get; set; }
-        public Nullable<System.DateTime> MobileVerifySendDate { get; set; }
-        public Nullable<System.DateTime> MobileVerifiedDate { get; set; }
-        public string EmailAddress { get; set; }
-        public string Password { get; set; }
-        public string EmailVerifyCode { get; set; }
-        public Nullable<System.DateTime> EmailVerifySendDate { get; set; }
-        public Nullable<System.DateTime> EmailVerifiedDate { get; set; }
-        [Column("CurrentStatusId")]
-        public UserStatuses CurrentStatus { get; set; }
-        public Nullable<System.DateTime> CurrentStatusDate { get; set; }
-        public string CurrentStatusDetails { get; set; }
-        public Nullable<System.DateTime> Created { get; set; }
-        public Nullable<System.DateTime> Modified { get; set; }
 
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(50)]
+        public string Firstname { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(50)]
+        public string Lastname { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(255)]
+        [Index]
+        public string EmailAddress { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(100),MinLength(8)]
+        public string Password { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(255)]
+        public string EmailVerifyCode { get; set; }
+
+        public Nullable<System.DateTime> EmailVerifySendDate { get; set; }
+
+        public Nullable<System.DateTime> EmailVerifiedDate { get; set; }
+
+        [Column("CurrentStatusId")]
+        [Required]
+        public UserStatuses CurrentStatus { get; set; }
+
+        [Required]
+        public System.DateTime CurrentStatusDate { get; set; } = DateTime.Now;
+
+        [MaxLength(255)]
+        public string CurrentStatusDetails { get; set; }
+
+        [Required]
+        public System.DateTime Created { get; set; } = DateTime.Now;
+
+        [Required]
+        public System.DateTime Modified { get; set; } = DateTime.Now;
+ 
         public virtual ICollection<Organisation> Organisations { get; set; }
-        public virtual ICollection<UserToken> UserTokens { get; set; }
+
         public virtual ICollection<UserStatus> UserStatuses { get; set; }
 
         [NotMapped]
         public string Fullname {
             get
             {
-                return (Title + Firstname + " " + Lastname).TrimI();
+                return (Firstname + " " + Lastname).TrimI();
             }
         }
 

@@ -128,7 +128,7 @@ namespace GenderPayGap
                     });
 
                 //Otherwise prompt user to check account only
-                var remainingTime = currentUser.EmailVerifySendDate.Value.AddDays(WebUI.Properties.Settings.Default.EmailVerificationMinResendHours) - DateTime.Now;
+                var remainingTime = currentUser.EmailVerifySendDate.Value.AddHours(WebUI.Properties.Settings.Default.EmailVerificationMinResendHours) - DateTime.Now;
                 if (remainingTime > TimeSpan.Zero)
                     return View("Error", new ErrorViewModel()
                     {
@@ -184,14 +184,14 @@ namespace GenderPayGap
                         Title = "Incomplete Registration",
                         Description = "You have not yet confirmed the PIN sent to you in the post.",
                         CallToAction = "Click the button below to enter the PIN you have received in the post or try again in {"+ remainingTime.ToFriendly(maxParts:2) +"} to request another PIN.",
-                        ActionUrl = Url.Action("Complete", "Register")
+                        ActionUrl = Url.Action("ConfirmPIN", "Register")
                     });
                 return View("Error", new ErrorViewModel()
                 {
                     Title = "Incomplete Registration",
                     Description = "You have not confirmed the PIN sent to you in the post.",
                     CallToAction = "Click the button below to enter the PIN you have received in the post or to request another PIN.",
-                    ActionUrl = Url.Action("Complete", "Register")
+                    ActionUrl = Url.Action("ConfirmPIN", "Register")
                 });
             }
 
@@ -265,11 +265,11 @@ namespace GenderPayGap
 
         public void StashModel<T>(T model)
         {
-            ViewData[this+":Model"] = model;
+            Session[this+":Model"] = model;
         }
         public T UnstashModel<T>()
         {
-            return (T)ViewData[this + ":Model"];
+            return (T)Session[this + ":Model"];
         }
 
         #endregion
