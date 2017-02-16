@@ -2,7 +2,7 @@
 using Extensions;
 using GenderPayGap.Core.Classes;
 using GenderPayGap.Core.Interfaces;
-using GpgDB.Models.GpgDatabase;
+using GenderPayGap.Models.SqlDatabase;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -21,7 +21,7 @@ namespace GenderPayGap
         protected void Application_Start()
         {
 #if DEBUG
-            GpgDatabase.Default.User.FirstOrDefault();//Test entity framework loads ok
+            DbContext.Default.User.FirstOrDefault();//Test entity framework loads ok
 #endif
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
@@ -39,7 +39,7 @@ namespace GenderPayGap
 
             //builder.RegisterType<GpgDatabase>().As<IDbContext>();
             //builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
-            builder.Register(c => new SqlRepository(new GpgDatabase())).As<IRepository>();
+            builder.Register(c => new SqlRepository(new DbContext())).As<IRepository>();
 
             return builder.Build();
         }

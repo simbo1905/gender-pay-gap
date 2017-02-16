@@ -1,20 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
 using System.Web;
 using System.Web.Mvc;
-using GenderPayGap;
 using Extensions;
-using Newtonsoft.Json;
-using IdentityServer3.Core;
-using GenderPayGap.Core.Interfaces;
-using GpgDB.Models.GpgDatabase;
+using GenderPayGap.Models.SqlDatabase;
 using Autofac;
 using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Classes;
-using System.Security.Principal;
-using GpgDB;
 using System.Net;
 
 namespace GenderPayGap.WebUI.Controllers
@@ -83,12 +76,9 @@ namespace GenderPayGap.WebUI.Controllers
                 Repository.Delete(currentUser);
 
             }
-            else
-            {
-                currentUser=new User();
-            }
 
             //Save the submitted fields
+            currentUser = new User();
             currentUser.Created = DateTime.Now;
             currentUser.Modified = currentUser.Created;
             currentUser.Firstname = model.FirstName;
@@ -99,8 +89,7 @@ namespace GenderPayGap.WebUI.Controllers
             currentUser.EmailVerifySendDate = null;
             currentUser.EmailVerifiedDate = null;
             currentUser.EmailVerifyCode = null;
-            currentUser.CurrentStatus=UserStatuses.New;
-            currentUser.CurrentStatusDate = DateTime.Now;
+            currentUser.SetStatus(UserStatuses.New,currentUser.UserId);
 
             //Save the user to DB
             if (currentUser.UserId==0)Repository.Insert(currentUser);
@@ -551,10 +540,9 @@ namespace GenderPayGap.WebUI.Controllers
                 org.SectorType = model.SectorType.Value;
                 org.OrganisationName = employer.Name;
                 org.PrivateSectorReference = employer.CompanyNumber;
-                org.CurrentStatus = OrganisationStatuses.New;
-                org.CurrentStatusDate = now;
                 org.Created = now;
                 org.Modified = now;
+                org.SetStatus(OrganisationStatuses.New, currentUser.UserId);
                 Repository.Insert(org);
                 Repository.SaveChanges();
             }
@@ -586,7 +574,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             if (userOrg == null)
             {
-                userOrg = new GpgDB.Models.GpgDatabase.UserOrganisation()
+                userOrg = new GenderPayGap.Models.SqlDatabase.UserOrganisation()
                 {
                     UserId = currentUser.UserId,
                     OrganisationId = org.OrganisationId,

@@ -2,7 +2,7 @@
 using Extensions;
 using GenderPayGap.Core.Interfaces;
 using GenderPayGap.WebUI.Classes;
-using GpgDB.Models.GpgDatabase;
+using GenderPayGap.Models.SqlDatabase;
 using System;
 using System.Collections.Generic;
 using System.Linq;

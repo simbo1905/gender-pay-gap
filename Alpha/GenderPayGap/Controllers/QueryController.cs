@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GpgDB.Models.GpgDatabase;
+using GenderPayGap.Models.SqlDatabase;
 using GenderPayGap.WebUI.Models;
 using Extensions;
 
@@ -21,7 +21,7 @@ namespace GenderPayGap.WebUI.Controllers
             var model = new SearchViewModel();
             if (!string.IsNullOrWhiteSpace(query))
             {
-                model.Results = GpgDatabase.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(query.ToLower())).ToArray();
+                model.Results = DbContext.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(query.ToLower())).ToArray();
 
                 //var x = model.Search;
                 //model.Results = GpgDatabase.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(model.Search.ToLower())).ToArray();
@@ -46,7 +46,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
             else if (ModelState.IsValid && string.IsNullOrWhiteSpace(model.Search))
             {
-                  model.Results = GpgDatabase.Default.Organisation.Select(o => o).ToArray();
+                  model.Results = DbContext.Default.Organisation.Select(o => o).ToArray();
             }
 
             return View(model);

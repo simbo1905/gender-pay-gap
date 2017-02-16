@@ -1,9 +1,4 @@
-﻿using GpgDB.Models.GpgDatabase;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Web;
+﻿using GenderPayGap.Models.SqlDatabase;
 
 namespace GenderPayGap.WebUI.Models
 {

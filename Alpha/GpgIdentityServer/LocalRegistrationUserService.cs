@@ -9,7 +9,7 @@ using IdentityServer3.Core.Extensions;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services;
 using IdentityServer3.Core.Services.Default;
-using GpgDB.Models.GpgDatabase;
+using GenderPayGap.Models.SqlDatabase;
 using System.Configuration;
 
 namespace GpgIdentityServer
@@ -67,9 +67,9 @@ namespace GpgIdentityServer
         {
             //TODO Load users from database
             var users = new List<LocalUser>();
-            GpgDatabase.RefreshAll();
+            DbContext.RefreshAll();
 
-            foreach (var user in GpgDatabase.Default.User)
+            foreach (var user in DbContext.Default.User)
             {
                 users.Add(new LocalUser
                 {

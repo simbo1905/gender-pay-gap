@@ -3,12 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Extensions;
-using GpgDB;
-using GpgDB.Models.GpgDatabase;
-using Microsoft.AspNet.Identity;
-using Microsoft.IdentityModel;
-using Microsoft.Owin.Security;
-using static GpgDB.Models.GpgDatabase.Organisation;
+using GenderPayGap.Models.SqlDatabase;
 
 namespace GenderPayGap.WebUI.Models
 {
