@@ -194,21 +194,8 @@ namespace GenderPayGap.WebUI.Controllers
                 model = (ReturnViewModel)TempData["Model"];
 
             return View(model);
-
-           // var qid = Repository.GetAll<Return>().FirstOrDefault(r => r.ReturnId == id);
-          //  return View(qid);
         }
 
-
-        //[Authorize]
-        //[HttpPost]
-        //public ActionResult Step4  /*Confirm*/(ReturnViewModel model)
-        //{
-        //    if (!Authorise()) return RedirectToAction("Index", "Register");
-
-        //    if (!ModelState.IsValid) return View(model);
-        //    return View(model);
-        //}
 
         [Authorize]
         [HttpPost]
