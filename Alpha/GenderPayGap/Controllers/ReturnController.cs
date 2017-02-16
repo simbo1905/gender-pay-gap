@@ -33,6 +33,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             var currentUser = GetCurrentUser();
             var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+            //var @return = Repository.GetAll<Return>().OrderByDescending(r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId && r.AccountingDate.Value.AddYears(1) < DateTime.Now);
             var @return = Repository.GetAll<Return>().FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
 
             var model = new ReturnViewModel();
@@ -77,7 +78,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             if (!ModelState.IsValid) return View(model);
 
-            ViewBag.Model = model;
+            TempData["Model"] = model;
             return RedirectToAction("Step2");
         }
 
@@ -106,20 +107,17 @@ namespace GenderPayGap.WebUI.Controllers
             if (!Authorise()) return RedirectToAction("Index", "Register");
 
             var currentUser = GetCurrentUser();
-            var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
-            var @return = Repository.GetAll<Return>().FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
 
-            var model = (ReturnViewModel)ViewBag.Model;
+            ReturnViewModel model = null; //= (!TempData["Model"].IsNull()) ? (ReturnViewModel) TempData["Model"] : null;
 
-            if (@return != null)
-            {
-                model.JobTitle = @return.JobTitle;
-                model.FirstName = @return.FirstName;
-                model.LastName = @return.LastName;
-            }
-        
+            if (!TempData["Model"].IsNull())
+                model = (ReturnViewModel)TempData["Model"];
+
+           // TempData.Keep();
+
+
             if (model == null) model = new ReturnViewModel();
-            model.OrganisationId = userOrg.OrganisationId;
+            //model.OrganisationId = userOrg.OrganisationId;
 
             var result = View("Step2", model);
             return result;
@@ -131,13 +129,11 @@ namespace GenderPayGap.WebUI.Controllers
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
 
-            //ModelState.Remove("FirstName");
-            //ModelState.Remove("LastName");
-            //ModelState.Remove("JobTitle");
-
             if (!ModelState.IsValid) return View(model);
 
-            ViewBag.Model = model;
+            TempData["Model"] = model;
+   //         TempData.Keep();
+
             return RedirectToAction("Step3");
         }
 
@@ -148,13 +144,15 @@ namespace GenderPayGap.WebUI.Controllers
             if (!Authorise()) return RedirectToAction("Index", "Register");
 
             var currentUser = GetCurrentUser();
-            var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
-            var @return = Repository.GetAll<Return>().FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
+           
 
-            var model = (ReturnViewModel)ViewBag.Model;
+            ReturnViewModel model = null; 
+
+            if (!TempData["Model"].IsNull())
+                model = (ReturnViewModel)TempData["Model"];
 
             if (model == null) model = new ReturnViewModel();
-            model.OrganisationId = userOrg.OrganisationId;
+           // model.OrganisationId = userOrg.OrganisationId;
 
             var result = View("Step3", model);
             return result;
@@ -166,25 +164,51 @@ namespace GenderPayGap.WebUI.Controllers
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
 
-            ModelState.Remove("FirstName");
-            ModelState.Remove("LastName");
-            ModelState.Remove("JobTitle");
-
             if (!ModelState.IsValid) return View(model);
 
-            ViewBag.Model = model;
+            TempData["Model"] = model;
+  //          TempData.Keep();
+
             return RedirectToAction("Step4");
         }
 
+        //[Authorize]
+        //[HttpGet]
+        //public ActionResult Step4  /*Confirm*/(int id = 1)
+        //{
+        //    if (!Authorise()) return RedirectToAction("Index", "Register");
+
+        //    var qid = GpgDatabase.Default.Return.Find(id);
+        //    return View(qid);
+        //}
+
         [Authorize]
         [HttpGet]
-        public ActionResult Step4  /*Confirm*/(int id = 1)
+        public ActionResult Step4  /*Confirm*/()
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
 
-            var qid = GpgDatabase.Default.Return.Find(id);
-            return View(qid);
+            ReturnViewModel model = null;
+
+            if (!TempData["Model"].IsNull())
+                model = (ReturnViewModel)TempData["Model"];
+
+            return View(model);
+
+           // var qid = Repository.GetAll<Return>().FirstOrDefault(r => r.ReturnId == id);
+          //  return View(qid);
         }
+
+
+        //[Authorize]
+        //[HttpPost]
+        //public ActionResult Step4  /*Confirm*/(ReturnViewModel model)
+        //{
+        //    if (!Authorise()) return RedirectToAction("Index", "Register");
+
+        //    if (!ModelState.IsValid) return View(model);
+        //    return View(model);
+        //}
 
         [Authorize]
         [HttpPost]
@@ -192,13 +216,12 @@ namespace GenderPayGap.WebUI.Controllers
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
 
-            //ModelState.Remove("FirstName");
-            //ModelState.Remove("LastName");
-            //ModelState.Remove("JobTitle");
-
             if (!ModelState.IsValid) return View(model);
+
+            Repository.SaveChanges();
             return View(model);
         }
+
 
         //Step4: Should have edits to take user to pages for editing
         //Step5 will be cut off from the original steps as this page will not be provided by us
