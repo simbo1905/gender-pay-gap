@@ -407,7 +407,7 @@
     <Content Include="Views\Return\Delete.cshtml" />
     <Content Include="Views\Home\_Index.cshtml" />
     <Content Include="Views\Return\Step1.cshtml" />
-    <Content Include="Views\Return\Step3.cshtml" />
+    <Content Include="Views\Return\Step4.cshtml" />
     <Content Include="Views\Return\Edit.cshtml" />
     <Content Include="Views\Return\Step2.cshtml" />
     <Content Include="Views\Return\PersonRespEdit.cshtml" />
@@ -423,9 +423,10 @@
     <Content Include="Views\Query\Search.cshtml" />
     <Content Include="Views\Query\Sectors.cshtml" />
     <Content Include="Views\Query\Start.cshtml" />
-    <Content Include="Views\Return\Step4.cshtml" />
+    <Content Include="Views\Return\Step5.cshtml" />
     <Content Include="Views\Return\Details.cshtml" />
     <Content Include="Views\Register\Confirm.cshtml" />
+    <Content Include="Views\Return\Step3.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\GPGDatabase\" />
@@ -456,6 +457,24 @@
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <Optimize>true</Optimize>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <ErrorReport>prompt</ErrorReport>
+    <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />

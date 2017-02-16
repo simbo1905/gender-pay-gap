@@ -21,7 +21,6 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpGet]
         public ActionResult Index()
         {
-            
             var view = View("Index");
             return view;
         }
@@ -31,11 +30,36 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Step1 /*Create*/() 
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
+
             var currentUser = GetCurrentUser();
             var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
-            var model = Repository.GetAll<Return>().FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
+            var @return = Repository.GetAll<Return>().FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
 
-            if (model == null) model = new Return();
+            var model = new ReturnViewModel();
+
+            if (@return != null)
+            {
+                model.ReturnId                     =  @return.ReturnId;
+                model.OrganisationId               =  @return.OrganisationId;
+                model.DiffMeanBonusPercent         =  @return.DiffMeanBonusPercent;
+                model.DiffMeanHourlyPayPercent     =  @return.DiffMeanHourlyPayPercent;
+                model.DiffMedianBonusPercent       =  @return.DiffMedianBonusPercent;
+                model.DiffMedianHourlyPercent      =  @return.DiffMeanHourlyPayPercent;
+                model.FemaleLowerPayBand           =  @return.DiffMeanHourlyPayPercent;
+                model.FemaleMedianBonusPayPercent  =  @return.DiffMeanHourlyPayPercent;
+                model.FemaleMiddlePayBand          =  @return.DiffMeanHourlyPayPercent;
+                model.FemaleUpperPayBand           =  @return.DiffMeanHourlyPayPercent;
+                model.FemaleUpperQuartilePayBand   =  @return.DiffMeanHourlyPayPercent;
+                model.MaleLowerPayBand             =  @return.MaleLowerPayBand;
+                model.MaleMedianBonusPayPercent    =  @return.MaleMedianBonusPayPercent;
+                model.MaleMiddlePayBand            =  @return.MaleMiddlePayBand;
+                model.MaleUpperPayBand             =  @return.MaleUpperPayBand;
+                model.MaleUpperQuartilePayBand     =  @return.MaleUpperQuartilePayBand;
+                model.JobTitle                     =  @return.JobTitle;
+                model.FirstName                    =  @return.FirstName;
+                model.LastName                     =  @return.LastName;
+            }
+
             model.OrganisationId = userOrg.OrganisationId;
             var result = View("Step1", model);
             return result;
@@ -43,40 +67,145 @@ namespace GenderPayGap.WebUI.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult Step1/*Create*/(Return model)
+        public ActionResult Step1/*Create*/(ReturnViewModel model)
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
+
+            ModelState.Remove("FirstName");
+            ModelState.Remove("LastName");
+            ModelState.Remove("JobTitle");
+
             if (!ModelState.IsValid) return View(model);
 
-            return View(model);
+            ViewBag.Model = model;
+            return RedirectToAction("Step2");
+        }
+
+        //[Authorize]
+        //[HttpGet]
+        //public ActionResult Step2 /*Create*/()
+        //{
+        //    if (!Authorise()) return RedirectToAction("Index", "Register");
+
+        //    var currentUser = GetCurrentUser();
+        //    var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+        //    var model = Repository.GetAll<Return>().FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
+
+        //    var returnModel = (ReturnViewModel)ViewBag.Model;
+
+        //    if (model == null) model = new Return();
+        //    model.OrganisationId = userOrg.OrganisationId;
+        //    var result = View("Step2", model);
+        //    return result;
+        //}
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult Step2 /*Create*/()
+        {
+            if (!Authorise()) return RedirectToAction("Index", "Register");
+
+            var currentUser = GetCurrentUser();
+            var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+            var @return = Repository.GetAll<Return>().FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
+
+            var model = (ReturnViewModel)ViewBag.Model;
+
+            if (@return != null)
+            {
+                model.JobTitle = @return.JobTitle;
+                model.FirstName = @return.FirstName;
+                model.LastName = @return.LastName;
+            }
+        
+            if (model == null) model = new ReturnViewModel();
+            model.OrganisationId = userOrg.OrganisationId;
+
+            var result = View("Step2", model);
+            return result;
         }
 
         [Authorize]
         [HttpPost]
-        public ActionResult Step2 /*Authoriser*/(Return model)
+        public ActionResult Step2 /*Authoriser*/(ReturnViewModel model)
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
 
-            if (Request.UrlReferrer.PathAndQuery.ContainsI("Create") && string.IsNullOrWhiteSpace(model.FirstName) && string.IsNullOrWhiteSpace(model.LastName) && string.IsNullOrWhiteSpace(model.JobTitle))
-                ModelState.Clear();
+            //ModelState.Remove("FirstName");
+            //ModelState.Remove("LastName");
+            //ModelState.Remove("JobTitle");
 
-            if (!ModelState.IsValid)
-                return View(model);
-            return View(model);
-        }
-
-        [Authorize]
-        [HttpPost]
-        public ActionResult Step3 /*Confirm*/(Return model)
-        {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
             if (!ModelState.IsValid) return View(model);
-            return View(model);
+
+            ViewBag.Model = model;
+            return RedirectToAction("Step3");
         }
 
         [Authorize]
         [HttpGet]
-        public ActionResult Step4 /*SendConfirmed*/(long id = 0)
+        public ActionResult Step3 /*GPGInfoLink*/()
+        {
+            if (!Authorise()) return RedirectToAction("Index", "Register");
+
+            var currentUser = GetCurrentUser();
+            var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+            var @return = Repository.GetAll<Return>().FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
+
+            var model = (ReturnViewModel)ViewBag.Model;
+
+            if (model == null) model = new ReturnViewModel();
+            model.OrganisationId = userOrg.OrganisationId;
+
+            var result = View("Step3", model);
+            return result;
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult Step3 /*GPGInfoLink*/(ReturnViewModel model)
+        {
+            if (!Authorise()) return RedirectToAction("Index", "Register");
+
+            ModelState.Remove("FirstName");
+            ModelState.Remove("LastName");
+            ModelState.Remove("JobTitle");
+
+            if (!ModelState.IsValid) return View(model);
+
+            ViewBag.Model = model;
+            return RedirectToAction("Step4");
+        }
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult Step4  /*Confirm*/(int id = 1)
+        {
+            if (!Authorise()) return RedirectToAction("Index", "Register");
+
+            var qid = GpgDatabase.Default.Return.Find(id);
+            return View(qid);
+        }
+
+        [Authorize]
+        [HttpPost]
+        public ActionResult Step4  /*Confirm*/(ReturnViewModel model)
+        {
+            if (!Authorise()) return RedirectToAction("Index", "Register");
+
+            //ModelState.Remove("FirstName");
+            //ModelState.Remove("LastName");
+            //ModelState.Remove("JobTitle");
+
+            if (!ModelState.IsValid) return View(model);
+            return View(model);
+        }
+
+        //Step4: Should have edits to take user to pages for editing
+        //Step5 will be cut off from the original steps as this page will not be provided by us
+
+        [Authorize]
+        [HttpGet]
+        public ActionResult Step5 /*Step4*/ /*SendConfirmed*/(long id = 0)
         {
             try
             {
@@ -96,7 +225,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult Step4 /*SendConfirmed*/(Return model)
+        public ActionResult Step5 /*Step4*/  /*SendConfirmed*/(Return model)
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
 
@@ -123,16 +252,10 @@ namespace GenderPayGap.WebUI.Controllers
                 ModelState.AddModelError("", ex.Message);
                 return View(model);
             }
-            return RedirectToAction("Step4", new { id=model.ReturnId});
+            return RedirectToAction("Step4", new { id = model.ReturnId });
         }
 
         // GET: Return/Details/5
-        public ActionResult Step3 /*Confirm*/(int id = 1)
-        {
-            var qid = GpgDatabase.Default.Return.Find(id);
-            return View(qid);
-        }
-
         public ActionResult Details(int id = 1)
         {
             var qid = GpgDatabase.Default.Return.Find(id);

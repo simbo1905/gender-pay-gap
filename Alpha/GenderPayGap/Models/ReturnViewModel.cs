@@ -13,7 +13,6 @@ namespace GenderPayGap.WebUI.Models
 {
     public class ReturnViewModel
     {
-
         public ReturnViewModel()
         {
 
@@ -81,28 +80,21 @@ namespace GenderPayGap.WebUI.Models
         //[ForeignKey("OrganisationId")]
         //public virtual Organisation Organisation { get; set; }
 
-    }
-
-    public class PersonResponsibleViewModel
-    {
         [Required]
         [Display(Name = "Title")]
-        public string Title { get; set; }
+        public string JobTitle { get; set; }
         [Required]
         [Display(Name = "First name")]
         public string FirstName { get; set; }
         [Required]
         [Display(Name = "Last name")]
         public string LastName { get; set; }
-    }
 
-    public class CompanyLinkToGPGInfoViewModel
-    {
         [Url]
         [Display(Name = "Link to your gender pay gap information")]
         public string CompanyLinkToGPGInfo { get; set; }
-    }
 
+    }
 }
 
 
