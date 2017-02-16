@@ -1,6 +1,6 @@
 ﻿using Extensions;
 using GenderPayGap.WebUI.Models;
-using GpgDB.Models.GpgDatabase;
+using GenderPayGap.Models.SqlDatabase;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -8,6 +8,7 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using GenderPayGap.WebUI.Classes;
+using DbContext = GenderPayGap.Models.SqlDatabase.DbContext;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -26,8 +27,8 @@ namespace GenderPayGap.WebUI.Controllers
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
             var currentUser = Repository.FindUser(User);
-            var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
-            var model = GpgDatabase.Default.Return.FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
+            var userOrg = DbContext.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+            var model = DbContext.Default.Return.FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
             if (model == null) model = new Return();
             model.OrganisationId = userOrg.OrganisationId;
             return View(model);
@@ -92,23 +93,23 @@ namespace GenderPayGap.WebUI.Controllers
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
 
-            var original = GpgDatabase.Default.Return.Find(model.ReturnId);
+            var original = DbContext.Default.Return.Find(model.ReturnId);
             if (original == null)
             {
                 var currentUser = Repository.FindUser(User);
-                var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+                var userOrg = DbContext.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
                 model.OrganisationId = userOrg.OrganisationId;
-                GpgDatabase.Default.Return.Add(model);
+                DbContext.Default.Return.Add(model);
             }
             else
             {
-                GpgDatabase.Default.Entry(original).CurrentValues.SetValues(model);
+                DbContext.Default.Entry(original).CurrentValues.SetValues(model);
             }
-            model.Organisation = GpgDatabase.Default.Organisation.Find(model.OrganisationId);
+            model.Organisation = DbContext.Default.Organisation.Find(model.OrganisationId);
             model.AccountingDate = DateTime.Now;
             try
             {
-                GpgDatabase.Default.SaveChanges();
+                DbContext.Default.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -121,13 +122,13 @@ namespace GenderPayGap.WebUI.Controllers
         // GET: Return/Details/5
         public ActionResult Confirm(int id = 1)
         {
-            var qid = GpgDatabase.Default.Return.Find(id);
+            var qid = DbContext.Default.Return.Find(id);
             return View(qid);
         }
 
         public ActionResult Details(int id = 1)
         {
-            var qid = GpgDatabase.Default.Return.Find(id);
+            var qid = DbContext.Default.Return.Find(id);
             return View(qid);
         }
     }

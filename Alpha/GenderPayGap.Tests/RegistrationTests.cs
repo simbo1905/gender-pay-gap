@@ -1,6 +1,6 @@
 ﻿using GenderPayGap.WebUI.Controllers;
 using GenderPayGap.WebUI.Models;
-using GpgDB.Models.GpgDatabase;
+using GenderPayGap.Models.SqlDatabase;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;

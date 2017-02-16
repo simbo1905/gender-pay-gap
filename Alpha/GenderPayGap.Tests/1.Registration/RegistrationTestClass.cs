@@ -2,13 +2,8 @@
 using GenderPayGap.WebUI.Models;
 using NUnit.Framework;
 using System.Web.Mvc;
-using System.Web;
-using System.Security.Principal;
-using System.Web.Routing;
-using System.Security.Claims;
-using GpgDB.Models.GpgDatabase;
+using GenderPayGap.Models.SqlDatabase;
 using System;
-using Autofac;
 
 namespace GenderPayGap.Tests.Registeration
 {
