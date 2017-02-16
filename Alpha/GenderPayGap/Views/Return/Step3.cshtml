@@ -1,181 +1,94 @@
-﻿@model GpgDB.Models.GpgDatabase.Return
-
-
+﻿@model GenderPayGap.WebUI.Models.ReturnViewModel
 
 <main id="content" role="main">
-    <h1 class="heading-large">
-        <span class="heading-secondary">Step 3 of 3</span>
-        Review your gender pay gap data
-    </h1>
-@using (Html.BeginForm("Step4", "Return", FormMethod.Post))
-{
-    @Html.HiddenFor(model => model.ReturnId)
-    @Html.HiddenFor(model => model.OrganisationId)
-    @Html.HiddenFor(model => model.DiffMeanBonusPercent)
-    @Html.HiddenFor(model => model.DiffMeanHourlyPayPercent)
-    @Html.HiddenFor(model => model.DiffMedianBonusPercent)
-    @Html.HiddenFor(model => model.DiffMedianHourlyPercent)
-    @Html.HiddenFor(model => model.FemaleLowerPayBand)
-    @Html.HiddenFor(model => model.FemaleMedianBonusPayPercent)
-    @Html.HiddenFor(model => model.FemaleMiddlePayBand)
-    @Html.HiddenFor(model => model.FemaleUpperPayBand)
-    @Html.HiddenFor(model => model.FemaleUpperQuartilePayBand)
-    @Html.HiddenFor(model => model.FirstName)
-    @Html.HiddenFor(model => model.JobTitle)
-    @Html.HiddenFor(model => model.LastName)
-    @Html.HiddenFor(model => model.MaleLowerPayBand)
-    @Html.HiddenFor(model => model.MaleMedianBonusPayPercent)
-    @Html.HiddenFor(model => model.MaleMiddlePayBand)
-    @Html.HiddenFor(model => model.MaleUpperPayBand)
-    @Html.HiddenFor(model => model.MaleUpperQuartilePayBand)
-    @Html.HiddenFor(model => model.CompanyLinkToGPGInfo)
+    @using (Html.BeginForm(/*"Step4", "Return", FormMethod.Post*/))
+    {
+        @Html.HiddenFor(model => model.ReturnId)
+        @Html.HiddenFor(model => model.OrganisationId)
+        @Html.HiddenFor(model => model.FirstName)
+        @Html.HiddenFor(model => model.JobTitle)
+        @Html.HiddenFor(model => model.LastName)
+
+        @Html.HiddenFor(model => model.ReturnId)
+        @Html.HiddenFor(model => model.OrganisationId)
+        @Html.HiddenFor(model => model.DiffMeanBonusPercent)
+        @Html.HiddenFor(model => model.DiffMeanHourlyPayPercent)
+        @Html.HiddenFor(model => model.DiffMedianBonusPercent)
+        @Html.HiddenFor(model => model.DiffMedianHourlyPercent)
+        @Html.HiddenFor(model => model.FemaleLowerPayBand)
+        @Html.HiddenFor(model => model.FemaleMedianBonusPayPercent)
+        @Html.HiddenFor(model => model.FemaleMiddlePayBand)
+        @Html.HiddenFor(model => model.FemaleUpperPayBand)
+        @Html.HiddenFor(model => model.FemaleUpperQuartilePayBand)
+        @Html.HiddenFor(model => model.MaleLowerPayBand)
+        @Html.HiddenFor(model => model.MaleMedianBonusPayPercent)
+        @Html.HiddenFor(model => model.MaleMiddlePayBand)
+        @Html.HiddenFor(model => model.MaleUpperPayBand)
+        @Html.HiddenFor(model => model.MaleUpperQuartilePayBand)
 
 
-    <div class="grid-row">
-        <div class="column-two-thirds">
-            <table class="gpg-data">
-                <thead>
-                    <tr>
-                        <th class="question" colspan="3">
-                            1. Your organisation’s 2016 to 2017 gender pay gap data @*<span class="edit">@Html.ActionLink("Edit", "Edit", new { id = Model.ReturnId })</span>*@
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            1. Difference in mean hourly rate of pay between male and female employees
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.DiffMeanHourlyPayPercent)%
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            2. Difference in median hourly rate of pay between male and female employees
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.DiffMedianHourlyPercent)%
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            3. Difference in mean bonus pay between male and female employees
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.DiffMeanBonusPercent)%
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            4. Difference in median bonus pay between male and female employees
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.DiffMedianBonusPercent)%
-                        </td>
-                        <td></td>
-                    </tr>
-                    <tr>
-                        <td>
-                            5. Percentage of male and female employees who received bonus pay
-                        </td>
-                        <td>Male <br>@Html.ValueFor(model => model.MaleMedianBonusPayPercent)%</td>
-                        <td>Female <br>@Html.ValueFor(model => model.FemaleMedianBonusPayPercent)%</td>
-                    </tr>
-                    <tr class="row">
-                        <td>
-                            6. Male and female employees by pay quartile
-                        </td>
-                        <td>Male </td>
-                        <td>Female</td>
-                    </tr>
-                    <tr class="row">
-                        <td>
-                            Lower quartile
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.MaleLowerPayBand)%
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.FemaleLowerPayBand)%
-                        </td>
-                    </tr>
-                    <tr class="row">
-                        <td>
-                            Lower middle quartile
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.MaleMiddlePayBand)%
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.FemaleMiddlePayBand)%
-                        </td>
-                    </tr>
-                    <tr class="row">
-                        <td>
-                            Upper middle quartile
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.MaleUpperPayBand)%
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.FemaleUpperPayBand)%
-                        </td>
-                    </tr>
-                    <tr>
-                        <td>
-                            Top quartile
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.MaleUpperQuartilePayBand)%
-                        </td>
-                        <td>
-                            @Html.ValueFor(model => model.FemaleUpperQuartilePayBand)%
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="3">
-                            <p>7. Link to your gender pay gap information</p>
-                            @*<a href='#'>http://home.kpmg.com/gender-pay-gap-report-16-17.html</a>*@
-                            @Html.ValueFor(model => model.CompanyLinkToGPGInfo)
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="grid-row">
+            <div class="column-two-thirds">
+                <h1 class="heading-large">
+                    <span class="heading-secondary">Step 3 of 4</span>
+                    Submit your gender pay gap data for 2016 to 2017
+                </h1>
 
-            <table class="signedby">
-                <thead>
-                    <tr>
-                        <th class="question" colspan="3">
-                            2. Person responsible in your organisation @*<span class="edit"><a href='edit-approval'>Edit</a></span>*@
-                            @*@Html.ActionLink("Edit", "Edit", new { id = Model.ReturnId })*@
-                        </th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td>
-                            @Html.ValueFor(model => model.FirstName) &nbsp;
-                            @Html.ValueFor(model => model.LastName) <br>
-                            @Html.ValueFor(model => model.JobTitle)
-                    </td>
-                        <td> </td>
-                    </tr>
 
-                </tbody>
-            </table>
+                <div class="form-horizontal">
+                    @*<h4>Return</h4>*@
+                    @*<hr />*@
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 
-            <p>
-                <input class="button" type="submit" role="button" value="Back" formaction='@Url.Action("Step2")' />
-                <input class="button" type="submit" role="button" value="Confirm and submit"/>              
-            </p>
+                    <h2 class="heading-medium">7. Link to your gender pay gap information</h2>
+                    @*<p>Enter the web address (URL) for the gender pay gap information published on your organisation’s website. The person with responsibility for gender pay gap reporting in your organisation will have this.</p>*@
+                    <fieldset>
+                        @*<div class="form-group ">
+                                <textarea class="form-control" id="textarea-b" cols="30" rows="6"></textarea>
+                            </div>*@
+
+                        <div class="form-group">
+                            <p>@Html.LabelFor(model => model.CompanyLinkToGPGInfo, "Enter the web address (URL) for the gender pay gap information published on your organisation’s website. The person with responsibility for gender pay gap reporting in your organisation will have this", htmlAttributes: new { @class = "control-label col-md-2" })</p>
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(model => model.CompanyLinkToGPGInfo, 6, 30, new { @class = "form-control" })
+
+                                @Html.ValidationMessageFor(model => model.CompanyLinkToGPGInfo, "", new { @class = "text-danger" })
+                                @*@Html.ValidationMessageFor(model => model.CompanyLinkToGPGInfo, "The field is not a valid fully-qualified http, https, or ftp URL.",  new { @class = "text-danger" })*@
+                            </div>
+                        </div>
+
+                    </fieldset>
+
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            @*<input type="submit" value="Create" class="btn btn-default" />*@
+                        </div>
+                    </div>
+
+                </div>
+
+                <p>
+                    <input class="button" type="submit" role="button" value="Continue" />
+                <p>@Html.ActionLink("Cancel", "Index", null, new { @class = "", onclick = "if (!confirm('Are you sure you want to cancel?'))return false;" })</p>
+                </p>
+                @*<a href="gpg-overview">Cancel</a>*@
+            </div>
+
         </div>
-    </div>
-}
+    }
 </main>
+
+
+
+
+
+
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")

@@ -1,8 +1,8 @@
-﻿@model GpgDB.Models.GpgDatabase.Return
-
+﻿@*@model GpgDB.Models.GpgDatabase.Return*@
+@model GenderPayGap.WebUI.Models.ReturnViewModel
 
 <main id="content" role="main">
-@using (Html.BeginForm("Step3", "Return", FormMethod.Post))
+@using (Html.BeginForm(/*"Step3", "Return", FormMethod.Post*/))
 {
     @Html.HiddenFor(model => model.ReturnId)
     @Html.HiddenFor(model => model.OrganisationId)
@@ -20,12 +20,11 @@
     @Html.HiddenFor(model => model.MaleMiddlePayBand)
     @Html.HiddenFor(model => model.MaleUpperPayBand)
     @Html.HiddenFor(model => model.MaleUpperQuartilePayBand)
-    @Html.HiddenFor(model => model.CompanyLinkToGPGInfo)
 
     <div class="grid-row">
         <div class="column-two-thirds">
             <h1 class="heading-large">
-                <span class="heading-secondary">Step 2 of 3</span>
+                <span class="heading-secondary">Step 2 of 4</span>
                 Person responsible in your organisation
             </h1>
             <p>

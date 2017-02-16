@@ -33,65 +33,129 @@ namespace GenderPayGap.Tests.Submission
 
         }
 
+
+        //[Test]
+        //[Description("")]
+        //public void Step1_UserNotLoggedIn_RedirectToLoginPage()
+        //{
+        //    // Arrange
+        //    var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+        //    var organisation = new Organisation() { OrganisationId = 1 };
+        //    var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
+        //    //var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
+
+        //    var controller = TestHelper.GetController<ReturnController>(1);
+
+        //    //Act
+        //    //var result = controller.xyz() as RedirectToRouteResult;
+        //    var result = controller.Step1() as RedirectToRouteResult;
+
+        //    //Assert
+        //    Assert.Null(result, "Should have redirected");
+        //   // Assert.Null(, "Should have redirected to index page");
+
+        //}
+
         [Test]
-        [Description("")]
-        public void VerifyThatUserIsLoggedIn()
+        [Description("If a user has a return in the database load that return and verify its existence")]
+        public void Step1_UserHasReturn_ShowExistingReturn()
         {
-            // Arrange
+            // Arrange:
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
-            //var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
+            //simulated return from mock db
+            var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
+
+            //Add a return to the mock repo to simulate one in the database
+            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation, @return);
+
+            //Act:
+            var result = (ViewResult)controller.Step1();
+            var resultModel = result.Model as ReturnViewModel;
+
+            //Assert:
+            Assert.That(resultModel.ReturnId == 1, "ReturnId expected '1' as a value");
+            Assert.That(resultModel.OrganisationId == 1, "OrganisationId expected '1' as a value");
+
+        }
+
+        [Test]
+        [Description("If a user does not have a return existing in the database, a new one should be created and verified with default values")]
+        public void Step1_UserHasNoReturn_ShowNewReturn()
+        {
+            // Arrange:
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var organisation = new Organisation() { OrganisationId = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
 
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
 
+            //Act:
+            var result = (ViewResult)controller.Step1();
+            var resultModel = result.Model as ReturnViewModel;
+
+            //Assert:
+            Assert.That(resultModel.ReturnId == 0, "ReturnId expected 0");
+            Assert.That(resultModel.OrganisationId == 1, "Organisation Id ");
+        }
+
+
+        #region CompanyLinkToGPGInfo
+
+        [Test]
+        [Description("Verify that a bad url link is not allowed or validated")]
+        public void VerifyGPGInfoLink_BadURL_Link()
+        {
+            //Arrange
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var organisation = new Organisation() { OrganisationId = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
+            var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
+
+            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
+
+            var model = new ReturnViewModel()
+            {
+                CompanyLinkToGPGInfo = "http:www.//google.com" //put wrong deliberately!!!!
+            };
+           
             //Act
-            var result = ((BaseController)controller).Authorise();
+            var result = (ViewResult)controller.Step3(model);
+            var returnModel = result.Model as Return;
 
             //Assert
-            Assert.That(result, Is.EqualTo(true),"User is not logged in");
+            Assert.That(returnModel.CompanyLinkToGPGInfo == model.CompanyLinkToGPGInfo, "CompanyLinkToGPGInfoLink should have the neccesary URL Prefix, 'http://' /'https:// and 'ftp://''");
+
         }
 
         [Test]
-        [Description("make sure user is redirected to the index view in for the register page")]
-        public void VerifyUserIsRedirectedIfNotLoggedIn()
+        [Description("Verify an existing GPGInfo Link is what is returned")]
+        public void VerifyGPGInfoLink_WhatYouPutIn_IsWhatYouGetOut()
         {
-            // Arrange
-            var user = new User() { UserId = 1 };
-            var controller = TestHelper.GetController<ReturnController>(0, user);
-
-            //Act
-            var result = (RedirectToRouteResult)controller.Step1();
-
-            // Assert
-            Assert.Multiple(() =>
-                               {
-                                   Assert.That(result, Is.TypeOf<RedirectToRouteResult>(), "Error Message");
-                                   Assert.That(result.RouteValues["action"], Is.EqualTo("Index"), "Error Message");
-                                   Assert.That(result.RouteValues["controller"], Is.EqualTo("Register"), "Error Message");
-                               }
-                           );
-        }
-
-        [Test]
-        [Description("Start page should call the step1 (Return View) action result")]
-        public void VerifyStep1ActionLoadsStep1View()
-        {
-            // Arrange
+            //Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
-            //var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
+            var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
 
+            var model = new ReturnViewModel()
+            {
+                CompanyLinkToGPGInfo = "http://www.test.com"
+            };
+           
             //Act
-            var result = (ViewResult)controller.Step1();
+            var result = (ViewResult)controller.Step3(model);
+            var returnModel = result.Model as Return;
 
-            // Assert
-            Assert.That(result.ViewName, Is.EqualTo("Step1"), "Error Message");
+            //Assert
+            Assert.That(returnModel.CompanyLinkToGPGInfo == model.CompanyLinkToGPGInfo, "CompanyLinkToGPGInfoLink that was input by the user is not what is returned");
 
         }
+        #endregion
+
 
         [Test]
         [Description("Create action result should load the return model view")]
@@ -111,33 +175,7 @@ namespace GenderPayGap.Tests.Submission
             // Assert
             Assert.IsNotNull(result.Model, "Error Message");
         }
-
-        #region MyRegion
-        [Test]
-        [Description("Create action result should load the return model view")]
-        public void VerifyReturn()
-        {
-            // Arrange
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
-            var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
-            var @return = new Return() { ReturnId = 1, OrganisationId = 1, CompanyLinkToGPGInfo = "https://www.test.com" };
-
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
-
-            //Act
-            var result = (ViewResult)controller.Step1();
-            var returnModel = result.Model as Return;
-            //var cltGPGModel = result.Model as CompanyLinkToGPGInfoViewModel;
-            //var returnModel = result.Model as ReturnViewModel;
-
-            // Assert
-            //Assert.That(returnModel.CompanyLinkToGPGInfo, Is.EqualTo("https://www.test.com"), "Error Message");
-            //Assert.That(returnModel., Is.EqualTo(""), "Error Message");
-            Assert.That(returnModel, Is.EqualTo(@return), "Error Message");
-        }
-        #endregion
-
+       
         [Test]
         [Description("Create action result should load the return model view")]
         public void VerifyStep1ActionReturnsAnExistingReturn()
@@ -151,231 +189,14 @@ namespace GenderPayGap.Tests.Submission
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
 
             //Act
-            var result = (ViewResult)controller.Step1(@return);
-            var returnModel = result.Model as Return;
+            //var result = (ViewResult)controller.Step1(@return);
+            //var returnModel = result.Model as Return;
 
             // Assert
-            Assert.That(returnModel, Is.EqualTo(@return), "Error Message");
+            // Assert.That(returnModel, Is.EqualTo(@return), "Error Message");
         }
 
-        #region CompanyLinkToGPGInfo
-        [Test]
-        [Description("Verify all fields have one decimal place format")]
-        public void VerifyCompanyLinkToGPGInfoIsEmpty()
-        {
-            //Arrange
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
-            var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
-            var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
-
-            //Act
-            // **  @return.CompanyLinkToGPGInfo will not be part of step1
-            var result = (ViewResult)controller.Step1(); //** 
-            var returnModel = result.Model as CompanyLinkToGPGInfoViewModel;
-
-            //Assert
-            Assert.That(String.IsNullOrEmpty(returnModel.CompanyLinkToGPGInfo), "CompanyLinkToGPGInfo should be null or empty"); // if is empty
-        }
-
-        [Test]
-        [Description("Verify CompanyLinkToGPGInfo has required prefix if value is entered in the field")]
-        public void VerifyURLPrefixCompanyLinkToGPGInfo()
-        {
-            //Arrange
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
-            var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
-            var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
-
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
-
-            //Act
-            // **  @return.CompanyLinkToGPGInfo will not be part of step1
-            var result = (ViewResult)controller.Step1(); //** 
-            var returnModel = result.Model as CompanyLinkToGPGInfoViewModel;
-
-            var hasValue = returnModel.CompanyLinkToGPGInfo.Contains("http://") ||
-                                        returnModel.CompanyLinkToGPGInfo.Contains("https://") ||
-                                                    returnModel.CompanyLinkToGPGInfo.Contains("ftp://");
-
-            //Assert
-            Assert.That(hasValue, Is.EqualTo(true), "CompanyLinkToGPGInfo field is does not contain the required url prefix 'http://', 'http://' or 'ftp://'");
-        }
-        #endregion
-
-
-        #region Unsure Tests
-        [Test]
-        [Description("Start page should call the create action should call the create view")]
-        public void CreateActionValidateReturnModelValues()
-        {
-            // Arrange
-            // Mock user, Organisation, user organisation and Return
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
-            var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
-            var @return = new Return()
-            {
-                FirstName = null,
-                JobTitle = null,
-                LastName = null,
-                AccountingDate = null,
-                Created = DateTime.Now.Date,
-                CurrentStatusDate = null,
-                Modified = DateTime.Now.Date,
-                CompanyLinkToGPGInfo = null,
-                CurrentStatus = null,
-                CurrentStatusDetails = null,
-                Organisation = null,
-                ReturnId = 1,
-                OrganisationId = 1   //, ReturnStatuses
-            };
-
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation, @return);
-
-            //Act
-            var result = (ViewResult)controller.Step1();
-            var returnModel = (Return)result.Model;
-
-            // Assert
-            Assert.That(returnModel.MaleLowerPayBand, Is.EqualTo(0.0), "Error Message");
-            Assert.That(returnModel.MaleMedianBonusPayPercent, Is.EqualTo(0.0), "Error Message");
-            Assert.That(returnModel.MaleMiddlePayBand, Is.EqualTo(0.0), "Error Message");
-            Assert.That(returnModel.MaleUpperPayBand, Is.EqualTo(0.0), "Error Message");
-            Assert.That(returnModel.MaleUpperQuartilePayBand, Is.EqualTo(0.0), "Error Message");
-
-            Assert.That(returnModel.FemaleLowerPayBand, Is.EqualTo(0.0), "Error Message");
-            Assert.That(returnModel.FemaleMedianBonusPayPercent, Is.EqualTo(0.0), "Error Message");
-            Assert.That(returnModel.FemaleMiddlePayBand, Is.EqualTo(0.0), "Error Message");
-            Assert.That(returnModel.FemaleUpperPayBand, Is.EqualTo(0.0), "Error Message");
-            Assert.That(returnModel.FemaleUpperQuartilePayBand, Is.EqualTo(0.0), "Error Message");
-
-            Assert.That(returnModel.DiffMeanBonusPercent, Is.EqualTo(0.0), "Error Message");
-            Assert.That(returnModel.DiffMeanHourlyPayPercent, Is.EqualTo(0.0), "Error Message");
-            Assert.That(returnModel.DiffMedianBonusPercent, Is.EqualTo(0.0), "Error Message");
-            Assert.That(returnModel.DiffMedianHourlyPercent, Is.EqualTo(0.0), "Error Message");
-            //Assert.That(returnModel.JobTitle, Is.EqualTo("Director Of Operations"), "Error Message");
-            //Assert.That(returnModel.FirstName, Is.EqualTo("Kingsley"), "Error Message");
-            //Assert.That(returnModel.LastName, Is.EqualTo("MagnusEweka"), "Error Message");
-            Assert.That(returnModel.JobTitle, Is.EqualTo(@return.JobTitle), "Error Message");
-            Assert.That(returnModel.FirstName, Is.EqualTo(@return.FirstName), "Error Message");
-            Assert.That(returnModel.LastName, Is.EqualTo(@return.LastName), "Error Message");
-
-            Assert.That(returnModel.AccountingDate, Is.EqualTo(@return.AccountingDate), "Error Message");
-            Assert.That(((DateTime)(returnModel.Created)).Date, Is.EqualTo(@return.Created), "Error Message");
-            Assert.That(returnModel.CurrentStatusDate, Is.EqualTo(@return.CurrentStatusDate), "Error Message");
-
-            Assert.That(((DateTime)(returnModel.Modified)).Date, Is.EqualTo(@return.Modified), "Error Message");
-
-            Assert.That(returnModel.CurrentStatus, Is.EqualTo(@return.CurrentStatus), "Error Message");
-            Assert.That(returnModel.CurrentStatusDetails, Is.EqualTo(@return.CurrentStatusDetails), "Error Message");
-
-            Assert.That(returnModel.Organisation, Is.EqualTo(@return.Organisation), "Error Message");
-
-            Assert.That(returnModel.OrganisationId, Is.EqualTo(@return.OrganisationId), "Error Message");
-            Assert.That(returnModel.ReturnId, Is.EqualTo(@return.ReturnId), "Error Message");
-        }
-
-        [Test]
-        [Description
-        ("verify loaded (HTTPGET) Empty fields test :-> validate that the fields are empty or have 0.0 except  *use regular expression")]
-        public void VerifyGPGReturnFormFieldsAreEmptyWhenPageLoads()
-        {
-
-            {
-                // Arrange
-                // Mock user, Organisation, user organisation and Return
-                var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
-                var organisation = new Organisation() { OrganisationId = 0 };
-                var userOrganisation = new UserOrganisation() { OrganisationId = 0, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
-                var @return = new Return();
-                var zeroVal = 0;
-
-                var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
-
-                //Act
-                var result = (ViewResult)controller.Step1();
-                var returnModel = (Return)result.Model;
-
-                // Assert
-                Assert.That(returnModel.MaleLowerPayBand, Is.EqualTo(zeroVal), "Error Message");
-                Assert.That(returnModel.MaleMedianBonusPayPercent, Is.EqualTo(zeroVal), "Error Message");
-                Assert.That(returnModel.MaleMiddlePayBand, Is.EqualTo(zeroVal), "Error Message");
-                Assert.That(returnModel.MaleUpperPayBand, Is.EqualTo(zeroVal), "Error Message");
-                Assert.That(returnModel.MaleUpperQuartilePayBand, Is.EqualTo(zeroVal), "Error Message");
-
-                Assert.That(returnModel.FemaleLowerPayBand, Is.EqualTo(zeroVal), "Error Message");
-                Assert.That(returnModel.FemaleMedianBonusPayPercent, Is.EqualTo(zeroVal), "Error Message");
-                Assert.That(returnModel.FemaleMiddlePayBand, Is.EqualTo(zeroVal), "Error Message");
-                Assert.That(returnModel.FemaleUpperPayBand, Is.EqualTo(zeroVal), "Error Message");
-                Assert.That(returnModel.FemaleUpperQuartilePayBand, Is.EqualTo(zeroVal), "Error Message");
-
-                Assert.That(returnModel.DiffMeanBonusPercent, Is.EqualTo(zeroVal), "Error Message");
-                Assert.That(returnModel.DiffMeanHourlyPayPercent, Is.EqualTo(zeroVal), "Error Message");
-                Assert.That(returnModel.DiffMedianBonusPercent, Is.EqualTo(zeroVal), "Error Message");
-                Assert.That(returnModel.DiffMedianHourlyPercent, Is.EqualTo(zeroVal), "Error Message");
-
-                Assert.That(returnModel.JobTitle, Is.EqualTo(null), "Error Message");
-                Assert.That(returnModel.FirstName, Is.EqualTo(null), "Error Message");
-                Assert.That(returnModel.LastName, Is.EqualTo(null), "Error Message");
-
-                Assert.That(returnModel.AccountingDate, Is.EqualTo(@return.AccountingDate), "Error Message");
-
-                Assert.That(((DateTime)(returnModel.Created)).Date, Is.EqualTo(((DateTime)(@return.Created)).Date), "Error Message");
-                Assert.That(((DateTime)(returnModel.Modified)).Date, Is.EqualTo(((DateTime)(@return.Modified)).Date), "Error Message");
-
-                Assert.That(returnModel.CurrentStatusDate, Is.EqualTo(null), "Error Message");
-
-                Assert.That(returnModel.CurrentStatus, Is.EqualTo(null), "Error Message");
-                Assert.That(returnModel.CurrentStatusDetails, Is.EqualTo(null), "Error Message");
-
-                Assert.That(returnModel.Organisation, Is.EqualTo(null), "Error Message");
-
-                Assert.That(returnModel.OrganisationId, Is.EqualTo(0), "Error Message");
-                Assert.That(returnModel.ReturnId, Is.EqualTo(0), "Error Message");
-            }
-        }
-
-        [Test]
-        [Description("Verify all fields have one decimal place format")]
-        public void ValidatedOneDecimalPlaceforAllNumericDataPointsFields()
-        {
-            // Arrange
-            string pattern = "^[0-9]([.][0-9]{1,1})?$"; //Pattern of "0.0" decimal format and place should allow "000.0 as well"
-
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
-            var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
-            //var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
-
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
-
-            //Act
-            var result = (ViewResult)controller.Step1();
-            var returnModel = (Return)result.Model;
-
-            //Assert
-            Assert.That(Regex.IsMatch(returnModel.MaleLowerPayBand.ToString(), pattern), "Error Message");
-            Assert.That(Regex.IsMatch(returnModel.MaleMiddlePayBand.ToString(), pattern), "Error Message");
-            Assert.That(Regex.IsMatch(returnModel.MaleUpperPayBand.ToString(), pattern), "Error Message");
-            Assert.That(Regex.IsMatch(returnModel.MaleMedianBonusPayPercent.ToString(), pattern), "Error Message");
-            Assert.That(Regex.IsMatch(returnModel.MaleUpperQuartilePayBand.ToString(), pattern), "Error Message");
-            Assert.That(Regex.IsMatch(returnModel.FemaleLowerPayBand.ToString(), pattern), "Error Message");
-            Assert.That(Regex.IsMatch(returnModel.FemaleMedianBonusPayPercent.ToString(), pattern), "Error Message");
-            Assert.That(Regex.IsMatch(returnModel.FemaleMiddlePayBand.ToString(), pattern), "Error Message");
-            Assert.That(Regex.IsMatch(returnModel.FemaleUpperPayBand.ToString(), pattern), "Error Message");
-            Assert.That(Regex.IsMatch(returnModel.FemaleUpperQuartilePayBand.ToString(), pattern), "Error Message");
-            Assert.That(Regex.IsMatch(returnModel.DiffMeanBonusPercent.ToString(), pattern), "Error Message");
-            Assert.That(Regex.IsMatch(returnModel.DiffMeanBonusPercent.ToString(), pattern), "Error Message");
-            Assert.That(Regex.IsMatch(returnModel.DiffMeanHourlyPayPercent.ToString(), pattern), "Error Message");
-            Assert.That(Regex.IsMatch(returnModel.DiffMedianBonusPercent.ToString(), pattern), "Error Message");
-            Assert.That(Regex.IsMatch(returnModel.DiffMedianHourlyPercent.ToString(), pattern), "Error Message");
-
-        } 
-        #endregion
 
 
 
