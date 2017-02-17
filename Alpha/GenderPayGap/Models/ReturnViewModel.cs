@@ -19,49 +19,72 @@ namespace GenderPayGap.WebUI.Models
         }
 
         [Required]
+        [Range(-200.0, 200.0)]
         [Display(Name = "Enter the difference in mean hourly rate")]
         public decimal DiffMeanHourlyPayPercent { get; set; }
 
         [Required]
+        [Range(-200.0, 200.0)]
         [Display(Name = "Enter the difference in median hourly rate")]
         public decimal DiffMedianHourlyPercent { get; set; }
 
         [Required]
         [Display(Name = "Enter the difference in mean bonus pay")]
+        [Range(-200.0, 200.0)]
         public decimal DiffMeanBonusPercent { get; set; }
 
         [Required]
         [Display(Name = "Enter the difference in median bonus pay")]
+        [Range(-200.0, 200.0)]
         public decimal DiffMedianBonusPercent { get; set; }
 
         [Required]
+        [Range(0.0, 200.0)]
         [Display(Name = "Males who received bonus pay %")]
         public decimal MaleMedianBonusPayPercent { get; set; }
+
         [Required]
+        [Range(0.0, 200.0)]
         [Display(Name = "Females who received bonus pay %")]
         public decimal FemaleMedianBonusPayPercent { get; set; }
+
         [Required]
+        [Range(0.0, 200.0)]
         [Display(Name = "Male")]
         public decimal MaleLowerPayBand { get; set; }
+
         [Required]
+        [Range(0.0, 200.0)]
         [Display(Name = "Female")]
         public decimal FemaleLowerPayBand { get; set; }
+
         [Required]
+        [Range(0.0, 200.0)]
         [Display(Name = "Male")]
         public decimal MaleMiddlePayBand { get; set; }
+
         [Required]
+        [Range(0.0, 200.0)]
         [Display(Name = "Female")]
         public decimal FemaleMiddlePayBand { get; set; }
+
         [Required]
+        [Range(0.0, 200.0)]
         [Display(Name = "Male")]
         public decimal MaleUpperPayBand { get; set; }
+
         [Required]
+        [Range(0.0, 200.0)]
         [Display(Name = "Female")]
         public decimal FemaleUpperPayBand { get; set; }
+
         [Required]
+        [Range(0.0, 200.0)]
         [Display(Name = "Male")]
         public decimal MaleUpperQuartilePayBand { get; set; }
+
         [Required]
+        [Range(0.0, 200.0) ]
         [Display(Name = "Female")]
         public decimal FemaleUpperQuartilePayBand { get; set; }
 
@@ -80,7 +103,8 @@ namespace GenderPayGap.WebUI.Models
         //[ForeignKey("OrganisationId")]
         //public virtual Organisation Organisation { get; set; }
 
-        [Required]
+
+        [Required(AllowEmptyStrings = false)]
         [Display(Name = "Title")]
         public string JobTitle { get; set; }
         [Required]

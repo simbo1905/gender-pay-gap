@@ -1,5 +1,18 @@
 ﻿@model GenderPayGap.WebUI.Models.ReturnViewModel
 
+@*button.Link {
+     background:none!important;
+     border:none;
+     padding:0!important;
+     font: inherit;
+     /*border is optional*/
+     border-bottom:1px solid #444;
+     cursor: pointer;
+}*@
+
+
+
+
 <main id="content" role="main">
     @using (Html.BeginForm(/*"Step4", "Return", FormMethod.Post*/))
     {
@@ -69,13 +82,17 @@
                 </div>
 
                 <p>
-                    <input class="button" type="submit" role="button" value="Continue" />
-                <p>@Html.ActionLink("Cancel", "Index", null, new { @class = "", onclick = "if (!confirm('Are you sure you want to cancel?'))return false;" })</p>
-                </p>
-                @*<a href="gpg-overview">Cancel</a>*@
-            </div>
+                    <input class="button" type="submit" role="button" name="command" value="Continue" />
+                    <input class="link" type="submit" role="button" name="command" value="Back" />
 
+                <p>
+                    @*@Html.ActionLink("Cancel", "Index", null, new { @class = "", onclick = "if (!confirm('Are you sure you want to cancel?'))return false;" })*@
+                    @Html.ActionLink("Back", "Step2", null, new { @class = "", onclick = Url.Action("Step2") })</p>
+            </p>
+            @*<a href="gpg-overview">Cancel</a>*@
         </div>
+
+    </div>
     }
 </main>
 
