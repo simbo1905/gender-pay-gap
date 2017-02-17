@@ -115,19 +115,19 @@ namespace GpgIdentityServer
 
         private void ConfigureIdentityProviders(IAppBuilder app, string signInAsType)
         {
-            app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions
-            {
-                AuthenticationType = "Google",
-                Caption = "Sign-in with Google",
-                SignInAsAuthenticationType = signInAsType,
+            //app.UseGoogleAuthentication(new GoogleOAuth2AuthenticationOptions
+            //{
+            //    AuthenticationType = "Google",
+            //    Caption = "Sign-in with Google",
+            //    SignInAsAuthenticationType = signInAsType,
 
-                //ClientId = "701386055558-9epl93fgsjfmdn14frqvaq2r9i44qgaa.apps.googleusercontent.com",
-                //ClientSecret = "3pyawKDWaXwsPuRDL7LtKm_o"
+            //    //ClientId = "701386055558-9epl93fgsjfmdn14frqvaq2r9i44qgaa.apps.googleusercontent.com",
+            //    //ClientSecret = "3pyawKDWaXwsPuRDL7LtKm_o"
 
-                ClientId = "979363520284-3l9brf97vd16jvv68je6of8b7v8ej48d.apps.googleusercontent.com",
-                ClientSecret = "Rp8_erHf2xZmJInm35iC7ug_"
+            //    ClientId = "979363520284-3l9brf97vd16jvv68je6of8b7v8ej48d.apps.googleusercontent.com",
+            //    ClientSecret = "Rp8_erHf2xZmJInm35iC7ug_"
                 
-            });
+            //});
 
             //var fb = new FacebookAuthenticationOptions
             //{

@@ -1,0 +1,50 @@
+﻿@{
+    ViewBag.Title = "Register: Step 4";
+}
+@model GenderPayGap.WebUI.Models.OrganisationViewModel
+
+<main id="content" role="main">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.SectorType)
+
+        <div class="grid-row">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                @Html.ValidationSummary("ERRORS:", new {@class = "text-danger"})
+            }
+            <div class="column-full">
+                <h1 class="heading-large">
+                    <span class="heading-secondary">Step 4 of 6</span>
+                    Choose your company
+                </h1>
+
+                <div class="search-bar">
+                    <div class="searchfield">
+                        @Html.EditorFor(model => model.SearchText, new { htmlAttributes = new { @class = "search-input", @placeholder = "Enter an employers name or company no" } })<br />
+
+                        <button type="submit" class="search-submit">Search</button>
+                    </div>
+                </div>
+                <br/>
+                <details role="group">
+                    <summary role="button" aria-controls="details-content-0" aria-expanded="true">Where to find your company registration number</summary>
+                    <div class="panel panel-border-narrow" id="details-content-0" aria-hidden="false">
+                        <p>You can find your company’s registration number:</p>
+                        <ul class="list list-bullet">
+                            <li>on invoices or receipts issued by your company</li>
+                            <li>your company’s website</li>
+                            <li>from Companies House by <a href="https://www.gov.uk/get-information-about-a-company">searching for your company</a></li>
+                        </ul>
+                    </div>
+                </details>
+                @if (!string.IsNullOrWhiteSpace(Model.SearchText))
+                {
+                    <p>No records found</p>
+                }
+                <br>
+            </div>
+        </div>
+    }
+</main>

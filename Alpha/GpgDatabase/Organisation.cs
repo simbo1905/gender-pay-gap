@@ -21,35 +21,49 @@ namespace GpgDB.Models.GpgDatabase
             this.OrganisationAddresses = new HashSet<OrganisationAddress>();
             this.OrganisationStatuses = new HashSet<OrganisationStatus>();
             this.Returns = new HashSet<Return>();
-            Created = DateTime.Now;
-            Modified = DateTime.Now;
         }
 
-        public enum OrgTypes:int
-        {
-            Unknown=0,
-            Company=1,
-            Charity=2,
-            Government=3
-        }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long OrganisationId { get; set; }
-        public string OrganisationRef { get; set; }
+
+        [MaxLength(10)]
+        public string PrivateSectorReference { get; set; }
+
+        [MaxLength(10)]
+        public string PublicSectorReference { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(100), MinLength(5)]
+        [Index]
         public string OrganisationName { get; set; }
-        public OrgTypes OrganisationType { get; set; }
-        public string Phone { get; set; }
-        public string Email { get; set; }
-        public string Web { get; set; }
-        public string CurrentStatus { get; set; }
-        public Nullable<System.DateTime> CurrentStatusDate { get; set; }
+
+        [Required]
+        [Column("SectorTypeId")]
+        [Index]
+        public SectorTypes SectorType { get; set; }
+
+        [Required]
+        [Column("CurrentStatusID")]
+        public OrganisationStatuses CurrentStatus { get; set; }
+
+        [Required]
+        public System.DateTime CurrentStatusDate { get; set; } = DateTime.Now;
+
+        [MaxLength(255)]
         public string CurrentStatusDetails { get; set; }
-        public Nullable<System.DateTime> Created { get; set; }
-        public Nullable<System.DateTime> Modified { get; set; }
+
+        [Required]
+        public System.DateTime Created { get; set; } = DateTime.Now;
+
+        [Required]
+        public System.DateTime Modified { get; set; } = DateTime.Now;
 
         public virtual ICollection<OrganisationAddress> OrganisationAddresses { get; set; }
+
         public virtual ICollection<OrganisationStatus> OrganisationStatuses { get; set; }
+
         public virtual ICollection<Return> Returns { get; set; }
     }
 }

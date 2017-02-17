@@ -19,13 +19,28 @@ namespace GpgDB.Models.GpgDatabase
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long OrganisationStatusId { get; set; }
+
+        [Required]
         public long OrganisationId { get; set; }
-        public byte StatusId { get; set; }
-        public Nullable<System.DateTime>  StatusDate { get; set; }
+
+        [Required]
+        [Column("StatusId")]
+        public OrganisationStatuses Status { get; set; }
+
+        [Required]
+        [Index]
+        public System.DateTime  StatusDate { get; set; } = DateTime.Now;
+
+        [MaxLength(255)]
         public string StatusMessage { get; set; }
+
+        [Required]
         public Nullable<long> ByUserId { get; set; }
 
         [ForeignKey("OrganisationId")]
         public virtual Organisation Organisation { get; set; }
+
+        [ForeignKey("ByUserId")]
+        public virtual User ByUser { get; set; }
     }
 }

@@ -18,15 +18,29 @@ namespace GpgDB.Models.GpgDatabase
     {
         public UserStatus()
         {
-            StatusDate = DateTime.Now;
         }
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long UserStatusId { get; set; }
+
+        [Required]
         public long UserId { get; set; }
-        public byte StatusId { get; set; }
-        public Nullable<System.DateTime>  StatusDate { get; set; }
+
+        [Column("StatusId")]
+
+        public UserStatuses Status { get; set; }
+
+        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
+        [Index]
+        public System.DateTime StatusDate { get; set; } = DateTime.Now;
+
+        [MaxLength(255)]
         public string StatusMessage { get; set; }
-        public Nullable<long> ByUserId { get; set; }    
+
+        [Required]
+        public long ByUserId { get; set; }
+
+        [ForeignKey("ByUserId")]
+        public virtual User ByUser { get; set; }
     }
 }

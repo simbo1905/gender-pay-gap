@@ -86,6 +86,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Enums.cs" />
     <Compile Include="GpgDatabase.cs" />
     <Compile Include="Organisation.cs" />
     <Compile Include="OrganisationAddress.cs" />
@@ -96,7 +97,6 @@
     <Compile Include="User.cs" />
     <Compile Include="UserOrganisation.cs" />
     <Compile Include="UserStatuses.cs" />
-    <Compile Include="UserToken.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
