@@ -5,6 +5,7 @@ using GenderPayGap.WebUI.Classes;
 using GenderPayGap.Models.SqlDatabase;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Authentication;
 using System.Security.Principal;
@@ -54,33 +55,48 @@ namespace GenderPayGap
         #endregion
 
         #region Exception handling methods
+
+
         protected override void OnException(ExceptionContext filterContext)
         {
-            WriteLog(Settings.Default.LogErrorFile, filterContext.Exception.ToString());
+            //Add to the log
+            Log.WriteLine(filterContext.Exception.ToString());
 
             // Output a nice error page
             if (filterContext.HttpContext.IsCustomErrorEnabled)
             {
                 filterContext.ExceptionHandled = true;
-                View("Error").ExecuteResult(ControllerContext);
+                if (filterContext.Exception is IdentityNotMappedException)
+                    filterContext.Result=View("Error", new ErrorViewModel()
+                    {
+                        Title = "Unauthorised Request",
+                        Description = "Unrecognised user.",
+                        CallToAction = "Please log out of the system.",
+                        ActionUrl = Url.Action("LogOut", "Home")
+                    });
+                else if (filterContext.Exception is UnauthorizedAccessException)
+                    filterContext.Result =  View("Error", new ErrorViewModel()
+                    {
+                        Title = "Unauthorised Request",
+                        Description = "You do not have the required permission to access this option.",
+                        CallToAction = "Please log in as a user with the correct permissions.",
+                        ActionUrl = Url.Action("LogOut", "Home")
+                    });
+                else if (filterContext.Exception is AuthenticationException)
+                    filterContext.Result = View("Error", new ErrorViewModel()
+                    {
+                        Title = "Login Required",
+                        Description = "You must first login to access this option.",
+                        CallToAction = "Next Step: Login to service",
+                        ActionUrl = Url.Action("LogOut", "Home")
+                    });
+                else 
+                    View("Error").ExecuteResult(ControllerContext);
             }
         }
 
-        /// <summary>
-        /// Logs a message to the given log file
-        /// </summary>
-        /// <param name="logFile">The filename to log to</param>
-        /// <param name="text">The message to log</param>
-        static void WriteLog(string logFile, string text)
-        {
-            //TODO: Format nicer
-            StringBuilder message = new StringBuilder();
-            message.AppendLine(DateTime.Now.ToString());
-            message.AppendLine(text);
-            message.AppendLine("=========================================");
+        private Logger Log => new Logger(FileSystem.ExpandLocalPath(Path.Combine(Settings.Default.LogPath, "Errors")));
 
-            System.IO.File.AppendAllText(logFile, message.ToString());
-        }
         #endregion
 
         #region Authorisation Methods
@@ -220,44 +236,6 @@ namespace GenderPayGap
                 return false;
 
             return true;
-        }
-        #endregion
-
-        #region Error handling actions
-        [HandleError(ExceptionType = typeof(IdentityNotMappedException))]
-        public ActionResult IdentityNotMapped()
-        {
-            return View("Error", new ErrorViewModel()
-            {
-                Title = "Unauthorised Request",
-                Description = "Unrecognised user.",
-                CallToAction = "Please log out of the system.",
-                ActionUrl = Url.Action("LogOff", "Account")
-            });
-        }
-
-        [HandleError(ExceptionType = typeof(UnauthorizedAccessException))]
-        public ActionResult UnauthorizedAccess()
-        {
-            return View("Error", new ErrorViewModel()
-            {
-                Title = "Unauthorised Request",
-                Description = "You do not have the required permission to access this option.",
-                CallToAction = "Please log in as a user with the correct permissions.",
-                ActionUrl = Url.Action("LogOff", "Account")
-            });
-        }
-
-        [HandleError(ExceptionType = typeof(AuthenticationException))]
-        public ActionResult NotAuthenticated()
-        {
-            return View("Error", new ErrorViewModel()
-            {
-                Title = "Login Required",
-                Description = "You must first login to access this option.",
-                CallToAction = "Next Step: Login to service",
-                ActionUrl = Url.Action("Logon", "Identity")
-            });
         }
         #endregion
 

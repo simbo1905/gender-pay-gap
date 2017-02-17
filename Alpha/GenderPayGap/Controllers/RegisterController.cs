@@ -9,6 +9,7 @@ using Autofac;
 using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Classes;
 using System.Net;
+using System.Security.Principal;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -174,6 +175,9 @@ namespace GenderPayGap.WebUI.Controllers
 
             //Set the user as verified
             currentUser.EmailVerifiedDate = DateTime.Now;
+
+            //Mark the user as active
+            currentUser.SetStatus(UserStatuses.Active, currentUser.UserId,"Email verified");
 
             //Save the current user
             Repository.SaveChanges();
@@ -606,8 +610,8 @@ namespace GenderPayGap.WebUI.Controllers
             //Get the user organisation
             var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
 
-            //Get the latest address for the organisation
-            var address = Repository.GetAll<OrganisationAddress>().OrderByDescending(oa => oa.Modified).FirstOrDefault(oa => oa.OrganisationId == userOrg.OrganisationId);
+            //Get the organisation
+            var org = Repository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == userOrg.OrganisationId);
 
             //If a pin has never been sent or resend button submitted then send one immediately
             if (string.IsNullOrWhiteSpace(userOrg.PINCode) || userOrg.PINSentDate.EqualsI(null, DateTime.MinValue) || Request.HttpMethod.EqualsI("POST"))
@@ -624,7 +628,7 @@ namespace GenderPayGap.WebUI.Controllers
                     var pin = Numeric.Rand(0, 999999);
 
                     //Try and send the PIN in post
-                    if (!this.SendPinInPost(currentUser.Fullname + " (" + currentUser.JobTitle + ")", currentUser.EmailAddress, pin.ToString()))
+                    if (!this.SendPinInPost(currentUser, org, pin.ToString()))
                         throw new Exception("Could not send PIN in the POST. Please try again later.");
 
                     //Generate a confimation link
@@ -652,7 +656,8 @@ namespace GenderPayGap.WebUI.Controllers
                 && userOrg.PINSentDate.Value.AddDays(Properties.Settings.Default.PinInPostMinRepostDays) < DateTime.Now;
             ViewBag.UserFullName = currentUser.Fullname;
             ViewBag.UserJobTitle = currentUser.JobTitle;
-            ViewBag.Address = address.GetAddress(",<br/>");
+            ViewBag.Organisation = org.OrganisationName;
+            ViewBag.Address = org.Address.GetAddress(",<br/>");
             return View("SendPIN");
         }
 
@@ -743,7 +748,13 @@ namespace GenderPayGap.WebUI.Controllers
 
             //Set the user org as confirmed
             userOrg.PINConfirmedDate = DateTime.Now;
-            
+
+            //Mark the organisation as active
+            userOrg.Organisation.SetStatus(OrganisationStatuses.Active, currentUser.UserId,"PIN Confirmed");
+
+            //Mark the address as confirmed
+            userOrg.Organisation.Address.SetStatus(AddressStatuses.Confirmed, currentUser.UserId, "PIN Confirmed");
+
             //Save the current user
             Repository.SaveChanges();
 
@@ -769,13 +780,6 @@ namespace GenderPayGap.WebUI.Controllers
 
             //Show the confirmation view
             return View("Complete");
-        }
-
-        [HttpGet]
-        public ActionResult Error()
-        {
-            //Show the confirmation view
-            return View();
         }
     }
 }

@@ -43,10 +43,10 @@ namespace GenderPayGap.WebUI.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("LogErrorFile.Log")]
-        public string LogErrorFile {
+        [global::System.Configuration.DefaultSettingValueAttribute("Logs")]
+        public string LogPath {
             get {
-                return ((string)(this["LogErrorFile"]));
+                return ((string)(this["LogPath"]));
             }
         }
         

@@ -69,6 +69,7 @@
     <Compile Include="Extensions.cs" />
     <Compile Include="FileSystem.cs" />
     <Compile Include="Lists.cs" />
+    <Compile Include="Logger.cs" />
     <Compile Include="Misc.cs" />
     <Compile Include="NameValueList.cs" />
     <Compile Include="Numeric.cs" />

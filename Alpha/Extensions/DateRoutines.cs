@@ -640,7 +640,7 @@ namespace Extensions
                 parts++;
                 if (result != null) result += parts == maxParts ? " and " : ", ";
                 result += interval.Seconds;
-                result += "second" + (interval.Seconds > 1 ? "s" : "");
+                result += " second" + (interval.Seconds > 1 ? "s" : "");
             }
             return result;
         }

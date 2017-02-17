@@ -59,11 +59,11 @@ namespace GenderPayGap.Models.SqlDatabase
 
         [Required]
         [DataType("decimal(4,1")]
-        public decimal MaleMIddlePayBand { get; set; }
+        public decimal MaleMiddlePayBand { get; set; }
 
         [Required]
         [DataType("decimal(4,1")]
-        public decimal FemaleMIddlePayBand { get; set; }
+        public decimal FemaleMiddlePayBand { get; set; }
 
         [Required]
         [DataType("decimal(4,1")]

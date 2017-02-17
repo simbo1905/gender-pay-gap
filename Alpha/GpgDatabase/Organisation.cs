@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace GenderPayGap.Models.SqlDatabase
 {
     using System;
@@ -71,6 +73,15 @@ namespace GenderPayGap.Models.SqlDatabase
             Status = status;
             StatusDate = DateTime.Now;
             StatusDetails = details;
+        }
+
+        public OrganisationAddress Address
+        {
+            get
+            {
+                //Get the latest address for the organisation
+                return OrganisationAddresses.OrderByDescending(oa => oa.Modified).FirstOrDefault(oa => oa.OrganisationId == OrganisationId);
+            }
         }
     }
 }
