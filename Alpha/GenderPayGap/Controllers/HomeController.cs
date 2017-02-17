@@ -41,5 +41,10 @@ namespace GenderPayGap.WebUI.Controllers
             Request.GetOwinContext().Authentication.SignOut();
             return Redirect("/");
         }
+        public ActionResult TimeOut()
+        {
+            Request.GetOwinContext().Authentication.SignOut();
+            return View("TimedOut");
+        }
     }
 }

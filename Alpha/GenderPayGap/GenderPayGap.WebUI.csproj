@@ -385,7 +385,6 @@
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Return\Index.cshtml" />
@@ -443,6 +442,7 @@
     <Content Include="Views\Register\Step4.cshtml" />
     <Content Include="Views\Register\SendPIN.cshtml" />
     <Content Include="Views\Register\ConfirmPIN.cshtml" />
+    <Content Include="Views\Home\TimedOut.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\GPGDatabase\" />
