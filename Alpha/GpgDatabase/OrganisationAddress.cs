@@ -80,15 +80,17 @@ namespace GenderPayGap.Models.SqlDatabase
             return list.ToDelimitedString(delimiter);
         }
 
-        public void SetStatus(AddressStatuses status, long userId, string details = null)
+        public void SetStatus(AddressStatuses status, long byUserId, string details = null)
         {
-            var addressStatus = new AddressStatus()
+            if (status == Status && details == StatusDetails) return;
+            AddressStatuses.Add(new AddressStatus()
             {
+                AddressId = this.OrganisationAddressId,
                 Status = status,
                 StatusDate = DateTime.Now,
                 StatusDetails = details,
-                ByUserId = userId
-            };
+                ByUserId = byUserId
+            });
             Status = status;
             StatusDate = DateTime.Now;
             StatusDetails = details;

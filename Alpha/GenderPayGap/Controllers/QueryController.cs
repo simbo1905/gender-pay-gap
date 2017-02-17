@@ -9,7 +9,7 @@ using Extensions;
 
 namespace GenderPayGap.WebUI.Controllers
 {
-    public class QueryController : Controller
+    public class QueryController : BaseController
     {
         public ActionResult Start()
         {
@@ -21,7 +21,7 @@ namespace GenderPayGap.WebUI.Controllers
             var model = new SearchViewModel();
             if (!string.IsNullOrWhiteSpace(query))
             {
-                model.Results = DbContext.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(query.ToLower())).ToArray();
+                model.Results = Repository.GetAll<Organisation>().Where(o => o.OrganisationName.ToLower().Contains(query.ToLower())).ToArray();
 
                 //var x = model.Search;
                 //model.Results = GpgDatabase.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(model.Search.ToLower())).ToArray();
@@ -46,7 +46,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
             else if (ModelState.IsValid && string.IsNullOrWhiteSpace(model.Search))
             {
-                  model.Results = DbContext.Default.Organisation.Select(o => o).ToArray();
+                  model.Results = Repository.GetAll<Organisation>().Select(o => o).ToArray();
             }
 
             return View(model);

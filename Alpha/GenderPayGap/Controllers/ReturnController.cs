@@ -27,8 +27,8 @@ namespace GenderPayGap.WebUI.Controllers
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
             var currentUser = Repository.FindUser(User);
-            var userOrg = DbContext.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
-            var model = DbContext.Default.Return.FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
+            var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+            var model = Repository.GetAll<Return>().FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
             if (model == null) model = new Return();
             model.OrganisationId = userOrg.OrganisationId;
             return View(model);
@@ -93,23 +93,23 @@ namespace GenderPayGap.WebUI.Controllers
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
 
-            var original = DbContext.Default.Return.Find(model.ReturnId);
+            var original = Repository.GetAll<Return>().Where(r=>r.ReturnId==model.ReturnId);
             if (original == null)
             {
                 var currentUser = Repository.FindUser(User);
-                var userOrg = DbContext.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+                var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
                 model.OrganisationId = userOrg.OrganisationId;
-                DbContext.Default.Return.Add(model);
+                Repository.Insert(model);
             }
             else
             {
-                DbContext.Default.Entry(original).CurrentValues.SetValues(model);
+                //DbContext.Default.Entry(original).CurrentValues.SetValues(model);
             }
-            model.Organisation = DbContext.Default.Organisation.Find(model.OrganisationId);
+            //model.Organisation = DbContext.Default.Organisation.Find(model.OrganisationId);
             model.AccountingDate = DateTime.Now;
             try
             {
-                DbContext.Default.SaveChanges();
+                //DbContext.Default.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -122,14 +122,14 @@ namespace GenderPayGap.WebUI.Controllers
         // GET: Return/Details/5
         public ActionResult Confirm(int id = 1)
         {
-            var qid = DbContext.Default.Return.Find(id);
-            return View(qid);
+            //var qid = DbContext.Default.Return.Find(id);
+            return View();
         }
 
         public ActionResult Details(int id = 1)
         {
-            var qid = DbContext.Default.Return.Find(id);
-            return View(qid);
+            //var qid = DbContext.Default.Return.Find(id);
+            return View();
         }
     }
 }

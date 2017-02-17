@@ -1,4 +1,6 @@
-﻿namespace GenderPayGap.Models.SqlDatabase
+﻿using System.Data.Entity.Validation;
+
+namespace GenderPayGap.Models.SqlDatabase
 {
     using GenderPayGap.Core.Interfaces;
     using System;
@@ -14,7 +16,6 @@
             : base("GpgDatabase")
         {
         }
-        public static DbContext Default = new DbContext();
 
         public virtual DbSet<Organisation> Organisation { get; set; }
         public virtual DbSet<OrganisationAddress> OrganisationAddress { get; set; }
@@ -28,10 +29,10 @@
         public static int Truncate(params string[] tables)
         {
             List<string> target = new List<string>();
-
+            var context=new DbContext();
             if (tables == null || tables.Length == 0)
             {
-                target = GetTableList(DbContext.Default);
+                target = GetTableList(context);
             }
             else
             {
@@ -46,19 +47,19 @@
                 {
                     try
                     {
-                        DbContext.Default.Database.ExecuteSqlCommand(string.Format("TRUNCATE TABLE [{0}]", table));
+                        context.Database.ExecuteSqlCommand(string.Format("TRUNCATE TABLE [{0}]", table));
                         result++;
                     }
                     catch (Exception ex)
                     {
                         try
                         {
-                            DbContext.Default.Database.ExecuteSqlCommand(string.Format("DELETE [{0}]", table));
+                            context.Database.ExecuteSqlCommand(string.Format("DELETE [{0}]", table));
                             result++;
 
                             try
                             {
-                                DbContext.Default.Database.ExecuteSqlCommand(string.Format("DBCC CHECKIdENT ([{0}], RESEED, 1)", table));
+                                context.Database.ExecuteSqlCommand(string.Format("DBCC CHECKIdENT ([{0}], RESEED, 1)", table));
                             }
                             catch (Exception ex1)
                             {
@@ -74,7 +75,7 @@
                 if (result == target.Count()) break;
                 if (result == 10) throw new Exception("Unable to truncate all tables");
             }
-            DbContext.Default.SaveChanges();
+            context.SaveChanges();
             return result;
         }
 
@@ -89,25 +90,24 @@
                 .Select(x => x.Name).ToList();
         }
 
-        public static void RefreshAll()
-        {
-            Default = new DbContext();
-        }
-
         public override int SaveChanges()
         {
-            int c = 0;
-            retry:
             try
             {
                 return base.SaveChanges();
             }
-            catch (Exception ex)
+            catch (DbEntityValidationException vex)
             {
-                c++;
-                Thread.Sleep(1000);
-                if (c<10)goto retry;
-                throw;
+                var innerExceptions=new List<ArgumentException>();
+                
+                foreach (var err in vex.EntityValidationErrors)
+                {
+                    foreach (var err1 in err.ValidationErrors)
+                    {
+                        innerExceptions.Add(new ArgumentException(err1.ErrorMessage,err1.PropertyName));
+                    }
+                }
+                throw new AggregateException(innerExceptions);
             }
         }
 

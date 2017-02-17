@@ -11,82 +11,53 @@ using IdentityServer3.Core.Services;
 using IdentityServer3.Core.Services.Default;
 using GenderPayGap.Models.SqlDatabase;
 using System.Configuration;
+using Extensions;
 
 namespace GpgIdentityServer
 {
     public class LocalRegistrationUserService : UserServiceBase
     {
-        public class ExternalUser
-        {
-            public string Subject { get; set; }
-            public string Provider { get; set; }
-            public string ProviderID { get; set; }
-            public bool IsRegistered { get; set; }
-            public List<Claim> Claims { get; set; }
-        }
-
-        public class LocalUser
-        {
-            public string Subject { get; set; }
-            public string Name { get; set; }
-            public string Username { get; set; }
-            public string Password { get; set; }
-            public List<Claim> Claims { get; set; }
-        }
-        
-        public static List<LocalUser> InternalUsers = new List<LocalUser>();
-
         public override Task AuthenticateLocalAsync(LocalAuthenticationContext context)
         {
-            InternalUsers = LoadInternal();
             //var user = InternalUsers.SingleOrDefault(x => x.Username == context.UserName && x.Password == context.Password);
-            var user = InternalUsers.FirstOrDefault(x => x.Username == context.UserName && x.Password == context.Password);
+
+            var username = context.UserName.ToLower();
+
+            var dbContext = new DbContext();
+            var user = dbContext.User.FirstOrDefault(x => x.EmailAddress == username);
+
             if (user != null)
             {
-                context.AuthenticateResult = new AuthenticateResult(user.Subject, user.Username);
+                var remaining = user.LoginDate==null ? TimeSpan.Zero : user.LoginDate.Value.AddMinutes(Properties.Settings.Default.LockoutMinutes) - DateTime.Now;
+                if (user.LoginAttempts >=Properties.Settings.Default.MaxLoginAttempts && remaining > TimeSpan.Zero)
+                {
+                    context.AuthenticateResult = new AuthenticateResult("You have failed too many login attempts. Please try again in " + remaining.ToFriendly(maxParts:2));
+                }
+                else if (user.PasswordHash == context.Password.GetSHA512Checksum())
+                {
+                    context.AuthenticateResult = new AuthenticateResult(user.UserId.ToString(), user.Fullname,new [] {new Claim(Constants.ClaimTypes.Subject, user.UserId.ToString()), });
+                    user.LoginAttempts=0;
+                }
+                else
+                {
+                    context.AuthenticateResult = new AuthenticateResult("Invalid username or password.");
+                    user.LoginAttempts++;
+                }
+                user.LoginDate = DateTime.Now;
+                dbContext.SaveChanges();
             }
+            else
+                context.AuthenticateResult = new AuthenticateResult("Invalid username or password.");
 
             return Task.FromResult(0);
         }
 
         public override Task GetProfileDataAsync(ProfileDataRequestContext context)
         {
-            // issue the claims for the user
-            var internaluser = InternalUsers.SingleOrDefault(x => x.Subject == context.Subject.GetSubjectId());
-            // issue the claims for the user
-            var user = InternalUsers.SingleOrDefault(x => x.Subject == context.Subject.GetSubjectId());
-            if (user != null)
-            {
-                context.IssuedClaims = user.Claims.Where(x => context.RequestedClaimTypes.Contains(x.Type));
-            }
+            //Issue the requested claims for the user
+            context.IssuedClaims = context.Subject.Claims.Where(x => context.RequestedClaimTypes.Contains(x.Type));
 
             return Task.FromResult(0);
-        }
-
-        private List<LocalUser> LoadInternal()
-        {
-            //TODO Load users from database
-            var users = new List<LocalUser>();
-            DbContext.RefreshAll();
-
-            foreach (var user in DbContext.Default.User)
-            {
-                users.Add(new LocalUser
-                {
-                    Username = user.EmailAddress,
-                    Password = user.Password,
-                    Subject = user.UserId.ToString(),
-                    Name=user.Fullname,
-                    Claims = new List<Claim>
-                    {
-                        new Claim(Constants.ClaimTypes.Subject, user.UserId.ToString()),
-                        new Claim(Constants.ClaimTypes.GivenName, user.Firstname),
-                        new Claim(Constants.ClaimTypes.FamilyName, user.Lastname),
-                        new Claim(Constants.ClaimTypes.Role, "Customer")
-                    }
-                });
-            }
-            return users;
         }
     }
 }
