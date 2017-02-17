@@ -18,19 +18,33 @@ namespace GpgDB.Models.GpgDatabase
     {
         public ReturnStatus()
         {
-            StatusDate = DateTime.Now;
         }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long ReturnStatusId { get; set; }
+
+        [Required]
         public long ReturnId { get; set; }
-        public byte StatusId { get; set; }
-        public Nullable<System.DateTime>  StatusDate { get; set; }
+
+        [Required]
+        [Column("StatusId")]
+        public ReturnStatuses Status { get; set; }
+
+        [Required]
+        [Index]
+        public System.DateTime  StatusDate { get; set; } = DateTime.Now;
+
+        [MaxLength(255)]
         public string StatusMessage { get; set; }
-        public Nullable<long> ByUserId { get; set; }
+
+        [Required]
+        public long ByUserId { get; set; }
 
         [ForeignKey("ReturnId")]
         public virtual Return Return { get; set; }
+
+        [ForeignKey("UserId")]
+        public virtual User ByUser { get; set; }
     }
 }

@@ -8,6 +8,8 @@ using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Web;
+using System.Web.Mvc;
+using GenderPayGap.WebUI.Controllers;
 
 namespace GenderPayGap.WebUI.Classes
 {
@@ -27,12 +29,17 @@ namespace GenderPayGap.WebUI.Classes
 
         public static long GetUserId(this IPrincipal principal)
         {
-            return principal.GetClaim(Constants.ClaimTypes.ExternalProviderUserId).ToLong();
+            return principal.GetClaim(Constants.ClaimTypes.Subject).ToLong();
         }
 
         #endregion
 
         #region User Entity
+        public static UserOrganisation GetUserOrg(this IRepository repository, User user)
+        {
+            return repository.GetAll<UserOrganisation>().FirstOrDefault(uo=>uo.UserId==user.UserId);
+        }
+
         public static User FindUser(this IRepository repository, IPrincipal principal)
         {
             //GEt the logged in users identifier
@@ -42,6 +49,22 @@ namespace GenderPayGap.WebUI.Classes
             if (userId > 0) return repository.GetAll<User>().FirstOrDefault(u=>u.UserId==userId);
 
             return null;
+        }
+
+        public static User FindUserByEmail(this IRepository repository, string emailAddress)
+        {
+            if (string.IsNullOrWhiteSpace(emailAddress))throw new ArgumentNullException("emailAddress");
+            
+            //If internal user the load it using the identifier as the UserID
+            return repository.GetAll<User>().FirstOrDefault(u => u.EmailAddress == emailAddress);
+        }
+
+        public static User FindUserByVerifyCode(this IRepository repository, string verifyCode)
+        {
+            if (string.IsNullOrWhiteSpace(verifyCode)) throw new ArgumentNullException("verifyCode");
+
+            //If internal user the load it using the identifier as the UserID
+            return repository.GetAll<User>().FirstOrDefault(u => u.EmailVerifyCode == verifyCode);
         }
 
         public static UserOrganisation FindUserOrganisation(this IRepository repository, IPrincipal principal)
@@ -57,6 +80,37 @@ namespace GenderPayGap.WebUI.Classes
 
         #endregion
 
+        #region Registraion Helpers
 
+        public static bool SendVerifyEmail(this RegisterController controller, string emailAddress, string verifyCode)
+        {
+            var verifyUrl=controller.Url.Action("Step2", null, new {code= verifyCode },"https");
+            return GovNotifyAPI.SendVerifyEmail(verifyUrl,emailAddress, verifyCode);
+        }
+        public static bool SendConfirmEmail(this RegisterController controller, string emailAddress, string confirmCode)
+        {
+            var confirmUrl = controller.Url.Action("Step2", null, new { code = confirmCode },"https");
+            return GovNotifyAPI.SendConfirmEmail(confirmUrl, emailAddress,confirmCode);
+        }
+
+        public static bool SendPinInPost(this RegisterController controller, string name, string address, string pin)
+        {
+            var returnUrl = controller.Url.Action("Step6",null,null,"https");
+            return GovNotifyAPI.SendPinInPost(returnUrl, name, address, pin);
+        }
+
+        #endregion
+
+        #region AntiSpam
+        public static string SpamProtectionTimeStamp(this HtmlHelper helper)
+        {
+            var builder = new TagBuilder("input");
+            builder.MergeAttribute("id", "SpamProtectionTimeStamp");
+            builder.MergeAttribute("name", "SpamProtectionTimeStamp");
+            builder.MergeAttribute("type", "hidden");
+            builder.MergeAttribute("value", Encryption.EncryptData(DateTime.Now.ToShortTimeString()));
+            return builder.ToString(TagRenderMode.SelfClosing);
+        }
+        #endregion
     }
 }

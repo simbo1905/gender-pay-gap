@@ -139,8 +139,17 @@ namespace Extensions
             }
         }
 
+        public static bool EqualsI(this object item, params object[] values)
+        {
+            if (item == null && values.Contains(null)) return true;
+            foreach (var value in values)
+                if (item.Equals(value)) return true;
+            return false;
+        }
+
         public static bool IsAny(this object item, params object[] values)
         {
+            if (item == null && values.Contains(null)) return true;
             foreach (var value in values)
                 if (item.Equals(value)) return true; 
             return false;
@@ -320,7 +329,7 @@ namespace Extensions
                 if (DateTime.TryParseExact(str, Time.ShortDateFormat, null, System.Globalization.DateTimeStyles.AssumeLocal, out parsedValue))
                     return parsedValue;
 
-                if (DateTime.TryParseExact(str, Time.SmallDateFormat, null, System.Globalization.DateTimeStyles.AssumeLocal, out parsedValue))
+                if (DateTime.TryParseExact(str, Time.ShortDateFormat, null, System.Globalization.DateTimeStyles.AssumeLocal, out parsedValue))
                     return parsedValue;
 
                 if (DateTime.TryParse(str, out parsedValue)) return parsedValue;

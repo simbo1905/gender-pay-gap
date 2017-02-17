@@ -5,7 +5,10 @@ using IdentityServer3.Core;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Security.Claims;
 using System.Security.Principal;
 using System.Text;
@@ -18,6 +21,7 @@ namespace GenderPayGap.Tests
 {
     public static class TestHelper
     {
+        private const string Url = "https://genderpaygap.azurewebsites.net";
         public static T GetController<T>(long userId=0, params object[] dbObjects) where T : Controller
         {
             var builder = BuildContainerIoC(dbObjects);
@@ -25,16 +29,31 @@ namespace GenderPayGap.Tests
             //Mock UserId as claim
             var claims = new List<Claim>();
 
-            if (userId>0)claims.Add(new Claim(Constants.ClaimTypes.ExternalProviderUserId, userId.ToString()));
+            if (userId>0)claims.Add(new Claim(Constants.ClaimTypes.Subject, userId.ToString()));
             
             var mockPrincipal = new Mock<ClaimsPrincipal>();
             mockPrincipal.Setup(m => m.Claims).Returns(claims);
             mockPrincipal.Setup(m => m.Identity.IsAuthenticated).Returns(userId > 0);
             if (userId>0)mockPrincipal.Setup(m => m.Identity.Name).Returns(userId.ToString());
 
+            //Mock HttpRequest
+            var requestMock = new Mock<HttpRequestBase>();
+            requestMock.SetupGet(x => x.ApplicationPath).Returns("/");
+            requestMock.SetupGet(x => x.Url).Returns(new Uri(Url, UriKind.Absolute));
+            requestMock.SetupGet(x => x.ServerVariables).Returns(new NameValueCollection());
+
+            //Mock HttpResponse
+            var responseMock = new Mock<HttpResponseBase>();
+            responseMock.Setup(x => x.ApplyAppPathModifier(It.IsAny<string>())).Returns((string url) => url);
+
             //Mock HttpContext
             var contextMock = new Mock<HttpContextBase>();
             contextMock.Setup(ctx => ctx.User).Returns(mockPrincipal.Object);
+            contextMock.SetupGet(x => x.Request).Returns(requestMock.Object);
+            contextMock.SetupGet(x => x.Response).Returns(responseMock.Object);
+
+            var routes = new RouteCollection();
+            RouteConfig.RegisterRoutes(routes);
 
             //Mock the httpcontext to the controllercontext
             var controllerContextMock = new Mock<ControllerContext>();
@@ -42,7 +61,10 @@ namespace GenderPayGap.Tests
 
             T controller = (T)Activator.CreateInstance(typeof(T), builder);
             controller.ControllerContext = controllerContextMock.Object;
-
+            controller.Url = new UrlHelper(
+                new RequestContext(contextMock.Object, new RouteData()),
+                routes
+            );
             return controller;
         }
 
@@ -58,6 +80,17 @@ namespace GenderPayGap.Tests
 
 
             return builder.Build();
+        }
+
+        public static void Bind(this Controller controller, object Model)
+        {
+            ValidationContext validationContext = new ValidationContext(Model, null, null);
+            List<ValidationResult> validationResults = new List<ValidationResult>();
+            Validator.TryValidateObject(Model, validationContext, validationResults, true);
+            foreach (ValidationResult validationResult in validationResults)
+            {
+                controller.ModelState.AddModelError(String.Join(", ", validationResult.MemberNames), validationResult.ErrorMessage);
+            }
         }
     }
 

@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "Register";
+}
+@model GenderPayGap.WebUI.Models.OrganisationViewModel
+
+<main id="content" role="main">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        <div class="grid-row">
+            @if (!ViewData.ModelState.IsValid)
+            {
+                @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
+            }
+
+            <div class="column-two-thirds">
+                <h1 class="heading-large">
+                    <span class="heading-secondary">Step 3 of 5</span>
+                    Your type of organisation
+                </h1>
+                <p>Please select the type of organisation you’re registering to report gender pay gap data. </p>
+
+                <div class="form-section">
+                    <!-- "Chunky" Radio buttons, stacked -->
+                    <h2 class="heading-small">Organisation type</h2>
+                    <div class="form-group">
+                        <fieldset>
+                            <label class="block-label selection-button-radio" for="radio-1">
+                                @Html.RadioButtonFor(m=>m.SectorType, GpgDB.SectorTypes.Private, new { @type = "radio", @class = "styled", @name = "radio-group", @id = "radio-1" })
+                                Private limited company,<br/>
+                                Limited liability partnership,<br />
+                                Charity,<br />
+                                Public limited company
+                            </label>
+                            <label class="block-label selection-button-radio " for="radio-2">
+                                @Html.RadioButtonFor(m => m.SectorType, GpgDB.SectorTypes.Public, new { @type = "radio", @class = "styled", @name = "radio-group", @id = "radio-2" })
+                                Public sector organisation
+                            </label>
+                        </fieldset>
+                    </div>
+                    <br>
+
+                    <input type="submit" class="button" value="Continue" />
+                </div>
+            </div>
+        </div>
+    }
+</main>

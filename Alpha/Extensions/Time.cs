@@ -10,7 +10,7 @@ namespace Extensions
     {
 
         public const string ShortDateFormat = "yyMMddHHmmss";
-        public const string SmallDateFormat = "yyMMddHHmm";
+        public const string ShorterDateFormat = "yyMMddHHmm";
 
         public static bool Between(this DateTime current, DateTime start, DateTime end, bool inclusive = true)
         {

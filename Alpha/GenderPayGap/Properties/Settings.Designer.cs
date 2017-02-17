@@ -25,10 +25,46 @@ namespace GenderPayGap.WebUI.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("5")]
-        public long aaaa {
+        [global::System.Configuration.DefaultSettingValueAttribute("14")]
+        public int PinInPostExpiryDays {
             get {
-                return ((long)(this["aaaa"]));
+                return ((int)(this["PinInPostExpiryDays"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("24")]
+        public int EmailVerificationExpiryHours {
+            get {
+                return ((int)(this["EmailVerificationExpiryHours"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("LogErrorFile.Log")]
+        public string LogErrorFile {
+            get {
+                return ((string)(this["LogErrorFile"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("5")]
+        public int PinInPostMinRepostDays {
+            get {
+                return ((int)(this["PinInPostMinRepostDays"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int EmailVerificationMinResendHours {
+            get {
+                return ((int)(this["EmailVerificationMinResendHours"]));
             }
         }
     }

@@ -19,24 +19,46 @@ namespace GpgDB.Models.GpgDatabase
     {
         public OrganisationAddress()
         {
-            Created = DateTime.Now;
-            Modified = DateTime.Now;
         }
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long OrganisationAddressId { get; set; }
-        public string Type { get; set; }
+
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(100),MinLength(1)]
+        [Index]
+
         public string Address1 { get; set; }
+
+        [MaxLength(100)]
         public string Address2 { get; set; }
+
+        [MaxLength(100)]
         public string Address3 { get; set; }
+
+        [MaxLength(100)]
         public string TownCity { get; set; }
+
+        [MaxLength(100)]
         public string County { get; set; }
+
+        [MaxLength(100)]
         public string Country { get; set; }
+
+        [MaxLength(100)]
+        [Index]
+
         public string PostCode { get; set; }
-        public Nullable<System.DateTime> Created { get; set; }
-        public Nullable<System.DateTime> Modified { get; set; }
-        
+
+        [Required]
+        [Index]
+        public System.DateTime Created { get; set; } = DateTime.Now;
+
+        [Required]
+        public System.DateTime Modified { get; set; } = DateTime.Now;
+
+        [Required]
         public long OrganisationId { get; set; }
 
         [ForeignKey("OrganisationId")]

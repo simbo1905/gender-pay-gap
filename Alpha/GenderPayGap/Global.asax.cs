@@ -1,9 +1,11 @@
 ﻿using Autofac;
+using Extensions;
 using GenderPayGap.Core.Classes;
 using GenderPayGap.Core.Interfaces;
 using GpgDB.Models.GpgDatabase;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -41,5 +43,7 @@ namespace GenderPayGap
 
             return builder.Build();
         }
+
+
     }
 }
