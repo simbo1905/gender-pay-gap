@@ -29,12 +29,13 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpGet]
         public ActionResult Step1 /*Create*/() 
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
+            User currentUser;
+            var errorView = CheckUserRegisteredOk(out currentUser);
+            if (errorView != null) return errorView;
 
-            var currentUser = GetCurrentUser();
             var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
-            //var @return = Repository.GetAll<Return>().OrderByDescending(r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId && r.AccountingDate.Value.AddYears(1) < DateTime.Now);
-            var @return = Repository.GetAll<Return>().FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
+            var @return = Repository.GetAll<Return>().OrderByDescending(r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId && r.AccountingDate.AddYears(1) < DateTime.Now);
+            //var @return = Repository.GetAll<Return>().FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
 
             var model = new ReturnViewModel();
 
@@ -68,9 +69,12 @@ namespace GenderPayGap.WebUI.Controllers
 
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Step1/*Create*/(ReturnViewModel model)
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
+            User currentUser;
+            var errorView = CheckUserRegisteredOk(out currentUser);
+            if (errorView != null) return errorView;
 
             ModelState.Remove("FirstName");
             ModelState.Remove("LastName");
@@ -86,9 +90,9 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpGet]
         public ActionResult Step2 /*Create*/()
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
-
-            var currentUser = GetCurrentUser();
+            User currentUser;
+            var errorView = CheckUserRegisteredOk(out currentUser);
+            if (errorView != null) return errorView;
 
             ReturnViewModel model = null; //= (!TempData["Model"].IsNull()) ? (ReturnViewModel) TempData["Model"] : null;
 
@@ -103,9 +107,12 @@ namespace GenderPayGap.WebUI.Controllers
 
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Step2 /*Authoriser*/(ReturnViewModel model)
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
+            User currentUser;
+            var errorView = CheckUserRegisteredOk(out currentUser);
+            if (errorView != null) return errorView;
 
             if (!ModelState.IsValid) return View(model);
 
@@ -118,10 +125,9 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpGet]
         public ActionResult Step3 /*GPGInfoLink*/()
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
-
-            var currentUser = GetCurrentUser();
-           
+            User currentUser;
+            var errorView = CheckUserRegisteredOk(out currentUser);
+            if (errorView != null)  return errorView; 
 
             ReturnViewModel model = null; 
 
@@ -136,6 +142,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Step3 /*GPGInfoLink*/(ReturnViewModel model, string command)
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
@@ -153,7 +160,9 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpGet]
         public ActionResult Step4  /*Confirm*/()
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
+            User currentUser;
+            var errorView = CheckUserRegisteredOk(out currentUser);
+            if (errorView != null) return errorView;
 
             ReturnViewModel model = null;
 
@@ -166,9 +175,12 @@ namespace GenderPayGap.WebUI.Controllers
 
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Step4  /*Confirm*/(ReturnViewModel model)
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
+            User currentUser;
+            var errorView = CheckUserRegisteredOk(out currentUser);
+            if (errorView != null) return errorView;
 
             if (!ModelState.IsValid) return View(model);
 
@@ -223,6 +235,10 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpGet]
         public ActionResult Step5 /*Step4*/ /*SendConfirmed*/(long id = 0)
         {
+            User currentUser;
+            var errorView = CheckUserRegisteredOk(out currentUser);
+            if (errorView != null) return errorView;
+
             try
             {
                 if (id < 1)
@@ -241,14 +257,16 @@ namespace GenderPayGap.WebUI.Controllers
 
         [Authorize]
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Step5 /*Step4*/  /*SendConfirmed*/(Return model)
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
+            User currentUser;
+            var errorView = CheckUserRegisteredOk(out currentUser);
+            if (errorView != null) return errorView;
 
             var original = GpgDatabase.Default.Return.Find(model.ReturnId);
             if (original == null)
             {
-                var currentUser = GetCurrentUser();
                 var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
                 model.OrganisationId = userOrg.OrganisationId;
                 GpgDatabase.Default.Return.Add(model);
@@ -272,10 +290,22 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         // GET: Return/Details/5
+        [Authorize]
         public ActionResult Details(int id = 1)
         {
+            User currentUser;
+            var errorView = CheckUserRegisteredOk(out currentUser);
+            if (errorView != null) return errorView;
+
             var qid = GpgDatabase.Default.Return.Find(id);
             return View(qid);
+        }
+
+        [HttpGet]
+        public ActionResult Error()
+        {
+            //Show the confirmation view
+            return View();
         }
     }
 }

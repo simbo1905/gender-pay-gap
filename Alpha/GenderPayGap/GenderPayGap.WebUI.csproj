@@ -252,6 +252,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Classes\Extensions\Extensions.cs" />
+    <Compile Include="Classes\SpamProtectionAttribute.cs" />
     <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -260,6 +261,7 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\ErrorViewModel.cs" />
     <Compile Include="Models\RegisterViewModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ReturnViewModel.cs" />
@@ -423,10 +425,6 @@
     <Content Include="Views\Return\PersonRespDelete.cshtml" />
     <Content Include="Views\Return\PersonRespDetails.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Register\Index.cshtml" />
-    <Content Include="Views\Register\Verify.cshtml" />
-    <Content Include="Views\Register\Type.cshtml" />
-    <Content Include="Views\Register\Organisation.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Query\Download.cshtml" />
     <Content Include="Views\Query\Search.cshtml" />
@@ -434,8 +432,17 @@
     <Content Include="Views\Query\Start.cshtml" />
     <Content Include="Views\Return\Step5.cshtml" />
     <Content Include="Views\Return\Details.cshtml" />
-    <Content Include="Views\Register\Confirm.cshtml" />
     <Content Include="Views\Return\Step3.cshtml" />
+    <Content Include="Views\Register\SendPIN.cshtml" />
+    <Content Include="Views\Register\Step1.cshtml" />
+    <Content Include="Views\Register\Step2.cshtml" />
+    <Content Include="Views\Register\Step3.cshtml" />
+    <Content Include="Views\Register\Step4.cshtml" />
+    <Content Include="Views\Register\Step5.cshtml" />
+    <Content Include="Views\Register\Step6.cshtml" />
+    <Content Include="Views\Register\ConfirmPIN.cshtml" />
+    <Content Include="Views\Register\Error.cshtml" />
+    <Content Include="Views\Register\Complete.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\GPGDatabase\" />

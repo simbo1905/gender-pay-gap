@@ -192,4 +192,10 @@ if not check for a new view
 
 
 
-
+Goals for the weekend:
+Make sure the submission is running
+add more unit tests for all pages submission
+acceptance test from alan
+merge projects together and make sure all our pages work together correctly
+cleanse every page for static to dynamic values 
+replace TempData with BaseController.StashModel() and UnStashModel
