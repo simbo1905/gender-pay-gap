@@ -63,13 +63,13 @@ namespace GenderPayGap.Tests.Submission
             // Arrange:
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode ="0" };
             //simulated return from mock db
             var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
             //Add a return to the mock repo to simulate one in the database
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation, @return);
-            //controller.bind();
+           // controller.bind();
 
             //Act:
             var result = (ViewResult)controller.Step1();
@@ -88,10 +88,10 @@ namespace GenderPayGap.Tests.Submission
             // Arrange:
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "0" };
 
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
-            //controller.Bind(model);
+           // controller.Bind(model);
 
 
             //Act:
@@ -113,7 +113,7 @@ namespace GenderPayGap.Tests.Submission
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "1" };
 
             decimal zero = 0;
 
@@ -137,7 +137,7 @@ namespace GenderPayGap.Tests.Submission
 
 
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
-            //controller.Bind(model);
+            controller.Bind(model);
 
             // Act
             var result = controller.Step1(model) as ViewResult;
@@ -177,7 +177,7 @@ namespace GenderPayGap.Tests.Submission
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "1" };
 
             decimal validValue = 100;
 
@@ -242,7 +242,7 @@ namespace GenderPayGap.Tests.Submission
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "1" };
 
             decimal minOutOfRangeValue = -201M;
 
@@ -306,7 +306,7 @@ namespace GenderPayGap.Tests.Submission
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "1" };
 
             decimal maxOutOfRangeValue = 201M;
 
@@ -374,7 +374,7 @@ namespace GenderPayGap.Tests.Submission
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "1" };
 
             string emptyString = string.Empty;
 
@@ -412,7 +412,7 @@ namespace GenderPayGap.Tests.Submission
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "1" };
 
             string emptyString = null;
 
@@ -450,7 +450,7 @@ namespace GenderPayGap.Tests.Submission
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "1" };
 
             var model = new ReturnViewModel()
             {
@@ -492,7 +492,7 @@ namespace GenderPayGap.Tests.Submission
             //Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "0" };
             var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
@@ -519,7 +519,7 @@ namespace GenderPayGap.Tests.Submission
             //Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "0" };
             var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
             var model = new ReturnViewModel();
@@ -550,7 +550,7 @@ namespace GenderPayGap.Tests.Submission
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "0" };
             var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
@@ -569,7 +569,7 @@ namespace GenderPayGap.Tests.Submission
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = 0 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "0" };
             var @return = new Return() { ReturnId = 1, OrganisationId = 1, CompanyLinkToGPGInfo = "https://www.test.com" };
 
             var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);

@@ -17,5 +17,11 @@
     <Setting Name="EmailVerificationMinResendHours" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">1</Value>
     </Setting>
+    <Setting Name="PublicAccountingDate" Type="System.DateTime" Scope="Application">
+      <Value Profile="(Default)">2017-02-18</Value>
+    </Setting>
+    <Setting Name="PrivateAccountingDate" Type="System.DateTime" Scope="Application">
+      <Value Profile="(Default)">2018-05-04</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
