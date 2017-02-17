@@ -82,24 +82,6 @@ namespace GenderPayGap.WebUI.Controllers
             return RedirectToAction("Step2");
         }
 
-        //[Authorize]
-        //[HttpGet]
-        //public ActionResult Step2 /*Create*/()
-        //{
-        //    if (!Authorise()) return RedirectToAction("Index", "Register");
-
-        //    var currentUser = GetCurrentUser();
-        //    var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
-        //    var model = Repository.GetAll<Return>().FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
-
-        //    var returnModel = (ReturnViewModel)ViewBag.Model;
-
-        //    if (model == null) model = new Return();
-        //    model.OrganisationId = userOrg.OrganisationId;
-        //    var result = View("Step2", model);
-        //    return result;
-        //}
-
         [Authorize]
         [HttpGet]
         public ActionResult Step2 /*Create*/()
@@ -113,11 +95,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (!TempData["Model"].IsNull())
                 model = (ReturnViewModel)TempData["Model"];
 
-           // TempData.Keep();
-
-
             if (model == null) model = new ReturnViewModel();
-            //model.OrganisationId = userOrg.OrganisationId;
 
             var result = View("Step2", model);
             return result;
@@ -132,7 +110,6 @@ namespace GenderPayGap.WebUI.Controllers
             if (!ModelState.IsValid) return View(model);
 
             TempData["Model"] = model;
-   //         TempData.Keep();
 
             return RedirectToAction("Step3");
         }
@@ -152,7 +129,6 @@ namespace GenderPayGap.WebUI.Controllers
                 model = (ReturnViewModel)TempData["Model"];
 
             if (model == null) model = new ReturnViewModel();
-           // model.OrganisationId = userOrg.OrganisationId;
 
             var result = View("Step3", model);
             return result;
@@ -160,27 +136,18 @@ namespace GenderPayGap.WebUI.Controllers
 
         [Authorize]
         [HttpPost]
-        public ActionResult Step3 /*GPGInfoLink*/(ReturnViewModel model)
+        public ActionResult Step3 /*GPGInfoLink*/(ReturnViewModel model, string command)
         {
             if (!Authorise()) return RedirectToAction("Index", "Register");
 
-            if (!ModelState.IsValid) return View(model);
 
+            if (!ModelState.IsValid) return View(model);
             TempData["Model"] = model;
-  //          TempData.Keep();
+
+            if (command == "Back") return RedirectToAction("Step2");
 
             return RedirectToAction("Step4");
         }
-
-        //[Authorize]
-        //[HttpGet]
-        //public ActionResult Step4  /*Confirm*/(int id = 1)
-        //{
-        //    if (!Authorise()) return RedirectToAction("Index", "Register");
-
-        //    var qid = GpgDatabase.Default.Return.Find(id);
-        //    return View(qid);
-        //}
 
         [Authorize]
         [HttpGet]
@@ -205,10 +172,49 @@ namespace GenderPayGap.WebUI.Controllers
 
             if (!ModelState.IsValid) return View(model);
 
+            var @return = Repository.GetAll<Return>().FirstOrDefault(r => r.ReturnId == model.ReturnId);
+
+            if(!@return.IsNull())
+            {
+                //TODO:mark this return as retired 
+                
+            }
+
+            @return = new Return()
+            {
+                AccountingDate = DateTime.Now,
+                CompanyLinkToGPGInfo = model.CompanyLinkToGPGInfo,
+                Created = DateTime.Now,
+
+                DiffMeanBonusPercent = model.DiffMeanBonusPercent,
+                DiffMeanHourlyPayPercent = model.DiffMeanHourlyPayPercent,
+                DiffMedianBonusPercent = model.DiffMedianBonusPercent,
+                DiffMedianHourlyPercent = model.DiffMedianBonusPercent,
+                FemaleLowerPayBand = model.FemaleLowerPayBand,
+                FemaleMedianBonusPayPercent = model.FemaleMedianBonusPayPercent,
+                FemaleMiddlePayBand = model.FemaleMiddlePayBand,
+                FemaleUpperPayBand = model.FemaleUpperPayBand,
+                FemaleUpperQuartilePayBand = model.FemaleUpperQuartilePayBand,
+                FirstName = model.FirstName,
+                LastName = model.LastName,
+                JobTitle = model.JobTitle,
+                MaleLowerPayBand = model.MaleLowerPayBand,
+                MaleMedianBonusPayPercent = model.MaleMedianBonusPayPercent,
+                MaleUpperQuartilePayBand = model.MaleUpperQuartilePayBand,
+                MaleMiddlePayBand = model.MaleMiddlePayBand,
+                MaleUpperPayBand = model.MaleUpperPayBand,
+                //TODO SetStatus
+                //Modified                  = model.Modified,
+                OrganisationId = model.OrganisationId,
+                ReturnId = model.ReturnId
+                                   
+            };
+
+            Repository.Insert<Return>(@return);
             Repository.SaveChanges();
+
             return View(model);
         }
-
 
         //Step4: Should have edits to take user to pages for editing
         //Step5 will be cut off from the original steps as this page will not be provided by us

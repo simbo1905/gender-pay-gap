@@ -5,7 +5,7 @@
 
 <main id="content" role="main">
     <h1 class="heading-large">
-        <span class="heading-secondary">Step 3 of 3</span>
+        <span class="heading-secondary">Step 4 of 4</span>
         Review your gender pay gap data
     </h1>
 @using (Html.BeginForm("Step4", "Return", FormMethod.Post))
@@ -174,7 +174,8 @@
 
             <p>
                 <input class="button" type="submit" role="button" value="Back" formaction='@Url.Action("Step2")' />
-                <input class="button" type="submit" role="button" value="Confirm and submit"/>              
+                <input class="button" type="submit" role="button" value="Confirm and submit"/> 
+                @*@Html.ActionLink("Back", "Step1", null, new { @class = "", onclick = Url.Action("Step3") })*@             
             </p>
         </div>
     </div>
