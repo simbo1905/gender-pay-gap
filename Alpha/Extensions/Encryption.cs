@@ -16,7 +16,8 @@ namespace Extensions
     {
         static Encryption()
         {
-            DefaultEncryptionKey = WebConfigurationManager.AppSettings["DefaultEncryptionKey"];
+            var key = WebConfigurationManager.AppSettings["DefaultEncryptionKey"];
+            if (!string.IsNullOrWhiteSpace(key)) DefaultEncryptionKey = key;
         }
 
         private static string DefaultEncryptionKey = "BA9138B8C0724F168A05482456802405";

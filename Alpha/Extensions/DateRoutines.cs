@@ -619,24 +619,25 @@ namespace Extensions
                 parts++;
             }
 
-            if (interval.Hours > 0 && parts<=maxParts)
+            if (interval.Hours > 0 && parts<maxParts)
             {
+                parts++;
                 if (result != null) result += parts == maxParts ? " and " : ", ";
                 result += interval.Hours;
                 result += " hour" + (interval.Hours > 1 ? "s" : "");
-                parts++;
             }
 
-            if (interval.Minutes > 0 && parts <= maxParts)
+            if (interval.Minutes > 0 && parts < maxParts)
             {
+                parts++;
                 if (result != null) result += parts == maxParts ? " and " : ", ";
                 result += interval.Minutes;
                 result += " minute" + (interval.Minutes > 1 ? "s" : "");
-                parts++;
             }
 
-            if (interval.Days==0 && interval.Hours==0 && interval.Seconds > 0 && parts <= maxParts)
+            if (interval.Days==0 && interval.Hours==0 && interval.Seconds > 0 && parts < maxParts)
             {
+                parts++;
                 if (result != null) result += parts == maxParts ? " and " : ", ";
                 result += interval.Seconds;
                 result += "second" + (interval.Seconds > 1 ? "s" : "");
@@ -644,12 +645,12 @@ namespace Extensions
             return result;
         }
 
-        public static string ToShortDateTime(this DateTime dateTime)
+        public static string ToSmallDateTime(this DateTime dateTime)
         {
             return dateTime.ToString(Time.ShortDateFormat);
         }
 
-        public static DateTime FromShortDateTime(this string shortDateTime, bool defaultMaxDateTime=false)
+        public static DateTime FromSmallDateTime(this string shortDateTime, bool defaultMaxDateTime=false)
         {
             DateTime dateTime;
             if (DateTime.TryParseExact(shortDateTime, Time.ShortDateFormat, null, System.Globalization.DateTimeStyles.AssumeLocal, out dateTime))
@@ -657,12 +658,12 @@ namespace Extensions
             return defaultMaxDateTime ? DateTime.MaxValue : DateTime.MinValue;
         }
 
-        public static string ToShorterDateTime(this DateTime dateTime)
+        public static string ToSmallerDateTime(this DateTime dateTime)
         {
             return dateTime.ToString(Time.ShorterDateFormat);
         }
 
-        public static DateTime FromShorterDateTime(this string shorterDateTime)
+        public static DateTime FromSmallerDateTime(this string shorterDateTime)
         {
             DateTime dateTime;
             if (DateTime.TryParseExact(shorterDateTime, Time.ShorterDateFormat, null, System.Globalization.DateTimeStyles.AssumeLocal, out dateTime))

@@ -10,7 +10,7 @@
             @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
         }
 
-        using (Html.BeginForm())
+        @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
 

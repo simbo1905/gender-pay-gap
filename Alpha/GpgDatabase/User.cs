@@ -39,10 +39,9 @@ namespace GenderPayGap.Models.SqlDatabase
         public string EmailAddress { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        [MaxLength(100),MinLength(8)]
-        public string Password { get; set; }
+        [MaxLength(250),MinLength(64)]
+        public string PasswordHash { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
         [MaxLength(255)]
         public string EmailVerifyCode { get; set; }
 
@@ -59,6 +58,9 @@ namespace GenderPayGap.Models.SqlDatabase
 
         [MaxLength(255)]
         public string StatusDetails { get; set; }
+
+        public int LoginAttempts { get; set; }
+        public DateTime? LoginDate { get; set; }
 
         [Required]
         public System.DateTime Created { get; set; } = DateTime.Now;
@@ -80,13 +82,15 @@ namespace GenderPayGap.Models.SqlDatabase
 
         public void SetStatus(UserStatuses status, long userId, string details=null)
         {
-            var addressStatus = new UserStatus()
+            if (status == Status && details == StatusDetails) return;
+            UserStatuses.Add(new UserStatus()
             {
+                UserId = userId,
                 Status = status,
                 StatusDate = DateTime.Now,
                 StatusDetails = details,
-                ByUserId = userId                
-            };
+                ByUserId = userId
+            });
             Status = status;
             StatusDate = DateTime.Now;
             StatusDetails = details;

@@ -21,7 +21,8 @@ namespace GenderPayGap
         protected void Application_Start()
         {
 #if DEBUG
-            DbContext.Default.User.FirstOrDefault();//Test entity framework loads ok
+            var context =new DbContext();
+            context.User.FirstOrDefault();//Test entity framework loads ok
 #endif
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);

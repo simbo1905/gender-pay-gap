@@ -57,15 +57,17 @@ namespace GenderPayGap.Models.SqlDatabase
 
         public virtual ICollection<Return> Returns { get; set; }
 
-        public void SetStatus(OrganisationStatuses status, long userId, string details = null)
+        public void SetStatus(OrganisationStatuses status, long byUserId, string details = null)
         {
-            var addressStatus = new OrganisationStatus()
+            if (status == Status && details == StatusDetails) return;
+            OrganisationStatuses.Add(new OrganisationStatus()
             {
+                OrganisationId = this.OrganisationId,
                 Status = status,
                 StatusDate = DateTime.Now,
                 StatusDetails = details,
-                ByUserId = userId
-            };
+                ByUserId = byUserId
+            });
             Status = status;
             StatusDate = DateTime.Now;
             StatusDetails = details;

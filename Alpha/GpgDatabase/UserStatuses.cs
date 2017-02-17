@@ -21,7 +21,6 @@ namespace GenderPayGap.Models.SqlDatabase
 
         public UserStatuses Status { get; set; }
 
-        [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         [Index]
         public System.DateTime StatusDate { get; set; } = DateTime.Now;
 

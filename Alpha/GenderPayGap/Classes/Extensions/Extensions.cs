@@ -102,14 +102,14 @@ namespace GenderPayGap.WebUI.Classes
         #endregion
 
         #region AntiSpam
-        public static string SpamProtectionTimeStamp(this HtmlHelper helper)
+        public static IHtmlString SpamProtectionTimeStamp(this HtmlHelper helper)
         {
             var builder = new TagBuilder("input");
             builder.MergeAttribute("id", "SpamProtectionTimeStamp");
             builder.MergeAttribute("name", "SpamProtectionTimeStamp");
             builder.MergeAttribute("type", "hidden");
-            builder.MergeAttribute("value", Encryption.EncryptData(DateTime.Now.ToShortTimeString()));
-            return builder.ToString(TagRenderMode.SelfClosing);
+            builder.MergeAttribute("value", Encryption.EncryptData(DateTime.Now.ToSmallDateTime()));
+            return new MvcHtmlString(builder.ToString(TagRenderMode.SelfClosing));
         }
         #endregion
     }

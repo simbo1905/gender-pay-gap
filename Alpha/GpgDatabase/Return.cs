@@ -117,15 +117,17 @@ namespace GenderPayGap.Models.SqlDatabase
         [ForeignKey("OrganisationId")]
         public virtual Organisation Organisation { get; set; }
 
-        public void SetStatus(ReturnStatuses status, long userId, string details = null)
+        public void SetStatus(ReturnStatuses status, long byUserId, string details = null)
         {
-            var addressStatus = new ReturnStatus()
+            if (status == Status && details == StatusDetails) return;
+            ReturnStatuses.Add(new ReturnStatus()
             {
+                ReturnId = this.ReturnId,
                 Status = status,
                 StatusDate = DateTime.Now,
                 StatusDetails = details,
-                ByUserId = userId
-            };
+                ByUserId = byUserId
+            });
             Status = status;
             StatusDate = DateTime.Now;
             StatusDetails = details;

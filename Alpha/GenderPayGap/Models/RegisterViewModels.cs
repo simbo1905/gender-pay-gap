@@ -15,20 +15,6 @@ namespace GenderPayGap.WebUI.Models
 
         }
 
-        public RegisterViewModel(User currentUser)
-        {
-            if (currentUser != null)
-            {
-                this.FirstName = currentUser.Firstname;
-                this.LastName = currentUser.Lastname;
-                this.JobTitle = currentUser.JobTitle;
-                this.EmailAddress = currentUser.EmailAddress;
-                this.EmailAddress = currentUser.EmailAddress;
-                this.Password = currentUser.Password;
-                this.ConfirmPassword = currentUser.Password;
-            }
-        }
-
         [Required(AllowEmptyStrings = false)]
         [Display(Name = "First Name")]
         public string FirstName { get; set; }
@@ -193,7 +179,7 @@ namespace GenderPayGap.WebUI.Models
         {
 
         }
-
+        [Required]
         [Display(Name = "Enter pin")]
         [Range(1,999999,ErrorMessage = "Pin code must be between 1 and 999999")]
         public string PIN { get; set; }
