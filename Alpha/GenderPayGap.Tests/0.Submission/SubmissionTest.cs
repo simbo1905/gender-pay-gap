@@ -12,10 +12,10 @@ using System.Web;
 using System.Security.Principal;
 using System.Web.Routing;
 using System.Security.Claims;
-using GenderPayGap.Tests.DBRespository;
+//using GenderPayGap.Tests.DBRespository;
 using GenderPayGap.Tests;
 using GenderPayGap.WebUI.Controllers;
-using GpgDB.Models.GpgDatabase;
+using GenderPayGap.Models.SqlDatabase;
 using System.Text.RegularExpressions;
 using GenderPayGap.WebUI.Models;
 

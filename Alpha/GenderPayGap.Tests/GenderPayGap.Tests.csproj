@@ -132,16 +132,7 @@
     <None Include="0.Submission\SubmissionTest.cs.old0" />
     <None Include="0.Submission\SubmissionTest.cs.old1" />
     <Compile Include="0.Submission\SubmissionTest.cs" />
-    <Compile Include="2.Login\LoginTest.cs" />
-    <Compile Include="3.Return\ReturnTest.cs" />
-    <Compile Include="4.SendConfirm\SendConfirmTest.cs" />
-    <Compile Include="5.ViewData\ViewDataTest.cs" />
-    <Compile Include="6.Query\QueryTest.cs" />
-    <Compile Include="7.Navigation\Controllers\HomeControllerTest.cs" />
-    <Compile Include="7.Navigation\Controllers\QueryControllerTest.cs" />
-    <Compile Include="7.Navigation\Controllers\ReturnControllerTest.cs" />
     <Compile Include="RegistrationTests.cs" />
-    <Compile Include="TestRespository\TestEF_DBRepository.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="TestHelpers.cs" />
   </ItemGroup>
@@ -166,8 +157,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="1.Registration\" />
-    <Folder Include="8.Integration\" />
+    <Folder Include="TestRespository\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
