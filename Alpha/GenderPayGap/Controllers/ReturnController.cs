@@ -34,7 +34,17 @@ namespace GenderPayGap.WebUI.Controllers
             if (errorView != null) return errorView;
 
             var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
-            var @return = Repository.GetAll<Return>().OrderByDescending(r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId && r.AccountingDate.AddYears(1) < DateTime.Now);
+
+            // userOrg.Organisation.SectorType == SectorTypes.Private
+            //Settings for accounting date 
+            //Accounting year
+
+            var expectStartDate = DateTime.MinValue; //from Base Controloer extecte AccountYear
+            var expectEndDate = expectStartDate.AddYears(1).Date.AddDays(1);
+
+            var @return = Repository.GetAll<Return>().OrderByDescending
+                (r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId && r.AccountingDate >= expectStartDate && r.AccountingDate < expectEndDate);
+           
             //var @return = Repository.GetAll<Return>().FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
 
             var model = new ReturnViewModel();
