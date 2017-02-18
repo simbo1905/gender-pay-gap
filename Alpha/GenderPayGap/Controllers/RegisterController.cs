@@ -1,20 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
 using System.Web;
 using System.Web.Mvc;
-using GenderPayGap;
 using Extensions;
-using Newtonsoft.Json;
-using IdentityServer3.Core;
-using GenderPayGap.Core.Interfaces;
-using GpgDB.Models.GpgDatabase;
+using GenderPayGap.Models.SqlDatabase;
 using Autofac;
 using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Classes;
-using System.Security.Principal;
-using GpgDB;
 using System.Net;
 
 namespace GenderPayGap.WebUI.Controllers
@@ -50,7 +43,6 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         [ValidateAntiForgeryToken]
         [SpamProtection()]
         public ActionResult Step1(Models.RegisterViewModel model)
@@ -83,28 +75,23 @@ namespace GenderPayGap.WebUI.Controllers
                 Repository.Delete(currentUser);
 
             }
-            else
-            {
-                currentUser=new User();
-            }
 
             //Save the submitted fields
+            currentUser = new User();
             currentUser.Created = DateTime.Now;
             currentUser.Modified = currentUser.Created;
             currentUser.Firstname = model.FirstName;
             currentUser.Lastname = model.LastName;
             currentUser.JobTitle = model.JobTitle;
             currentUser.EmailAddress = model.EmailAddress;
-            currentUser.Password = model.Password;
+            currentUser.PasswordHash = model.Password.GetSHA512Checksum();
             currentUser.EmailVerifySendDate = null;
             currentUser.EmailVerifiedDate = null;
             currentUser.EmailVerifyCode = null;
-            currentUser.CurrentStatus=UserStatuses.New;
-            currentUser.CurrentStatusDate = DateTime.Now;
-
-            //Save the user to DB
-            if (currentUser.UserId==0)Repository.Insert(currentUser);
+            //Save the user to ensure UserId>0 for new status
+            Repository.Insert(currentUser);
             Repository.SaveChanges();
+            currentUser.SetStatus(UserStatuses.New,currentUser.UserId);
 
             //Send the verification code and showconfirmation
             return ResendVerifyCode(currentUser);
@@ -116,7 +103,7 @@ namespace GenderPayGap.WebUI.Controllers
             //Send a verification link to the email address
             try
             {
-                var verifyCode = Encryption.EncryptQuerystring(currentUser.UserId + ":" + currentUser.Created.ToShortDateTime());
+                var verifyCode = Encryption.EncryptQuerystring(currentUser.UserId + ":" + currentUser.Created.ToSmallDateTime());
                 if (!this.SendVerifyEmail(currentUser.EmailAddress, verifyCode))
                     throw new Exception("Could not send verification email. Please try again later.");
 
@@ -131,6 +118,7 @@ namespace GenderPayGap.WebUI.Controllers
                 else
                     ModelState.AddModelError(string.Empty, ex.Message);
             }
+            if (!ModelState.IsValid) return View("Step1");
 
             //Prompt user to open email and verification link
             return View("Step2", new VerifyViewModel() { EmailAddress = currentUser.EmailAddress });
@@ -149,7 +137,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (result == null) throw new AuthenticationException();
             var errorViewModel = result.Model as ErrorViewModel;
             if (errorViewModel == null) throw new AuthenticationException();
-            if (errorViewModel.ActionUrl != Url.Action("Step2", "Register") && errorViewModel.Description!= "You have not verified your email address.")
+            if (errorViewModel.ActionUrl != Url.Action("Step2", "Register") && errorViewModel.Description!= "You have not yet verified your email address.")
                 return result;
 
             //Allow resend of verification if sent over 24 hours ago
@@ -276,7 +264,7 @@ namespace GenderPayGap.WebUI.Controllers
         [Authorize]
         public ActionResult Step4()
         {
-            var model=TempData["Model"] as OrganisationViewModel;
+            var model=UnstashModel<OrganisationViewModel>();
 
             //Ensure the user is logged in
             if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
@@ -348,7 +336,7 @@ namespace GenderPayGap.WebUI.Controllers
         [Authorize]
         public ActionResult Step5()
         {
-            var model = TempData["Model"] as OrganisationViewModel;
+            var model = UnstashModel<OrganisationViewModel>();
             if (model != null) return Step5(model,null);
 
             //Ensure the user is logged in
@@ -371,7 +359,7 @@ namespace GenderPayGap.WebUI.Controllers
         [Authorize]
         public ActionResult Step5(OrganisationViewModel model, string command)
         {
-            var m = TempData["Model"] as OrganisationViewModel;
+            var m = UnstashModel<OrganisationViewModel>();
             if (m != null && m.Employers!=null && m.Employers.Count>0) model.Employers = m.Employers;
 
             //Go back if requested
@@ -461,8 +449,8 @@ namespace GenderPayGap.WebUI.Controllers
             if (command.StartsWithI("employer_"))
             {
                 var employerIndex = command.AfterFirst("employer_").ToInt32();
-
-                var org = Repository.GetAll<Organisation>().FirstOrDefault(o => o.PrivateSectorReference == model.Employers[employerIndex].CompanyNumber);
+                var reference = model.Employers[employerIndex].CompanyNumber;
+                var org = Repository.GetAll<Organisation>().FirstOrDefault(o => o.PrivateSectorReference == reference);
                 if (org != null)
                 {
                     var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.OrganisationId == org.OrganisationId);
@@ -484,6 +472,7 @@ namespace GenderPayGap.WebUI.Controllers
                         }
                     }
                 }
+                model.SelectedEmployerIndex = employerIndex;
             }
 
             StashModel(model);
@@ -551,10 +540,9 @@ namespace GenderPayGap.WebUI.Controllers
                 org.SectorType = model.SectorType.Value;
                 org.OrganisationName = employer.Name;
                 org.PrivateSectorReference = employer.CompanyNumber;
-                org.CurrentStatus = OrganisationStatuses.New;
-                org.CurrentStatusDate = now;
                 org.Created = now;
                 org.Modified = now;
+                org.SetStatus(OrganisationStatuses.New, currentUser.UserId);
                 Repository.Insert(org);
                 Repository.SaveChanges();
             }
@@ -578,7 +566,7 @@ namespace GenderPayGap.WebUI.Controllers
             var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.OrganisationId == org.OrganisationId);
 
             //If from a previous user then delete the previous user
-            if (userOrg.UserId != currentUser.UserId)
+            if (userOrg!=null && userOrg.UserId != currentUser.UserId)
             {
                 Repository.Delete(userOrg);
                 userOrg = null;
@@ -586,7 +574,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             if (userOrg == null)
             {
-                userOrg = new GpgDB.Models.GpgDatabase.UserOrganisation()
+                userOrg = new GenderPayGap.Models.SqlDatabase.UserOrganisation()
                 {
                     UserId = currentUser.UserId,
                     OrganisationId = org.OrganisationId,
@@ -602,49 +590,7 @@ namespace GenderPayGap.WebUI.Controllers
             return RedirectToAction("SendPIN");
         }
 
-        bool SendPIN(User user, UserOrganisation userOrg)
-        {
-            try
-            {
-                //Marke the user org as ready to send a pin
-                userOrg.PINCode = null;
-                userOrg.PINSentDate = null;
-                userOrg.ConfirmCode = null;
-                Repository.SaveChanges();
-
-                //Generate a new pin
-                var pin = Numeric.Rand(0, 999999);
-
-                //Try and send the PIN in post
-                if (!this.SendPinInPost(user.Fullname + " (" + user.JobTitle + ")", user.EmailAddress, pin.ToString()))
-                    throw new Exception("Could not send PIN in the POST. Please try again later.");
-
-                //Generate a confimation link
-                var confirmCode = Encryption.EncryptQuerystring(string.Format("{0}:{1}:{2}", userOrg.UserId, userOrg.OrganisationId, DateTime.Now.ToShortDateTime()));
-
-                //Try and send the confirmation email
-                if (!this.SendConfirmEmail(user.EmailAddress, confirmCode))
-                    throw new Exception("Could not send confirmation email. Please try again later.");
-
-                //Save the PIN and confirm code
-                userOrg.PINCode = pin.ToString("000000");
-                userOrg.PINSentDate = DateTime.Now;
-                userOrg.ConfirmCode = confirmCode;
-                Repository.SaveChanges();
-            }
-            catch (Exception ex)
-            {
-                ModelState.AddModelError(string.Empty, ex.Message);
-                return false;
-            }
-            //Prompt user to open email and verification link
-            return true;
-        }
-
-        [Authorize]
-        [ValidateAntiForgeryToken]
-        [AcceptVerbs(HttpVerbs.Get | HttpVerbs.Post)]
-        public ActionResult SendPIN()
+        ActionResult GetSendPIN()
         {
             //Ensure the user is logged in
             if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
@@ -661,22 +607,72 @@ namespace GenderPayGap.WebUI.Controllers
             var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
 
             //Get the latest address for the organisation
-            var address = Repository.GetAll<OrganisationAddress>().OrderByDescending(oa=>oa.Modified).FirstOrDefault(oa => oa.OrganisationId==userOrg.OrganisationId);
+            var address = Repository.GetAll<OrganisationAddress>().OrderByDescending(oa => oa.Modified).FirstOrDefault(oa => oa.OrganisationId == userOrg.OrganisationId);
 
             //If a pin has never been sent or resend button submitted then send one immediately
-            if (string.IsNullOrWhiteSpace(userOrg.PINCode) || userOrg.PINSentDate.EqualsI(null,DateTime.MinValue) || Request.HttpMethod.EqualsI("POST")) SendPIN(currentUser, userOrg);
+            if (string.IsNullOrWhiteSpace(userOrg.PINCode) || userOrg.PINSentDate.EqualsI(null, DateTime.MinValue) || Request.HttpMethod.EqualsI("POST"))
+            {
+                try
+                {
+                    //Marke the user org as ready to send a pin
+                    userOrg.PINCode = null;
+                    userOrg.PINSentDate = null;
+                    userOrg.ConfirmCode = null;
+                    Repository.SaveChanges();
+
+                    //Generate a new pin
+                    var pin = Numeric.Rand(0, 999999);
+
+                    //Try and send the PIN in post
+                    if (!this.SendPinInPost(currentUser.Fullname + " (" + currentUser.JobTitle + ")", currentUser.EmailAddress, pin.ToString()))
+                        throw new Exception("Could not send PIN in the POST. Please try again later.");
+
+                    //Generate a confimation link
+                    var confirmCode = Encryption.EncryptQuerystring(string.Format("{0}:{1}:{2}", userOrg.UserId, userOrg.OrganisationId, DateTime.Now.ToSmallDateTime()));
+
+                    //Try and send the confirmation email
+                    if (!this.SendConfirmEmail(currentUser.EmailAddress, confirmCode))
+                        throw new Exception("Could not send confirmation email. Please try again later.");
+
+                    //Save the PIN and confirm code
+                    userOrg.PINCode = pin.ToString("000000");
+                    userOrg.PINSentDate = DateTime.Now;
+                    userOrg.ConfirmCode = confirmCode;
+                    Repository.SaveChanges();
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError(string.Empty, ex.Message);
+                    return View("SendPIN");
+                }
+            }
 
             //Prepare view parameters
             ViewBag.Resend = !string.IsNullOrWhiteSpace(userOrg.PINCode) && !userOrg.PINSentDate.EqualsI(null, DateTime.MinValue)
                 && userOrg.PINSentDate.Value.AddDays(Properties.Settings.Default.PinInPostMinRepostDays) < DateTime.Now;
-            ViewBag.UserFullName=currentUser.Fullname;
+            ViewBag.UserFullName = currentUser.Fullname;
+            ViewBag.UserJobTitle = currentUser.JobTitle;
             ViewBag.Address = address.GetAddress(",<br/>");
             return View("SendPIN");
         }
 
+        [Authorize]
         [HttpGet]
+        public ActionResult SendPIN()
+        {
+            return GetSendPIN();
+        }
+
         [Authorize]
         [ValidateAntiForgeryToken]
+        [HttpPost]
+        public ActionResult SendPIN(string command)
+        {
+            return GetSendPIN();
+        }
+
+        [HttpGet]
+        [Authorize]
         public ActionResult ConfirmPIN()
         {
             //Ensure the user is logged in
@@ -700,7 +696,7 @@ namespace GenderPayGap.WebUI.Controllers
             model.AllowResend = remainingTime <= TimeSpan.Zero;
             model.Remaining = remainingTime.ToFriendly(maxParts:2);
             //Show the PIN textbox and button
-            return View("ConfirmPIN");
+            return View("ConfirmPIN",model);
         }
 
         [HttpPost]
@@ -745,9 +741,9 @@ namespace GenderPayGap.WebUI.Controllers
                 return View("ConfirmPIN",model);
             }
 
-            //Set the user as verified
-            currentUser.EmailVerifiedDate = DateTime.Now;
-
+            //Set the user org as confirmed
+            userOrg.PINConfirmedDate = DateTime.Now;
+            
             //Save the current user
             Repository.SaveChanges();
 
@@ -765,7 +761,11 @@ namespace GenderPayGap.WebUI.Controllers
             //Ensure user has completed the registration process
             User currentUser;
             var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
-            if (result != null) return result;
+            if (result == null) throw new AuthenticationException();
+            var errorViewModel = result.Model as ErrorViewModel;
+            if (errorViewModel == null) throw new AuthenticationException();
+            if (errorViewModel.ActionUrl != Url.Action("Create", "Return"))
+                return result;
 
             //Show the confirmation view
             return View("Complete");

@@ -1,7 +1,4 @@
-﻿using GpgDB.Models.GpgDatabase;
-using System;
-using System.Linq;
-using System.Security.Claims;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Thinktecture.IdentityModel.Owin.ResourceAuthorization;
 

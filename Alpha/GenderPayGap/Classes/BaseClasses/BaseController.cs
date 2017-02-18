@@ -2,7 +2,7 @@
 using Extensions;
 using GenderPayGap.Core.Interfaces;
 using GenderPayGap.WebUI.Classes;
-using GpgDB.Models.GpgDatabase;
+using GenderPayGap.Models.SqlDatabase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -134,7 +134,7 @@ namespace GenderPayGap
                     {
                         Title = "Incomplete Registration",
                         Description = "You have not yet verified your email address.",
-                        CallToAction = "Please check your email account and follow the instructions to verify your email address.<br/>Alternatively, try again in {" + remainingTime.ToFriendly(maxParts: 2) + "} to request another verification email."
+                        CallToAction = "Please check your email account and follow the instructions to verify your email address.<br/>Alternatively, try again in " + remainingTime.ToFriendly(maxParts: 2) + " to request another verification email."
                     });
                 return View("Error", new ErrorViewModel()
                 {
@@ -183,7 +183,7 @@ namespace GenderPayGap
                     {
                         Title = "Incomplete Registration",
                         Description = "You have not yet confirmed the PIN sent to you in the post.",
-                        CallToAction = "Click the button below to enter the PIN you have received in the post or try again in {"+ remainingTime.ToFriendly(maxParts:2) +"} to request another PIN.",
+                        CallToAction = "Click the button below to enter the PIN you have received in the post or try again in "+ remainingTime.ToFriendly(maxParts:2) +" to request another PIN.",
                         ActionUrl = Url.Action("ConfirmPIN", "Register")
                     });
                 return View("Error", new ErrorViewModel()

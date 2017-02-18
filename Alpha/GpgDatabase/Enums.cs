@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace GpgDB
+namespace GenderPayGap.Models.SqlDatabase
 {
     public enum UserStatuses:byte
     {
@@ -22,6 +22,16 @@ namespace GpgDB
         Active = 3,
         Retired = 4,
     }
+
+    public enum AddressStatuses : byte
+    {
+        Unknown = 0,
+        New = 1,
+        Unconfirmed = 2,
+        Confirmed = 3,
+        Retired = 4,
+    }
+
     public enum ReturnStatuses : byte
     {
         Unknown = 0,

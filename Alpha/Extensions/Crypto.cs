@@ -39,11 +39,11 @@ namespace Extensions
             return MD5.Create().ComputeHash(checksumData);
         }
 
-        public static string GetSHA512Checksum(this string text)
+        public static string GetSHA512Checksum(this string text, bool base64encode=true)
         {
             var checksumData = System.Text.Encoding.UTF8.GetBytes(text);
             var hash = SHA512.Create().ComputeHash(checksumData);
-            var calculatedChecksum = Convert.ToBase64String(hash);
+            var calculatedChecksum = base64encode ? Convert.ToBase64String(hash) : Encoding.UTF8.GetString(hash);
             return calculatedChecksum;
         }
 
