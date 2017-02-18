@@ -279,7 +279,6 @@ namespace GenderPayGap.WebUI.Controllers
              //   GpgDatabase.Default.Entry(original).CurrentValues.SetValues(model);
             }
 
-           // model.Organisation = GpgDatabase.Default.Organisation.Find(model.OrganisationId);
             model.Organisation = Repository.GetAll<Organisation>().FirstOrDefault(m => m.OrganisationId == model.OrganisationId);
            
                 model.AccountingDate = DateTime.Now;
