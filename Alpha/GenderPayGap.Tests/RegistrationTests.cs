@@ -34,10 +34,10 @@ namespace GenderPayGap.Tests
         public void Step1_IdentityNotMapped_ReturnsView()
         {
             // Arrange
-            var controller = TestHelper.GetController<RegisterController>(1);
+            var controller = TestHelper.GetController<ErrorController>(1);
 
             // Act
-            var result = controller.IdentityNotMapped() as ViewResult;
+            var result = controller.HttpError(404) as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
