@@ -274,6 +274,10 @@ namespace GenderPayGap
 
         #endregion
 
-
+        //Current account Year method
+        public DateTime GetCurrentAccountYearStartDate(Organisation org)
+        {
+            return DateTime.MinValue;
+        }
     }
 }
