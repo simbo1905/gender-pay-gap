@@ -155,7 +155,9 @@ namespace GenderPayGap.WebUI.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Step3 /*GPGInfoLink*/(ReturnViewModel model, string command)
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
+            User currentUser;
+            var errorView = CheckUserRegisteredOk(out currentUser);
+            if (errorView != null) return errorView;
 
 
             if (!ModelState.IsValid) return View(model);
@@ -261,7 +263,7 @@ namespace GenderPayGap.WebUI.Controllers
                 ModelState.AddModelError(string.Empty, ex.Message);
             }
 
-            if (!Authorise()) return RedirectToAction("Index", "Register");
+            //if (!Authorise()) return RedirectToAction("Index", "Register");
             return View(id);
         }
 
