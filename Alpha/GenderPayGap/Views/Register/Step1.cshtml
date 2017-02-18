@@ -6,7 +6,7 @@
 @using GenderPayGap.WebUI.Classes
 <main id="content" role="main">
     <div class="grid-row">
-        <div class="column-two-thirds">
+        <div class="column-full">
             @if (!ViewData.ModelState.IsValid)
             {
                 @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -19,33 +20,12 @@ namespace GenderPayGap
             totalRecords = 0;
             var employers = new List<EmployerRecord>();
             Task<string> task;
-            if (searchText.IsNumber())
+            try
             {
-
-                task = Task.Run<string>(async () => await GetCompany(searchText));
-
-                dynamic company = JsonConvert.DeserializeObject(task.Result);
-                if (!string.IsNullOrWhiteSpace(company))
-                {
-                    var employer = new EmployerRecord();
-                    employer.Name = company.company_name;
-                    employer.CompanyNumber = company.company_number;
-                    employer.Address1 = company.registered_office_address.address_line_1;
-                    employer.Address2 = company.registered_office_address.address_line_2;
-                    employer.Address3 = company.registered_office_address.locality;
-                    employer.Country = company.registered_office_address.country;
-                    employer.PostCode = company.registered_office_address.postal_code;
-                    employer.PoBox = company.registered_office_address.po_box;
-                    employers.Add(employer);
-                    totalRecords = 1;
-                }
-            }
-            else
-            {
-                task = Task.Run<string>(async () => await GetCompanies(searchText,page, pageSize));
+                task = Task.Run<string>(async () => await GetCompanies(searchText, page, pageSize));
 
                 dynamic companies = JsonConvert.DeserializeObject(task.Result);
-                if (companies!=null)
+                if (companies != null)
                 {
                     totalRecords = companies.total_results;
                     if (totalRecords > 0)
@@ -66,9 +46,13 @@ namespace GenderPayGap
                         }
                     }
                 }
-
             }
-
+            catch (AggregateException aex)
+            {
+                if (Debugger.IsAttached) Debugger.Break();
+                var httpEx = aex.InnerException as HttpRequestException;
+                if (httpEx != null && httpEx.Message != "Response status code does not indicate success: 404 (Not Found).") throw;
+            }
             return employers;
         }
 

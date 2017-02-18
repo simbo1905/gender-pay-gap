@@ -253,7 +253,10 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Classes\Extensions\Extensions.cs" />
+    <Compile Include="Classes\HttpErrorMessages.cs" />
+    <Compile Include="Classes\PasswordAttribute.cs" />
     <Compile Include="Classes\SpamProtectionAttribute.cs" />
+    <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
@@ -281,6 +284,7 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <Content Include="App_Data\Confirm.txt" />
+    <None Include="App_Data\HttpErrorMessages.config" />
     <Content Include="App_Data\Pin.txt" />
     <Content Include="App_Data\Verify.txt" />
     <Content Include="Content\application.css" />
@@ -384,7 +388,7 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Error\HttpError.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Return\Index.cshtml" />
@@ -406,7 +410,6 @@
     <Content Include="Views\Manage\ManageLogins.cshtml" />
     <Content Include="Views\Manage\SetPassword.cshtml" />
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
-    <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\DfE\Layouts\template.cshtml" />
     <Content Include="Views\GOVUK\Layouts\template.cshtml" />
@@ -435,7 +438,7 @@
     <Content Include="Views\Return\SendConfirmed.cshtml" />
     <Content Include="Views\Return\Details.cshtml" />
     <Content Include="Views\Register\Complete.cshtml" />
-    <Content Include="Views\Register\Error.cshtml" />
+    <Content Include="Views\Shared\CustomError.cshtml" />
     <Content Include="Views\Register\Step2.cshtml" />
     <Content Include="Views\Register\Step5.cshtml" />
     <Content Include="Views\Register\Step6.cshtml" />
@@ -443,6 +446,7 @@
     <Content Include="Views\Register\SendPIN.cshtml" />
     <Content Include="Views\Register\ConfirmPIN.cshtml" />
     <Content Include="Views\Home\TimedOut.cshtml" />
+    <Content Include="Views\Error\DefaultError.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\GPGDatabase\" />

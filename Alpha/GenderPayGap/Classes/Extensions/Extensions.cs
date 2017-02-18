@@ -84,13 +84,13 @@ namespace GenderPayGap.WebUI.Classes
 
         public static bool SendVerifyEmail(this RegisterController controller, string emailAddress, string verifyCode)
         {
-            var verifyUrl=controller.Url.Action("Step2", null, new {code= verifyCode },"https");
+            var verifyUrl=controller.Url.Action("Step2", "Register", new {code= verifyCode },"https");
             return GovNotifyAPI.SendVerifyEmail(verifyUrl,emailAddress, verifyCode);
         }
-        public static bool SendConfirmEmail(this RegisterController controller, string emailAddress, string confirmCode)
+        public static bool SendConfirmEmail(this RegisterController controller, string emailAddress)
         {
-            var confirmUrl = controller.Url.Action("Step2", null, new { code = confirmCode },"https");
-            return GovNotifyAPI.SendConfirmEmail(confirmUrl, emailAddress,confirmCode);
+            var confirmUrl = controller.Url.Action("ConfirmPIN", "Register", null,"https");
+            return GovNotifyAPI.SendConfirmEmail(confirmUrl, emailAddress);
         }
 
         public static bool SendPinInPost(this RegisterController controller, User user, Organisation organisation, string pin)

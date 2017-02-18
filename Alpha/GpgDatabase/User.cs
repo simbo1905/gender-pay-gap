@@ -62,6 +62,9 @@ namespace GenderPayGap.Models.SqlDatabase
         public int LoginAttempts { get; set; }
         public DateTime? LoginDate { get; set; }
 
+        public DateTime? VerifyAttemptDate { get; set; }
+        public int VerifyAttempts { get; set; }
+
         [Required]
         public System.DateTime Created { get; set; } = DateTime.Now;
 

@@ -19,7 +19,7 @@
         @Html.HiddenFor(m => m.SectorType)
 
         <div class="grid-row">
-            <div class="column-two-thirds">
+            <div class="column-full">
                 <h1 class="heading-large">
                     <span class="heading-secondary">Step 6 of 6</span>
                     Confirm your organisation’s details
@@ -70,7 +70,7 @@
                     <p><input type="submit" class="button" value="Confirm &amp; continue" /></p>
 
                     <p>
-                        <input type="submit" class="button" name="command" value="back" />
+                        @Html.ActionLink("Go back to previous step", "Step5")
                     </p>
                 </fieldset>
             </div>

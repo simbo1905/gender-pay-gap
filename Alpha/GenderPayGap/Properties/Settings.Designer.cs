@@ -67,5 +67,51 @@ namespace GenderPayGap.WebUI.Properties {
                 return ((int)(this["EmailVerificationMinResendHours"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d\\W]{8,}$")]
+        public string PasswordRegex {
+            get {
+                return ((string)(this["PasswordRegex"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Password must contain at least one upper case, 1 lower case character and 1 digit" +
+            "")]
+        public string PasswordRegexError {
+            get {
+                return ((string)(this["PasswordRegexError"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int MaxPinAttempts {
+            get {
+                return ((int)(this["MaxPinAttempts"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int MaxEmailVerifyAttempts {
+            get {
+                return ((int)(this["MaxEmailVerifyAttempts"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int LockoutMinutes {
+            get {
+                return ((int)(this["LockoutMinutes"]));
+            }
+        }
     }
 }

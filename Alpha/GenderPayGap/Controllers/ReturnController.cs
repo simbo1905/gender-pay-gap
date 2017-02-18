@@ -25,7 +25,6 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpGet]
         public ActionResult Create()
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
             var currentUser = Repository.FindUser(User);
             var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
             var model = Repository.GetAll<Return>().FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId);
@@ -38,7 +37,6 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpPost]
         public ActionResult Create(Return model)
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
             if (!ModelState.IsValid) return View(model);
 
             return View(model);
@@ -48,7 +46,6 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpPost]
         public ActionResult Authoriser(Return model)
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
 
             if (Request.UrlReferrer.PathAndQuery.ContainsI("Create") && string.IsNullOrWhiteSpace(model.FirstName) && string.IsNullOrWhiteSpace(model.LastName) && string.IsNullOrWhiteSpace(model.JobTitle))
                 ModelState.Clear();
@@ -62,7 +59,6 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpPost]
         public ActionResult Confirm(Return model)
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
             if (!ModelState.IsValid) return View(model);
             return View(model);
         }
@@ -83,7 +79,6 @@ namespace GenderPayGap.WebUI.Controllers
                 ModelState.AddModelError(string.Empty, ex.Message);
             }
 
-            if (!Authorise()) return RedirectToAction("Index", "Register");
             return View(id);
         }
 
@@ -91,7 +86,6 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpPost]
         public ActionResult SendConfirmed(Return model)
         {
-            if (!Authorise()) return RedirectToAction("Index", "Register");
 
             var original = Repository.GetAll<Return>().Where(r=>r.ReturnId==model.ReturnId);
             if (original == null)
