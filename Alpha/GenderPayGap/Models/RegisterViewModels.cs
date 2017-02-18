@@ -3,12 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Extensions;
-using GpgDB;
-using GpgDB.Models.GpgDatabase;
-using Microsoft.AspNet.Identity;
-using Microsoft.IdentityModel;
-using Microsoft.Owin.Security;
-using static GpgDB.Models.GpgDatabase.Organisation;
+using GenderPayGap.Models.SqlDatabase;
 
 namespace GenderPayGap.WebUI.Models
 {
@@ -18,20 +13,6 @@ namespace GenderPayGap.WebUI.Models
         public RegisterViewModel()
         {
 
-        }
-
-        public RegisterViewModel(User currentUser)
-        {
-            if (currentUser != null)
-            {
-                this.FirstName = currentUser.Firstname;
-                this.LastName = currentUser.Lastname;
-                this.JobTitle = currentUser.JobTitle;
-                this.EmailAddress = currentUser.EmailAddress;
-                this.EmailAddress = currentUser.EmailAddress;
-                this.Password = currentUser.Password;
-                this.ConfirmPassword = currentUser.Password;
-            }
         }
 
         [Required(AllowEmptyStrings = false)]
@@ -198,7 +179,7 @@ namespace GenderPayGap.WebUI.Models
         {
 
         }
-
+        [Required]
         [Display(Name = "Enter pin")]
         [Range(1,999999,ErrorMessage = "Pin code must be between 1 and 999999")]
         public string PIN { get; set; }

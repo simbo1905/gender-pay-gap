@@ -5,30 +5,35 @@ namespace GenderPayGap.Models.SqlDatabase
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
-    public partial class UserStatus
+    public partial class AddressStatus
     {
-        public UserStatus()
+        public AddressStatus()
         {
         }
+
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long UserStatusId { get; set; }
+        public long AddressStatusId { get; set; }
 
         [Required]
-        public long UserId { get; set; }
+        public long AddressId { get; set; }
 
+        [Required]
         [Column("StatusId")]
+        public AddressStatuses Status { get; set; }
 
-        public UserStatuses Status { get; set; }
-
+        [Required]
         [Index]
-        public System.DateTime StatusDate { get; set; } = DateTime.Now;
+        public System.DateTime  StatusDate { get; set; } = DateTime.Now;
 
         [MaxLength(255)]
         public string StatusDetails { get; set; }
 
         [Required]
         public long ByUserId { get; set; }
+
+        [ForeignKey("AddressId")]
+        public virtual OrganisationAddress Address { get; set; }
 
         [ForeignKey("ByUserId")]
         public virtual User ByUser { get; set; }

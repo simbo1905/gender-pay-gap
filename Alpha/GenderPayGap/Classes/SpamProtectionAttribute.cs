@@ -9,7 +9,7 @@ namespace GenderPayGap.WebUI.Classes
 {
     public class SpamProtectionAttribute : FilterAttribute, IAuthorizationFilter
     {
-        public SpamProtectionAttribute(int minimumSeconds = 20)
+        public SpamProtectionAttribute(int minimumSeconds = 10)
         {
             _minimumSeconds = minimumSeconds;
         }
@@ -22,10 +22,10 @@ namespace GenderPayGap.WebUI.Classes
 
             try
             {
-                remoteTime = Encryption.Decrypt(filterContext.RequestContext.HttpContext.Request.Params["SpamProtectionTimeStamp"]).FromShortDateTime(true);
+                remoteTime = Encryption.DecryptData(filterContext.RequestContext.HttpContext.Request.Params["SpamProtectionTimeStamp"]).FromSmallDateTime(true);
                 if (remoteTime.AddSeconds(_minimumSeconds) < DateTime.Now) return;
             }
-            catch
+            catch (Exception ex)
             {
             }
             throw new HttpException("Invalid form submission. Invalid timestamp parameter.");

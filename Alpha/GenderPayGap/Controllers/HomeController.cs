@@ -1,4 +1,4 @@
-﻿using GpgDB.Models.GpgDatabase;
+﻿using GenderPayGap.Models.SqlDatabase;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +18,7 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpPost]
         public ActionResult Delete()
         {
-            GpgDatabase.Truncate();
+            DbContext.Truncate();
             return RedirectToAction("Index");
         }
 
@@ -38,6 +38,11 @@ namespace GenderPayGap.WebUI.Controllers
         {
             Request.GetOwinContext().Authentication.SignOut();
             return Redirect("/");
+        }
+        public ActionResult TimeOut()
+        {
+            Request.GetOwinContext().Authentication.SignOut();
+            return View("TimedOut");
         }
     }
 }
