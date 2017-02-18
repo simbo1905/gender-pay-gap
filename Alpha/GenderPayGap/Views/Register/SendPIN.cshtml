@@ -1,5 +1,5 @@
 ﻿@{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Register: Send PIN";
 }
 
 <main id="content" role="main">
@@ -8,9 +8,9 @@
         @Html.AntiForgeryToken()
 
         <div class="grid-row">
-        @if (ViewBag.Resend)
+        @if (ViewBag.Resend !=null && ViewBag.Resend)
         {
-            <div class="column-two-thirds">
+            <div class="column-full">
                 <div class="govuk-box-highlight">
                     <h1 class="bold-medium">A gender pay gap PIN was previous sent by post to the following name &amp; address:</h1>
                 </div>
@@ -44,7 +44,7 @@
                 </div>
 
                 <div class="panel-indent text dynamic-content default-content ltd plc public charity" style="display: block;">
-                    <p>When you get the PIN, sign into the&nbsp; <a href="@Url.Action("Create","Return")">gender pay gap reporting service</a>&nbsp;using your email, password and PIN.</p><p>
+                    <p>When you get the PIN, sign into the&nbsp; <a href="@Url.Action("ConfirmPIN","Register")">gender pay gap reporting service</a>&nbsp;using your email, password and PIN.</p><p>
                     </p>
                 </div>
             </div>

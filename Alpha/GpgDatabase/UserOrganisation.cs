@@ -17,15 +17,16 @@ namespace GenderPayGap.Models.SqlDatabase
         [Key, Column(Order = 1)]
         public long OrganisationId { get; set; }
 
-        [MaxLength(255)]
-        public string ConfirmCode { get; set; }
-
         [MaxLength(20)]
         public string PINCode { get; set; }
 
         public Nullable<System.DateTime> PINSentDate { get; set; }
 
         public Nullable<System.DateTime> PINConfirmedDate { get; set; }
+
+        public Nullable<System.DateTime> ConfirmAttemptDate { get; set; }
+
+        public int ConfirmAttempts { get; set; }
 
         [Required]
         public System.DateTime Created { get; set; } = DateTime.Now;
@@ -38,7 +39,5 @@ namespace GenderPayGap.Models.SqlDatabase
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
-
-
     }
 }

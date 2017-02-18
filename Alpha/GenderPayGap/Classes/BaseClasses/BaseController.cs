@@ -5,6 +5,7 @@ using GenderPayGap.WebUI.Classes;
 using GenderPayGap.Models.SqlDatabase;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Authentication;
 using System.Security.Principal;
@@ -54,33 +55,55 @@ namespace GenderPayGap
         #endregion
 
         #region Exception handling methods
+
+
         protected override void OnException(ExceptionContext filterContext)
         {
-            WriteLog(Settings.Default.LogErrorFile, filterContext.Exception.ToString());
+            //Add to the log
+            Log.WriteLine(filterContext.Exception.ToString());
 
             // Output a nice error page
             if (filterContext.HttpContext.IsCustomErrorEnabled)
             {
                 filterContext.ExceptionHandled = true;
-                View("Error").ExecuteResult(ControllerContext);
+                if (filterContext.Exception is HttpException)
+                    filterContext.Result = RedirectToAction("HttpError","Error", new {code = ((HttpException) filterContext.Exception).GetHttpCode()});
+                else if (filterContext.Exception is IdentityNotMappedException)
+                    filterContext.Result=View("CustomError", new ErrorViewModel()
+                    {
+                        Title = "Unauthorised Request",
+                        Description = "Unrecognised user.",
+                        CallToAction = "Please log out of the system.",
+                        ActionUrl = Url.Action("LogOut", "Home")
+                    });
+                else if (filterContext.Exception is UnauthorizedAccessException)
+                    filterContext.Result =  View("CustomError", new ErrorViewModel()
+                    {
+                        Title = "Unauthorised Request",
+                        Description = "You do not have the required permission to access this option.",
+                        CallToAction = "Please log in as a user with the correct permissions.",
+                        ActionUrl = Url.Action("LogOut", "Home")
+                    });
+                else if (filterContext.Exception is AuthenticationException)
+                    filterContext.Result = View("CustomError", new ErrorViewModel()
+                    {
+                        Title = "Login Required",
+                        Description = "You must first login to access this option.",
+                        CallToAction = "Next Step: Login to service",
+                        ActionUrl = Url.Action("LogOut", "Home")
+                    });
+                else
+                    filterContext.Result = View("CustomError", new ErrorViewModel()
+                    {
+                        Title = "Unexpected Error",
+                        Description = "An unexpected error has occurred and has been reported to the administrator.",
+                        CallToAction = "Please try again later"
+                    });
             }
         }
 
-        /// <summary>
-        /// Logs a message to the given log file
-        /// </summary>
-        /// <param name="logFile">The filename to log to</param>
-        /// <param name="text">The message to log</param>
-        static void WriteLog(string logFile, string text)
-        {
-            //TODO: Format nicer
-            StringBuilder message = new StringBuilder();
-            message.AppendLine(DateTime.Now.ToString());
-            message.AppendLine(text);
-            message.AppendLine("=========================================");
+        private Logger Log => new Logger(FileSystem.ExpandLocalPath(Path.Combine(Settings.Default.LogPath, "Errors")));
 
-            System.IO.File.AppendAllText(logFile, message.ToString());
-        }
         #endregion
 
         #region Authorisation Methods
@@ -109,7 +132,7 @@ namespace GenderPayGap
             {
                 //Allow resend of verification if sent over 24 hours ago
                 if (currentUser.EmailVerifySendDate.EqualsI(null, DateTime.MinValue))
-                    return View("Error", new ErrorViewModel()
+                    return View("CustomError", new ErrorViewModel()
                     {
                         Title = "Incomplete Registration",
                         Description = "You have not verified your email address.",
@@ -119,7 +142,7 @@ namespace GenderPayGap
 
                 //Allow resend of verification if sent over 24 hours ago
                 if (currentUser.EmailVerifySendDate.Value.AddHours(WebUI.Properties.Settings.Default.EmailVerificationExpiryHours) < DateTime.Now)
-                    return View("Error", new ErrorViewModel()
+                    return View("CustomError", new ErrorViewModel()
                     {
                         Title = "Incomplete Registration",
                         Description = "You did not verified your email address within the allowed time.",
@@ -130,13 +153,13 @@ namespace GenderPayGap
                 //Otherwise prompt user to check account only
                 var remainingTime = currentUser.EmailVerifySendDate.Value.AddHours(WebUI.Properties.Settings.Default.EmailVerificationMinResendHours) - DateTime.Now;
                 if (remainingTime > TimeSpan.Zero)
-                    return View("Error", new ErrorViewModel()
+                    return View("CustomError", new ErrorViewModel()
                     {
                         Title = "Incomplete Registration",
                         Description = "You have not yet verified your email address.",
                         CallToAction = "Please check your email account and follow the instructions to verify your email address.<br/>Alternatively, try again in " + remainingTime.ToFriendly(maxParts: 2) + " to request another verification email."
                     });
-                return View("Error", new ErrorViewModel()
+                return View("CustomError", new ErrorViewModel()
                 {
                     Title = "Incomplete Registration",
                     Description = "You have not yet verified your email address.",
@@ -150,7 +173,7 @@ namespace GenderPayGap
 
             //If they didnt have started organisation registration step then prompt to continue registration
             if (userOrg == null)
-                return View("Error", new ErrorViewModel()
+                return View("CustomError", new ErrorViewModel()
                 {
                     Title = "Incomplete Registration",
                     Description = "You have not completed the registration process.",
@@ -162,7 +185,7 @@ namespace GenderPayGap
             {
                 //Allow resend of PIN if sent over 2 weeks ago
                 if (userOrg.PINSentDate.EqualsI(null, DateTime.MinValue))
-                    return View("Error", new ErrorViewModel()
+                    return View("CustomError", new ErrorViewModel()
                     {
                         Title = "Incomplete Registration",
                         Description = "You have not been sent a PIN in the post.",
@@ -170,7 +193,7 @@ namespace GenderPayGap
                         ActionUrl = Url.Action("SendPIN", "Register")
                     });
                 if (userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostExpiryDays) < DateTime.Now)
-                    return View("Error", new ErrorViewModel()
+                    return View("CustomError", new ErrorViewModel()
                     {
                         Title = "Incomplete Registration",
                         Description = "You did not confirm the PIN sent to you in the post in the allowed time.",
@@ -179,14 +202,14 @@ namespace GenderPayGap
                     });
                 var remainingTime = userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
                 if (remainingTime > TimeSpan.Zero)
-                    return View("Error", new ErrorViewModel()
+                    return View("CustomError", new ErrorViewModel()
                     {
                         Title = "Incomplete Registration",
                         Description = "You have not yet confirmed the PIN sent to you in the post.",
                         CallToAction = "Click the button below to enter the PIN you have received in the post or try again in "+ remainingTime.ToFriendly(maxParts:2) +" to request another PIN.",
                         ActionUrl = Url.Action("ConfirmPIN", "Register")
                     });
-                return View("Error", new ErrorViewModel()
+                return View("CustomError", new ErrorViewModel()
                 {
                     Title = "Incomplete Registration",
                     Description = "You have not confirmed the PIN sent to you in the post.",
@@ -198,7 +221,7 @@ namespace GenderPayGap
             if (this is RegisterController)
                 //Ensure user has completed the registration process
                 //If user is fully registered then start submit process
-                return View("Error", new ErrorViewModel()
+                return View("CustomError", new ErrorViewModel()
                 {
                     Title = "Registration Complete",
                     Description = "You have already completed registration.",
@@ -209,65 +232,15 @@ namespace GenderPayGap
             return null;
         }
 
-        public bool Authorise()
-        {
-            var user = Repository.FindUser(User); //TODO:There is BUG Here
-            if (user == null || user.EmailVerifiedDate == null || user.EmailVerifiedDate == DateTime.MinValue)
-                return false;
-
-            var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(u => u.UserId == user.UserId);
-            if (userOrg == null || userOrg.PINConfirmedDate == null || userOrg.PINConfirmedDate == DateTime.MinValue)
-                return false;
-
-            return true;
-        }
-        #endregion
-
-        #region Error handling actions
-        [HandleError(ExceptionType = typeof(IdentityNotMappedException))]
-        public ActionResult IdentityNotMapped()
-        {
-            return View("Error", new ErrorViewModel()
-            {
-                Title = "Unauthorised Request",
-                Description = "Unrecognised user.",
-                CallToAction = "Please log out of the system.",
-                ActionUrl = Url.Action("LogOff", "Account")
-            });
-        }
-
-        [HandleError(ExceptionType = typeof(UnauthorizedAccessException))]
-        public ActionResult UnauthorizedAccess()
-        {
-            return View("Error", new ErrorViewModel()
-            {
-                Title = "Unauthorised Request",
-                Description = "You do not have the required permission to access this option.",
-                CallToAction = "Please log in as a user with the correct permissions.",
-                ActionUrl = Url.Action("LogOff", "Account")
-            });
-        }
-
-        [HandleError(ExceptionType = typeof(AuthenticationException))]
-        public ActionResult NotAuthenticated()
-        {
-            return View("Error", new ErrorViewModel()
-            {
-                Title = "Login Required",
-                Description = "You must first login to access this option.",
-                CallToAction = "Next Step: Login to service",
-                ActionUrl = Url.Action("Logon", "Identity")
-            });
-        }
         #endregion
 
         #region Session Handling
 
-        public void StashModel<T>(T model)
+        protected void StashModel<T>(T model)
         {
             Session[this+":Model"] = model;
         }
-        public T UnstashModel<T>()
+        protected T UnstashModel<T>()
         {
             return (T)Session[this + ":Model"];
         }

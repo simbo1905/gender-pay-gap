@@ -62,10 +62,9 @@ namespace GenderPayGap
             return result.status.EqualsI("created", "sending", "delivered");
         }
 
-        public static bool SendConfirmEmail(string confirmUrl,string emailAddress, string confirmCode)
+        public static bool SendConfirmEmail(string confirmUrl,string emailAddress)
         {
             var personalisation = new Dictionary<string, dynamic> { { "url", confirmUrl } };
-
 
             Notification result = null;
             try

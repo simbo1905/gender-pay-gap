@@ -28,7 +28,7 @@ namespace GenderPayGap.WebUI.Classes
             catch (Exception ex)
             {
             }
-            throw new HttpException("Invalid form submission. Invalid timestamp parameter.");
+            throw new HttpException(429,"Too Many Requests");
         }
     }
 }

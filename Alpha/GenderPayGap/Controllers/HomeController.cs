@@ -4,45 +4,42 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using Microsoft.Owin.Security;
 
 namespace GenderPayGap.WebUI.Controllers
 {
+    [RoutePrefix("Home")]
+    [Route("{action}")]
     public class HomeController : Controller
     {
         [HttpGet]
+        [Route("~/")]
+        [Route("Index")]
         public ActionResult Index()
         {
             return View();
         }
 
         [HttpPost]
+        [Route("Delete")]
         public ActionResult Delete()
         {
             DbContext.Truncate();
             return RedirectToAction("Index");
         }
 
-        public ActionResult About()
-        {
-            ViewBag.Message = "Your application description page.";
-            return View();
-        }
-
-        public ActionResult Contact()
-        {
-            ViewBag.Message = "Your contact page.";
-            return View();
-        }
-
+        [Route("LogOut")]
         public ActionResult Logout()
         {
             Request.GetOwinContext().Authentication.SignOut();
             return Redirect("/");
         }
+
+        [Route("TimeOut")]
         public ActionResult TimeOut()
         {
-            Request.GetOwinContext().Authentication.SignOut();
-            return View("TimedOut");
+            Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("Step1","Submit") });
+            return null;
         }
     }
 }
