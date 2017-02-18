@@ -41,7 +41,7 @@ namespace GenderPayGap.WebUI.Models
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d]{8,}$", ErrorMessage="Password must contain at least one upper case, 1 lower case character and 1 digit")]
+        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[A-Za-z\d\W]{8,}$", ErrorMessage="Password must contain at least one upper case, 1 lower case character and 1 digit")]
         public string Password { get; set; }
 
         [Required(AllowEmptyStrings = false)]
