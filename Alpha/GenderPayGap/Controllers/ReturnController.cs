@@ -1,6 +1,6 @@
 ﻿using Extensions;
 using GenderPayGap.WebUI.Models;
-using GpgDB.Models.GpgDatabase;
+using GenderPayGap.Models.SqlDatabase;
 using System;
 using System.Collections.Generic;
 using System.Data.Entity;
@@ -264,22 +264,28 @@ namespace GenderPayGap.WebUI.Controllers
             var errorView = CheckUserRegisteredOk(out currentUser);
             if (errorView != null) return errorView;
 
-            var original = GpgDatabase.Default.Return.Find(model.ReturnId);
+            //var original = GpgDatabase.Default.Return.Find(model.ReturnId);
+            var original = Repository.GetAll<Return>().FirstOrDefault(m => m.ReturnId == model.ReturnId);
+
             if (original == null)
             {
-                var userOrg = GpgDatabase.Default.UserOrganisations.FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+                var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
                 model.OrganisationId = userOrg.OrganisationId;
-                GpgDatabase.Default.Return.Add(model);
+                Repository.Insert<Return>(model);
+               
             }
             else
             {
-                GpgDatabase.Default.Entry(original).CurrentValues.SetValues(model);
+             //   GpgDatabase.Default.Entry(original).CurrentValues.SetValues(model);
             }
-            model.Organisation = GpgDatabase.Default.Organisation.Find(model.OrganisationId);
-            model.AccountingDate = DateTime.Now;
+
+           // model.Organisation = GpgDatabase.Default.Organisation.Find(model.OrganisationId);
+            model.Organisation = Repository.GetAll<Organisation>().FirstOrDefault(m => m.OrganisationId == model.OrganisationId);
+           
+                model.AccountingDate = DateTime.Now;
             try
             {
-                GpgDatabase.Default.SaveChanges();
+                Repository.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -297,7 +303,7 @@ namespace GenderPayGap.WebUI.Controllers
             var errorView = CheckUserRegisteredOk(out currentUser);
             if (errorView != null) return errorView;
 
-            var qid = GpgDatabase.Default.Return.Find(id);
+            var qid = Repository.GetAll<Return>().FirstOrDefault(r => r.ReturnId == id);
             return View(qid);
         }
 

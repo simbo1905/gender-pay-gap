@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GpgDB.Models.GpgDatabase;
+using GenderPayGap.Models.SqlDatabase;
 using GenderPayGap.WebUI.Models;
 using Extensions;
 using Autofac;
@@ -53,7 +53,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
             else if (ModelState.IsValid && string.IsNullOrWhiteSpace(model.Search))
             {
-                  model.Results = GpgDatabase.Default.Organisation.Select(o => o).ToArray();
+                model.Results = Repository.GetAll<Organisation>().Select(o => o).ToArray();
             }
 
             return View(model);

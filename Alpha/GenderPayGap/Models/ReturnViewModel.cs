@@ -1,11 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using GpgDB;
-using GpgDB.Models.GpgDatabase;
+using GenderPayGap.Models.SqlDatabase;
 using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
-using static GpgDB.Models.GpgDatabase.Organisation;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
 
