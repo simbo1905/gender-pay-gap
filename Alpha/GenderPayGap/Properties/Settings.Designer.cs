@@ -43,10 +43,10 @@ namespace GenderPayGap.WebUI.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("LogErrorFile.Log")]
-        public string LogErrorFile {
+        [global::System.Configuration.DefaultSettingValueAttribute("Logs")]
+        public string LogPath {
             get {
-                return ((string)(this["LogErrorFile"]));
+                return ((string)(this["LogPath"]));
             }
         }
         
@@ -70,19 +70,47 @@ namespace GenderPayGap.WebUI.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2017-02-18")]
-        public global::System.DateTime PublicAccountingDate {
+        [global::System.Configuration.DefaultSettingValueAttribute("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[A-Za-z\\d\\W]{8,}$")]
+        public string PasswordRegex {
             get {
-                return ((global::System.DateTime)(this["PublicAccountingDate"]));
+                return ((string)(this["PasswordRegex"]));
             }
         }
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2018-05-04")]
-        public global::System.DateTime PrivateAccountingDate {
+        [global::System.Configuration.DefaultSettingValueAttribute("Password must contain at least one upper case, 1 lower case character and 1 digit" +
+            "")]
+        public string PasswordRegexError {
             get {
-                return ((global::System.DateTime)(this["PrivateAccountingDate"]));
+                return ((string)(this["PasswordRegexError"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
+        public int MaxPinAttempts {
+            get {
+                return ((int)(this["MaxPinAttempts"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        public int MaxEmailVerifyAttempts {
+            get {
+                return ((int)(this["MaxEmailVerifyAttempts"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
+        public int LockoutMinutes {
+            get {
+                return ((int)(this["LockoutMinutes"]));
             }
         }
     }

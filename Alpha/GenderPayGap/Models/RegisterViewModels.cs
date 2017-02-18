@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Extensions;
 using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap.WebUI.Models
 {
@@ -41,7 +42,7 @@ namespace GenderPayGap.WebUI.Models
         [StringLength(100, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 8)]
         [DataType(DataType.Password)]
         [Display(Name = "Password")]
-        [RegularExpression(@"^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[$@$!%*?&])[A-Za-z\d$@$!%*?&]{8,}", ErrorMessage="Password must contain at least one upper case, 1 lower case and 1 digit and 1 symbol characters")]
+        [Password]
         public string Password { get; set; }
 
         [Required(AllowEmptyStrings = false)]
@@ -91,13 +92,13 @@ namespace GenderPayGap.WebUI.Models
         [DisplayName("Search")]
         public string SearchText { get; set; }
 
-        public List<EmployerRecord> Employers { get; internal set; }
+        public List<EmployerRecord> Employers { get; set; }
 
         public int SelectedEmployerIndex { get; set; }
 
-        public int EmployerRecords { get; internal set; }
+        public int EmployerRecords { get; set; }
 
-        public int EmployerCurrentPage { get; internal set; } = 1;
+        public int EmployerCurrentPage { get; set; } 
 
         public int EmployerPageSize { get; set; }=10;
 
@@ -121,25 +122,27 @@ namespace GenderPayGap.WebUI.Models
             get
             {
                 if (Employers == null || Employers.Count < 1) return 1;
-                return EmployerStartIndex + Employers.Count;
+                return EmployerStartIndex + Employers.Count-1;
             }
         }
         public int PagerStartIndex
         {
             get
             {
+                if (EmployerPages <= 5) return 1;
                 if (EmployerCurrentPage < 4) return 1;
-                if (EmployerCurrentPage > EmployerPages-3) return EmployerPages-4;
+                if (EmployerCurrentPage + 2 > EmployerPages) return EmployerPages-4;
 
-                return EmployerCurrentPage-2;
+                return EmployerCurrentPage -2;
             }
         }
         public int PagerEndIndex
         {
             get
             {
-                if (EmployerPages < 5) return EmployerPages;
-                return 5;
+                if (EmployerPages <=5) return EmployerPages;
+                if (PagerStartIndex + 4 > EmployerPages) return EmployerPages;
+                return PagerStartIndex + 4;
             }
         }
     }

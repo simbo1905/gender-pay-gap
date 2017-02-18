@@ -30,13 +30,13 @@
 
                 <div class="search-bar">
                     <div class="searchfield">
-                        @Html.EditorFor(model => model.SearchText, new { htmlAttributes = new { @class = "search-input", @placeholder = "Enter an employers name or company no" } })<br />
+                        @Html.EditorFor(model => model.SearchText, new { htmlAttributes = new { @class = "search-input", @placeholder = "Enter an employers name or company no" } })
 
-                        <button type="submit" class="search-submit" name="command" data-argument="search">Search</button>
+                        <button type="submit" class="search-submit" name="command" value="search">Search</button>
                     </div>
                 </div>
 
-                @if (Model.EmployerRecords < 1)
+                @if (Model.Employers.Count < 1)
                 {
                     <p>No records found</p>
                 }
@@ -62,41 +62,48 @@
                                         @Model.Employers[i].CompanyNumber
                                     </td>
                                     <td>
-                                        <a href="#" data-argument="employer_@(i+1)">Choose company</a>
+                                        <a href="#" data-argument="employer_@i">Choose company</a>
                                     </td>
                                 </tr>
                             }
                         </tbody>
                     </table>
 
-                    <div class="pager">
-                        <div class="pager-controls">
-                            @if (Model.EmployerCurrentPage > 1)
-                            {
-<a class="pager-next" href="#" data-argument="pagePrev">Previous</a>
-                            }
-                            <ul class="pager-items">
-                                @for (var i = Model.PagerStartIndex; i <= Model.PagerEndIndex; i++)
+                    if (Model.Employers.Count > 1)
+                    {
+                        <div class="pager">
+                            <div class="pager-controls">
+                                @if (Model.EmployerCurrentPage > 1)
                                 {
-                                    if (i == Model.EmployerCurrentPage)
-                                    {
-<li>@i</li>
-                                    }
-                                    else
-                                    {
-                                        <li><a href="#" data-argument="page_@i">@i</a></li>
-                                    }
+                                    <a class="pager-next" href="#" data-argument="pagePrev">Previous</a>
                                 }
-                            </ul>
-                            @if (Model.EmployerCurrentPage < Model.EmployerPages)
-                            {
-<a class="pager-next" href="#" data-argument="pageNext">Next</a>
-                            }
+                                <ul class="pager-items">
+                                    @for (var i = Model.PagerStartIndex; i <= Model.PagerEndIndex; i++)
+                                    {
+                                        if (i == Model.EmployerCurrentPage)
+                                        {
+                                            <li><b>@i</b></li>
+                                        }
+                                        else
+                                        {
+                                            <li><a href="#" data-argument="page_@i">@i</a></li>
+                                        }
+                                    }
+                                </ul>
+                                @if (Model.EmployerCurrentPage < Model.EmployerPages)
+                                {
+                                    <a class="pager-next" href="#" data-argument="pageNext">Next</a>
+                                }
+                            </div>
+                            <div class="pager-summary">Showing @Model.EmployerStartIndex – @Model.EmployerEndIndex of @Model.EmployerRecords employers</div>
                         </div>
-                        <div class="pager-summary">Showing @Model.EmployerStartIndex – @Model.EmployerEndIndex of @Model.EmployerRecords employers</div>
-                    </div>
+                    }
                 }
                 <br>
+                <p>
+                    @Html.ActionLink("Go back to previous step", "Step4")
+                </p>
+
             </div>
         </div>
     }
