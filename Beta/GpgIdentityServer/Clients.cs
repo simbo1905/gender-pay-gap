@@ -15,7 +15,7 @@ namespace GpgIdentityServer
                     ClientName = "Gender Pay Gap (Alpha)",
                     ClientId = "gpgWeb",
                     Flow = Flows.Implicit,
-
+                    RequireConsent = false,
                     RedirectUris = new List<string>
                     {
                         ConfigurationManager.AppSettings["GpgWebServer"]
@@ -37,6 +37,7 @@ namespace GpgIdentityServer
                     ClientName = "Gender Pay Gap (Alpha)",   
                     ClientId = "gpg_portal",
                     Flow = Flows.ClientCredentials,
+                    RequireConsent = false,
 
                     ClientSecrets = new List<Secret>
                     {
