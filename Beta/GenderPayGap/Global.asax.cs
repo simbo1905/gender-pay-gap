@@ -6,17 +6,29 @@ using GenderPayGap.Models.SqlDatabase;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
+using GenderPayGap.WebUI.Properties;
 
 namespace GenderPayGap
 {
     public class MvcApplication : System.Web.HttpApplication
     {
         public static IContainer ContainerIOC;
+
+        private static Logger _Log;
+        public static Logger Log
+        {
+            get
+            {
+                if (_Log==null)_Log=new Logger(FileSystem.ExpandLocalPath(Path.Combine(Settings.Default.LogPath, "Errors")));
+                return _Log;
+            }
+        }
 
         protected void Application_Start()
         {
@@ -39,15 +51,19 @@ namespace GenderPayGap
         protected void Application_Error(Object sender, EventArgs e)
         {
             // Process exception
-
-
             if (HttpContext.Current.IsCustomErrorEnabled)
             {
                 var raisedException = Server.GetLastError();
-                if (raisedException is HttpException)
-                    HttpContext.Current.Response.Redirect("~/Error/HttpError?code=" + ((HttpException) raisedException).GetHttpCode());
-                else
-                    HttpContext.Current.Response.Redirect("~/Error/DefaultError");
+                if (raisedException != null)
+                {
+                    //Add to the log
+                    Log.WriteLine(raisedException.ToString());
+
+                    if (raisedException is HttpException)
+                        HttpContext.Current.Response.Redirect("~/Error?code=" + ((HttpException) raisedException).GetHttpCode());
+                    else
+                        HttpContext.Current.Response.Redirect("~/Error");
+                }
             }
         }
 

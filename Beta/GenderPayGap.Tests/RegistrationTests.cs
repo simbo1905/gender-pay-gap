@@ -37,7 +37,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<ErrorController>(1);
 
             // Act
-            var result = controller.HttpError(404) as ViewResult;
+            var result = controller.Default(404) as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -90,7 +90,7 @@ namespace GenderPayGap.Tests
             Assert.NotNull(model, "Expected ErrorViewModel");
             Assert.That(model.Title == "Incomplete Registration", "Invalid error title");
             Assert.That(model.Description == "You did not verified your email address within the allowed time.", "Invalid error description");
-            Assert.That(model.ActionUrl == controller.Url.Action("Verify", "Register"), "Invalid error action");
+            Assert.That(model.ActionUrl == controller.Url.Action("Step2", "Register"), "Invalid error action");
         }
 
         [Test]
@@ -136,7 +136,7 @@ namespace GenderPayGap.Tests
             Assert.That(model.Title == "Incomplete Registration", "Invalid error title");
             Assert.That(model.Description == "You have not completed the registration process.", "Invalid error description");
             Assert.That(model.CallToAction == "Next Step: Select your organisation","Invalid error call to action");
-            Assert.That(model.ActionUrl == controller.Url.Action("Organisation", "Register"), "Invalid error action");
+            Assert.That(model.ActionUrl == controller.Url.Action("Step2", "Register"), "Invalid error action");
 
         }
 
@@ -186,7 +186,7 @@ namespace GenderPayGap.Tests
             Assert.NotNull(model, "Expected ErrorViewModel");
             Assert.That(model.Title == "Incomplete Registration", "Invalid error title");
             Assert.That(model.Description == "You did not confirm the PIN sent to you in the post in the allowed time.", "Invalid error description");
-            Assert.That(model.ActionUrl == controller.Url.Action("Confirm", "Register"), "Invalid error action");
+            Assert.That(model.ActionUrl == controller.Url.Action("ConfirmPIN", "Register"), "Invalid error action");
         }
 
         [Test]

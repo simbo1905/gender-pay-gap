@@ -12,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace GenderPayGap.WebUI.Classes
 {
-    public class HttpErrorMessagesSection : ConfigurationSection
+    public class ErrorMessagesSection : ConfigurationSection
     {
         [ConfigurationProperty("", IsRequired = true, IsDefaultCollection = true)]
-        [ConfigurationCollection(typeof(HttpErrorMessages), AddItemName = "HttpErrorMessage")]
-        public HttpErrorMessages Messages
+        [ConfigurationCollection(typeof(ErrorMessages), AddItemName = "ErrorMessage")]
+        public ErrorMessages Messages
         {
-            get { return (HttpErrorMessages)this[""]; }
+            get { return (ErrorMessages)this[""]; }
             set { this[""] = value; }
         }
         public override bool IsReadOnly()
@@ -28,39 +28,39 @@ namespace GenderPayGap.WebUI.Classes
 
         public string Serialize()
         {
-            return SerializeSection(this, "HttpErrorMessages", ConfigurationSaveMode.Full);
+            return SerializeSection(this, "ErrorMessages", ConfigurationSaveMode.Full);
         }
 
-        public static HttpErrorMessagesSection Deserialize(string xml)
+        public static ErrorMessagesSection Deserialize(string xml)
         {
-            var HttpErrorMessagesSection = new HttpErrorMessagesSection();
+            var ErrorMessagesSection = new ErrorMessagesSection();
             var rdr = new XmlTextReader(new StringReader(xml));
-            HttpErrorMessagesSection.DeserializeSection(rdr);
-            return HttpErrorMessagesSection;
+            ErrorMessagesSection.DeserializeSection(rdr);
+            return ErrorMessagesSection;
         }
     }
 
-    public class HttpErrorMessages : ConfigurationElementCollection
+    public class ErrorMessages : ConfigurationElementCollection
     {
         public override bool IsReadOnly()
         {
             return false;
         }
 
-        public BindingList<HttpErrorMessage> GetBindingList()
+        public BindingList<ErrorMessage> GetBindingList()
         {
-            var results = new BindingList<HttpErrorMessage>();
-            foreach (HttpErrorMessage setting in this)
+            var results = new BindingList<ErrorMessage>();
+            foreach (ErrorMessage setting in this)
                 results.Add(setting);
             return results;
         }
 
-        public HttpErrorMessage this[int code]
+        public ErrorMessage this[int code]
         {
             get
             {
                 if (code<400) return null;
-                foreach (HttpErrorMessage setting in this)
+                foreach (ErrorMessage setting in this)
                 {
                     if (setting.Code.EqualsI(code)) return setting;
                 }
@@ -68,11 +68,11 @@ namespace GenderPayGap.WebUI.Classes
             }
         }
 
-        internal HttpErrorMessage Default
+        internal ErrorMessage Default
         {
             get
             {
-                foreach (HttpErrorMessage setting in this)
+                foreach (ErrorMessage setting in this)
                 {
                     if (setting.Default == true) return setting;
                 }
@@ -82,14 +82,14 @@ namespace GenderPayGap.WebUI.Classes
 
         protected override ConfigurationElement CreateNewElement()
         {
-            return new HttpErrorMessage();
+            return new ErrorMessage();
         }
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((HttpErrorMessage)element).Code;
+            return ((ErrorMessage)element).Code;
         }
 
-        public void Add(HttpErrorMessage element)
+        public void Add(ErrorMessage element)
         {
             base.BaseAdd(element);
         }
@@ -99,7 +99,7 @@ namespace GenderPayGap.WebUI.Classes
             base.BaseRemoveAt(index);
         }
 
-        public void Insert(int index, HttpErrorMessage element)
+        public void Insert(int index, ErrorMessage element)
         {
             base.BaseAdd(index, element);
         }
@@ -108,13 +108,13 @@ namespace GenderPayGap.WebUI.Classes
         {
             get
             {
-                return "HttpErrorMessage";
+                return "ErrorMessage";
             }
         }
 
         protected override bool IsElementName(string elementName)
         {
-            return elementName.Equals("HttpErrorMessage", StringComparison.InvariantCultureIgnoreCase);
+            return elementName.Equals("ErrorMessage", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public override ConfigurationElementCollectionType CollectionType
@@ -125,14 +125,14 @@ namespace GenderPayGap.WebUI.Classes
             }
         }
 
-        internal static HttpErrorMessages Load(System.Configuration.Configuration config)
+        internal static ErrorMessages Load(System.Configuration.Configuration config)
         {
-            var HttpErrorMessagesSection = (HttpErrorMessagesSection)config.GetSection("HttpErrorMessages");
+            var ErrorMessagesSection = (ErrorMessagesSection)config.GetSection("ErrorMessages");
 
             //Get the account settings section
-            if (HttpErrorMessagesSection == null) HttpErrorMessagesSection = new HttpErrorMessagesSection();
-            if (HttpErrorMessagesSection.Messages == null) HttpErrorMessagesSection.Messages = new HttpErrorMessages();
-            var results = HttpErrorMessagesSection.Messages;
+            if (ErrorMessagesSection == null) ErrorMessagesSection = new ErrorMessagesSection();
+            if (ErrorMessagesSection.Messages == null) ErrorMessagesSection.Messages = new ErrorMessages();
+            var results = ErrorMessagesSection.Messages;
 
             if (results == null) throw new Exception("You must enter all the http error codes and messages.");
 
@@ -141,12 +141,12 @@ namespace GenderPayGap.WebUI.Classes
     }
 
     [Serializable]
-    public class HttpErrorMessage : ConfigurationElement
+    public class ErrorMessage : ConfigurationElement
     {
-        public HttpErrorMessage() : base()
+        public ErrorMessage() : base()
         {
         }
-        public HttpErrorMessage(int code)
+        public ErrorMessage(int code)
         {
             Code = code;
         }
@@ -187,6 +187,16 @@ namespace GenderPayGap.WebUI.Classes
             set
             {
                 base["description"] = value;
+            }
+        }
+
+        [ConfigurationProperty("callToAction", IsRequired = false)]
+        public string CallToAction
+        {
+            get { return (string)base["callToAction"]; }
+            set
+            {
+                base["callToAction"] = value;
             }
         }
 

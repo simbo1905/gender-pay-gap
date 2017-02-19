@@ -74,19 +74,19 @@ namespace GenderPayGap.WebUI.Controllers
         // GET: Query
         public ActionResult Index()
         {
-            return View();
+            return View("Search");
         }
 
         // GET: Query/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            return View("Search");
         }
 
         // GET: Query/Create
         public ActionResult Create()
         {
-            return View();
+            return View("Search");
         }
 
         // POST: Query/Create
@@ -101,14 +101,14 @@ namespace GenderPayGap.WebUI.Controllers
             }
             catch
             {
-                return View();
+                return View("Search");
             }
         }
 
         // GET: Query/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            return View("Search");
         }
 
         // POST: Query/Edit/5
@@ -123,14 +123,14 @@ namespace GenderPayGap.WebUI.Controllers
             }
             catch
             {
-                return View();
+                return View("Search");
             }
         }
 
         // GET: Query/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            return View("Search");
         }
 
         // POST: Query/Delete/5
@@ -145,7 +145,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
             catch
             {
-                return View();
+                return View("Search");
             }
         }
     }
