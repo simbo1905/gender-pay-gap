@@ -22,7 +22,6 @@ namespace GenderPayGap.WebUI.Controllers
         public RegisterController(IContainer container): base(container){}
 
         [HttpGet]
-        [Route]
         [Route("Step1")]
         public ActionResult Step1()
         {
@@ -491,14 +490,14 @@ namespace GenderPayGap.WebUI.Controllers
                         if (userOrg.PINSentDate != null)
                         {
                             ModelState.AddModelError("", "Another user ("+user.Fullname+") has already registered for this organisation.");
-                            return View("Step1", model);
+                            return View("Step5", model);
                         }
 
                         var remainingTime = userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostExpiryDays) - DateTime.Now;
                         if (remainingTime > TimeSpan.Zero)
                         {
-                            ModelState.AddModelError("EmailAddress", "Another user (" + user.Fullname + ") is trying to register this organisation and has " + remainingTime.ToFriendly(maxParts: 2) + " to confirm their registered address. Please try again later.");
-                            return View("Step1", model);
+                            ModelState.AddModelError("", "Another user (" + user.Fullname + ") is trying to register this organisation. Please try again later in " + remainingTime.ToFriendly(maxParts: 2) + ".");
+                            return View("Step5", model);
                         }
                     }
                 }

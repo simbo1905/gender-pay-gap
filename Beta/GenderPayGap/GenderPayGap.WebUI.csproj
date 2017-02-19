@@ -253,7 +253,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Classes\Extensions\Extensions.cs" />
-    <Compile Include="Classes\HttpErrorMessages.cs" />
+    <Compile Include="Classes\ErrorMessagesConfig.cs" />
     <Compile Include="Classes\PasswordAttribute.cs" />
     <Compile Include="Classes\SpamProtectionAttribute.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -285,7 +285,9 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <Content Include="App_Data\Confirm.txt" />
-    <None Include="App_Data\HttpErrorMessages.config" />
+    <Content Include="App_Data\ErrorMessages.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="App_Data\Pin.txt" />
     <Content Include="App_Data\Verify.txt" />
     <Content Include="Content\application.css" />
@@ -360,6 +362,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Properties\PublishProfiles\genderpaygap - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\genderpaygap - Web Deploy %283%29.pubxml" />
+    <None Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\wa-t1te-gpg - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -389,29 +393,9 @@
     </Content>
     <Content Include="Views\Web.config" />
     <Content Include="Views\_ViewStart.cshtml" />
-    <Content Include="Views\Error\HttpError.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
     <Content Include="Views\Submit\Index.cshtml" />
-    <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
-    <Content Include="Views\Account\ConfirmEmail.cshtml" />
-    <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
-    <Content Include="Views\Account\ExternalLoginFailure.cshtml" />
-    <Content Include="Views\Account\ForgotPassword.cshtml" />
-    <Content Include="Views\Account\ForgotPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\Login.cshtml" />
-    <Content Include="Views\Account\Register.cshtml" />
-    <Content Include="Views\Account\ResetPassword.cshtml" />
-    <Content Include="Views\Account\ResetPasswordConfirmation.cshtml" />
-    <Content Include="Views\Account\SendCode.cshtml" />
-    <Content Include="Views\Account\VerifyCode.cshtml" />
-    <Content Include="Views\Manage\AddPhoneNumber.cshtml" />
-    <Content Include="Views\Manage\ChangePassword.cshtml" />
-    <Content Include="Views\Manage\Index.cshtml" />
-    <Content Include="Views\Manage\ManageLogins.cshtml" />
-    <Content Include="Views\Manage\SetPassword.cshtml" />
-    <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
-    <Content Include="Views\Shared\_LoginPartial.cshtml" />
     <Content Include="Views\DfE\Layouts\template.cshtml" />
     <Content Include="Views\GOVUK\Layouts\template.cshtml" />
     <Content Include="Views\GOVUK\Partials\footer-support-links.cshtml" />
@@ -421,7 +405,6 @@
     <Content Include="Views\Home\_Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
     <Content Include="Views\Register\Step1.cshtml" />
-    <Content Include="Views\Register\Type.cshtml" />
     <Content Include="Views\Register\Step3.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Query\Download.cshtml" />
@@ -437,12 +420,13 @@
     <Content Include="Views\Register\SendPIN.cshtml" />
     <Content Include="Views\Register\ConfirmPIN.cshtml" />
     <Content Include="Views\Home\TimedOut.cshtml" />
-    <Content Include="Views\Error\DefaultError.cshtml" />
     <Content Include="Views\Submit\Step1.cshtml" />
     <Content Include="Views\Submit\Step2.cshtml" />
     <Content Include="Views\Submit\Step3.cshtml" />
     <Content Include="Views\Submit\Step4.cshtml" />
     <Content Include="Views\Submit\Step5.cshtml" />
+    <Content Include="Views\Submit\Complete.cshtml" />
+    <Content Include="Views\Shared\Error.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\GPGDatabase\" />
