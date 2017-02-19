@@ -5,11 +5,7 @@
 
 <main id="content" role="main">
     <div class="grid-row">
-        @if (!ViewData.ModelState.IsValid)
-        {
-            @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
-        }
-
+        @Html.ValidationSummary("", new { @class = "text-danger" })
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()

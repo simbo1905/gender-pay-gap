@@ -68,7 +68,7 @@ namespace GenderPayGap.Tests.Submission
             var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
             //Add a return to the mock repo to simulate one in the database
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation, @return);
+            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation, @return);
            // controller.bind();
 
             //Act:
@@ -90,7 +90,7 @@ namespace GenderPayGap.Tests.Submission
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "0" };
 
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
            // controller.Bind(model);
 
 
@@ -136,7 +136,7 @@ namespace GenderPayGap.Tests.Submission
             };
 
 
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
             controller.Bind(model);
 
             // Act
@@ -200,7 +200,7 @@ namespace GenderPayGap.Tests.Submission
             };
 
 
-            var controller = TestHelper.GetController<ReturnController>();
+            var controller = TestHelper.GetController<SubmitController>();
             //controller.Bind(model);
 
             // Act
@@ -265,7 +265,7 @@ namespace GenderPayGap.Tests.Submission
             };
 
 
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
             //controller.Bind(model);
 
             // Act
@@ -329,7 +329,7 @@ namespace GenderPayGap.Tests.Submission
             };
 
 
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
             //controller.Bind(model);
 
             // Act
@@ -385,7 +385,7 @@ namespace GenderPayGap.Tests.Submission
                 LastName = emptyString
             };
 
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
             //controller.bind();
 
             //Act:
@@ -423,7 +423,7 @@ namespace GenderPayGap.Tests.Submission
                 LastName = emptyString
             };
 
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
             //controller.bind();
 
             //Act:
@@ -459,7 +459,7 @@ namespace GenderPayGap.Tests.Submission
                 LastName  = "MyLastName"
             };
 
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
             //controller.bind();
 
             //Act:
@@ -495,7 +495,7 @@ namespace GenderPayGap.Tests.Submission
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "0" };
             var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
 
             var model = new ReturnViewModel()
             {
@@ -525,7 +525,7 @@ namespace GenderPayGap.Tests.Submission
             var model = new ReturnViewModel();
             model.CompanyLinkToGPGInfo = "http://www.test.com";
 
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
 
             //Act
             var result = (ViewResult)controller.Step3(model, string.Empty);
@@ -553,7 +553,7 @@ namespace GenderPayGap.Tests.Submission
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "0" };
             var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
             //Act
             var result = (ViewResult)controller.Step1();
             var model = result.Model as ReturnViewModel;
@@ -572,7 +572,7 @@ namespace GenderPayGap.Tests.Submission
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINCode = "0" };
             var @return = new Return() { ReturnId = 1, OrganisationId = 1, CompanyLinkToGPGInfo = "https://www.test.com" };
 
-            var controller = TestHelper.GetController<ReturnController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
 
             //Act
             //var result = (ViewResult)controller.Step1(@return);

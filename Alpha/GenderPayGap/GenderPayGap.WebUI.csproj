@@ -260,7 +260,7 @@
     <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
-    <Compile Include="Controllers\ReturnController.cs" />
+    <Compile Include="Controllers\SubmitController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -392,7 +392,7 @@
     <Content Include="Views\Error\HttpError.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Return\Index.cshtml" />
+    <Content Include="Views\Submit\Index.cshtml" />
     <Content Include="Views\Account\_ExternalLoginsListPartial.cshtml" />
     <Content Include="Views\Account\ConfirmEmail.cshtml" />
     <Content Include="Views\Account\ExternalLoginConfirmation.cshtml" />
@@ -438,11 +438,11 @@
     <Content Include="Views\Register\ConfirmPIN.cshtml" />
     <Content Include="Views\Home\TimedOut.cshtml" />
     <Content Include="Views\Error\DefaultError.cshtml" />
-    <Content Include="Views\Return\Step1.cshtml" />
-    <Content Include="Views\Return\Step2.cshtml" />
-    <Content Include="Views\Return\Step3.cshtml" />
-    <Content Include="Views\Return\Step4.cshtml" />
-    <Content Include="Views\Return\Step5.cshtml" />
+    <Content Include="Views\Submit\Step1.cshtml" />
+    <Content Include="Views\Submit\Step2.cshtml" />
+    <Content Include="Views\Submit\Step3.cshtml" />
+    <Content Include="Views\Submit\Step4.cshtml" />
+    <Content Include="Views\Submit\Step5.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Models\GPGDatabase\" />

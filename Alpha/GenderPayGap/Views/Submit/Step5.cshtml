@@ -1,10 +1,11 @@
-﻿@model long
+﻿@model GenderPayGap.WebUI.Models.ReturnViewModel
 
 
 <main id="content" role="main">
 
 @using (Html.BeginForm())
 {
+    @Html.AntiForgeryToken()
 
 
     if (!ViewData.ModelState.IsValid)
@@ -16,7 +17,7 @@
 
         <div class="column-two-thirds">
             <div class="govuk-box-highlight">
-                <h1 class="bold-large">You've sent your gender pay gap data for 2016 to 2017</h1>
+                <h1 class="bold-large">You have successfully submitted your gender pay gap data for 2016 to 2017</h1>
             </div>
             <!--       <p>We have sent you a confirmation email.</p>
              -->

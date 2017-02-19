@@ -117,7 +117,7 @@ namespace GenderPayGap
                 if (this is RegisterController) return null;
 
                 //When submitting ensure user is authenticated
-                if (this is ReturnController) throw new UnauthorizedAccessException();
+                if (this is SubmitController) throw new UnauthorizedAccessException();
             }
 
             //The user can then go through the process of changing their details and email then sending another verification email
@@ -226,7 +226,7 @@ namespace GenderPayGap
                     Title = "Registration Complete",
                     Description = "You have already completed registration.",
                     CallToAction = "Next Step: Submit your Gender Pay Gap data",
-                    ActionUrl = Url.Action("Create", "Return")
+                    ActionUrl = Url.Action("Step1", "Submit")
                 });
 
             return null;

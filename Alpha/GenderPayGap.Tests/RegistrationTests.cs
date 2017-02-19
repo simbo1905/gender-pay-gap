@@ -233,7 +233,7 @@ namespace GenderPayGap.Tests
             Assert.NotNull(model, "Expected ErrorViewModel");
             Assert.That(model.Title == "Registration Complete", "Invalid error title");
             Assert.That(model.Description == "You have already completed registration.", "Invalid error description");
-            Assert.That(model.ActionUrl==controller.Url.Action("Create", "Return"), "Invalid error action");
+            Assert.That(model.ActionUrl==controller.Url.Action("Step1", "Submit"), "Invalid error action");
         }
         #endregion
 

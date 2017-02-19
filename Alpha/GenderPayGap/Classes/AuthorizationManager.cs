@@ -10,7 +10,7 @@ namespace GenderPayGap
         {
             switch (context.Resource.First().Value)
             {
-                case "Return":
+                case "Submit":
                     return AuthoriseReturn(context);
                 default:
                     return Nok();
