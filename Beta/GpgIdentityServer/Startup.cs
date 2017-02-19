@@ -34,6 +34,8 @@ namespace GpgIdentityServer
                 // note: for the sample this registration is a singletone (not what you want in production probably)
                 factory.UserService = new Registration<IUserService>(resolver => userService);
 
+                //factory.ViewService = new Registration<IViewService, CustomViewService>();
+
                 var options = new IdentityServerOptions
                 {
                     SiteName = "GPG IdentityServer",

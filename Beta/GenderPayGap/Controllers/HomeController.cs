@@ -38,7 +38,7 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Logout()
         {
             Request.GetOwinContext().Authentication.SignOut();
-            return Redirect("/");
+            return RedirectToAction("Step1","Submit");
         }
 
         [Route("TimeOut")]
