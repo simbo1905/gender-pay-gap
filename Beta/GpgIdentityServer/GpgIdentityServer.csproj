@@ -120,6 +120,9 @@
     </Content>
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\genderpaygap - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\GPGBeta.pubxml" />
+    <None Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\wa-t1te-gpg - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

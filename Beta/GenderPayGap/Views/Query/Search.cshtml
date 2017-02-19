@@ -53,7 +53,7 @@
                                                 //check there is a value before doing a search.
                                                 if ( (item != null) && (item.Returns.Select( l => l.CompanyLinkToGPGInfo) != null) )
                                                 {
-                                                    @Html.ActionLink(item.OrganisationName, "Details", "Submit", new { Id = item.OrganisationId }, null) <br/>
+                                                    @Html.ActionLink(item.OrganisationName, "", "Submit", new { Id = item.OrganisationId }, null) <br/>
                                                     @Html.DisplayFor(i => item.OrganisationAddresses.FirstOrDefault().Address1)
                                                     <text>&nbsp;</text>
                                                     @Html.DisplayFor(i => item.OrganisationAddresses.FirstOrDefault().PostCode)
@@ -62,7 +62,7 @@
                                         </td>
 
                                         <td>
-                                            @Html.DisplayFor(i => item.OrganisationType)
+                                            @Html.DisplayFor(i => item.SectorType)
                                         </td>
                                     </tr>
                                         }

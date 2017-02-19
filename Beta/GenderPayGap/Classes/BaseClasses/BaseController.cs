@@ -60,14 +60,14 @@ namespace GenderPayGap
         protected override void OnException(ExceptionContext filterContext)
         {
             //Add to the log
-            Log.WriteLine(filterContext.Exception.ToString());
+            MvcApplication.Log.WriteLine(filterContext.Exception.ToString());
 
             // Output a nice error page
             if (filterContext.HttpContext.IsCustomErrorEnabled)
             {
                 filterContext.ExceptionHandled = true;
                 if (filterContext.Exception is HttpException)
-                    filterContext.Result = RedirectToAction("HttpError","Error", new {code = ((HttpException) filterContext.Exception).GetHttpCode()});
+                    filterContext.Result = RedirectToAction("Default","Error", new {code = ((HttpException) filterContext.Exception).GetHttpCode()});
                 else if (filterContext.Exception is IdentityNotMappedException)
                     filterContext.Result=View("CustomError", new ErrorViewModel()
                     {
@@ -101,8 +101,6 @@ namespace GenderPayGap
                     });
             }
         }
-
-        private Logger Log => new Logger(FileSystem.ExpandLocalPath(Path.Combine(Settings.Default.LogPath, "Errors")));
 
         #endregion
 

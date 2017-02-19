@@ -258,7 +258,7 @@ namespace GenderPayGap.WebUI.Controllers
             {
                 if (id < 1)
                 {
-                    return View(id);
+                    return View("Step5");
                 }
             }
             catch (Exception ex)
@@ -267,7 +267,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
 
             //if (!Authorise()) return RedirectToAction("Index", "Register");
-            return View(id);
+            return View("Step5");
         }
 
         [Authorize]
@@ -305,28 +305,21 @@ namespace GenderPayGap.WebUI.Controllers
             catch (Exception ex)
             {
                 ModelState.AddModelError("", ex.Message);
-                return View(model);
+                return View("Step5");
             }
-            return RedirectToAction("Step4", new { id = model.ReturnId });
+            return RedirectToAction("Complete");
         }
 
         // GET: Submit/Details/5
         [Authorize]
-        public ActionResult Details(int id = 1)
+        public ActionResult Complete()
         {
             User currentUser;
             var errorView = CheckUserRegisteredOk(out currentUser);
             if (errorView != null) return errorView;
 
-            var qid = Repository.GetAll<Return>().FirstOrDefault(r => r.ReturnId == id);
-            return View(qid);
-        }
-
-        [HttpGet]
-        public ActionResult Error()
-        {
-            //Show the confirmation view
-            return View();
+            var qid = Repository.GetAll<Return>().FirstOrDefault(r => r.ReturnId == 1);
+            return View("Complete");
         }
     }
 }
