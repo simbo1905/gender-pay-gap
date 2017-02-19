@@ -1,0 +1,59 @@
+﻿
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+/*custom css class - added by kingsley*/
+.badge-danger {
+    color: #fff; 
+    background-color: #d9534f !important;
+}
+
+.set-width-100-percent {
+    width:100%;
+}
+
+.wordwrap { 
+   /*white-space: pre-wrap;*/        /* CSS3 */   
+   /*white-space: -moz-pre-wrap;*/  /* Firefox */    
+   /*white-space: -pre-wrap;*/      /* Opera <7 */   
+   /*white-space: -o-pre-wrap;*/    /* Opera 7 */    
+   word-wrap: break-word;           /* IE */
+}
+
+.registerlogin {
+
+   background-color:black;
+   text-decoration-color:white;
+   color:white;
+}
+
+.text-danger {
+  color: red;
+}
+
+.Link {
+    background:none!important;
+    border:none; 
+    padding:0!important;
+    font: inherit;
+    /*border is optional*/
+    text-decoration: underline;
+    display: inline;
+    color: #005ea5;
+    cursor: pointer;
+    position: relative;
+    margin-bottom: 0;
+}
+.Link:hover {
+  color: #2e8aca; 
+}
+

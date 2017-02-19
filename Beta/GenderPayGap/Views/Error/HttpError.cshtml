@@ -1,0 +1,14 @@
+﻿@model Error
+@{
+    ViewBag.Title = @Model.ErrorCode + " ERROR";
+}
+<main id="content" role="main">
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <div class="govuk-box-highlight">
+                <h1 class="bold-large">@Model.Title</h1>
+                <p class="bold-large">@Model.ActionUrl</p>
+            </div>
+        </div>
+    </div>
+</main>

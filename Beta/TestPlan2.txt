@@ -1,0 +1,202 @@
+*********************************************************************************Breadth Returns Test********************************************************************************************
+																
+Assumptions:
+User is logged in.
+
+Setup:
+ mock repository and Controller class with overloaded controller to be able to call Mock controller with (user , org) calling mock IRepository
+ or real Repository
+ mock user
+ mock org
+
+
+################################# LOAD TEST BEGIN: #######################################################
+Test Case:
+	1.User clicks the start page
+Result:
+RED: The corresponding view does not load or exist, Appropriate Error message is given.
+GREEN: The Correct view is loaded.
+
+
+Test Case:
+	2.Verify the model does not load any data into the form fields
+Result:
+RED: Model or ViewModel is not empty and returns data to populate fields, Appropriate Error message is given.
+GREEN: Model or ViewModel is empty and returns data to populate fields
+
+
+Test Case:
+	3.page check a database for the user if user Iprinciple is not set or null, redirect to login page
+Result:
+RED: 
+GREEN: 
+
+
+Test Case:
+	4.if principle is set and principle not exist in the mock, throw an exception 
+Result:
+RED: 
+GREEN: 
+
+
+Test Case:
+5.if user exist in the database but have not been verified / confirmed (confirmed email)
+Result:
+RED: 
+GREEN: 
+
+
+Test Case:
+6.if user exist in the database but have not been been associated with an organisation
+Result:
+RED: 
+GREEN:
+
+######################### LOAD TEST END ######################################
+
+
+
+Test Case:
+7.if user exist in the database but have not been been associated with an organisation which will affect the deadline date for submission 
+if Private: Deadline date: 6/4/2018: -> more tests for these deadline date
+if Public: Deadline date:  1/4/2018: -> more tests for this deadline date 
+Result:
+RED: 
+GREEN:
+
+
+Test Case:
+	8. if user fills in form before the just deadline date, and clicks continue just after the deadline date, 
+		before submission once continue is clicked Datetime.now must be verified against deadline date for if company is public or private.
+Result:
+RED: 
+GREEN:
+
+
+
+########################################### DESIGN PATTERN: ####################################
+create controllers to use default constructor to call child constructors with Irepository so that you can call real repo and mock repo
+mock user
+mock user without confirmation
+mock user with confirmation without organisation
+mock user with organisation without pin e.t.c
+
+Helper methods:
+GetHttpContext()
+GetLoggedInUser()
+
+######################################### END DESIGN PATTERN ##################################
+
+SCENARIOS
+1.Register and email sent, then log back in:
+
+
+Refactored test:
+
+ [Test, Order(1)]
+        [Description("Ensure the register.Index action the user is not already logged in")]
+        public void EnsureRegisterControllerReturned()
+        {
+            // Arrange
+            var user = new User() { UserId = 1,EmailVerifiedDate=DateTime.Now };
+            var organisation = new Organisation() { OrganisationId = 1 };
+            var userorganisation = new UserOrganisation() { OrganisationId = 1, UserId=1 };
+
+            var controller = TestHelper.GetController<RegisterController>(1,user,organisation,userorganisation);
+
+            // Act
+            var result= controller.Index();
+
+            // Assert
+            Assert.That(result, Is.TypeOf<RedirectToRouteResult>());
+        }
+
+
+Submission Journey:
+0.Clicking on the submit button should return the return view
+
+1. User signs in successfully
+2. User signs in successfully and has associated with an organisation
+4. User signs in successfully and has been verified
+5. User signs in successfully and has been verified Verify email verification date > 
+6. User signs in successfully and has pin code 
+7. User signs in successfully and has pin code verify pin code is correct
+
+	
+********************************************************************************************GENDER PAY GAP FORM PAGE************************************************************************************
+
+When GPG Page loads:
+Verify user is logged in from above
+ 
+Tests for the gpg return form page:
+
+
+
+Submitting:
+verify output values from what is entered
+
+verify when you click on the continue button->
+Numeric validation test : -> validate one decimal place -> if a user enters a whole number it should automatically convert to 1 decimal place *use regular expression
+verify all fields are numerical and have one decimal 0.0 place even if you put in a whole number *use regular expression
+
+Range validation test :-> 200.00 to +200.00
+loads up persone responsible page --> method that calls this page and view
+
+****************************************************************************************************************************************************************************************************
+
+
+
+*************************************************************************************PERSON RESPONSIBLE*********************************************************************************************
+Load person responsible:
+Make sure it came from previous page and all the hidden fields in the formcollection or model (including hidden fields are not empty they hold previous info collected)
+fields load up empty first name last name and title feilds from the model /form collection fields
+
+Submitting person responsible:
+verify when you click on the continue button->
+All the fields are not empty and validated i.e text use reg expressions for text allowed only, and all fields are mandatory
+opens up links to you gender pay gap information page ( the next page)
+
+
+**********************************************************************************************GENDER PAG GAP INFORMATION********************************************************************************
+load gender pay gap information:
+Make sure it came from previous page and all the hidden fields in the formcollection or model (including hidden fields are not empty they hold previous info collected)
+gender pay gap information Text box / page loads empty
+it is optional
+
+submit gender pay gap information:
+verify when you click on the continue button->
+if it is not empty it should adhere to the mandatory http:, https: and ftp: prepended followed by a web address validation using reg expression for www.blah.com /.co/.uk/ e.t.c
+if it is empty it should pass the test -> (if empty || filled && with http: prepended in front the the text when filled)
+if filled verify the employers website link with the organisation to see if there is a match
+loads up the review page 
+
+load review page:
+Make sure it came from previous page and all the hidden fields in the formcollection or model (including hidden fields are not empty they hold previous info collected)
+loads up the review page with all the data from the model /form fields of all the previous pages
+verify the information in the review page matches all the previously collected information from the form collection ( hidden fields) / model
+note:edit utton is now on the next page.
+
+submit review page:
+Make sure it came from previous page and all the hidden fields in the formcollection or model (including hidden fields are not empty they hold previous info collected)
+loads up submitted gpg page
+verify see your gpg data link should take you to the viewing service.
+verify that 'correct your gpg data' should take you back to the enter gpg data page with all the previous info entered for editing.
+verify editing your data and clicking continue will take you through each page step by step all the way back to the review page with the edited data and all the way to the submit gpg page( this page)
+.
+***********************************************************************************************************************************************************************************************************
+
+Create ReturnViewModel
+
+check for return view
+if not check for a new view
+
+
+
+Goals for the weekend:
+Make sure the submission is running
+add more unit tests for all pages submission
+acceptance test from alan
+merge projects together and make sure all our pages work together correctly
+cleanse every page for static to dynamic values 
+replace TempData with BaseController.StashModel() and UnStashModel
+change returnController to SubmitController
