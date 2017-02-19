@@ -1,8 +1,9 @@
 ﻿@model GenderPayGap.WebUI.Models.ReturnViewModel
 
 <main id="content" role="main">
-    @using (Html.BeginForm(/*"Step2", "Return", FormMethod.Post*/))
+    @using (Html.BeginForm(/*"Step2", "Submit", FormMethod.Post*/))
     {
+        @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.ReturnId)
         @Html.HiddenFor(model => model.OrganisationId)
         @Html.HiddenFor(model => model.FirstName)
@@ -18,7 +19,7 @@
 
 
                 <div class="form-horizontal">
-                    @*<h4>Return</h4>*@
+                    @*<h4>Submit</h4>*@
                     @*<hr />*@
                     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 

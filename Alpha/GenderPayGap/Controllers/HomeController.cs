@@ -12,8 +12,14 @@ namespace GenderPayGap.WebUI.Controllers
     [Route("{action}")]
     public class HomeController : Controller
     {
-        [HttpGet]
         [Route("~/")]
+        public ActionResult Redirect()
+        {
+            return RedirectToAction("Step1","Submit");
+        }
+
+        [HttpGet]
+        [Route]
         [Route("Index")]
         public ActionResult Index()
         {

@@ -22,6 +22,7 @@ namespace GenderPayGap.WebUI.Controllers
         public RegisterController(IContainer container): base(container){}
 
         [HttpGet]
+        [Route]
         [Route("Step1")]
         public ActionResult Step1()
         {
@@ -41,7 +42,7 @@ namespace GenderPayGap.WebUI.Controllers
                     Title = "Registration Complete",
                     Description = "You have already completed registration.",
                     CallToAction = "Next Step: Submit your Gender Pay Gap data",
-                    ActionUrl = Url.Action("Create", "Return")
+                    ActionUrl = Url.Action("Step1", "Submit")
                 });
             }
 
@@ -830,7 +831,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (result == null) throw new AuthenticationException();
             var errorViewModel = result.Model as ErrorViewModel;
             if (errorViewModel == null) throw new AuthenticationException();
-            if (errorViewModel.ActionUrl != Url.Action("Create", "Return"))
+            if (errorViewModel.ActionUrl != Url.Action("Step1", "Submit"))
                 return result;
 
             //Show the confirmation view

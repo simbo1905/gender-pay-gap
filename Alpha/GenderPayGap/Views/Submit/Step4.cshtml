@@ -8,8 +8,10 @@
         <span class="heading-secondary">Step 4 of 4</span>
         Review your gender pay gap data
     </h1>
-@using (Html.BeginForm("Step4", "Return", FormMethod.Post))
+@using (Html.BeginForm("Step4", "Submit", FormMethod.Post))
 {
+    @Html.AntiForgeryToken()
+
     @Html.HiddenFor(model => model.ReturnId)
     @Html.HiddenFor(model => model.OrganisationId)
     @Html.HiddenFor(model => model.FirstName)

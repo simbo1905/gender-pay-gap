@@ -18,10 +18,7 @@
 
         <input type="submit" style="display:none" name="command" value="">
         <div class="grid-row">
-            @if (!ViewData.ModelState.IsValid)
-            {
-                @Html.ValidationSummary("ERRORS:", new {@class = "text-danger"})
-            }
+            @Html.ValidationSummary("", new { @class = "text-danger" })
             <div class="column-full">
                 <h1 class="heading-large">
                     <span class="heading-secondary">Step 5 of 6</span>

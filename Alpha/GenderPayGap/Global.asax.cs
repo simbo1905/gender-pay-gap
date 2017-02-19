@@ -31,6 +31,9 @@ namespace GenderPayGap
 
             //Create Inversion of Control container
             ContainerIOC = BuildContainerIoC();
+
+            RouteTable.Routes.MapMvcAttributeRoutes();
+
         }
 
         protected void Application_Error(Object sender, EventArgs e)

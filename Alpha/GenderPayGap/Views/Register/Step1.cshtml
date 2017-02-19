@@ -7,17 +7,14 @@
 <main id="content" role="main">
     <div class="grid-row">
         <div class="column-full">
-            @if (!ViewData.ModelState.IsValid)
-            {
-                @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
-            }
+            @Html.ValidationSummary("", new { @class = "text-danger" })
             <h1 class="heading-large">
                 <span class="heading-secondary">Step 1 of 6</span>
                 About you
             </h1>
             @if (!User.Identity.IsAuthenticated)
             {
-                <p>If you already have an account, please @Html.ActionLink("sign In", "Create", "Return").</p>
+                <p>If you already have an account, please @Html.ActionLink("sign In", "Step1", "Submit").</p>
             }
             @using (Html.BeginForm())
             {

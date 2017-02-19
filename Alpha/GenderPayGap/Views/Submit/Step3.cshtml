@@ -14,8 +14,9 @@
 
 
 <main id="content" role="main">
-    @using (Html.BeginForm(/*"Step4", "Return", FormMethod.Post*/))
+    @using (Html.BeginForm(/*"Step4", "Submit", FormMethod.Post*/))
     {
+        @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.ReturnId)
         @Html.HiddenFor(model => model.OrganisationId)
         @Html.HiddenFor(model => model.FirstName)
@@ -49,7 +50,7 @@
 
 
                 <div class="form-horizontal">
-                    @*<h4>Return</h4>*@
+                    @*<h4>Submit</h4>*@
                     @*<hr />*@
                     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
 

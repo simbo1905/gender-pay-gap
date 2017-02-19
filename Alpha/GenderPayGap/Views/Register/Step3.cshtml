@@ -10,10 +10,8 @@
         @Html.HiddenFor(m => m.SearchText)
 
         <div class="grid-row">
-            @if (!ViewData.ModelState.IsValid)
-            {
-                @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
-            }
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+
 
             <div class="column-full">
                 <h1 class="heading-large">

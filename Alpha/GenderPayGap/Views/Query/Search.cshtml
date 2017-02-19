@@ -18,10 +18,7 @@
                     </ul>
                 </div>
                 <div class="tabs-content">
-                    @if (!ViewData.ModelState.IsValid)
-                    {
-                        @Html.ValidationSummary("ERROR:", new  { @class="text-danger"})
-                    }
+                    @Html.ValidationSummary("", new { @class = "text-danger" })
                     <div class="tabs-panel" id="tab-1">
                         <div class="tabs-panel-inner text">
                             <h2 class="heading-medium">Search for employers</h2>
@@ -56,7 +53,7 @@
                                                 //check there is a value before doing a search.
                                                 if ( (item != null) && (item.Returns.Select( l => l.CompanyLinkToGPGInfo) != null) )
                                                 {
-                                                    @Html.ActionLink(item.OrganisationName, "Details", "Return", new { Id = item.OrganisationId }, null) <br/>
+                                                    @Html.ActionLink(item.OrganisationName, "Details", "Submit", new { Id = item.OrganisationId }, null) <br/>
                                                     @Html.DisplayFor(i => item.OrganisationAddresses.FirstOrDefault().Address1)
                                                     <text>&nbsp;</text>
                                                     @Html.DisplayFor(i => item.OrganisationAddresses.FirstOrDefault().PostCode)

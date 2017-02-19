@@ -2,8 +2,9 @@
 @model GenderPayGap.WebUI.Models.ReturnViewModel
 
 <main id="content" role="main">
-@using (Html.BeginForm(/*"Step3", "Return", FormMethod.Post*/))
+@using (Html.BeginForm(/*"Step3", "Submit", FormMethod.Post*/))
 {
+    @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.ReturnId)
     @Html.HiddenFor(model => model.OrganisationId)
     @Html.HiddenFor(model => model.DiffMeanBonusPercent)
