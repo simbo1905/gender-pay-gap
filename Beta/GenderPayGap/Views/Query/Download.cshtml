@@ -1,0 +1,52 @@
+﻿@model GenderPayGap.Models.SqlDatabase.Organisation
+
+<main id="content" role="main">
+    
+
+    <div class="grid-row">
+        <div class="column-full">
+            <h1 class="heading-large">
+                Gender pay gap
+            </h1>
+            <div class="tabs">
+                <div class="tabs-nav">
+                    <ul class="tabs-list">
+                        <li><a href="search">Search for employers</a></li>
+                        <li><a href="sectors">View employers by sector</a></li>
+
+                        <li><a href="download" class="selected">Download data</a></li>
+                    </ul>
+                </div>
+                <div class="tabs-content">
+                    <div class="tabs-panel" id="tab-1">
+                        <div class="tabs-panel-inner text">
+                            <h2 class="heading-medium">Download gender pay gap data </h2>
+                            <table class="download-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Year</th>
+                                        <th scope="col">Number of employers</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+
+
+                                    <tr>
+                                        <td><a href="#">2016 to 2017 </a><span class="info"> (CSV, 2.3MB)</span></td>
+                                        <td> 400 </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Styles.Render("~/Content/css")
+}

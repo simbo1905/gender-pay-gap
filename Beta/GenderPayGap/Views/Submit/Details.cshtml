@@ -1,0 +1,255 @@
+﻿@model GenderPayGap.Models.SqlDatabase.Return
+
+
+<main id="content" role="main" class="">
+
+
+    <div class="breadcrumbs">
+        <ol>
+            <li><a href="search">Gender pay gap</a></li>
+            <li><a href="search-results">Search results</a></li>
+        </ol>
+    </div>
+    <div class="grid-row">
+        <div class="column-two-thirds gpg-details">
+            <h1 class="heading-large">
+                <span class="heading-secondary">2016 to 2017 gender pay gap data</span>
+                @Html.ValueFor(model => model.Organisation.OrganisationName)
+            </h1>
+            <div class="tabs">
+                <div class="tabs-nav">
+
+                    <ul class="tabs-list">
+                        <li><a id="t1" onclick="tab(1)" class="selected">Hourly rate</a></li>
+                        <li><a id="t2" onclick="tab(2)">Pay scales</a></li>
+                        <li><a id="t3" onclick="tab(3)">Bonus pay</a></li>
+                    </ul>
+
+                </div>
+
+                <div class="tabs-content">
+                    <div class="tabs-panel" id="tab-1">
+                        <div class="tabs-panel-inner text">
+                            <div class="block ">
+                                <h2 class="heading-medium no-sub">Women's hourly pay is</h2>
+                                <div class="data">
+                                    <h4 class="bold-xlarge ">@Html.ValueFor(model => model.DiffMeanHourlyPayPercent)% </h4>
+                                    <p class="bold-large sub ">LOWER </p>
+                                </div>
+                                <p class="amount"><span>What this means:</span>  If average hourly pay for men in this organisation is £15, the average for women would be £12.90.</p>
+                            </div>
+                            <div class="">
+                                <h2 class="heading-medium ">From highest to lowest paid</h2>
+                                <p class="spacer">
+                                    Compared to the male employee in the middle of this organisation's pay range, the equivalent female employee earns
+                                </p>
+                                <div class="data">
+                                    <h4 class="bold-xlarge ">@Html.ValueFor(model => model.DiffMedianHourlyPercent)%</h4>
+                                    <p class="bold-large sub ">LESS </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tabs-panel" id="tab-2">
+                        <div class="tabs-panel-inner text">
+                            <h2 class="heading-medium ">Pay scales </h2>
+                            <p>How many men and women are in each quarter of the employer's payroll.</p>
+                            <p class="header">Lowest-paid quarter of staff </p>
+                            <div class="grid-row">
+                                <div class="column-one-half">
+                                    <div class="data">
+                                        <h4 class="bold-xlarge">@Html.ValueFor(model => model.MaleLowerPayBand)%</h4>
+                                        <p class="font-small">Men</p>
+                                    </div>
+                                </div>
+                                <div class="column-one-half">
+                                    <div class="data">
+                                        <h4 class="bold-xlarge">@Html.ValueFor(model => model.FemaleLowerPayBand)%</h4>
+                                        <p class="font-small">Women </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="header">Second lowest-paid quarter of staff</p>
+                            <div class="grid-row">
+                                <div class="column-one-half">
+                                    <div class="data">
+                                        <h4 class="bold-xlarge">@Html.ValueFor(model => model.MaleMiddlePayBand)% </h4>
+                                        <p class="font-small">Men</p>
+                                    </div>
+                                </div>
+                                <div class="column-one-half">
+                                    <div class="data">
+                                        <h4 class="bold-xlarge">@Html.ValueFor(model => model.FemaleMiddlePayBand)%</h4>
+                                        <p class="font-small">Women </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="header">Second highest-paid quarter of staff </p>
+                            <div class="grid-row">
+                                <div class="column-one-half">
+                                    <div class="data">
+                                        <h4 class="bold-xlarge">@Html.ValueFor(model => model.MaleUpperPayBand)% </h4>
+                                        <p class="font-small">Men</p>
+                                    </div>
+                                </div>
+                                <div class="column-one-half">
+                                    <div class="data">
+                                        <h4 class="bold-xlarge">@Html.ValueFor(model => model.FemaleUpperPayBand)%</h4>
+                                        <p class="font-small">Women </p>
+                                    </div>
+                                </div>
+                            </div>
+                            <p class="header">Highest-paid quarter of staff </p>
+                            <div class="grid-row ">
+                                <div class="column-one-half">
+                                    <div class="data">
+                                        <h4 class="bold-xlarge">@Html.ValueFor(model => model.MaleUpperQuartilePayBand)%</h4>
+                                        <p class="font-small">Men</p>
+                                    </div>
+                                </div>
+                                <div class="column-one-half">
+                                    <div class="data">
+                                        <h4 class="bold-xlarge">@Html.ValueFor(model => model.FemaleUpperQuartilePayBand)%</h4>
+                                        <p class="font-small">Women </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="tabs-panel" id="tab-3">
+                        <div class="tabs-panel-inner text">
+                            <div class="block ">
+
+                                <h2 class="heading-medium no-sub">Bonus pay</h2>
+                                <p class="header">Who gets it</p>
+                                <div class="grid-row">
+                                    <div class="column-one-half ">
+                                        <div class="data">
+                                            <h4 class="bold-xlarge">@Html.ValueFor(model => model.MaleMedianBonusPayPercent)% </h4>
+                                            <p class="font-small">Men </p>
+                                        </div>
+                                    </div>
+                                    <div class="column-one-half">
+                                        <div class="data">
+                                            <h4 class="bold-xlarge">@Html.ValueFor(model => model.FemaleMedianBonusPayPercent)%</h4>
+                                            <p class="font-small">Women  </p>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="">
+                                <h2 class="heading-medium no-sub">Women's bonus pay is</h2>
+
+                                <div class="data">
+                                    <h4 class="bold-xlarge ">@Html.ValueFor(model => model.FemaleMedianBonusPayPercent)%</h4>
+                                    <p class="bold-large sub ">LESS </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="column-third">
+            <aside class="govuk-related-items" role="complementary">
+                <nav role="navigation" aria-labelledby="subsection-title">
+                    <h3 class="heading-medium">About this employer </h3>
+                    <div class="section flush">
+                        <h3 class="heading-small">Registered office address </h3>
+                        <p class="font-xsmall">
+                            @{
+                                if (Model != null && Model.Organisation != null)
+                                {
+                                    @Html.ValueFor(model => model.Organisation.OrganisationAddresses.FirstOrDefault().Address1);
+                                    <text>&nbsp;</text>
+                                    @Html.ValueFor(model => model.Organisation.OrganisationAddresses.FirstOrDefault().PostCode);
+                                }
+                            }
+                        </p>
+                    </div>
+                    <div class="section flush">
+                        <h3 class="heading-small">Sector </h3>
+                        <p class="font-xsmall">@{
+                            if (Model != null && Model.Organisation != null)
+                            {
+                                @Html.ValueFor(model => model.Organisation.OrganisationType);  
+                            }
+                        }</p>
+                    </div>
+                    <div class="section flush">
+                        <h3 class="heading-small">Employer's gender pay gap report </h3>
+                        <p class="font-xsmall">
+                            View the employer's 2016 to 2017 gender pay gap report on their website.
+                            @{ 
+                                if (Model != null)
+                                {
+                                   <a rel="external" href="#">@Html.ValueFor(model => model.Organisation.Returns.FirstOrDefault().CompanyLinkToGPGInfo)</a>
+                                }   
+                                
+                              }
+                        </p>
+                    </div>
+                </nav>
+            </aside>
+        </div>
+    </div>
+</main>
+
+<script>
+    function tab(i) {
+                                if (i == 1) {
+            $("#tab-1").show();
+            $("#t1").addClass("selected");
+
+            $("#tab-2").hide();
+            $("#t2").removeClass("selected");
+            $("#t2").removeAttr("class");
+
+            $("3tab3").hide();
+            $("#t3").removeClass("selected");
+            $("#t3").removeAttr("class");
+                                }
+
+                                if (i == 2) {
+            $("#tab-1").hide();
+            $("#t1").removeClass("selected");
+            $("#t1").removeAttr("class");
+
+            $("#tab-2").show();
+            $("#t2").addClass("selected");
+
+            $("3tab3").hide();
+            $("#t3").removeClass("selected");
+            $("#t3").removeAttr("class");
+                                }
+
+                                if (i == 3) {
+            $("#tab-1").hide();
+            $("#t1").removeClass("selected");
+
+            $("#tab-2").hide();
+            $("#t2").removeClass("selected");
+
+            $("3tab3").show();
+            $("#t3").addClass("selected");
+                                }
+                            }
+</script>
+
+
+
+@*<p>
+        @Html.ActionLink("Edit", "Edit", new { id = Model.ReturnId }) |
+        @Html.ActionLink("Back to List", "Index")
+    </p>*@
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Styles.Render("~/Content/css")
+}

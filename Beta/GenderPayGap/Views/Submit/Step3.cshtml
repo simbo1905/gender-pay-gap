@@ -1,0 +1,114 @@
+﻿@model GenderPayGap.WebUI.Models.ReturnViewModel
+
+@*button.Link {
+     background:none!important;
+     border:none;
+     padding:0!important;
+     font: inherit;
+     /*border is optional*/
+     border-bottom:1px solid #444;
+     cursor: pointer;
+}*@
+
+
+
+
+<main id="content" role="main">
+    @using (Html.BeginForm(/*"Step4", "Submit", FormMethod.Post*/))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.ReturnId)
+        @Html.HiddenFor(model => model.OrganisationId)
+        @Html.HiddenFor(model => model.FirstName)
+        @Html.HiddenFor(model => model.JobTitle)
+        @Html.HiddenFor(model => model.LastName)
+
+        @Html.HiddenFor(model => model.ReturnId)
+        @Html.HiddenFor(model => model.OrganisationId)
+        @Html.HiddenFor(model => model.DiffMeanBonusPercent)
+        @Html.HiddenFor(model => model.DiffMeanHourlyPayPercent)
+        @Html.HiddenFor(model => model.DiffMedianBonusPercent)
+        @Html.HiddenFor(model => model.DiffMedianHourlyPercent)
+        @Html.HiddenFor(model => model.FemaleLowerPayBand)
+        @Html.HiddenFor(model => model.FemaleMedianBonusPayPercent)
+        @Html.HiddenFor(model => model.FemaleMiddlePayBand)
+        @Html.HiddenFor(model => model.FemaleUpperPayBand)
+        @Html.HiddenFor(model => model.FemaleUpperQuartilePayBand)
+        @Html.HiddenFor(model => model.MaleLowerPayBand)
+        @Html.HiddenFor(model => model.MaleMedianBonusPayPercent)
+        @Html.HiddenFor(model => model.MaleMiddlePayBand)
+        @Html.HiddenFor(model => model.MaleUpperPayBand)
+        @Html.HiddenFor(model => model.MaleUpperQuartilePayBand)
+
+
+        <div class="grid-row">
+            <div class="column-two-thirds">
+                <h1 class="heading-large">
+                    <span class="heading-secondary">Step 3 of 4</span>
+                    Submit your gender pay gap data for 2016 to 2017
+                </h1>
+
+
+                <div class="form-horizontal">
+                    @*<h4>Submit</h4>*@
+                    @*<hr />*@
+                    @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+                    <h2 class="heading-medium">7. Link to your gender pay gap information</h2>
+                    @*<p>Enter the web address (URL) for the gender pay gap information published on your organisation’s website. The person with responsibility for gender pay gap reporting in your organisation will have this.</p>*@
+                    <fieldset>
+                        @*<div class="form-group ">
+                                <textarea class="form-control" id="textarea-b" cols="30" rows="6"></textarea>
+                            </div>*@
+
+                        <div class="form-group">
+                            <p>@Html.LabelFor(model => model.CompanyLinkToGPGInfo, "Enter the web address (URL) for the gender pay gap information published on your organisation’s website. The person with responsibility for gender pay gap reporting in your organisation will have this", htmlAttributes: new { @class = "control-label col-md-2" })</p>
+                            <div class="col-md-10">
+                                @Html.TextAreaFor(model => model.CompanyLinkToGPGInfo, 6, 30, new { @class = "form-control" })
+
+                                @Html.ValidationMessageFor(model => model.CompanyLinkToGPGInfo, "", new { @class = "text-danger" })
+                                @*@Html.ValidationMessageFor(model => model.CompanyLinkToGPGInfo, "The field is not a valid fully-qualified http, https, or ftp URL.",  new { @class = "text-danger" })*@
+                            </div>
+                        </div>
+
+                    </fieldset>
+
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-10">
+                            @*<input type="submit" value="Create" class="btn btn-default" />*@
+                        </div>
+                    </div>
+
+                </div>
+
+                <p>
+                    <input class="button" type="submit" role="button" name="command" value="Continue" />
+                    <input class="link" type="submit" role="button" name="command" value="Back" />
+
+                <p>
+                    @*@Html.ActionLink("Cancel", "Index", null, new { @class = "", onclick = "if (!confirm('Are you sure you want to cancel?'))return false;" })*@
+                    @Html.ActionLink("Back", "Step2", null, new { @class = "", onclick = Url.Action("Step2") })</p>
+            </p>
+            @*<a href="gpg-overview">Cancel</a>*@
+        </div>
+
+    </div>
+    }
+</main>
+
+
+
+
+
+
+
+
+<div>
+    @Html.ActionLink("Back to List", "Index")
+</div>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Styles.Render("~/Content/css")
+}

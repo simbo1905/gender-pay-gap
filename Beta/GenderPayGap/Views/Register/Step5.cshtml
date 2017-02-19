@@ -1,0 +1,116 @@
+﻿@{
+    ViewBag.Title = "Register: Step 5";
+}
+@model GenderPayGap.WebUI.Models.OrganisationViewModel
+
+<main id="content" role="main">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(m => m.EmployerCurrentPage)
+        @Html.HiddenFor(m => m.EmployerPages)
+        @Html.HiddenFor(m => m.Employers)
+        @Html.HiddenFor(m => m.EmployerPageSize)
+        @Html.HiddenFor(m => m.EmployerEndIndex)
+        @Html.HiddenFor(m => m.EmployerRecords)
+        @Html.HiddenFor(m => m.SectorType)
+
+        <input type="submit" style="display:none" name="command" value="">
+        <div class="grid-row">
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            <div class="column-full">
+                <h1 class="heading-large">
+                    <span class="heading-secondary">Step 5 of 6</span>
+                    Choose your company
+                </h1>
+
+                <div class="search-bar">
+                    <div class="searchfield">
+                        @Html.EditorFor(model => model.SearchText, new { htmlAttributes = new { @class = "search-input", @placeholder = "Enter an employers name or company no" } })
+
+                        <button type="submit" class="search-submit" name="command" value="search">Search</button>
+                    </div>
+                </div>
+
+                @if (Model.Employers.Count < 1)
+                {
+                    <p>No records found</p>
+                }
+                else
+                {
+                    <br>
+                    <table class="search search3">
+                        <caption class="visuallyhidden">Customer and Business search listing</caption>
+                        <thead>
+                            <tr>
+                                <th scope="col">Employer</th>
+                                <th scope="col">Company number</th>
+                                <th scope="col"></th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @for (var i = 0; i < Model.Employers.Count; i++)
+                            {
+<tr>
+                                    <td>@Model.Employers[i].Name <span>@Model.Employers[i].FullAddress</span></td>
+                                    <td>
+                                        @Model.Employers[i].CompanyNumber
+                                    </td>
+                                    <td>
+                                        <a href="#" data-argument="employer_@i">Choose company</a>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+
+                    if (Model.Employers.Count > 1)
+                    {
+                        <div class="pager">
+                            <div class="pager-controls">
+                                @if (Model.EmployerCurrentPage > 1)
+                                {
+                                    <a class="pager-next" href="#" data-argument="pagePrev">Previous</a>
+                                }
+                                <ul class="pager-items">
+                                    @for (var i = Model.PagerStartIndex; i <= Model.PagerEndIndex; i++)
+                                    {
+                                        if (i == Model.EmployerCurrentPage)
+                                        {
+                                            <li><b>@i</b></li>
+                                        }
+                                        else
+                                        {
+                                            <li><a href="#" data-argument="page_@i">@i</a></li>
+                                        }
+                                    }
+                                </ul>
+                                @if (Model.EmployerCurrentPage < Model.EmployerPages)
+                                {
+                                    <a class="pager-next" href="#" data-argument="pageNext">Next</a>
+                                }
+                            </div>
+                            <div class="pager-summary">Showing @Model.EmployerStartIndex – @Model.EmployerEndIndex of @Model.EmployerRecords employers</div>
+                        </div>
+                    }
+                }
+                <br>
+                <p>
+                    @Html.ActionLink("Go back to previous step", "Step4")
+                </p>
+
+            </div>
+        </div>
+    }
+</main>
+<script>
+    $(document).ready(function () {
+        $('[data-argument]').click(function () {
+
+            $('input[name=command').val($(this).data("argument")).click();
+
+        });
+    });
+</script>

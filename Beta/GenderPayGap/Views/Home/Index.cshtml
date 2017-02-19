@@ -1,0 +1,22 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Gender Pay Gap</h1>
+    <p class="lead">
+        Gender pay gap is a new service for employees to collect and store & track information on the differences wages of Male and Female employees
+        within their company as well as submit this data to the government at the end of the financial year.
+    </p>
+    <p>@Html.ActionLink("Register for GPG Account", "Step1", "Register", null, new { @class = "button" })</p>
+    <p>@Html.ActionLink("Submit GPG Return", "Step1", "Submit", null, new { @class = "button" }) </ p >
+    <p>@Html.ActionLink("Search GPG Returns", "Start", "Query", null, new { @class = "button" })</p>
+    <p><a href="@System.Configuration.ConfigurationManager.AppSettings["GpgApiServer"]help" class="button">API Help</a></p>
+    <p><a href="@System.Configuration.ConfigurationManager.AppSettings["GpgApiServer"]query" class="button">API Search</a></p>
+    @using (Html.BeginForm("Delete", "Home", FormMethod.Post))
+    {
+        @Html.AntiForgeryToken()
+        <p><input class="button" type="submit" role="button" value="Clear Database" /></p>
+    }
+
+</div>
