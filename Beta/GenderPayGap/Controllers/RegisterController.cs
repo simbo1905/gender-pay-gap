@@ -244,6 +244,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             var model = UnstashModel<OrganisationViewModel>();
             if (model == null) model = new OrganisationViewModel();
+            StashModel(model);
             return View("Step3", model);
         }
 
@@ -257,7 +258,17 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Step3(OrganisationViewModel model)
         {
             var m = UnstashModel<OrganisationViewModel>();
-            if (m != null && m.Employers != null && m.Employers.Count > 0) model.Employers = m.Employers;
+            //Make sure we can load session
+            if (m == null)
+                return View("CustomError", new ErrorViewModel()
+                {
+                    Title="Session Error",
+                    Description= "Could not load registration details from session",
+                    CallToAction = "Try again",
+                    ActionUrl = "/Register/Step3"
+                });
+
+            if (m.Employers != null && m.Employers.Count > 0) model.Employers = m.Employers;
 
             //Ensure the user is logged in
             if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
@@ -292,6 +303,16 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Step4()
         {
             var model=UnstashModel<OrganisationViewModel>();
+            //Make sure we can load session
+            if (model == null)
+                return View("CustomError", new ErrorViewModel()
+                {
+                    Title = "Session Error",
+                    Description = "Could not load registration details from session",
+                    CallToAction = "Try again",
+                    ActionUrl = "/Register/Step3"
+                });
+
 
             //Ensure the user is logged in
             if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
@@ -366,19 +387,18 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Step5()
         {
             var model = UnstashModel<OrganisationViewModel>();
+            //Make sure we can load session
+            if (model == null)
+                return View("CustomError", new ErrorViewModel()
+                {
+                    Title = "Session Error",
+                    Description = "Could not load registration details from session",
+                    CallToAction = "Try again",
+                    ActionUrl = "/Register/Step3"
+                });
 
-            if (model != null) return Step5(model,null);
 
-            //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
-
-            //This should always throw an error then redirect to step3
-            User currentUser;
-            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
-            if (result == null) throw new AuthenticationException();
-            var errorViewModel = result.Model as ErrorViewModel;
-            if (errorViewModel == null) throw new AuthenticationException();
-            return result;
+            return Step5(model,null);
         }
 
         /// <summary>
@@ -391,7 +411,17 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Step5(OrganisationViewModel model, string command)
         {
             var m = UnstashModel<OrganisationViewModel>();
-            if (m != null && m.Employers!=null && m.Employers.Count>0) model.Employers = m.Employers;
+            //Make sure we can load session
+            if (m == null)
+                return View("CustomError", new ErrorViewModel()
+                {
+                    Title = "Session Error",
+                    Description = "Could not load registration details from session",
+                    CallToAction = "Try again",
+                    ActionUrl = "/Register/Step3"
+                });
+
+            if (m.Employers!=null && m.Employers.Count>0) model.Employers = m.Employers;
 
             //Ensure the user is logged in
             if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
@@ -518,23 +548,18 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Step6()
         {
             var model = UnstashModel<OrganisationViewModel>();
-            if (model != null)
-            {
-                StashModel(model);
-                return View("Step6",model);
-            }
+            //Make sure we can load session
+            if (model == null)
+                return View("CustomError", new ErrorViewModel()
+                {
+                    Title = "Session Error",
+                    Description = "Could not load registration details from session",
+                    CallToAction = "Try again",
+                    ActionUrl = "/Register/Step3"
+                });
 
-            //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
-
-            //This should always throw an error then redirect to step3
-            User currentUser;
-            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
-            if (result == null) throw new AuthenticationException();
-            var errorViewModel = result.Model as ErrorViewModel;
-            if (errorViewModel == null) throw new AuthenticationException();
-            return result;
-
+            StashModel(model);
+            return View("Step6",model);
         }
 
         /// <summary>
@@ -559,7 +584,16 @@ namespace GenderPayGap.WebUI.Controllers
 
             //Load the employers from session
             var m = UnstashModel<OrganisationViewModel>();
-            if (m == null) throw new HttpException((int)HttpStatusCode.BadRequest,"Missing session data");
+            //Make sure we can load session
+            if (m == null)
+                return View("CustomError", new ErrorViewModel()
+                {
+                    Title = "Session Error",
+                    Description = "Could not load registration details from session",
+                    CallToAction = "Try again",
+                    ActionUrl = "/Register/Step3"
+                });
+
             if (m.Employers != null && m.Employers.Count > 0) model.Employers = m.Employers;
 
             var employer = model.Employers[model.SelectedEmployerIndex];
