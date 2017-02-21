@@ -12,13 +12,13 @@ using System.Threading.Tasks;
 
 namespace GenderPayGap.WebUI.Classes
 {
-    public class ErrorMessagesSection : ConfigurationSection
+    public class CustomErrorMessagesSection : ConfigurationSection
     {
         [ConfigurationProperty("", IsRequired = true, IsDefaultCollection = true)]
-        [ConfigurationCollection(typeof(ErrorMessages), AddItemName = "ErrorMessage")]
-        public ErrorMessages Messages
+        [ConfigurationCollection(typeof(CustomErrorMessages), AddItemName = "CustomErrorMessage")]
+        public CustomErrorMessages Messages
         {
-            get { return (ErrorMessages)this[""]; }
+            get { return (CustomErrorMessages)this[""]; }
             set { this[""] = value; }
         }
         public override bool IsReadOnly()
@@ -28,39 +28,39 @@ namespace GenderPayGap.WebUI.Classes
 
         public string Serialize()
         {
-            return SerializeSection(this, "ErrorMessages", ConfigurationSaveMode.Full);
+            return SerializeSection(this, "CustomErrorMessages", ConfigurationSaveMode.Full);
         }
 
-        public static ErrorMessagesSection Deserialize(string xml)
+        public static CustomErrorMessagesSection Deserialize(string xml)
         {
-            var ErrorMessagesSection = new ErrorMessagesSection();
+            var CustomErrorMessagesSection = new CustomErrorMessagesSection();
             var rdr = new XmlTextReader(new StringReader(xml));
-            ErrorMessagesSection.DeserializeSection(rdr);
-            return ErrorMessagesSection;
+            CustomErrorMessagesSection.DeserializeSection(rdr);
+            return CustomErrorMessagesSection;
         }
     }
 
-    public class ErrorMessages : ConfigurationElementCollection
+    public class CustomErrorMessages : ConfigurationElementCollection
     {
         public override bool IsReadOnly()
         {
             return false;
         }
 
-        public BindingList<ErrorMessage> GetBindingList()
+        public BindingList<CustomErrorMessage> GetBindingList()
         {
-            var results = new BindingList<ErrorMessage>();
-            foreach (ErrorMessage setting in this)
+            var results = new BindingList<CustomErrorMessage>();
+            foreach (CustomErrorMessage setting in this)
                 results.Add(setting);
             return results;
         }
 
-        public ErrorMessage this[int code]
+        public CustomErrorMessage this[int code]
         {
             get
             {
                 if (code<400) return null;
-                foreach (ErrorMessage setting in this)
+                foreach (CustomErrorMessage setting in this)
                 {
                     if (setting.Code.EqualsI(code)) return setting;
                 }
@@ -68,11 +68,11 @@ namespace GenderPayGap.WebUI.Classes
             }
         }
 
-        internal ErrorMessage Default
+        internal CustomErrorMessage Default
         {
             get
             {
-                foreach (ErrorMessage setting in this)
+                foreach (CustomErrorMessage setting in this)
                 {
                     if (setting.Default == true) return setting;
                 }
@@ -82,14 +82,14 @@ namespace GenderPayGap.WebUI.Classes
 
         protected override ConfigurationElement CreateNewElement()
         {
-            return new ErrorMessage();
+            return new CustomErrorMessage();
         }
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((ErrorMessage)element).Code;
+            return ((CustomErrorMessage)element).Code;
         }
 
-        public void Add(ErrorMessage element)
+        public void Add(CustomErrorMessage element)
         {
             base.BaseAdd(element);
         }
@@ -99,7 +99,7 @@ namespace GenderPayGap.WebUI.Classes
             base.BaseRemoveAt(index);
         }
 
-        public void Insert(int index, ErrorMessage element)
+        public void Insert(int index, CustomErrorMessage element)
         {
             base.BaseAdd(index, element);
         }
@@ -108,13 +108,13 @@ namespace GenderPayGap.WebUI.Classes
         {
             get
             {
-                return "ErrorMessage";
+                return "CustomErrorMessage";
             }
         }
 
         protected override bool IsElementName(string elementName)
         {
-            return elementName.Equals("ErrorMessage", StringComparison.InvariantCultureIgnoreCase);
+            return elementName.Equals("CustomErrorMessage", StringComparison.InvariantCultureIgnoreCase);
         }
 
         public override ConfigurationElementCollectionType CollectionType
@@ -125,14 +125,14 @@ namespace GenderPayGap.WebUI.Classes
             }
         }
 
-        internal static ErrorMessages Load(System.Configuration.Configuration config)
+        internal static CustomErrorMessages Load(System.Configuration.Configuration config)
         {
-            var ErrorMessagesSection = (ErrorMessagesSection)config.GetSection("ErrorMessages");
+            var CustomErrorMessagesSection = (CustomErrorMessagesSection)config.GetSection("CustomErrorMessages");
 
             //Get the account settings section
-            if (ErrorMessagesSection == null) ErrorMessagesSection = new ErrorMessagesSection();
-            if (ErrorMessagesSection.Messages == null) ErrorMessagesSection.Messages = new ErrorMessages();
-            var results = ErrorMessagesSection.Messages;
+            if (CustomErrorMessagesSection == null) CustomErrorMessagesSection = new CustomErrorMessagesSection();
+            if (CustomErrorMessagesSection.Messages == null) CustomErrorMessagesSection.Messages = new CustomErrorMessages();
+            var results = CustomErrorMessagesSection.Messages;
 
             if (results == null) throw new Exception("You must enter all the http error codes and messages.");
 
@@ -141,12 +141,12 @@ namespace GenderPayGap.WebUI.Classes
     }
 
     [Serializable]
-    public class ErrorMessage : ConfigurationElement
+    public class CustomErrorMessage : ConfigurationElement
     {
-        public ErrorMessage() : base()
+        public CustomErrorMessage() : base()
         {
         }
-        public ErrorMessage(int code)
+        public CustomErrorMessage(int code)
         {
             Code = code;
         }
