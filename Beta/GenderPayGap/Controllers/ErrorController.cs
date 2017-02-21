@@ -14,33 +14,13 @@ namespace GenderPayGap.WebUI.Controllers
     [Route("{action}")]
     public class ErrorController : Controller
     {
-        static ErrorMessagesSection _ErrorMessages = null;
-        private static ErrorMessagesSection ErrorMessages
-        {
-            get
-            {
-                if (_ErrorMessages == null) _ErrorMessages = (ErrorMessagesSection)ConfigurationManager.GetSection("ErrorMessages");
-                return _ErrorMessages;
-            }
-        }
-
 
         [HttpGet]
         [Route]
         [Route("Default")]
         public ActionResult Default(int code=0)
         {
-            var errorMessage = ErrorMessages.Messages[code] ?? ErrorMessages.Messages.Default;
-
-            var model = new ErrorViewModel()
-            {
-                Title = errorMessage.Title,
-                Description = errorMessage.Description,
-                CallToAction = errorMessage.CallToAction,
-                ActionUrl = errorMessage.ActionUrl,
-                ActionText = errorMessage.ActionText
-            };
-
+            var model = new ErrorViewModel(code);
             return View("CustomError", model);
         }
     }
