@@ -7,6 +7,10 @@ namespace GenderPayGap.WebUI.Models
 {
     public class ErrorViewModel
     {
+        public ErrorViewModel(int code, object parameters=null)
+        {
+            
+        }
         public string Title { get; set; }
         public string Description { get; set; }
         public string CallToAction { get; set; }
