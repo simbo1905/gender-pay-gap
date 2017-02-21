@@ -36,13 +36,7 @@ namespace GenderPayGap.WebUI.Controllers
                 if (result != null) return result;
 
                 //If user is fully registered then start submit process
-                return View("CustomError", new ErrorViewModel()
-                {
-                    Title = "Registration Complete",
-                    Description = "You have already completed registration.",
-                    CallToAction = "Next Step: Submit your Gender Pay Gap data",
-                    ActionUrl = Url.Action("Step1", "Submit")
-                });
+                return View("CustomError", new ErrorViewModel(1109));
             }
 
             //Start new user registration
@@ -159,24 +153,12 @@ namespace GenderPayGap.WebUI.Controllers
 
             var remaining = currentUser.VerifyAttemptDate == null ? TimeSpan.Zero : currentUser.VerifyAttemptDate.Value.AddMinutes(Properties.Settings.Default.LockoutMinutes) - DateTime.Now;
             if (currentUser.VerifyAttempts >= Properties.Settings.Default.MaxEmailVerifyAttempts && remaining > TimeSpan.Zero)
-            {
-                return View("CustomError", new ErrorViewModel()
-                {
-                    Title = "Invalid Verification Code",
-                    Description = "You have failed too many verification attempts.",
-                    CallToAction = "Please log out of the system and try again in "+remaining.ToFriendly(maxParts:2)+".",
-                    ActionUrl = Url.Action("LogOut", "Home")
-                });
-            }
+                return View("CustomError", new ErrorViewModel(1110, new {remainingTime = remaining.ToFriendly(maxParts: 2)}));
 
             if (currentUser.EmailVerifyCode != code)
             {
                 currentUser.VerifyAttempts++;
-                result1 = View("CustomError", new ErrorViewModel()
-                {
-                    Title = "Invalid Verification Code",
-                    Description = "The verification code you have entered is invalid."
-                });
+                result1 = View("CustomError", new ErrorViewModel(1111));
             }
             else 
             {
@@ -260,13 +242,7 @@ namespace GenderPayGap.WebUI.Controllers
             var m = UnstashModel<OrganisationViewModel>();
             //Make sure we can load session
             if (m == null)
-                return View("CustomError", new ErrorViewModel()
-                {
-                    Title="Session Error",
-                    Description= "Could not load registration details from session",
-                    CallToAction = "Try again",
-                    ActionUrl = "/Register/Step3"
-                });
+                return View("CustomError", new ErrorViewModel(1112));
 
             if (m.Employers != null && m.Employers.Count > 0) model.Employers = m.Employers;
 
@@ -305,13 +281,7 @@ namespace GenderPayGap.WebUI.Controllers
             var model=UnstashModel<OrganisationViewModel>();
             //Make sure we can load session
             if (model == null)
-                return View("CustomError", new ErrorViewModel()
-                {
-                    Title = "Session Error",
-                    Description = "Could not load registration details from session",
-                    CallToAction = "Try again",
-                    ActionUrl = "/Register/Step3"
-                });
+                return View("CustomError", new ErrorViewModel(1112));
 
 
             //Ensure the user is logged in
@@ -389,13 +359,7 @@ namespace GenderPayGap.WebUI.Controllers
             var model = UnstashModel<OrganisationViewModel>();
             //Make sure we can load session
             if (model == null)
-                return View("CustomError", new ErrorViewModel()
-                {
-                    Title = "Session Error",
-                    Description = "Could not load registration details from session",
-                    CallToAction = "Try again",
-                    ActionUrl = "/Register/Step3"
-                });
+                return View("CustomError", new ErrorViewModel(1112));
 
 
             return Step5(model,null);
@@ -413,13 +377,7 @@ namespace GenderPayGap.WebUI.Controllers
             var m = UnstashModel<OrganisationViewModel>();
             //Make sure we can load session
             if (m == null)
-                return View("CustomError", new ErrorViewModel()
-                {
-                    Title = "Session Error",
-                    Description = "Could not load registration details from session",
-                    CallToAction = "Try again",
-                    ActionUrl = "/Register/Step3"
-                });
+                return View("CustomError", new ErrorViewModel(1112));
 
             if (m.Employers!=null && m.Employers.Count>0) model.Employers = m.Employers;
 
@@ -550,13 +508,7 @@ namespace GenderPayGap.WebUI.Controllers
             var model = UnstashModel<OrganisationViewModel>();
             //Make sure we can load session
             if (model == null)
-                return View("CustomError", new ErrorViewModel()
-                {
-                    Title = "Session Error",
-                    Description = "Could not load registration details from session",
-                    CallToAction = "Try again",
-                    ActionUrl = "/Register/Step3"
-                });
+                return View("CustomError", new ErrorViewModel(1112));
 
             StashModel(model);
             return View("Step6",model);
@@ -586,13 +538,7 @@ namespace GenderPayGap.WebUI.Controllers
             var m = UnstashModel<OrganisationViewModel>();
             //Make sure we can load session
             if (m == null)
-                return View("CustomError", new ErrorViewModel()
-                {
-                    Title = "Session Error",
-                    Description = "Could not load registration details from session",
-                    CallToAction = "Try again",
-                    ActionUrl = "/Register/Step3"
-                });
+                return View("CustomError", new ErrorViewModel(1112));
 
             if (m.Employers != null && m.Employers.Count > 0) model.Employers = m.Employers;
 
@@ -760,15 +706,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             var remaining = userOrg.ConfirmAttemptDate == null ? TimeSpan.Zero : userOrg.ConfirmAttemptDate.Value.AddMinutes(Properties.Settings.Default.LockoutMinutes) - DateTime.Now;
             if (userOrg.ConfirmAttempts >= Properties.Settings.Default.MaxPinAttempts && remaining > TimeSpan.Zero)
-            {
-                return View("CustomError", new ErrorViewModel()
-                {
-                    Title = "Invalid PIN Code",
-                    Description = "You have tried too many incorrect PIN codes.",
-                    CallToAction = "Please log out of the system and try again in " + remaining.ToFriendly(maxParts: 2) + ".",
-                    ActionUrl = Url.Action("LogOut", "Home")
-                });
-            }
+                return View("CustomError", new ErrorViewModel(1113));
 
             remaining = userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
             var model=new CompleteViewModel();
@@ -811,13 +749,7 @@ namespace GenderPayGap.WebUI.Controllers
             var remaining = userOrg.ConfirmAttemptDate == null ? TimeSpan.Zero : userOrg.ConfirmAttemptDate.Value.AddMinutes(Properties.Settings.Default.LockoutMinutes) - DateTime.Now;
             if (userOrg.ConfirmAttempts >= Properties.Settings.Default.MaxPinAttempts && remaining > TimeSpan.Zero)
             {
-                return View("CustomError", new ErrorViewModel()
-                {
-                    Title = "Invalid PIN Code",
-                    Description = "You have tried too many incorrect PIN codes.",
-                    CallToAction = "Please log out of the system and try again in " + remaining.ToFriendly(maxParts: 2) + ".",
-                    ActionUrl = Url.Action("LogOut", "Home")
-                });
+                return View("CustomError", new ErrorViewModel(1113,new {remainingTime= remaining.ToFriendly(maxParts: 2)}));
             }
 
             if (userOrg.PINCode == model.PIN)

@@ -67,38 +67,15 @@ namespace GenderPayGap
             {
                 filterContext.ExceptionHandled = true;
                 if (filterContext.Exception is HttpException)
-                    filterContext.Result = RedirectToAction("Default","Error", new {code = ((HttpException) filterContext.Exception).GetHttpCode()});
+                    filterContext.Result = View("CustomError",new ErrorViewModel(((HttpException) filterContext.Exception).GetHttpCode()));
                 else if (filterContext.Exception is IdentityNotMappedException)
-                    filterContext.Result=View("CustomError", new ErrorViewModel()
-                    {
-                        Title = "Unauthorised Request",
-                        Description = "Unrecognised user.",
-                        CallToAction = "Please log out of the system.",
-                        ActionUrl = Url.Action("LogOut", "Home")
-                    });
+                    filterContext.Result=View("CustomError", new ErrorViewModel(1000));
                 else if (filterContext.Exception is UnauthorizedAccessException)
-                    filterContext.Result =  View("CustomError", new ErrorViewModel()
-                    {
-                        Title = "Unauthorised Request",
-                        Description = "You do not have the required permission to access this option.",
-                        CallToAction = "Please log in as a user with the correct permissions.",
-                        ActionUrl = Url.Action("LogOut", "Home")
-                    });
+                    filterContext.Result = View("CustomError", new ErrorViewModel(1001));
                 else if (filterContext.Exception is AuthenticationException)
-                    filterContext.Result = View("CustomError", new ErrorViewModel()
-                    {
-                        Title = "Login Required",
-                        Description = "You must first login to access this option.",
-                        CallToAction = "Next Step: Login to service",
-                        ActionUrl = Url.Action("LogOut", "Home")
-                    });
+                    filterContext.Result = View("CustomError", new ErrorViewModel(1002));
                 else
-                    filterContext.Result = View("CustomError", new ErrorViewModel()
-                    {
-                        Title = "Unexpected Error",
-                        Description = "An unexpected error has occurred and has been reported to the administrator.",
-                        CallToAction = "Please try again later"
-                    });
+                    filterContext.Result = View("CustomError", new ErrorViewModel(1003));
             }
         }
 
@@ -130,40 +107,18 @@ namespace GenderPayGap
             {
                 //Allow resend of verification if sent over 24 hours ago
                 if (currentUser.EmailVerifySendDate.EqualsI(null, DateTime.MinValue))
-                    return View("CustomError", new ErrorViewModel()
-                    {
-                        Title = "Incomplete Registration",
-                        Description = "You have not verified your email address.",
-                        CallToAction = "Click the button below to continue registration and verify your email address",
-                        ActionUrl = Url.Action("Step2", "Register")
-                    });
+                    return View("CustomError", new ErrorViewModel(1100));
 
                 //Allow resend of verification if sent over 24 hours ago
                 if (currentUser.EmailVerifySendDate.Value.AddHours(WebUI.Properties.Settings.Default.EmailVerificationExpiryHours) < DateTime.Now)
-                    return View("CustomError", new ErrorViewModel()
-                    {
-                        Title = "Incomplete Registration",
-                        Description = "You did not verified your email address within the allowed time.",
-                        CallToAction = "Please click the button below to request a new verification email",
-                        ActionUrl = Url.Action("Step2", "Register")
-                    });
+                    return View("CustomError", new ErrorViewModel(1101));
 
                 //Otherwise prompt user to check account only
                 var remainingTime = currentUser.EmailVerifySendDate.Value.AddHours(WebUI.Properties.Settings.Default.EmailVerificationMinResendHours) - DateTime.Now;
                 if (remainingTime > TimeSpan.Zero)
-                    return View("CustomError", new ErrorViewModel()
-                    {
-                        Title = "Incomplete Registration",
-                        Description = "You have not yet verified your email address.",
-                        CallToAction = "Please check your email account and follow the instructions to verify your email address.<br/>Alternatively, try again in " + remainingTime.ToFriendly(maxParts: 2) + " to request another verification email."
-                    });
-                return View("CustomError", new ErrorViewModel()
-                {
-                    Title = "Incomplete Registration",
-                    Description = "You have not yet verified your email address.",
-                    CallToAction = "Please check your email account and follow the instructions to verify your email address.",
-                    ActionUrl = Url.Action("Step2", "Register")
-                });
+                    return View("CustomError", new ErrorViewModel(1102, new {remainingTime = remainingTime.ToFriendly(maxParts: 2)}));
+
+                return View("CustomError", new ErrorViewModel(1103));
             }
 
             //Get the current users organisation registration
@@ -171,61 +126,25 @@ namespace GenderPayGap
 
             //If they didnt have started organisation registration step then prompt to continue registration
             if (userOrg == null)
-                return View("CustomError", new ErrorViewModel()
-                {
-                    Title = "Incomplete Registration",
-                    Description = "You have not completed the registration process.",
-                    CallToAction = "Next Step: Select your organisation",
-                    ActionUrl = Url.Action("Step3", "Register")
-                });
+                return View("CustomError", new ErrorViewModel(1104));
 
             if (userOrg.PINConfirmedDate.EqualsI(null, DateTime.MinValue))
             {
                 //Allow resend of PIN if sent over 2 weeks ago
                 if (userOrg.PINSentDate.EqualsI(null, DateTime.MinValue))
-                    return View("CustomError", new ErrorViewModel()
-                    {
-                        Title = "Incomplete Registration",
-                        Description = "You have not been sent a PIN in the post.",
-                        CallToAction = "Please click the button below to send a PIN to your organisations address.",
-                        ActionUrl = Url.Action("SendPIN", "Register")
-                    });
+                    return View("CustomError", new ErrorViewModel(1105));
                 if (userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostExpiryDays) < DateTime.Now)
-                    return View("CustomError", new ErrorViewModel()
-                    {
-                        Title = "Incomplete Registration",
-                        Description = "You did not confirm the PIN sent to you in the post in the allowed time.",
-                        CallToAction = "Please click the button below to request a new PIN to be sent to your organisations address.",
-                        ActionUrl = Url.Action("SendPIN", "Register")
-                    });
+                    return View("CustomError", new ErrorViewModel(1106));
                 var remainingTime = userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
                 if (remainingTime > TimeSpan.Zero)
-                    return View("CustomError", new ErrorViewModel()
-                    {
-                        Title = "Incomplete Registration",
-                        Description = "You have not yet confirmed the PIN sent to you in the post.",
-                        CallToAction = "Click the button below to enter the PIN you have received in the post or try again in "+ remainingTime.ToFriendly(maxParts:2) +" to request another PIN.",
-                        ActionUrl = Url.Action("ConfirmPIN", "Register")
-                    });
-                return View("CustomError", new ErrorViewModel()
-                {
-                    Title = "Incomplete Registration",
-                    Description = "You have not confirmed the PIN sent to you in the post.",
-                    CallToAction = "Click the button below to enter the PIN you have received in the post or to request another PIN.",
-                    ActionUrl = Url.Action("ConfirmPIN", "Register")
-                });
+                    return View("CustomError", new ErrorViewModel(1107, new {remainingTime = remainingTime.ToFriendly(maxParts: 2)}));
+                return View("CustomError", new ErrorViewModel(1108));
             }
 
             if (this is RegisterController)
                 //Ensure user has completed the registration process
                 //If user is fully registered then start submit process
-                return View("CustomError", new ErrorViewModel()
-                {
-                    Title = "Registration Complete",
-                    Description = "You have already completed registration.",
-                    CallToAction = "Next Step: Submit your Gender Pay Gap data",
-                    ActionUrl = Url.Action("Step1", "Submit")
-                });
+                return View("CustomError", new ErrorViewModel(1109));
 
             return null;
         }
@@ -248,7 +167,36 @@ namespace GenderPayGap
         //Current account Year method
         public DateTime GetCurrentAccountYearStartDate(Organisation org)
         {
-            return DateTime.MinValue;
+            var tempDay = 0;
+            var tempMonth = 0;
+
+            var Now = DateTime.Now;
+            DateTime currAccountYearStartDate = DateTime.MinValue;
+
+            if ((org.SectorType == SectorTypes.Private))
+            {
+                tempDay = Settings.Default.PrivateAccountingDate.Day;
+                tempMonth = Settings.Default.PrivateAccountingDate.Month;
+
+                DateTime TempDate = new DateTime(Now.Year, tempMonth, tempDay);
+
+                currAccountYearStartDate = Now > TempDate ? TempDate : TempDate.AddYears(-1);
+            }
+
+            if ((org.SectorType == SectorTypes.Public))
+            { 
+                tempDay = Settings.Default.PublicAccountingDate.Day;
+                tempMonth = Settings.Default.PublicAccountingDate.Month;
+
+                DateTime TempDate = new DateTime(Now.Year, tempMonth, tempDay);
+
+                if (Now > TempDate)
+                    currAccountYearStartDate = TempDate;
+                else
+                    currAccountYearStartDate = TempDate.AddYears(-1);
+            }
+            
+            return currAccountYearStartDate;
         }
     }
 }
