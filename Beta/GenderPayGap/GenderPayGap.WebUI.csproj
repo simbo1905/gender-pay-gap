@@ -293,7 +293,7 @@
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
     <Content Include="App_Data\Confirm.txt" />
-    <Content Include="App_Data\ErrorMessages.config">
+    <Content Include="App_Data\CustomErrorMessages.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="App_Data\Pin.txt" />
