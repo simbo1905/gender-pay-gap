@@ -78,6 +78,7 @@ namespace GenderPayGap
             return builder.Build();
         }
 
+        protected void Session_Start() { }
 
     }
 }

@@ -1,6 +1,7 @@
 ﻿using IdentityServer3.Core.Models;
 using System.Collections.Generic;
 using System.Configuration;
+using Extensions;
 
 namespace GpgIdentityServer
 {
@@ -18,11 +19,11 @@ namespace GpgIdentityServer
                     RequireConsent = false,
                     RedirectUris = new List<string>
                     {
-                        ConfigurationManager.AppSettings["GpgWebServer"]
+                        ConfigurationManager.AppSettings["GpgWebServer"].TrimI("/")+"/"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        ConfigurationManager.AppSettings["GpgWebServer"]
+                        ConfigurationManager.AppSettings["GpgWebServer"].TrimI("/")+"/"
                     },
                     AllowedScopes = new List<string>
                     {

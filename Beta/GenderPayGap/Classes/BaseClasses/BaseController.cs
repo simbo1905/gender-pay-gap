@@ -92,7 +92,7 @@ namespace GenderPayGap
                 if (this is RegisterController) return null;
 
                 //When submitting ensure user is authenticated
-                if (this is SubmitController) throw new UnauthorizedAccessException();
+                if (this is SubmitController) return new HttpUnauthorizedResult();
             }
 
             //The user can then go through the process of changing their details and email then sending another verification email
@@ -157,9 +157,11 @@ namespace GenderPayGap
         {
             Session[this+":Model"] = model;
         }
-        protected T UnstashModel<T>()
+        protected T UnstashModel<T>(bool delete=false)
         {
-            return (T)Session[this + ":Model"];
+            var result=(T)Session[this + ":Model"];
+            if (delete) Session.Remove(this + ":Model");
+            return result;
         }
 
         #endregion
