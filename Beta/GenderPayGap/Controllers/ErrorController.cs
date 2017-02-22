@@ -17,7 +17,6 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route]
-        [Route("Default")]
         public ActionResult Default(int code=0)
         {
             var model = new ErrorViewModel(code);

@@ -11,6 +11,7 @@ using GenderPayGap.WebUI.Classes;
 using System.Net;
 using System.Security.Principal;
 using System.Web.WebPages;
+using Thinktecture.IdentityModel.Mvc;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -21,14 +22,18 @@ namespace GenderPayGap.WebUI.Controllers
         public RegisterController():base(){}
         public RegisterController(IContainer container): base(container){}
 
+        [Route]
+        public ActionResult Redirect()
+        {
+            return RedirectToAction("Step1");
+        }
+
         [HttpGet]
         [Route("Step1")]
         public ActionResult Step1()
         {
             User currentUser;
             //The user can then go through the process of changing their details and email then sending another verification email
-
-
             if (User.Identity.IsAuthenticated)
             {
                 //Ensure user has completed the registration process
@@ -98,11 +103,13 @@ namespace GenderPayGap.WebUI.Controllers
             currentUser.SetStatus(UserStatuses.New,currentUser.UserId);
 
             //Send the verification code and showconfirmation
-            return ResendVerifyCode(currentUser);
+            if (!ResendVerifyCode(currentUser))return View("Step1");
+            StashModel(new VerifyViewModel() { EmailAddress  = currentUser.EmailAddress});
+            return RedirectToAction("Step2");
         }
 
         ////Send the verification code and show confirmation
-        ActionResult ResendVerifyCode(User currentUser)
+        bool ResendVerifyCode(User currentUser)
         {
             //Send a verification link to the email address
             try
@@ -122,19 +129,21 @@ namespace GenderPayGap.WebUI.Controllers
                 else
                     ModelState.AddModelError(string.Empty, ex.Message);
             }
-            if (!ModelState.IsValid) return View("Step1");
+            if (!ModelState.IsValid) return false;
 
             //Prompt user to open email and verification link
-            return View("Step2", new VerifyViewModel() { EmailAddress = currentUser.EmailAddress });
+            return true;
         }
 
         [HttpGet]
-        [Authorize]
         [Route("Step2")]
         public ActionResult Step2(string code=null)
         {
+            var model = UnstashModel<VerifyViewModel>(true);
+            if (model!=null)return View("Step2",model);
+
             //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
+            if (!User.Identity.IsAuthenticated) return new HttpUnauthorizedResult();
 
             //Ensure user has completed the registration process
             User currentUser;
@@ -183,13 +192,10 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Auth]
         [Route("Step2")]
         public ActionResult Step2(VerifyViewModel model)
         {
-            //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
-
             //Ensure user has completed the registration process
             User currentUser;
             var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
@@ -207,14 +213,10 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Auth]
         [Route("Step3")]
         public ActionResult Step3()
         {
-
-            //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
-
             //Ensure user needs to select an organisation
             User currentUser;
             var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
@@ -235,7 +237,7 @@ namespace GenderPayGap.WebUI.Controllers
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Auth]
         [Route("Step3")]
         public ActionResult Step3(OrganisationViewModel model)
         {
@@ -245,9 +247,6 @@ namespace GenderPayGap.WebUI.Controllers
                 return View("CustomError", new ErrorViewModel(1112));
 
             if (m.Employers != null && m.Employers.Count > 0) model.Employers = m.Employers;
-
-            //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
 
             //Ensure user needs to select an organisation
             User currentUser;
@@ -274,26 +273,13 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Auth]
         [Route("Step4")]
         public ActionResult Step4()
         {
             var model=UnstashModel<OrganisationViewModel>();
             //Make sure we can load session
-            if (model == null)
-                return View("CustomError", new ErrorViewModel(1112));
-
-
-            //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
-
-            //This should always throw an error then redirect to step3
-            User currentUser;
-            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
-            if (result == null) throw new AuthenticationException();
-            var errorViewModel = result.Model as ErrorViewModel;
-            if (errorViewModel == null) throw new AuthenticationException();
-            if (model==null || !errorViewModel.ActionUrl.IsAny(Url.Action("Step3", "Register"))) return result;
+            if (model == null)return View("CustomError", new ErrorViewModel(1112));
 
             return View("Step4", model);
         }
@@ -304,85 +290,15 @@ namespace GenderPayGap.WebUI.Controllers
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
+        [Auth]
         [Route("Step4")]
-        public ActionResult Step4(OrganisationViewModel model,string command)
-        {
-            //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
-
-            //Ensure user has completed the registration process
-            User currentUser;
-            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
-            if (result == null) throw new AuthenticationException();
-            var errorModel = result.Model as ErrorViewModel;
-            if (errorModel == null) throw new AuthenticationException();
-            if (!errorModel.ActionUrl.IsAny(Url.Action("Step3", "Register"))) return result;
-
-            //TODO validate the submitted fields
-            model.SearchText = model.SearchText.TrimI();
-            ModelState.Clear();
-            if (string.IsNullOrWhiteSpace(model.SearchText))
-            {
-                ModelState.AddModelError("SearchText", "You must enter an employer name or company number");
-                return View("Step4", model);
-            }
-            if (model.SearchText.Length<3 || model.SearchText.Length > 100)
-            {
-                ModelState.AddModelError("SearchText", "You must enter between 3 and 100 characters");
-                return View("Step4", model);
-            }
-
-            model.SelectedEmployerIndex = 0;
-            model.EmployerCurrentPage = 1;
-            switch (model.SectorType)
-            {
-                case SectorTypes.Private:
-                    var employerRecords = model.EmployerRecords;
-                    model.Employers = CompaniesHouseAPI.SearchEmployers(out employerRecords, model.SearchText, model.EmployerCurrentPage, model.EmployerPageSize);
-                    model.EmployerRecords = employerRecords;
-                    break;
-                default:
-                    throw new NotImplementedException();
-            }
-            if (model.EmployerRecords<=0)return View("Step4", model);
-
-            StashModel(model);
-            return RedirectToAction("Step5");
-        }
-
-        [HttpGet]
-        [Authorize]
-        [Route("Step5")]
-        public ActionResult Step5()
-        {
-            var model = UnstashModel<OrganisationViewModel>();
-            //Make sure we can load session
-            if (model == null)
-                return View("CustomError", new ErrorViewModel(1112));
-
-
-            return Step5(model,null);
-        }
-
-        /// <summary>
-        /// Get the search text
-        /// </summary>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
-        [Route("Step5")]
-        public ActionResult Step5(OrganisationViewModel model, string command)
+        public ActionResult Step4(OrganisationViewModel model, string command)
         {
             var m = UnstashModel<OrganisationViewModel>();
+
             //Make sure we can load session
-            if (m == null)
-                return View("CustomError", new ErrorViewModel(1112));
-
+            if (m == null)return View("CustomError", new ErrorViewModel(1112));
             if (m.Employers!=null && m.Employers.Count>0) model.Employers = m.Employers;
-
-            //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
 
             //Ensure user has completed the registration process
             User currentUser;
@@ -394,7 +310,6 @@ namespace GenderPayGap.WebUI.Controllers
 
             model.SelectedEmployerIndex = -1;
 
-            
             bool doSearch = false;
             if (command == "search")
             {
@@ -402,13 +317,14 @@ namespace GenderPayGap.WebUI.Controllers
                 if (string.IsNullOrWhiteSpace(model.SearchText))
                 {
                     ModelState.AddModelError("SearchText", "You must enter an employer name or company number");
-                    return View("Step5", model);
+                    return View("Step4", model);
                 }
                 if (model.SearchText.Length < 3 || model.SearchText.Length > 100)
                 {
                     ModelState.AddModelError("SearchText", "You must enter between 3 and 100 characters");
                     return View("Step4", model);
                 }
+                model.EmployerCurrentPage = 1;
                 doSearch = true;
             }
             else if (command == "pageNext")
@@ -416,7 +332,7 @@ namespace GenderPayGap.WebUI.Controllers
                 if (model.EmployerCurrentPage >= model.EmployerPages)
                 {
                     ModelState.AddModelError("", "No more pages");
-                    return View("Step5", model);
+                    return View("Step4", model);
                 }
                 model.EmployerCurrentPage++;
                 doSearch = true;
@@ -426,7 +342,7 @@ namespace GenderPayGap.WebUI.Controllers
                 if (model.EmployerCurrentPage<=1)
                 {
                     ModelState.AddModelError("", "No previous page");
-                    return View("Step5", model);
+                    return View("Step4", model);
                 }
                 model.EmployerCurrentPage--;
                 doSearch = true;
@@ -437,7 +353,7 @@ namespace GenderPayGap.WebUI.Controllers
                 if (page<1 || page>model.EmployerPages)
                 {
                     ModelState.AddModelError("", "Invalid page number");
-                    return View("Step5", model);
+                    return View("Step4", model);
                 }
                 if (page != model.EmployerCurrentPage)
                 {
@@ -460,7 +376,7 @@ namespace GenderPayGap.WebUI.Controllers
                 }
                 ModelState.Clear();
                 StashModel(model);
-                return View("Step5", model);
+                return View("Step4", model);
             }
 
             if (command.StartsWithI("employer_"))
@@ -471,21 +387,21 @@ namespace GenderPayGap.WebUI.Controllers
                 if (org != null)
                 {
                     var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.OrganisationId == org.OrganisationId);
-                    if (userOrg.UserId != currentUser.UserId)
+                    if (userOrg!=null && userOrg.UserId != currentUser.UserId)
                     {
                         var user = Repository.GetAll<User>().FirstOrDefault(u => u.UserId == userOrg.UserId);
 
                         if (userOrg.PINSentDate != null)
                         {
                             ModelState.AddModelError("", "Another user ("+user.Fullname+") has already registered for this organisation.");
-                            return View("Step5", model);
+                            return View("Step4", model);
                         }
 
                         var remainingTime = userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostExpiryDays) - DateTime.Now;
                         if (remainingTime > TimeSpan.Zero)
                         {
                             ModelState.AddModelError("", "Another user (" + user.Fullname + ") is trying to register this organisation. Please try again later in " + remainingTime.ToFriendly(maxParts: 2) + ".");
-                            return View("Step5", model);
+                            return View("Step4", model);
                         }
                     }
                 }
@@ -495,15 +411,15 @@ namespace GenderPayGap.WebUI.Controllers
             ModelState.Clear();
             StashModel(model);
             if (model.SelectedEmployerIndex<0)
-                return View("Step5", model);
+                return View("Step4", model);
 
-            return RedirectToAction("Step6");
+            return RedirectToAction("Step5");
         }
 
         [HttpGet]
-        [Authorize]
-        [Route("Step6")]
-        public ActionResult Step6()
+        [Auth]
+        [Route("Step5")]
+        public ActionResult Step5()
         {
             var model = UnstashModel<OrganisationViewModel>();
             //Make sure we can load session
@@ -511,7 +427,7 @@ namespace GenderPayGap.WebUI.Controllers
                 return View("CustomError", new ErrorViewModel(1112));
 
             StashModel(model);
-            return View("Step6",model);
+            return View("Step5",model);
         }
 
         /// <summary>
@@ -519,17 +435,14 @@ namespace GenderPayGap.WebUI.Controllers
         /// </summary>
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Authorize]
-        [Route("Step6")]
-        public ActionResult Step6(OrganisationViewModel model,string command)
+        [Auth]
+        [Route("Step5")]
+        public ActionResult Step5(OrganisationViewModel model,string command)
         {
-            //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
-
             //Ensure user has completed the registration process
             User currentUser;
             var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
-            if (result == null) throw new AuthenticationException();
+            if (result == null) return new HttpUnauthorizedResult();
             var errorModel = result.Model as ErrorViewModel;
             if (errorModel == null) throw new AuthenticationException();
             if (errorModel.ActionUrl != Url.Action("Step3", "Register")) return result;
@@ -537,8 +450,7 @@ namespace GenderPayGap.WebUI.Controllers
             //Load the employers from session
             var m = UnstashModel<OrganisationViewModel>();
             //Make sure we can load session
-            if (m == null)
-                return View("CustomError", new ErrorViewModel(1112));
+            if (m == null)return View("CustomError", new ErrorViewModel(1112));
 
             if (m.Employers != null && m.Employers.Count > 0) model.Employers = m.Employers;
 
@@ -598,18 +510,18 @@ namespace GenderPayGap.WebUI.Controllers
             userOrg.PINSentDate = null;
             Repository.SaveChanges();
 
+            //Clear the stash
+            UnstashModel<OrganisationViewModel>(true);
+
             return RedirectToAction("SendPIN");
         }
 
         ActionResult GetSendPIN()
         {
-            //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
-
             //Ensure user has completed the registration process up to PIN confirmation
             User currentUser;
             var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
-            if (result == null) throw new AuthenticationException();
+            if (result == null) return new HttpUnauthorizedResult();
             var errorModel = result.Model as ErrorViewModel;
             if (errorModel == null) throw new AuthenticationException();
             if (!errorModel.ActionUrl.IsAny(Url.Action("SendPIN", "Register"))) return result;
@@ -663,7 +575,7 @@ namespace GenderPayGap.WebUI.Controllers
             return View("SendPIN");
         }
 
-        [Authorize]
+        [Auth]
         [HttpGet]
         [Route("SendPIN")]
         public ActionResult SendPIN()
@@ -671,7 +583,7 @@ namespace GenderPayGap.WebUI.Controllers
             return GetSendPIN();
         }
 
-        [Authorize]
+        [Auth]
         [ValidateAntiForgeryToken]
         [HttpPost]
         [Route("SendPIN")]
@@ -681,17 +593,14 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Auth]
         [Route("ConfirmPIN")]
         public ActionResult ConfirmPIN()
         {
-            //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
-
             //Ensure user has completed the registration process
             User currentUser;
             var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
-            if (result == null) throw new AuthenticationException();
+            if (result == null) return new HttpUnauthorizedResult();
             var errorViewModel = result.Model as ErrorViewModel;
             if (errorViewModel == null) throw new AuthenticationException();
             if (errorViewModel.ActionUrl != Url.Action("ConfirmPIN", "Register"))
@@ -718,18 +627,15 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpPost]
-        [Authorize]
+        [Auth]
         [ValidateAntiForgeryToken]
         [Route("ConfirmPIN")]
         public ActionResult ConfirmPIN(CompleteViewModel model)
         {
-            //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
-
             //Ensure user has completed the registration process
             User currentUser;
             var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
-            if (result == null) throw new AuthenticationException();
+            if (result == null) return new HttpUnauthorizedResult();
             var errorViewModel = result.Model as ErrorViewModel;
             if (errorViewModel == null) throw new AuthenticationException();
             if (errorViewModel.ActionUrl != Url.Action("ConfirmPIN", "Register"))
@@ -783,17 +689,14 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpGet]
-        [Authorize]
+        [Auth]
         [Route("Complete")]
         public ActionResult Complete()
         {
-            //Ensure the user is logged in
-            if (!User.Identity.IsAuthenticated) throw new AuthenticationException();
-
             //Ensure user has completed the registration process
             User currentUser;
             var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
-            if (result == null) throw new AuthenticationException();
+            if (result == null) return new HttpUnauthorizedResult();
             var errorViewModel = result.Model as ErrorViewModel;
             if (errorViewModel == null) throw new AuthenticationException();
             if (errorViewModel.ActionUrl != Url.Action("Step1", "Submit"))

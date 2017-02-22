@@ -6,9 +6,11 @@ using Microsoft.Owin.Security.Google;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using IdentityServer3.Core.Logging;
 using Microsoft.Owin.Security.Twitter;
 using IdentityServer3.Core.Services;
 using Microsoft.Owin.Security.Facebook;
+using Serilog;
 
 [assembly: OwinStartup(typeof(GpgIdentityServer.Startup))]
 
@@ -16,9 +18,12 @@ namespace GpgIdentityServer
 {
     public class Startup
     {
+        static CustomLogProvider Logger=new CustomLogProvider();
         public void Configuration(IAppBuilder app)
         {
-            app.Map("/identity", coreApp =>
+            LogProvider.SetCurrentLogProvider(new CustomLogProvider());
+
+            app.Map("/login", coreApp =>
             {
                 var factory = new IdentityServerServiceFactory()
                     .UseInMemoryClients(Clients.Get())
@@ -36,6 +41,8 @@ namespace GpgIdentityServer
 
                 //factory.ViewService = new Registration<IViewService, CustomViewService>();
 
+                factory.EventService = new Registration<IEventService, AuditEventService>();
+
                 var options = new IdentityServerOptions
                 {
                     SiteName = "GPG IdentityServer",
@@ -45,25 +52,29 @@ namespace GpgIdentityServer
 
                     AuthenticationOptions = new AuthenticationOptions
                     {
-                        EnablePostSignOutAutoRedirect = true,
+                        EnablePostSignOutAutoRedirect = false,
                         IdentityProviders = ConfigureIdentityProviders,
+                        
+                        EnableSignOutPrompt = false,
+                        InvalidSignInRedirectUrl = ConfigurationManager.AppSettings["GpgWebServer"],
+                        
                         LoginPageLinks = new List<LoginPageLink>()
                         {
                            new LoginPageLink()
                            {
-                               Href = ConfigurationManager.AppSettings["GpgWebServerReminder"],
-                               Text = "Forgotten Password?",
+                               Href = ConfigurationManager.AppSettings["GpgWebServerPasswordLink"],
+                               Text = "Reset your password",
                                Type = "resetPassword"
                            },
                            new LoginPageLink()
                            {
-                               Href = ConfigurationManager.AppSettings["GpgWebServerRegister"],
-                               Text = "Create New Account",
+                               Href = ConfigurationManager.AppSettings["GpgWebServerRegisterLink"],
+                               Text = "Register",
                                Type = "localRegistration"
                            }
                         }
                     },
-
+                    
                     EventsOptions = new EventsOptions
                     {
                         RaiseSuccessEvents = true,
@@ -76,7 +87,7 @@ namespace GpgIdentityServer
                 coreApp.UseIdentityServer(options);
             });
 
-            //app.Map("/identity", idsrvApp =>
+            //app.Map("/login", idsrvApp =>
             //{
             //    idsrvApp.UseIdentityServer(new IdentityServerOptions
             //    {

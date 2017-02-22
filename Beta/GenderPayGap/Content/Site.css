@@ -40,7 +40,7 @@
   color: red;
 }
 
-.Link {
+.link-button {
     background:none!important;
     border:none; 
     padding:0!important;
@@ -53,7 +53,7 @@
     position: relative;
     margin-bottom: 0;
 }
-.Link:hover {
+.link-button:hover {
   color: #2e8aca; 
 }
 
