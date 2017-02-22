@@ -2242,6 +2242,8 @@ input[type=number] {
 /* line 8, /app/govuk_modules/govuk-elements-sass/elements/_phase-banner.scss */
 .phase-banner-beta {
   padding: 10px 0 8px;
+  margin: 10px 0 8px;
+
   border-bottom: 1px solid #bfc1c3;
 }
 
