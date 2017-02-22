@@ -8,7 +8,7 @@
         <span class="heading-secondary">Step 4 of 4</span>
         Review your gender pay gap data
     </h1>
-@using (Html.BeginForm("Step4", "Submit", FormMethod.Post))
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
 
@@ -36,6 +36,7 @@
     @Html.HiddenFor(model => model.MaleUpperQuartilePayBand)
 
     @Html.HiddenFor(model => model.CompanyLinkToGPGInfo)
+    @Html.HiddenFor(model => Model.AccountingDate)
 
     <div class="grid-row">
         <div class="column-two-thirds">
@@ -43,7 +44,9 @@
                 <thead>
                     <tr>
                         <th class="question" colspan="3">
-                            1. Your organisation’s 2016 to 2017 gender pay gap data @*<span class="edit">@Html.ActionLink("Edit", "Edit", new { id = Model.ReturnId })</span>*@
+                            1. Your organisation’s @(Model.AccountingDate.AddYears(-1).Year)  to @(Model.AccountingDate.Year ) gender pay gap data <span class="edit">@Html.ActionLink("Edit", "Step1", new { id = Model })</span>
+                            @*<span class="edit">@Html.ActionLink("Edit", "Edit", new { id = Model.ReturnId })</span>*@
+                             
                         </th>
                     </tr>
                 </thead>
@@ -146,7 +149,7 @@
                         <td colspan="3">
                             <p>7. Link to your gender pay gap information</p>
                             @*<a href='#'>http://home.kpmg.com/gender-pay-gap-report-16-17.html</a>*@
-                            @Html.ValueFor(model => model.CompanyLinkToGPGInfo)
+                            @Html.ValueFor(model => model.CompanyLinkToGPGInfo) <span class="edit">@Html.ActionLink("Edit", "Step3", new { id = Model })</span>
                         </td>
                     </tr>
                 </tbody>
@@ -156,7 +159,7 @@
                 <thead>
                     <tr>
                         <th class="question" colspan="3">
-                            2. Person responsible in your organisation @*<span class="edit"><a href='edit-approval'>Edit</a></span>*@
+                            2. Person responsible in your organisation @*<span class="edit"><a href='edit-approval'>Edit</a></span>*@ <span class="edit">@Html.ActionLink("Edit", "Step2", new { id = Model })</span>
                             @*@Html.ActionLink("Edit", "Edit", new { id = Model.ReturnId })*@
                         </th>
                     </tr>
@@ -175,9 +178,10 @@
             </table>
 
             <p>
-                <input class="button" type="submit" role="button" value="Back" formaction='@Url.Action("Step2")' />
-                <input class="button" type="submit" role="button" value="Confirm and submit"/> 
-                @*@Html.ActionLink("Back", "Step1", null, new { @class = "", onclick = Url.Action("Step3") })*@             
+                <input class="button" type="submit" role="button" name="command" value="Continue" />
+            </p>
+            <p>
+                <input class="Link" type="submit" role="button" name="command" value="Back" />
             </p>
         </div>
     </div>

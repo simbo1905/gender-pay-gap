@@ -2,7 +2,7 @@
 @model GenderPayGap.WebUI.Models.ReturnViewModel
 
 <main id="content" role="main">
-@using (Html.BeginForm(/*"Step3", "Submit", FormMethod.Post*/))
+@using (Html.BeginForm())
 {
     @Html.AntiForgeryToken()
     @Html.HiddenFor(model => model.ReturnId)
@@ -21,6 +21,9 @@
     @Html.HiddenFor(model => model.MaleMiddlePayBand)
     @Html.HiddenFor(model => model.MaleUpperPayBand)
     @Html.HiddenFor(model => model.MaleUpperQuartilePayBand)
+    @Html.HiddenFor(model => Model.AccountingDate)
+
+    @Html.HiddenFor(model => model.CompanyLinkToGPGInfo)
 
     <div class="grid-row">
         <div class="column-two-thirds">
@@ -82,9 +85,10 @@
                 </div>
 
             <p>
-                <input class="button" type="submit" role="button" value="Back" formaction='@Url.Action("Step1")' />
-                <input class="button" type="submit" role="button" value="Continue" />
-                @*@Html.ActionLink("Back", "Step1", null, new { @class = "", onclick = Url.Action("Step3") })*@
+                <input class="button" type="submit" role="button" name="command" value="Continue" />
+            </p>
+            <p>
+                <input class="Link" type="submit" role="button" name="command" value="Back" />
             </p>
 
         </div>

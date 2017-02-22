@@ -9,12 +9,16 @@
         @Html.HiddenFor(model => model.FirstName)
         @Html.HiddenFor(model => model.JobTitle)
         @Html.HiddenFor(model => model.LastName)
+        @Html.HiddenFor(model => Model.AccountingDate)
+        @Html.HiddenFor(model => model.CompanyLinkToGPGInfo)
+
+        @*@Html.HiddenFor(model => model.AccountingDate.Year)*@
 
         <div class="grid-row">
             <div class="column-two-thirds">
                 <h1 class="heading-large">
                     <span class="heading-secondary">Step 1 of 4</span>
-                    Submit your gender pay gap data for 2016 to 2017
+                        Submit your gender pay gap data for @(Model.AccountingDate.AddYears(-1).Year)  to @(Model.AccountingDate.Year )
                 </h1>
 
 
@@ -35,46 +39,7 @@
                             </div>
                         </div>
                     </fieldset>
-                    @*<details>
-                        <summary><span class="summary">What to include when calculating hourly rate of pay</span></summary>
-                        <div class="panel panel-border-narrow">
-                            <p>You must include:</p>
-                            <ol class="list list-bullet">
-                                <li>
-                                    all pay to ‘relevant employees’ (all employees, workers and self-employed people who have a contract to perform services personally engaged by your organisation on the ‘snapshot date’)
-                                </li>
-                                <li>
-                                    ‘ordinary pay’-  which includes basic pay, pay for leave, pay for piecework, shift premium pay and any allowances paid in money (eg location allowances or payments for additional responsibilities like being fire warden)
-                                </li>
-                                <li>
-                                    the weekly hours worked by each employee
-                                </li>
-                            </ol>
-                            <p>Don’t include</p>
-                            <ul class="list list-bullet">
-                                <li>benefits in kind </li>
-                                <li>interest-free loans</li>
-                                <li>bonuses </li>
-                                <li>salary sacrifice schemes </li>
-                            </ul>
-                            <a href="#">More guidance on what to include when calculating hourly rate of pay  </a>
-                        </div>
-                    </details>*@
-                    @*<details>
-                        <summary><span class="summary">Mean hourly rate of pay as a percentage : how to calculate</span></summary>
-                        <div class="panel panel-border-narrow">
-                            <p>
-                                <ol class="list list-number">
-                                    <li>Get the mean hourly rate of pay for male ‘relevant employees’ from your payroll system</li>
-                                    <li>Get the mean hourly rate of pay for female ‘relevant employees’ from your payroll system</li>
-                                    <li>Subtract the figure for females from the figure for males</li>
-                                    <li>Divide this number by the figure for males</li>
-                                    <li>Multiply by 100 to give you a percentage figure</li>
-                                </ol>
-                                <a href="#">More guidance on calculating mean hourly rates of pay </a>
-                            </p>
-                        </div>
-                    </details>*@
+                   
                     <h2 class="heading-medium">2. Difference in median hourly rate of pay between male and female employees </h2>
                     <fieldset>
                         <div class="form-group">
@@ -87,46 +52,7 @@
                             </div>
                         </div>
                     </fieldset>
-                    @*<details>
-                        <summary><span class="summary">What to include when calculating hourly rate of pay</span></summary>
-                        <div class="panel panel-border-narrow">
-                            <p>You must include:</p>
-                            <ol class="list list-bullet">
-                                <li>
-                                    all pay to ‘relevant employees’ (all employees, workers and self-employed people who have a contract to perform services personally engaged by your organisation on the ‘snapshot date’)
-                                </li>
-                                <li>
-                                    ‘ordinary pay’ - which includes basic pay, pay for leave, pay for piecework, shift premium pay and any allowances paid in money (eg location allowances or payments for additional responsibilities like being fire warden)
-                                </li>
-                                <li>
-                                    the weekly hours worked by each employee
-                                </li>
-                            </ol>
-                            <p>Don’t include</p>
-                            <ol class="list list-bullet">
-                                <li>benefits in kind </li>
-                                <li>interest-free loans</li>
-                                <li>bonuses </li>
-                                <li>salary sacrifice schemes </li>
-                            </ol>
-                            <a href="#">More guidance on what to include when calculating hourly rate of pay  </a>
-                        </div>
-                    </details>*@
-                    @*<details>
-                        <summary><span class="summary">Median hourly rate of pay as a percentage : how to calculate</span></summary>
-                        <div class="panel panel-border-narrow">
-                            <p>
-                                <ol class="list list-number">
-                                    <li>Get the median hourly rate of pay for male ‘relevant employees’ from your payroll system</li>
-                                    <li>Get the median hourly rate of pay for female ‘relevant employees’ from your payroll system</li>
-                                    <li>Subtract the figure for females from the figure for males</li>
-                                    <li>Divide this number by the figure for males</li>
-                                    <li>Multiply by 100 to give you a percentage figure</li>
-                                </ol>
-                                <a href="#">More guidance on calculating mean hourly rates of pay </a>
-                            </p>
-                        </div>
-                    </details>*@
+                   
                     <h2 class="heading-medium">3. Difference in mean bonus pay between male and female employees  </h2>
                     <fieldset>
                         <div class="form-group">
@@ -139,31 +65,7 @@
                             </div>
                         </div>
                     </fieldset>
-                    @*<details>
-                        <summary><span class="summary">What to include when calculating mean bonus pay</span></summary>
-                        <div class="panel panel-border-narrow">
-                            <p>You must include:</p>
-                            <ol class="list list-bullet">
-                                <li>all bonuses paid to ‘relevant employees’ in the 12-month period that ends on the snapshot date.  (‘Relevant employees’ are all employees, workers and self-employed people who have a contract to perform services personally engaged by your organisation on the ‘snapshot date’)</li>
-                            </ol>
-                            <a href="#">More guidance on what to include when calculating mean bonus pay   </a>
-                        </div>
-                    </details>*@
-                    @*<details>
-                        <summary><span class="summary">Mean bonus pay as a percentage : how to calculate</span></summary>
-                        <div class="panel panel-border-narrow">
-                            <p>
-                                <ol class="list list-number">
-                                    <li>Get the mean amount of bonus pay for male ‘relevant employees’ from your payroll system</li>
-                                    <li>Get the mean amount of bonus pay for female ‘relevant employees’ from your payroll system</li>
-                                    <li>Subtract the figure for females from the figure for males</li>
-                                    <li>Divide the result by the figure for the males</li>
-                                    <li>Multiply by 100 to give you a percentage figure</li>
-                                </ol>
-                                <a href="#">More guidance on calculating the difference in mean bonus pay  </a>
-                            </p>
-                        </div>
-                    </details>*@
+                   
                     <h2 class="heading-medium">4. Difference in median bonus pay between male and female employees</h2>
                     <fieldset>
                         <div class="form-group">
@@ -177,31 +79,7 @@
                         </div>
 
                     </fieldset>
-                    @*<details>
-                        <summary><span class="summary">What to include when calculating mean bonus pay</span></summary>
-                        <div class="panel panel-border-narrow">
-                            <p>You must include:</p>
-                            <ol class="list list-bullet">
-                                <li>all bonuses paid to ‘relevant employees’ in the 12-month period that ends on the snapshot date. (‘Relevant employees’ are all employees, workers and self-employed people who have a contract to perform services personally engaged by your organisation on the ‘snapshot date’)</li>
-                            </ol>
-                            <a href="#">More guidance on what to include when calculating mean bonus pay   </a>
-                        </div>
-                    </details>*@
-                    @*<details>
-                        <summary><span class="summary">Median bonus pay as a percentage : how to calculate</span></summary>
-                        <div class="panel panel-border-narrow">
-                            <p>
-                                <ol class="list list-number">
-                                    <li>Get the median amount of bonus pay for male ‘relevant employees’ from your payroll system</li>
-                                    <li>Get the median amount of bonus pay for female ‘relevant employees’ s from your payroll system</li>
-                                    <li>Subtract the figure for females from the figure for males</li>
-                                    <li>Divide the result by the figure for the males</li>
-                                    <li>Multiply by 100 to give you a percentage figure</li>
-                                </ol>
-                                <a href="#">More guidance on calculating the difference in median bonus pay  </a>
-                            </p>
-                        </div>
-                    </details>*@
+                   
                     <h2 class="heading-medium">5. Percentage of male and female employees who received bonus pay</h2>
                     <fieldset>
                         <div class="form-group">
@@ -223,22 +101,7 @@
                             </div>
                         </div>
                     </fieldset>
-                    @*<details>
-                        <summary><span class="summary">How do I calculate this</span></summary>
-                        <div class="panel panel-border-narrow">
-                            <p>
-                                <ol class="list list-number">
-                                    <li>Get the number of male ‘relevant employees’ who received bonus pay from your payroll system during the 12-month period that ends with the ‘snapshot date’</li>
-                                    <li>Get the number of male ‘relevant employees’ who were engaged by your organisation in the 12-month period that ends with the ‘snapshot date’</li>
-                                    <li>Work out the percentage by dividing the first figure by the second figure and multiplying by 100</li>
-                                    <li>Get the number of female ‘relevant employees’ who received bonus pay from your payroll system during the 12-month period that ends with the ‘snapshot date’</li>
-                                    <li>Get the number of female ‘relevant employees’ who were engaged by your organisation in the 12-month period that ends with the ‘snapshot date’</li>
-                                    <li>Work out the percentage by dividing the first figure by the second figure</li>
-                                </ol>
-                                <a href="#">More guidance on calculating the difference in median bonus pay  </a>
-                            </p>
-                        </div>
-                    </details>*@
+                   
                     <h2 class="heading-medium">6. Male and female employees by pay quartile	</h2>
                     <h3 class="heading-small">Lower quartile</h3>
                     <fieldset>
@@ -312,47 +175,9 @@
                                 @Html.ValidationMessageFor(model => model.FemaleUpperQuartilePayBand, "", new { @class = "text-danger" })
                             </div>
                         </div>
-                        @*<details>
-                            <summary>What to include when calculating data by quartile</summary>
-                            <div class="panel panel-border-narrow">
-                                <p>
-                                <p>Pay quartile reporting only requires your organisation to include ‘full-pay relevant employees’. This means every employee who, on the ‘snapshot date’, is both:</p>
-                                <ul class="list list-bullet">
-                                    <li>employed </li>
-                                    <li>being paid their full regular pay </li>
-                                </ul>
-                                <p>Don’t include:</p>
-                                <ul class="list list-bullet">
-                                    <li>employees not paid in full at their normal rate for the ‘snapshot date’ because they are on leave (eg maternity, paternity or sick leave) </li>
-                                </ul>
-                                <a href="#">More guidance on full-pay relevant employees for pay quartile calculation  </a>
-                                </p>
-                            </div>
-                        </details>*@
+                        
                     </fieldset>
 
-                    @*<h2 class="heading-medium">7. Link to your gender pay gap information</h2>*@
-                    @*<p>Enter the web address (URL) for the gender pay gap information published on your organisation’s website. The person with responsibility for gender pay gap reporting in your organisation will have this.</p>*@
-                    @*<fieldset>*@
-                        @*<div class="form-group ">
-                                <textarea class="form-control" id="textarea-b" cols="30" rows="6"></textarea>
-                            </div>*@
-
-                        @*<div class="form-group">
-                            <p>@Html.LabelFor(model => model.CompanyLinkToGPGInfo, "Enter the web address (URL) for the gender pay gap information published on your organisation’s website. The person with responsibility for gender pay gap reporting in your organisation will have this", htmlAttributes: new { @class = "control-label col-md-2" })</p>
-                            <div class="col-md-10">
-                                @Html.TextAreaFor(model => model.CompanyLinkToGPGInfo, 6, 30, new { @class = "form-control" })
-
-                                @Html.ValidationMessageFor(model => model.CompanyLinkToGPGInfo, "", new { @class = "text-danger" })*@
-                                @*@Html.ValidationMessageFor(model => model.CompanyLinkToGPGInfo, "The field is not a valid fully-qualified http, https, or ftp URL.",  new { @class = "text-danger" })*@
-                            @*</div>
-                        </div>
-
-                    </fieldset>*@
-
-                    <button type="submit" name="command" value="Back">
-                        Backy
-                    </button>
                     <div class="form-group">
                         <div class="col-md-offset-2 col-md-10">
                             @*<input type="submit" value="Create" class="btn btn-default" />*@
@@ -363,7 +188,6 @@
 
                 <p>
                     <input class="button" type="submit" role="button" value="Continue" />
-                @*<p>@Html.ActionLink("Cancel", "Index", null, new { @class = "", onclick = "if (!confirm('Are you sure you want to cancel?'))return false;" })</p>*@
                 </p>
                 @*<a href="gpg-overview">Cancel</a>*@
             </div>
