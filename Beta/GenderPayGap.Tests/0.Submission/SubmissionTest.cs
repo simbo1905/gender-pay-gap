@@ -385,11 +385,13 @@ namespace GenderPayGap.Tests.Submission
                 LastName = emptyString
             };
 
+            var command = "";
+
             var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
             //controller.bind();
 
             //Act:
-            var result = controller.Step2(model) as ViewResult; ;
+            var result = controller.Step2(model, command) as ViewResult; ;
 
             //Assert
             Assert.Multiple(() =>
@@ -423,11 +425,13 @@ namespace GenderPayGap.Tests.Submission
                 LastName = emptyString
             };
 
+            var command = "";
+
             var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
             //controller.bind();
 
             //Act:
-            var result = controller.Step2(model) as ViewResult; ;
+            var result = controller.Step2(model, command) as ViewResult; ;
 
             //Assert
             Assert.Multiple(() =>
@@ -459,11 +463,13 @@ namespace GenderPayGap.Tests.Submission
                 LastName  = "MyLastName"
             };
 
+            var command = "";
+
             var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
             //controller.bind();
 
             //Act:
-            var result = controller.Step2(model) as ViewResult; ;
+            var result = controller.Step2(model, command) as ViewResult; ;
 
             //Assert
             Assert.Multiple(() =>
