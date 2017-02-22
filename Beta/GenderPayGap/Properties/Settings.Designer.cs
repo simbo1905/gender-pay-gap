@@ -113,5 +113,23 @@ namespace GenderPayGap.WebUI.Properties {
                 return ((int)(this["LockoutMinutes"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2017-04-05")]
+        public global::System.DateTime PrivateAccountingDate {
+            get {
+                return ((global::System.DateTime)(this["PrivateAccountingDate"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2017-03-31")]
+        public global::System.DateTime PublicAccountingDate {
+            get {
+                return ((global::System.DateTime)(this["PublicAccountingDate"]));
+            }
+        }
     }
 }
