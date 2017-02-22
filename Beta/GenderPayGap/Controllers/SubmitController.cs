@@ -8,6 +8,8 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Autofac;
+using GenderPayGap.WebUI.Classes;
+using Thinktecture.IdentityModel.Mvc;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -19,7 +21,7 @@ namespace GenderPayGap.WebUI.Controllers
         public SubmitController():base(){ }
         public SubmitController(IContainer container): base(container){ }
 
-        [Authorize]
+        [Auth]
         [Route("Step1")]
         [HttpGet]
         public ActionResult Step1 /*Create*/() 
@@ -72,7 +74,7 @@ namespace GenderPayGap.WebUI.Controllers
             return result;
         }
 
-        [Authorize]
+        [Auth]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Step1")]
@@ -92,7 +94,7 @@ namespace GenderPayGap.WebUI.Controllers
             return RedirectToAction("Step2");
         }
 
-        [Authorize]
+        [Auth]
         [HttpGet]
         [Route("Step2")]
         public ActionResult Step2 /*Create*/()
@@ -112,7 +114,7 @@ namespace GenderPayGap.WebUI.Controllers
             return result;
         }
 
-        [Authorize]
+        [Auth]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Step2")]
@@ -129,7 +131,7 @@ namespace GenderPayGap.WebUI.Controllers
             return RedirectToAction("Step3");
         }
 
-        [Authorize]
+        [Auth]
         [HttpGet]
         [Route("Step3")]
         public ActionResult Step3 /*GPGInfoLink*/()
@@ -149,7 +151,7 @@ namespace GenderPayGap.WebUI.Controllers
             return result;
         }
 
-        [Authorize]
+        [Auth]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Step3")]
@@ -168,7 +170,7 @@ namespace GenderPayGap.WebUI.Controllers
             return RedirectToAction("Step4");
         }
 
-        [Authorize]
+        [Auth]
         [HttpGet]
         [Route("Step4")]
         public ActionResult Step4  /*Confirm*/()
@@ -186,7 +188,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
 
-        [Authorize]
+        [Auth]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Step4")]
@@ -245,7 +247,7 @@ namespace GenderPayGap.WebUI.Controllers
         //Step4: Should have edits to take user to pages for editing
         //Step5 will be cut off from the original steps as this page will not be provided by us
 
-        [Authorize]
+        [Auth]
         [HttpGet]
         [Route("Step5")]
         public ActionResult Step5 /*Step4*/ /*SendConfirmed*/(long id = 0)
@@ -270,7 +272,7 @@ namespace GenderPayGap.WebUI.Controllers
             return View("Step5");
         }
 
-        [Authorize]
+        [Auth]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Step5")]
@@ -311,7 +313,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         // GET: Submit/Details/5
-        [Authorize]
+        [Auth]
         public ActionResult Complete()
         {
             User currentUser;

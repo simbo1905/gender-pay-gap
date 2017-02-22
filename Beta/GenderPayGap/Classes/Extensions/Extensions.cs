@@ -97,7 +97,7 @@ namespace GenderPayGap.WebUI.Classes
         {
             var name = user.Fullname + " (" + user.JobTitle + ")";
             var address = organisation.Address.GetAddress();
-            var returnUrl = controller.Url.Action("Step6",null,null,"https");
+            var returnUrl = controller.Url.Action("ConfirmPIN", "Register",null,"https");
             return GovNotifyAPI.SendPinInPost(returnUrl, name, user.EmailAddress, pin);
         }
 
