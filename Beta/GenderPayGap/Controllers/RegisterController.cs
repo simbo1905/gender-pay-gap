@@ -155,7 +155,7 @@ namespace GenderPayGap.WebUI.Controllers
                 return result;
 
             //Allow resend of verification if sent over 24 hours ago
-            if (currentUser.EmailVerifySendDate.Value.AddHours(WebUI.Properties.Settings.Default.EmailVerificationExpiryHours) < DateTime.Now)
+            if (currentUser.EmailVerifySendDate==null || currentUser.EmailVerifySendDate.Value.AddHours(WebUI.Properties.Settings.Default.EmailVerificationExpiryHours) < DateTime.Now)
                 return View("Step2", new VerifyViewModel() { EmailAddress = currentUser.EmailAddress, Expired = true });
 
             ActionResult result1;
@@ -617,7 +617,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (userOrg.ConfirmAttempts >= Properties.Settings.Default.MaxPinAttempts && remaining > TimeSpan.Zero)
                 return View("CustomError", new ErrorViewModel(1113));
 
-            remaining = userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
+            remaining = userOrg.PINSentDate==null ? TimeSpan.Zero : userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
             var model=new CompleteViewModel();
             model.PIN = null;
             model.AllowResend = remaining <= TimeSpan.Zero;
