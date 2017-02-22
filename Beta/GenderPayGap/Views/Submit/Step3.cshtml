@@ -1,6 +1,8 @@
 ﻿@model GenderPayGap.WebUI.Models.ReturnViewModel
 
-@*button.Link {
+<style>
+
+.buttonLink {
      background:none!important;
      border:none;
      padding:0!important;
@@ -8,13 +10,14 @@
      /*border is optional*/
      border-bottom:1px solid #444;
      cursor: pointer;
-}*@
+}
 
+</style>
 
 
 
 <main id="content" role="main">
-    @using (Html.BeginForm(/*"Step4", "Submit", FormMethod.Post*/))
+    @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.ReturnId)
@@ -39,13 +42,14 @@
         @Html.HiddenFor(model => model.MaleMiddlePayBand)
         @Html.HiddenFor(model => model.MaleUpperPayBand)
         @Html.HiddenFor(model => model.MaleUpperQuartilePayBand)
+        @Html.HiddenFor(model => Model.AccountingDate)
 
 
         <div class="grid-row">
             <div class="column-two-thirds">
                 <h1 class="heading-large">
                     <span class="heading-secondary">Step 3 of 4</span>
-                    Submit your gender pay gap data for 2016 to 2017
+                    Submit your gender pay gap data for @(Model.AccountingDate.AddYears(-1).Year)  to @(Model.AccountingDate.Year )
                 </h1>
 
 
@@ -84,12 +88,10 @@
 
                 <p>
                     <input class="button" type="submit" role="button" name="command" value="Continue" />
-                    <input class="link" type="submit" role="button" name="command" value="Back" />
-
+                </p>
                 <p>
-                    @*@Html.ActionLink("Cancel", "Index", null, new { @class = "", onclick = "if (!confirm('Are you sure you want to cancel?'))return false;" })*@
-                    @Html.ActionLink("Back", "Step2", null, new { @class = "", onclick = Url.Action("Step2") })</p>
-            </p>
+                    <input class="Link" type="submit" role="button" name="command" value="Back" />
+                </p>
             @*<a href="gpg-overview">Cancel</a>*@
         </div>
 
