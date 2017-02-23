@@ -321,6 +321,8 @@ TODAY:
 		create a new working branch  from task work item in vso
 		work on tariks design changes on submission and registration half done
 
-		edit journeys now work retest and clean up code
+		edit journeys now work retest and clean up code in the morning
+		Bug:
 		also when cancel is clicked if you edit a field the cancel should ignore the edit, but it still persists
 		so i have to save the original data in a TempData["temp"] and if cancel is clicked then push that back into the stash model as this is should be the data before any edit
+		Do all the text and UI changes in the morning
