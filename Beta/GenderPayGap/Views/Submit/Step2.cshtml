@@ -1,5 +1,4 @@
-﻿@*@model GpgDB.Models.GpgDatabase.Return*@
-@model GenderPayGap.WebUI.Models.ReturnViewModel
+﻿@model GenderPayGap.WebUI.Models.ReturnViewModel
 
 <main id="content" role="main">
 @using (Html.BeginForm())
@@ -89,7 +88,7 @@
             </p>
             <p>
                 @*<input class="Link" type="submit" role="button" name="command" value="Back" />*@
-                <input class="Link" type="@TempData["type"]" role="button" name="command" value="@TempData["value"]" />
+                <input class="link" type="@TempData["type"]" role="button" name="command" value="@TempData["value"]" />
             </p>
 
         </div>
