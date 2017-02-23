@@ -132,19 +132,19 @@ namespace GenderPayGap
             {
                 //Allow resend of PIN if sent over 2 weeks ago
                 if (userOrg.PINSentDate.EqualsI(null, DateTime.MinValue))
-                    return View("CustomError", new ErrorViewModel(1105));
+                    return RedirectToAction("Step3", "Register");
                 if (userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostExpiryDays) < DateTime.Now)
-                    return View("CustomError", new ErrorViewModel(1106));
+                    return RedirectToAction("ConfirmPIN","Register");
                 var remainingTime = userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
                 if (remainingTime > TimeSpan.Zero)
                     return View("CustomError", new ErrorViewModel(1107, new {remainingTime = remainingTime.ToFriendly(maxParts: 2)}));
-                return View("CustomError", new ErrorViewModel(1108));
+                return RedirectToAction("ConfirmPIN","Register");
             }
 
             if (this is RegisterController)
                 //Ensure user has completed the registration process
                 //If user is fully registered then start submit process
-                return View("CustomError", new ErrorViewModel(1109));
+                return RedirectToAction("Step1", "Submit");
 
             return null;
         }
