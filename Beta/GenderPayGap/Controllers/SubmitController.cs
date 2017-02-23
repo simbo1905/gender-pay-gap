@@ -16,8 +16,8 @@ namespace GenderPayGap.WebUI.Controllers
     public class SubmitController : BaseController
     {
 
-        public SubmitController():base(){ }
-        public SubmitController(IContainer container): base(container){ }
+        public SubmitController() : base() { }
+        public SubmitController(IContainer container) : base(container) { }
 
         DateTime gExpectStartDate;
         DateTime gExpectEndDate;
@@ -25,8 +25,10 @@ namespace GenderPayGap.WebUI.Controllers
         [Authorize]
         [Route("Step1")]
         [HttpGet]
-        public ActionResult Step1 /*Create*/() 
+        public ActionResult Step1 /*Create*/()
         {
+            ShowAndActivateCancelButtonLink();
+            
             User currentUser;
             var errorView = CheckUserRegisteredOk(out currentUser);
             if (errorView != null) return errorView;
@@ -34,7 +36,7 @@ namespace GenderPayGap.WebUI.Controllers
             var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
             var Org = Repository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == userOrg.OrganisationId);
 
-            var expectStartDate = GetCurrentAccountYearStartDate(Org); 
+            var expectStartDate = GetCurrentAccountYearStartDate(Org);
             var expectEndDate = expectStartDate.AddYears(1).Date.AddDays(1);
             gExpectStartDate = expectStartDate;
             gExpectEndDate = expectEndDate;
@@ -57,27 +59,27 @@ namespace GenderPayGap.WebUI.Controllers
                 {
                     //create new return viewmode
                     //populate with return from db
-                    model.ReturnId                    = @return.ReturnId;
-                    model.OrganisationId              = @return.OrganisationId;
-                    model.DiffMeanBonusPercent        = @return.DiffMeanBonusPercent;
-                    model.DiffMeanHourlyPayPercent    = @return.DiffMeanHourlyPayPercent;
-                    model.DiffMedianBonusPercent      = @return.DiffMedianBonusPercent;
-                    model.DiffMedianHourlyPercent     = @return.DiffMedianHourlyPercent;
-                    model.FemaleLowerPayBand          = @return.FemaleLowerPayBand;
+                    model.ReturnId = @return.ReturnId;
+                    model.OrganisationId = @return.OrganisationId;
+                    model.DiffMeanBonusPercent = @return.DiffMeanBonusPercent;
+                    model.DiffMeanHourlyPayPercent = @return.DiffMeanHourlyPayPercent;
+                    model.DiffMedianBonusPercent = @return.DiffMedianBonusPercent;
+                    model.DiffMedianHourlyPercent = @return.DiffMedianHourlyPercent;
+                    model.FemaleLowerPayBand = @return.FemaleLowerPayBand;
                     model.FemaleMedianBonusPayPercent = @return.FemaleMedianBonusPayPercent;
-                    model.FemaleMiddlePayBand         = @return.FemaleMiddlePayBand;
-                    model.FemaleUpperPayBand          = @return.FemaleUpperPayBand;
-                    model.FemaleUpperQuartilePayBand  = @return.FemaleUpperQuartilePayBand;
-                    model.MaleLowerPayBand            = @return.MaleLowerPayBand;
-                    model.MaleMedianBonusPayPercent   = @return.MaleMedianBonusPayPercent;
-                    model.MaleMiddlePayBand           = @return.MaleMiddlePayBand;
-                    model.MaleUpperPayBand            = @return.MaleUpperPayBand;
-                    model.MaleUpperQuartilePayBand    = @return.MaleUpperQuartilePayBand;
-                    model.JobTitle                    = @return.JobTitle;
-                    model.FirstName                   = @return.FirstName;
-                    model.LastName                    = @return.LastName;
-                    model.CompanyLinkToGPGInfo        = @return.CompanyLinkToGPGInfo;
-                    model.AccountingDate              = @return.AccountingDate;
+                    model.FemaleMiddlePayBand = @return.FemaleMiddlePayBand;
+                    model.FemaleUpperPayBand = @return.FemaleUpperPayBand;
+                    model.FemaleUpperQuartilePayBand = @return.FemaleUpperQuartilePayBand;
+                    model.MaleLowerPayBand = @return.MaleLowerPayBand;
+                    model.MaleMedianBonusPayPercent = @return.MaleMedianBonusPayPercent;
+                    model.MaleMiddlePayBand = @return.MaleMiddlePayBand;
+                    model.MaleUpperPayBand = @return.MaleUpperPayBand;
+                    model.MaleUpperQuartilePayBand = @return.MaleUpperQuartilePayBand;
+                    model.JobTitle = @return.JobTitle;
+                    model.FirstName = @return.FirstName;
+                    model.LastName = @return.LastName;
+                    model.CompanyLinkToGPGInfo = @return.CompanyLinkToGPGInfo;
+                    model.AccountingDate = @return.AccountingDate;
                 }
             }
 
@@ -112,9 +114,12 @@ namespace GenderPayGap.WebUI.Controllers
 
             // model.OrganisationId = userOrg.OrganisationId;
 
-            if (TempData.ContainsKey("ErrorMessage"))ModelState.AddModelError("", TempData["ErrorMessage"].ToString());
+            if (TempData.ContainsKey("ErrorMessage")) ModelState.AddModelError("", TempData["ErrorMessage"].ToString());
 
             StashModel(model);
+
+            if(Request.UrlReferrer != null && Request.UrlReferrer.Segments[2].ToString() == "Step4")
+                TempData["Review"] = Request.UrlReferrer.Segments[2].ToString();
 
             var result = View("Step1", model);
             return result;
@@ -138,6 +143,15 @@ namespace GenderPayGap.WebUI.Controllers
 
             StashModel(model);
 
+
+            var review = TempData["Review"];
+
+            if (/*command == "Cancel" && */  review != null && review.ToString() == "Step4")
+            {
+                ShowAndActivateCancelButtonLink();
+                return RedirectToAction("Step4");
+            }
+
             return RedirectToAction("Step2");
         }
 
@@ -146,14 +160,15 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("Step2")]
         public ActionResult Step2 /*Create*/()
         {
+            ChangeAndActivateBackButtonLinkName();
+
             User currentUser;
             var errorView = CheckUserRegisteredOk(out currentUser);
             if (errorView != null) return errorView;
 
+            //if (TempData.ContainsKey("ErrorMessage")) ModelState.AddModelError("", TempData["ErrorMessage"].ToString());
 
-      //     if (TempData.ContainsKey("ErrorMessage")) ModelState.AddModelError("", TempData["ErrorMessage"].ToString());
-
-            ReturnViewModel model = null; 
+            ReturnViewModel model = null;
             model = UnstashModel<ReturnViewModel>();
 
             if (model == null)
@@ -161,6 +176,9 @@ namespace GenderPayGap.WebUI.Controllers
                 TempData["ErrorMessage"] = "You session has timed out and you need to restart";
                 return RedirectToAction("Step1");
             }
+
+            if (Request.UrlReferrer != null && Request.UrlReferrer.Segments[2].ToString() == "Step4")
+                TempData["Review"] = Request.UrlReferrer.Segments[2].ToString();
 
             var result = View("Step2", model);
             return result;
@@ -170,9 +188,8 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Step2")]
-        public ActionResult Step2 (ReturnViewModel model, string command)
+        public ActionResult Step2(ReturnViewModel model, string command)
         {
-
             User currentUser;
             var errorView = CheckUserRegisteredOk(out currentUser);
             if (errorView != null) return errorView;
@@ -180,6 +197,11 @@ namespace GenderPayGap.WebUI.Controllers
             if (!ModelState.IsValid) return View(model);
 
             StashModel(model);
+
+            var review = TempData["Review"];
+            if (command == "Cancel" || command == "Continue" && review != null && review.ToString() == "Step4")
+                return RedirectToAction("Step4");
+
             if (command == "Back") return RedirectToAction("Step1");
 
             return RedirectToAction("Step3");
@@ -190,13 +212,14 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("Step3")]
         public ActionResult Step3 /*GPGInfoLink*/()
         {
+            ChangeAndActivateBackButtonLinkName();
+
             User currentUser;
             var errorView = CheckUserRegisteredOk(out currentUser);
-            if (errorView != null)  return errorView; 
+            if (errorView != null) return errorView;
 
-            ReturnViewModel model = null; 
+            ReturnViewModel model = null;
 
-          
             model = UnstashModel<ReturnViewModel>();
 
             if (model == null)
@@ -210,6 +233,9 @@ namespace GenderPayGap.WebUI.Controllers
             //    TempData["ErrorMessage"] = "You session has timed out and you need to restart";
             //    return RedirectToAction("Step2");
             //}
+
+            if (Request.UrlReferrer != null && Request.UrlReferrer.Segments[2].ToString() == "Step4")
+                TempData["Review"] = Request.UrlReferrer.Segments[2].ToString();
 
             var result = View("Step3", model);
             return result;
@@ -226,6 +252,10 @@ namespace GenderPayGap.WebUI.Controllers
             if (errorView != null) return errorView;
 
             StashModel(model);
+
+            var review = TempData["Review"];
+            if (command == "Cancel" || command == "Continue" && review != null && review.ToString() == "Step4")
+                return RedirectToAction("Step4");
 
             if (command == "Back") return RedirectToAction("Step2");
 
@@ -254,20 +284,22 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("Step4")]
         public ActionResult Step4  /*Confirm*/(ReturnViewModel model, string command)
         {
-
-           // model.AccountingDate = gExpectStartDate;
+            // model.AccountingDate = gExpectStartDate;
 
             User currentUser;
             var errorView = CheckUserRegisteredOk(out currentUser);
             if (errorView != null) return errorView;
-            
+
             if (!ModelState.IsValid) return View(model);
 
-            if (command == "Back") return RedirectToAction("Step3");
+            //if (command == "Cancel" && Request.UrlReferrer.ToString() == "Step4")
+            //    RedirectToAction("Step4");
+
+            //if (command == "Back") return RedirectToAction("Step3");
 
             var @return = Repository.GetAll<Return>().FirstOrDefault(r => r.ReturnId == model.ReturnId);
 
-            if(!@return.IsNull())
+            if (!@return.IsNull())
             {
                 @return.Status = ReturnStatuses.Retired;
             }
@@ -300,7 +332,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             Repository.Insert<Return>(@return);
             Repository.SaveChanges();
-            
+
             return View("Step5", model);
         }
 
@@ -310,13 +342,13 @@ namespace GenderPayGap.WebUI.Controllers
         [Authorize]
         [HttpGet]
         [Route("Step5")]
-        public ActionResult Step5 (/*long id = 1*/ )
+        public ActionResult Step5(/*long id = 1*/ )
         {
             User currentUser;
             var errorView = CheckUserRegisteredOk(out currentUser);
             if (errorView != null) return errorView;
 
-           var model = UnstashModel<ReturnViewModel>();
+            var model = UnstashModel<ReturnViewModel>();
 
             //try
             //{
@@ -394,11 +426,90 @@ namespace GenderPayGap.WebUI.Controllers
 
         }
 
+        public void ShowAndActivateCancelButtonLink()
+        {
+           // var prevReferrer = controller.Request.UrlReferrer.ToString();
+
+            //Set link initial value as there is noreferrer yet
+            TempData["type"] = "hidden";
+
+            if (Request.UrlReferrer != null && Request.UrlReferrer.Segments[2].ToString() == "Step4")
+            {
+                TempData["value"] = "Cancel";
+                TempData["type"] = "submit";
+            }
+        }
+
+        //public void UnhideAndChangeLinkName()
+        //{
+        //    //Set link initial value as there is noreferrer yet
+        //    TempData["type"] = "hidden";
+
+        //    if (Request.UrlReferrer == null)
+        //    {
+        //        TempData["value"] = "Back";
+        //    }
+        //    else
+        //    {
+        //        if (Request.UrlReferrer.ToString() == "Step4")
+        //        {
+        //            TempData["value"] = "Cancel";
+        //        }
+        //    }
+        //}
+
+        //helper methods
+
+        public void ChangeAndActivateBackButtonLinkName()
+        {
+            //Set link initial value as there is noreferrer yet
+            TempData["type"] = "submit";
+            TempData["value"] = "Back";
+
+            if ((Request.UrlReferrer == null) || (Request.UrlReferrer.Segments[2].ToString() == "Step2") || (Request.UrlReferrer.Segments[2].ToString() == "Step3"))
+            {
+                //Set link initial value as there is noreferrer yet
+                TempData["value"] = "Back";
+            }
+            else
+            {
+                if (Request.UrlReferrer.Segments[2].ToString() == "Step4")
+                {
+                    TempData["value"] = "Cancel";
+                }
+            }
+        }
+
+        public void GenericLinkBackButtonHandler(string _viewName)
+        {
+            //Set link initial value as there is no referrer yet
+            TempData["type"] = "submit";
+            TempData["value"] = "Back";
+
+            if (Request.UrlReferrer == null && _viewName == "Step1")
+            {
+                TempData["type"] = "hidden";
+            }
+            else if ((Request.UrlReferrer == null) && (_viewName == "Step2") || (_viewName == "Step3"))
+            {
+                TempData["value"] = "Back";
+            }
+            else
+            {
+                if (Request.UrlReferrer.Segments[2].ToString() == "Step4")
+                {
+                    TempData["value"] = "Cancel";
+                }
+            }
+        }
+
         [HttpGet]
         public ActionResult Error()
         {
             //Show the confirmation view
             return View();
         }
+
+        
     }
 }

@@ -21,7 +21,6 @@
                         Submit your gender pay gap data for @(Model.AccountingDate.AddYears(-1).Year)  to @(Model.AccountingDate.Year )
                 </h1>
 
-
                 <div class="form-horizontal">
                     @*<h4>Submit</h4>*@
                     @*<hr />*@
@@ -187,7 +186,11 @@
                 </div>
 
                 <p>
-                    <input class="button" type="submit" role="button" value="Continue" />
+                    <input class="button" type="submit" role="button" name="command" value="Continue" />
+                </p>
+                <p>
+                    @*<input class="Link" type="hidden/submit" role="button" name="command" value="Cancel" />*@
+                    <input class="Link" type="@TempData["type"]" role="button" name="command" value="@TempData["value"]" />
                 </p>
                 @*<a href="gpg-overview">Cancel</a>*@
             </div>
@@ -195,17 +198,6 @@
         </div>
     }
 </main>
-
-
-
-
-
-
-
-
-<div>
-    @*@Html.ActionLink("Back to List", "Index")*@
-</div>
 
 @section Scripts {
     @Scripts.Render("~/bundles/jqueryval")
