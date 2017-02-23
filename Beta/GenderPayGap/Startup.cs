@@ -16,13 +16,13 @@ using System.Threading.Tasks;
 using System.Configuration;
 using Autofac;
 using Extensions;
+using System.Web;
 
 [assembly: OwinStartupAttribute(typeof(GenderPayGap.Startup))]
 namespace GenderPayGap
 {
     public partial class Startup
     {
-
         public void Configuration(IAppBuilder app)
         {
             AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimTypes.Subject;

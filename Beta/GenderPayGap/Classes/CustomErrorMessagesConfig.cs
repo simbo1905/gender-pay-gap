@@ -55,16 +55,22 @@ namespace GenderPayGap.WebUI.Classes
             return results;
         }
 
+        List<CustomErrorMessage> _List = null;
+        List<CustomErrorMessage> List
+        {
+            get
+            {
+                if (_List == null) _List = this.ToList<CustomErrorMessage>();
+                return _List;
+
+            }
+        }
+
         public CustomErrorMessage this[int code]
         {
             get
             {
-                if (code<400) return null;
-                foreach (CustomErrorMessage setting in this)
-                {
-                    if (setting.Code.EqualsI(code)) return setting;
-                }
-                return null;
+                return List.FirstOrDefault(s=>s.Code==code);
             }
         }
 
