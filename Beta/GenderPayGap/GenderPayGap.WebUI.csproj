@@ -263,6 +263,9 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Classes\Extensions\Extensions.cs" />
     <Compile Include="Classes\CustomErrorMessagesConfig.cs" />
+    <Compile Include="Classes\StringLengthAttribute.cs" />
+    <Compile Include="Classes\RequiredAttribute.cs" />
+    <Compile Include="Classes\RangeAttribute.cs" />
     <Compile Include="Classes\PasswordAttribute.cs" />
     <Compile Include="Classes\SpamProtectionAttribute.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
