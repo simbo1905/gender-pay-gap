@@ -36,7 +36,7 @@ namespace GenderPayGap.WebUI.Models
         }
 
         static CustomErrorMessagesSection _CustomErrorMessages = null;
-        private static CustomErrorMessagesSection CustomErrorMessages
+        public static CustomErrorMessagesSection CustomErrorMessages
         {
             get
             {
