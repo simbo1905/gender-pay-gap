@@ -247,9 +247,10 @@ Private Beta outcome and comments:
 *******************************************************************Sprint4 Tasks:******************************************************************
 Merge Dev Repo into GpgBeta Repo:
 	best way to merge 2 repos together and fix bugs github
+	
 
 TDD Submission Journey: (3 Days)
-	going through the journey with Tarik and steve
+	going through the journey with Tarik 
 	Adding inital data for the journey
 	Required classes and creating them in the DB
 	Creating the TDD
@@ -260,12 +261,69 @@ TDD Submission Journey: (3 Days)
 ****************************************************************************************************************************************************	
 	
 	Design:
-	Go through Tariks desing changes and match them,
+	Go through Tariks design changes and match them,
+
+	Step1 changes:
+	Change 'back' button to 'cancel' and only show it if refferal is from reivew page 
+
+
 	think of the journey from review
+	
+	notes: use the request.urlrefferer.tostring to know where redirection came from to 
 	logic:
+	
+	In review:
+	if you click edit on data points
+	you are redirected to the datapoints step1 page
+	
+	step 1, 
+	then use make changes in the page... and click continue
+	in the step 1 action method 
+	if(request.urlreferer == "review page (step4)")
+	{
+		unhide the cancel button and redirect to review page
+		make sure the new change is carried across to the review page  
+	}
+
+	in the step 2 and 3 action method 
+	if(request.urlreferer == "review page (step4)")
+	{
+		 change link name 'back' to 'cancel' button and redirect to review page
+		 make sure the new change is carried across to the review page  
+	}
+
+	refactor and then create a method()
+
+
+	call this instead in the actions method to handle back link behaviour
+	public void UnhideOrChangeLinkName( ViewName _viewName, string nameToAssign)
+	{
+		if(step2 or step3)
+			change the 'back' link button name to 'cancel' (nameToAssign)
+
+		if(step1)
+			unhide the cancel button 
+
+	}
+
+
+
 	if current step is review 
 		change the back button name from 'back' to 'cancel' and the url of 'cancel' to go to review
+		
 
+	public registration Journey:
 	methodology on how to create the registeration journey -> use if org.private or if org.public
-	
+*************************************************************************************************************************************************
 
+TODAY:
+		merge between alpha and beta is now done
+		create a new working branch  from task work item in vso
+		work on tariks design changes on submission and registration half done
+
+		edit journeys now work retest and clean up code in the morning
+		Bug:
+		also when cancel is clicked if you edit a field the cancel should ignore the edit, but it still persists
+		so i have to save the original data in a TempData["temp"] and if cancel is clicked then push that back into the stash model as this is should be the data before any edit
+		Do all the text and UI changes in the morning
+		*************************************************************************************************************************************
