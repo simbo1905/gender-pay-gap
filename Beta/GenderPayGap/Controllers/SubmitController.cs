@@ -300,7 +300,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             @return = new Return()
             {
-                AccountingDate = DateTime.Now,
+                AccountingDate = gExpectStartDate,
                 CompanyLinkToGPGInfo = model.CompanyLinkToGPGInfo,
                 DiffMeanBonusPercent = model.DiffMeanBonusPercent,
                 DiffMeanHourlyPayPercent = model.DiffMeanHourlyPayPercent,
@@ -320,7 +320,6 @@ namespace GenderPayGap.WebUI.Controllers
                 MaleMiddlePayBand = model.MaleMiddlePayBand,
                 MaleUpperPayBand = model.MaleUpperPayBand,
                 Status = ReturnStatuses.Draft,
-                //Modified                  = model.Modified,
                 OrganisationId = model.OrganisationId
             };
 
