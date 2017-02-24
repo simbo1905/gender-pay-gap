@@ -55,44 +55,45 @@ namespace GenderPayGap.WebUI.Classes
             return results;
         }
 
-        //Find function
-        //public PublicSectorOrg this[int code]
+    
+        List<PublicSectorOrg> _List = null;
+        List<PublicSectorOrg> List
+        {
+            get
+            {
+                if (_List == null) _List = this.ToList<PublicSectorOrg>();
+                return List;
+            }
+        }
+        public PublicSectorOrg Find(string search)
+        {
+            return List.FirstOrDefault(o => o.OrgName.ContainsI(search));
+        }
+
+        public PublicSectorOrg this[string orgName]
+        {
+            get
+            {
+                if (string.IsNullOrWhiteSpace(orgName)) return null;
+                foreach (PublicSectorOrg setting in this)
+                {
+                    if (setting.OrgName.EqualsI(orgName)) return setting;
+                }
+                return null;
+            }
+        }
+
+        //internal PublicSectorOrg Default
         //{
         //    get
         //    {
-        //        if (code<400) return null;
         //        foreach (PublicSectorOrg setting in this)
         //        {
-        //            if (setting.Code.EqualsI(code)) return setting;
+        //            if (setting.Default == true) return setting;
         //        }
         //        return null;
         //    }
         //}
-
-        public PublicSectorOrg this[int code]
-        {
-            get
-            {
-                if (code < 400) return null;
-                foreach (PublicSectorOrg setting in this)
-                {
-                    if (setting.Code.EqualsI(code)) return setting;
-                }
-                return null;
-            }
-        }
-
-        internal PublicSectorOrg Default
-        {
-            get
-            {
-                foreach (PublicSectorOrg setting in this)
-                {
-                    if (setting.Default == true) return setting;
-                }
-                return null;
-            }
-        }
 
         protected override ConfigurationElement CreateNewElement()
         {
@@ -100,7 +101,7 @@ namespace GenderPayGap.WebUI.Classes
         }
         protected override object GetElementKey(ConfigurationElement element)
         {
-            return ((PublicSectorOrg)element).Code;
+            return ((PublicSectorOrg)element).OrgName;
         }
 
         public void Add(PublicSectorOrg element)
@@ -161,92 +162,42 @@ namespace GenderPayGap.WebUI.Classes
         public PublicSectorOrg() : base()
         {
         }
-        public PublicSectorOrg(int code)
-        {
-            Code = code;
-        }
 
         public override bool IsReadOnly()
         {
             return true;
         }
 
-        [ConfigurationProperty("code", IsKey = true, IsRequired = true)]
-        public int Code
+        [ConfigurationProperty("orgName", IsKey = true, IsRequired = true)]
+        public string  OrgName
         {
             get
             {
-                var result = (int)base["code"];
+                var result = (string)base["orgName"];
                 return result;
             }
             set
             {
-                base["code"] = value;
+                base["orgName"] = value;
             }
         }
 
-        [ConfigurationProperty("title", IsRequired = true)]
-        public string Title
+        [ConfigurationProperty("emailPatterns", IsRequired = true)]
+        public string EmailPatterns
         {
-            get { return (string)base["title"]; }
+            get { return (string)base["emailPatterns"]; }
             set
             {
-                base["description"] = value;
+                base["emailPatterns"] = value;
             }
         }
 
-        [ConfigurationProperty("description", IsRequired = true)]
-        public string Description
-        {
-            get { return (string)base["description"]; }
-            set
-            {
-                base["description"] = value;
-            }
-        }
 
-        [ConfigurationProperty("callToAction", IsRequired = false)]
-        public string CallToAction
+        public bool IsAuthorised(string emailAddress)
         {
-            get { return (string)base["callToAction"]; }
-            set
-            {
-                base["callToAction"] = value;
-            }
-        }
-
-        [ConfigurationProperty("actionUrl", IsRequired = false)]
-        public string ActionUrl
-        {
-            get { return (string)base["actionUrl"]; }
-            set
-            {
-                base["actionUrl"] = value;
-            }
-        }
-
-        [ConfigurationProperty("actionText", IsRequired = false,DefaultValue = "Continue")]
-        public string ActionText
-        {
-            get { return (string)base["actionText"]; }
-            set
-            {
-                base["actionText"] = value;
-            }
-        }
-
-        [ConfigurationProperty("default", IsRequired = false,DefaultValue = false)]
-        public bool Default
-        {
-            get
-            {
-                var result = (bool)base["default"];
-                return result;
-            }
-            set
-            {
-                base["default"] = value;
-            }
+            if (!emailAddress.IsEmailAddress()) throw new ArgumentException("Bad email address");
+            if (string.IsNullOrWhiteSpace(EmailPatterns)) throw new ArgumentException("Missing email pattern");
+            return emailAddress.LikeAny(EmailPatterns.SplitI(";"));
         }
 
     }
