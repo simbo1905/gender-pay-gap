@@ -25,7 +25,7 @@ namespace GenderPayGap.WebUI.Classes
         {
             if (code != 0)
             {
-                var customErrorMessage = ErrorViewModel.CustomErrorMessages.Messages[code];
+                var customErrorMessage = CustomErrorMessages.Get(code);
                 if (customErrorMessage != null && !string.IsNullOrWhiteSpace(customErrorMessage.Description)) ErrorMessage = customErrorMessage.Description;
             }
             if (!string.IsNullOrWhiteSpace(ErrorMessage))base.ErrorMessage = ErrorMessage;

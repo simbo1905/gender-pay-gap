@@ -17,12 +17,34 @@ namespace GenderPayGap.WebUI.Controllers
     [Route("{action}")]
     public class SubmitController : BaseController
     {
-
+        #region Initialisation
         public SubmitController() : base() { }
         public SubmitController(IContainer container) : base(container) { }
 
-        DateTime gExpectStartDate;
-        DateTime gExpectEndDate;
+
+        /// <summary>
+        /// This action is only used to warm up this controller on initialisation
+        /// </summary>
+        /// <returns></returns>
+        [Route("Init")]
+        public ActionResult Init()
+        {
+#if DEBUG
+            MvcApplication.Log.WriteLine("Submit Controller Initialised");
+#endif
+            return new EmptyResult();
+        }
+
+        /// <summary>
+        /// This action is used to redirect the user to the starting action when only the controller is specified in the url and no action
+        /// </summary>
+        /// <returns></returns>
+        [Route]
+        public ActionResult Redirect()
+        {
+            return RedirectToAction("Step1");
+        }
+        #endregion
 
         [Route("Step1")]
         [HttpGet]
@@ -39,8 +61,6 @@ namespace GenderPayGap.WebUI.Controllers
 
             var expectStartDate = GetCurrentAccountYearStartDate(Org);
             var expectEndDate = expectStartDate.AddYears(1).Date.AddDays(1);
-            gExpectStartDate = expectStartDate;
-            gExpectEndDate = expectEndDate;
 
             var @return = Repository.GetAll<Return>().OrderByDescending
                 (r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId && r.AccountingDate >= expectStartDate && r.AccountingDate < expectEndDate);

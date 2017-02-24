@@ -5,13 +5,32 @@ using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.Owin.Security;
+using Autofac;
 
 namespace GenderPayGap.WebUI.Controllers
 {
     [RoutePrefix("Home")]
     [Route("{action}")]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
+        #region Initialisation
+        public HomeController() : base() { }
+        public HomeController(IContainer container) : base(container) { }
+
+
+        /// <summary>
+        /// This action is only used to warm up this controller on initialisation
+        /// </summary>
+        /// <returns></returns>
+        [Route("Init")]
+        public ActionResult Init()
+        {
+#if DEBUG
+            MvcApplication.Log.WriteLine("Home Controller Initialised");
+#endif
+            return new EmptyResult();
+        }
+        #endregion
         [Route("~/")]
         public ActionResult Redirect()
         {

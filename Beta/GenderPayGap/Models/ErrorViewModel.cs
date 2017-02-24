@@ -13,7 +13,8 @@ namespace GenderPayGap.WebUI.Models
     {
         public ErrorViewModel(int code, object parameters=null)
         {
-            var customErrorMessage = CustomErrorMessages.Messages[code] ?? CustomErrorMessages.Messages.Default;
+            Code = code;
+            var customErrorMessage = CustomErrorMessages.Get(code) ?? CustomErrorMessages.Default;
 
             Title = customErrorMessage.Title;
             Description = customErrorMessage.Description;
@@ -27,24 +28,14 @@ namespace GenderPayGap.WebUI.Models
                 {
                     var value = prop.GetValue(parameters, null) as string;
                     if (string.IsNullOrWhiteSpace((prop.Name)) || string.IsNullOrWhiteSpace(value)) continue;
-                    Title = customErrorMessage.Title.ReplaceI(""+prop.Name+"",value);
-                    Description = customErrorMessage.Description.ReplaceI("" + prop.Name + "", value);
-                    CallToAction = customErrorMessage.CallToAction.ReplaceI("" + prop.Name + "", value);
-                    ActionUrl = customErrorMessage.ActionUrl.ReplaceI("" + prop.Name + "", value);
-                    ActionText = customErrorMessage.ActionText.ReplaceI("" + prop.Name + "", value);
+                    Title = customErrorMessage.Title.ReplaceI("{"+prop.Name+"}",value);
+                    Description = customErrorMessage.Description.ReplaceI("{" + prop.Name + "}", value);
+                    CallToAction = customErrorMessage.CallToAction.ReplaceI("{" + prop.Name + "}", value);
+                    ActionUrl = customErrorMessage.ActionUrl.ReplaceI("{" + prop.Name + "}", value);
+                    ActionText = customErrorMessage.ActionText.ReplaceI("{" + prop.Name + "}", value);
                 }
         }
-
-        static CustomErrorMessagesSection _CustomErrorMessages = null;
-        public static CustomErrorMessagesSection CustomErrorMessages
-        {
-            get
-            {
-                if (_CustomErrorMessages == null) _CustomErrorMessages = (CustomErrorMessagesSection)ConfigurationManager.GetSection("CustomErrorMessages");
-                return _CustomErrorMessages;
-            }
-        }
-
+        public int Code { get; private set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public string CallToAction { get; set; }
