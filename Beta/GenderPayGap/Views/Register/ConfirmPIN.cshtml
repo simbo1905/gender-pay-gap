@@ -5,11 +5,11 @@
 
 <main id="content" role="main">
     <div class="grid-row">
-        @Html.ValidationSummary("", new { @class = "text-danger" })
 
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
+            @Html.ValidationSummary("", new { @class = "text-danger" })
 
             <div class="column-full">
                 <h1 class="heading-large">
@@ -18,15 +18,12 @@
                 <br>
                 <div class="form-group ">
                     @Html.LabelFor(model => model.PIN, htmlAttributes: new { @class = "form-label" })
-                    @Html.EditorFor(model => model.PIN, null, new { htmlAttributes = new { @placeholder = "PIN Code", @class = "form-control" } })
+                    @Html.EditorFor(model => model.PIN, null, new { htmlAttributes = new { @placeholder = "PIN Code", @class = "form-control",style= "text-transform: uppercase;" } })
                 </div>
 
                 <details>
-                    <summary>Gender pay gap pin: what it is Problems with your gender pay gap pin</summary>
-                </details>			<details>
                     <summary>Problems with your activation pin?</summary>
                     <p>
-                        Lost your pin? 	
                         @if (Model.AllowResend)
                         {
                             <a id="forgotten-password" href="@Url.Action("SendPIN")">Request a new pin</a>

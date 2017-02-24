@@ -255,6 +255,7 @@
   <ItemGroup>
     <Compile Include="Classes\API\CompaniesHouseAPI.cs" />
     <Compile Include="Classes\Attributes\AuthAttribute.cs" />
+    <Compile Include="Classes\Attributes\PinAttribute.cs" />
     <Compile Include="Classes\AuthorizationManager.cs" />
     <Compile Include="Classes\BaseClasses\BaseController.cs" />
     <Compile Include="Classes\API\GovNotifyAPI.cs" />
@@ -585,16 +586,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>17222</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44371/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>

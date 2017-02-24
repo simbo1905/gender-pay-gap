@@ -38,5 +38,17 @@
     <Setting Name="PublicAccountingDate" Type="System.DateTime" Scope="Application">
       <Value Profile="(Default)">2017-03-31</Value>
     </Setting>
+    <Setting Name="PINChars" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">123456789ABCDEF</Value>
+    </Setting>
+    <Setting Name="PINLength" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">6</Value>
+    </Setting>
+    <Setting Name="PinRegex" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">^[A-Za-z0-9]{6}$</Value>
+    </Setting>
+    <Setting Name="PinRegexError" Type="System.String" Scope="Application">
+      <Value Profile="(Default)">PIN code must contain 6 alpha or numeric characters</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
