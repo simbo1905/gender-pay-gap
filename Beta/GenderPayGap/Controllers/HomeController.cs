@@ -37,6 +37,7 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("LogOut")]
         public ActionResult Logout()
         {
+            Session.Abandon();
             Request.GetOwinContext().Authentication.SignOut();
             return RedirectToAction("Step1","Submit");
         }
@@ -44,8 +45,10 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("TimeOut")]
         public ActionResult TimeOut()
         {
+            Session.Abandon();
             Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("Step1","Submit") });
             return null;
         }
+
     }
 }
