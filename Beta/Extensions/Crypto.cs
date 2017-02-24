@@ -108,6 +108,34 @@ namespace Extensions
             return new string(chars);
         }
 
+        public static string GeneratePasscode(int passcodeLength = 8)
+        {
+            return GeneratePassword(Text.AlphaNumericChars.ToArray(), passcodeLength);
+        }
+
+        public static string GeneratePasscode(char[] charset, int passcodeLength)
+        {
+            //Ensure characters are distict and mixed up
+            charset = charset.Distinct().ToList().Randomise().ToArray();
+
+            var chars = new char[passcodeLength];
+
+            //Generate a load of random numbers
+            var randomData = new byte[chars.Length];
+            using (var generator = new RNGCryptoServiceProvider())
+            {
+                generator.GetBytes(randomData);
+            }
+
+            //use the randome number to pick from the character set
+            Parallel.For(0, chars.Length, i =>
+            {
+                chars[i] = charset[randomData[i] % charset.Length];
+            });
+
+            return new string(chars);
+        }
+
         /// <summary>
         /// Encodes specified data with bas64 encoding.
         /// </summary>

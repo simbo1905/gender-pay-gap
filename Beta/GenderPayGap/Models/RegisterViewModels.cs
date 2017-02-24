@@ -184,7 +184,7 @@ namespace GenderPayGap.WebUI.Models
         }
         [Required(AllowEmptyStrings=false,ErrorMessage="You must enter a PIN code")]
         [Display(Name = "Enter pin")]
-        [Range(1,999999,ErrorMessage = "Pin code must be between 1 and 999999")]
+        [Pin()]
         public string PIN { get; set; }
         public bool AllowResend { get; set; }
         public string Remaining { get; set; }

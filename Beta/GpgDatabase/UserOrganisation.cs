@@ -17,8 +17,8 @@ namespace GenderPayGap.Models.SqlDatabase
         [Key, Column(Order = 1)]
         public long OrganisationId { get; set; }
 
-        [MaxLength(20)]
-        public string PINCode { get; set; }
+        [MaxLength(250), MinLength(64)]
+        public string PINHash { get; set; }
 
         public Nullable<System.DateTime> PINSentDate { get; set; }
 

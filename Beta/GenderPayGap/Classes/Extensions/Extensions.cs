@@ -64,7 +64,8 @@ namespace GenderPayGap.WebUI.Classes
             if (string.IsNullOrWhiteSpace(verifyCode)) throw new ArgumentNullException("verifyCode");
 
             //If internal user the load it using the identifier as the UserID
-            return repository.GetAll<User>().FirstOrDefault(u => u.EmailVerifyCode == verifyCode);
+            var verifyHash = verifyCode.GetSHA512Checksum();
+            return repository.GetAll<User>().FirstOrDefault(u => u.EmailVerifyHash == verifyHash);
         }
 
         public static UserOrganisation FindUserOrganisation(this IRepository repository, IPrincipal principal)
@@ -135,6 +136,11 @@ namespace GenderPayGap.WebUI.Classes
         }
 
         #endregion
+
+        public static string ResolveUrl(this Controller controller,RedirectToRouteResult redirectToRouteResult)
+        {
+            return controller.Url.RouteUrl(redirectToRouteResult.RouteName, redirectToRouteResult.RouteValues);
+        }
 
     }
 }

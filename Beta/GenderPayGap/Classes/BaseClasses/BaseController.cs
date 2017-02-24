@@ -109,14 +109,13 @@ namespace GenderPayGap
                 if (currentUser.EmailVerifySendDate.EqualsI(null, DateTime.MinValue))
                     return View("CustomError", new ErrorViewModel(1100));
 
-                //Allow resend of verification if sent over 24 hours ago
-                if (currentUser.EmailVerifySendDate.Value.AddHours(WebUI.Properties.Settings.Default.EmailVerificationExpiryHours) < DateTime.Now)
+                //If code has expired prompt user to click to request a new one
+                if (currentUser.EmailVerifySendDate.Value.AddHours(Settings.Default.EmailVerificationExpiryHours) < DateTime.Now)
                     return View("CustomError", new ErrorViewModel(1101));
 
-                //Otherwise prompt user to check account only
-                var remainingTime = currentUser.EmailVerifySendDate.Value.AddHours(WebUI.Properties.Settings.Default.EmailVerificationMinResendHours) - DateTime.Now;
-                if (remainingTime > TimeSpan.Zero)
-                    return View("CustomError", new ErrorViewModel(1102, new {remainingTime = remainingTime.ToFriendly(maxParts: 2)}));
+                //If code min time hasnt elapsed tell them to wait
+                var remainingTime = currentUser.EmailVerifySendDate.Value.AddHours(Settings.Default.EmailVerificationMinResendHours) - DateTime.Now;
+                if (remainingTime > TimeSpan.Zero)return View("CustomError", new ErrorViewModel(1102, new {remainingTime = remainingTime.ToFriendly(maxParts: 2)}));
 
                 return View("CustomError", new ErrorViewModel(1103));
             }
@@ -125,19 +124,18 @@ namespace GenderPayGap
             var userOrg = Repository.GetUserOrg(currentUser);
 
             //If they didnt have started organisation registration step then prompt to continue registration
-            if (userOrg == null)
-                return View("CustomError", new ErrorViewModel(1104));
+            if (userOrg == null)return View("CustomError", new ErrorViewModel(1104));
 
             if (userOrg.PINConfirmedDate.EqualsI(null, DateTime.MinValue))
             {
-                //Allow resend of PIN if sent over 2 weeks ago
-                if (userOrg.PINSentDate.EqualsI(null, DateTime.MinValue))
-                    return RedirectToAction("Step3", "Register");
-                if (userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostExpiryDays) < DateTime.Now)
-                    return RedirectToAction("ConfirmPIN","Register");
-                var remainingTime = userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
-                if (remainingTime > TimeSpan.Zero)
-                    return View("CustomError", new ErrorViewModel(1107, new {remainingTime = remainingTime.ToFriendly(maxParts: 2)}));
+                //If pin never sent restart step3
+                if (userOrg.PINSentDate.EqualsI(null, DateTime.MinValue))return RedirectToAction("Step3", "Register");
+
+                //If PIN sent and expired then prompt to request a new pin
+                if (userOrg.PINSentDate.Value.AddDays(Settings.Default.PinInPostExpiryDays) < DateTime.Now)
+                    return View("CustomError", new ErrorViewModel(1106));
+
+                //If PIN Not expired redirect to confirmPIN where they can either enter the same pin or request a new one 
                 return RedirectToAction("ConfirmPIN","Register");
             }
 
