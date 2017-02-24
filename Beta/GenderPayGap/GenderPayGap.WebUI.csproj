@@ -254,7 +254,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\API\CompaniesHouseAPI.cs" />
-    <Compile Include="Classes\AuthAttribute.cs" />
+    <Compile Include="Classes\Attributes\AuthAttribute.cs" />
     <Compile Include="Classes\AuthorizationManager.cs" />
     <Compile Include="Classes\BaseClasses\BaseController.cs" />
     <Compile Include="Classes\API\GovNotifyAPI.cs" />
@@ -263,11 +263,11 @@
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Classes\Extensions\Extensions.cs" />
     <Compile Include="Classes\CustomErrorMessagesConfig.cs" />
-    <Compile Include="Classes\StringLengthAttribute.cs" />
-    <Compile Include="Classes\RequiredAttribute.cs" />
-    <Compile Include="Classes\RangeAttribute.cs" />
-    <Compile Include="Classes\PasswordAttribute.cs" />
-    <Compile Include="Classes\SpamProtectionAttribute.cs" />
+    <Compile Include="Classes\Attributes\StringLengthAttribute.cs" />
+    <Compile Include="Classes\Attributes\RequiredAttribute.cs" />
+    <Compile Include="Classes\Attributes\RangeAttribute.cs" />
+    <Compile Include="Classes\Attributes\PasswordAttribute.cs" />
+    <Compile Include="Classes\Attributes\SpamProtectionAttribute.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
