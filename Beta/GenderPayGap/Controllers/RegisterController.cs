@@ -12,6 +12,7 @@ using System.Net;
 using System.Security.Principal;
 using System.Web.WebPages;
 using Thinktecture.IdentityModel.Mvc;
+using System.Configuration;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -21,6 +22,18 @@ namespace GenderPayGap.WebUI.Controllers
     {
         public RegisterController():base(){}
         public RegisterController(IContainer container): base(container){}
+
+
+        static PublicSectorOrgsSection _PublicSectorOrgs = null;
+        private static PublicSectorOrgsSection PublicSectorOrgs
+        {
+            get
+            {
+                if (_PublicSectorOrgs == null) _PublicSectorOrgs = (PublicSectorOrgsSection)ConfigurationManager.GetSection("PublicSectorOrgs");
+                return _PublicSectorOrgs;
+            }
+        }
+
 
         [Route]
         public ActionResult Redirect()
@@ -404,6 +417,18 @@ namespace GenderPayGap.WebUI.Controllers
                             return View("Step4", model);
                         }
                     }
+                }
+
+                if (model.SectorType == SectorTypes.Public)
+                {
+                    var employer = model.Employers[employerIndex];
+                    var publicOrg = PublicSectorOrgs.Messages[employer.Name];
+                    if (!publicOrg.IsAuthorised(currentUser.EmailAddress))
+                    {
+                        ModelState.AddModelError("", "Sorry");
+                        return View("Step4", model);
+                    }
+                    
                 }
                 model.SelectedEmployerIndex = employerIndex;
             }

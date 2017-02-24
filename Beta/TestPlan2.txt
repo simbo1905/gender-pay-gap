@@ -327,3 +327,22 @@ TODAY:
 		so i have to save the original data in a TempData["temp"] and if cancel is clicked then push that back into the stash model as this is should be the data before any edit
 		Do all the text and UI changes in the morning
 ****************************************************************************************************************************************************
+
+Public Sectors Tasks:
+1.Create the XML File and input dummy Data in for at least 31 records for pagination purposes
+2.Make sure navigation for public sector works without breaking private sector registration navigation, backwards and forwards
+3.make sure that the search textfield works and also with pagination, rest registration journey both private and public sector against this point.
+4.Do Validation for email pattern, if the email registered with does not match with the they click on from the search in select your organisation then, dont let them pass 
+do modelState validation and add it to the page to throw the error.
+5.Add your organisation in the form  and make sure that they can save their organisation address details to the database 
+6.Show this on the next form step
+7.confirm and complete Saves the details in the database
+
+
+New Steps for Public Sector Journey:
+Step3: select public sectors
+Step4: Search and select your organisation
+Step4A: Add your organisation
+Step5: Confirm your organisations details -> Show this on the next form step
+
+
