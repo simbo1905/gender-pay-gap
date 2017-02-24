@@ -42,8 +42,8 @@ namespace GenderPayGap.Models.SqlDatabase
         [MaxLength(250),MinLength(64)]
         public string PasswordHash { get; set; }
 
-        [MaxLength(255)]
-        public string EmailVerifyCode { get; set; }
+        [MaxLength(250), MinLength(64)]
+        public string EmailVerifyHash { get; set; }
 
         public Nullable<System.DateTime> EmailVerifySendDate { get; set; }
 

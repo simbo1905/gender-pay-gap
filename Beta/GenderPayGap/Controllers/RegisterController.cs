@@ -19,14 +19,33 @@ namespace GenderPayGap.WebUI.Controllers
     [Route("{action}")]
     public class RegisterController : BaseController
     {
+        #region Initialisation
         public RegisterController():base(){}
         public RegisterController(IContainer container): base(container){}
 
+        /// <summary>
+        /// This action is only used to warm up this controller on initialisation
+        /// </summary>
+        /// <returns></returns>
+        [Route("Init")]
+        public ActionResult Init()
+        {
+#if DEBUG
+            MvcApplication.Log.WriteLine("Register Controller Initialised");
+#endif
+            return new EmptyResult();
+        }
+
+        /// <summary>
+        /// This action is used to redirect the user to the starting action when only the controller is specified in the url and no action
+        /// </summary>
+        /// <returns></returns>
         [Route]
         public ActionResult Redirect()
         {
             return RedirectToAction("Step1");
         }
+        #endregion
 
         [HttpGet]
         [Route("Step1")]
@@ -96,7 +115,7 @@ namespace GenderPayGap.WebUI.Controllers
             currentUser.PasswordHash = model.Password.GetSHA512Checksum();
             currentUser.EmailVerifySendDate = null;
             currentUser.EmailVerifiedDate = null;
-            currentUser.EmailVerifyCode = null;
+            currentUser.EmailVerifyHash = null;
             //Save the user to ensure UserId>0 for new status
             Repository.Insert(currentUser);
             Repository.SaveChanges();
@@ -118,7 +137,7 @@ namespace GenderPayGap.WebUI.Controllers
                 if (!this.SendVerifyEmail(currentUser.EmailAddress, verifyCode))
                     throw new Exception("Could not send verification email. Please try again later.");
 
-                currentUser.EmailVerifyCode = verifyCode;
+                currentUser.EmailVerifyHash = verifyCode.GetSHA512Checksum();
                 currentUser.EmailVerifySendDate = DateTime.Now;
                 Repository.SaveChanges();
             }
@@ -135,6 +154,7 @@ namespace GenderPayGap.WebUI.Controllers
             return true;
         }
 
+        [Auth]
         [HttpGet]
         [Route("Step2")]
         public ActionResult Step2(string code=null)
@@ -145,13 +165,14 @@ namespace GenderPayGap.WebUI.Controllers
             //Ensure the user is logged in
             if (!User.Identity.IsAuthenticated) return new HttpUnauthorizedResult();
 
-            //Ensure user has completed the registration process
+            //Ensure user is ready to verify email address 
             User currentUser;
+
             var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
             if (result == null) throw new AuthenticationException();
             var errorViewModel = result.Model as ErrorViewModel;
             if (errorViewModel == null) throw new AuthenticationException();
-            if (errorViewModel.ActionUrl != Url.Action("Step2", "Register") && errorViewModel.Description!= "You have not yet verified your email address.")
+            if (errorViewModel.ActionUrl != Url.Action("Step2", "Register") && errorViewModel.Code!=1102)
                 return result;
 
             //Allow resend of verification if sent over 24 hours ago
@@ -164,7 +185,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (currentUser.VerifyAttempts >= Properties.Settings.Default.MaxEmailVerifyAttempts && remaining > TimeSpan.Zero)
                 return View("CustomError", new ErrorViewModel(1110, new {remainingTime = remaining.ToFriendly(maxParts: 2)}));
 
-            if (currentUser.EmailVerifyCode != code)
+            if (currentUser.EmailVerifyHash != code.GetSHA512Checksum())
             {
                 currentUser.VerifyAttempts++;
                 result1 = View("CustomError", new ErrorViewModel(1111));
@@ -205,7 +226,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             //Reset the verification send date
             currentUser.EmailVerifySendDate = null;
-            currentUser.EmailVerifyCode = null;
+            currentUser.EmailVerifyHash = null;
             Repository.SaveChanges();
 
             //Call GET action which will automatically resend
@@ -219,11 +240,10 @@ namespace GenderPayGap.WebUI.Controllers
         {
             //Ensure user needs to select an organisation
             User currentUser;
-            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
-            if (result == null) throw new AuthenticationException();
-            var errorViewModel = result.Model as ErrorViewModel;
-            if (errorViewModel == null) throw new AuthenticationException();
-            if (!errorViewModel.ActionUrl.IsAny(Url.Action("Step3", "Register")))
+            var result = CheckUserRegisteredOk(out currentUser);
+            if (result == null) return new HttpUnauthorizedResult();
+            if (result is ViewResult) return result;
+            if (result is RedirectToRouteResult && !this.ResolveUrl((RedirectToRouteResult)result).EqualsI(Url.Action("Step3", "Register")))
                 return result;
 
             var model = UnstashModel<OrganisationViewModel>();
@@ -250,10 +270,10 @@ namespace GenderPayGap.WebUI.Controllers
 
             //Ensure user needs to select an organisation
             User currentUser;
-            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
-            var errorViewModel = result.Model as ErrorViewModel;
-            if (result == null || errorViewModel == null) throw new AuthenticationException();
-            if (!errorViewModel.ActionUrl.IsAny(Url.Action("Step3", "Register")))
+            var result = CheckUserRegisteredOk(out currentUser);
+            if (result == null) return new HttpUnauthorizedResult();
+            if (result is ViewResult) return result;
+            if (result is RedirectToRouteResult && !this.ResolveUrl((RedirectToRouteResult)result).EqualsI(Url.Action("Step3", "Register")))
                 return result;
 
             //TODO validate the submitted fields
@@ -302,11 +322,11 @@ namespace GenderPayGap.WebUI.Controllers
 
             //Ensure user has completed the registration process
             User currentUser;
-            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
-            if (result == null) throw new AuthenticationException();
-            var errorModel = result.Model as ErrorViewModel;
-            if (errorModel == null) throw new AuthenticationException();
-            if (!errorModel.ActionUrl.IsAny(Url.Action("Step3", "Register"))) return result;
+            var result = CheckUserRegisteredOk(out currentUser);
+            if (result == null) return new HttpUnauthorizedResult();
+            if (result is ViewResult) return result;
+            if (result is RedirectToRouteResult && !this.ResolveUrl((RedirectToRouteResult)result).EqualsI(Url.Action("Step3", "Register")))
+                return result;
 
             model.SelectedEmployerIndex = -1;
 
@@ -441,11 +461,11 @@ namespace GenderPayGap.WebUI.Controllers
         {
             //Ensure user has completed the registration process
             User currentUser;
-            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
+            var result = CheckUserRegisteredOk(out currentUser);
             if (result == null) return new HttpUnauthorizedResult();
-            var errorModel = result.Model as ErrorViewModel;
-            if (errorModel == null) throw new AuthenticationException();
-            if (errorModel.ActionUrl != Url.Action("Step3", "Register")) return result;
+            if (result is ViewResult) return result;
+            if (result is RedirectToRouteResult && !this.ResolveUrl((RedirectToRouteResult)result).EqualsI(Url.Action("Step3", "Register")))
+                return result;
 
             //Load the employers from session
             var m = UnstashModel<OrganisationViewModel>();
@@ -506,7 +526,7 @@ namespace GenderPayGap.WebUI.Controllers
                 };
                 Repository.Insert(userOrg);
             }
-            userOrg.PINCode = null;
+            userOrg.PINHash = null;
             userOrg.PINSentDate = null;
             Repository.SaveChanges();
 
@@ -520,11 +540,11 @@ namespace GenderPayGap.WebUI.Controllers
         {
             //Ensure user has completed the registration process up to PIN confirmation
             User currentUser;
-            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
+            var result = CheckUserRegisteredOk(out currentUser);
             if (result == null) return new HttpUnauthorizedResult();
-            var errorModel = result.Model as ErrorViewModel;
-            if (errorModel == null) throw new AuthenticationException();
-            if (!errorModel.ActionUrl.IsAny(Url.Action("SendPIN", "Register"))) return result;
+            if (result is ViewResult) return result;
+            if (result is RedirectToRouteResult && !this.ResolveUrl((RedirectToRouteResult)result).EqualsI(Url.Action("Step3", "Register"), Url.Action("ConfirmPIN", "Register")))
+                return result;
 
             //Get the user organisation
             var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
@@ -533,17 +553,17 @@ namespace GenderPayGap.WebUI.Controllers
             var org = Repository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == userOrg.OrganisationId);
 
             //If a pin has never been sent or resend button submitted then send one immediately
-            if (string.IsNullOrWhiteSpace(userOrg.PINCode) || userOrg.PINSentDate.EqualsI(null, DateTime.MinValue) || Request.HttpMethod.EqualsI("POST"))
+            if (string.IsNullOrWhiteSpace(userOrg.PINHash) || userOrg.PINSentDate.EqualsI(null, DateTime.MinValue) || Request.HttpMethod.EqualsI("POST"))
             {
                 try
                 {
                     //Marke the user org as ready to send a pin
-                    userOrg.PINCode = null;
+                    userOrg.PINHash = null;
                     userOrg.PINSentDate = null;
                     Repository.SaveChanges();
 
                     //Generate a new pin
-                    var pin = Numeric.Rand(0, 999999);
+                    var pin = Crypto.GeneratePasscode(Properties.Settings.Default.PINChars.ToCharArray(),Properties.Settings.Default.PINLength);
 
                     //Try and send the PIN in post
                     if (!this.SendPinInPost(currentUser, org, pin.ToString()))
@@ -554,7 +574,7 @@ namespace GenderPayGap.WebUI.Controllers
                         throw new Exception("Could not send confirmation email. Please try again later.");
 
                     //Save the PIN and confirm code
-                    userOrg.PINCode = pin.ToString("000000");
+                    userOrg.PINHash = pin.GetSHA512Checksum();
                     userOrg.PINSentDate = DateTime.Now;
                     Repository.SaveChanges();
                 }
@@ -566,7 +586,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
 
             //Prepare view parameters
-            ViewBag.Resend = !string.IsNullOrWhiteSpace(userOrg.PINCode) && !userOrg.PINSentDate.EqualsI(null, DateTime.MinValue)
+            ViewBag.Resend = !string.IsNullOrWhiteSpace(userOrg.PINHash) && !userOrg.PINSentDate.EqualsI(null, DateTime.MinValue)
                 && userOrg.PINSentDate.Value.AddDays(Properties.Settings.Default.PinInPostMinRepostDays) < DateTime.Now;
             ViewBag.UserFullName = currentUser.Fullname;
             ViewBag.UserJobTitle = currentUser.JobTitle;
@@ -599,11 +619,10 @@ namespace GenderPayGap.WebUI.Controllers
         {
             //Ensure user has completed the registration process
             User currentUser;
-            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
+            var result = CheckUserRegisteredOk(out currentUser);
             if (result == null) return new HttpUnauthorizedResult();
-            var errorViewModel = result.Model as ErrorViewModel;
-            if (errorViewModel == null) throw new AuthenticationException();
-            if (errorViewModel.ActionUrl != Url.Action("ConfirmPIN", "Register"))
+            if (result is ViewResult && !((ErrorViewModel)((ViewResult)result).Model).Code.EqualsI(1106)) return result;
+            if (result is RedirectToRouteResult && !this.ResolveUrl((RedirectToRouteResult)result).EqualsI(Url.Action("ConfirmPIN", "Register")))
                 return result;
 
             //Get the user organisation
@@ -634,11 +653,10 @@ namespace GenderPayGap.WebUI.Controllers
         {
             //Ensure user has completed the registration process
             User currentUser;
-            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
+            var result = CheckUserRegisteredOk(out currentUser);
             if (result == null) return new HttpUnauthorizedResult();
-            var errorViewModel = result.Model as ErrorViewModel;
-            if (errorViewModel == null) throw new AuthenticationException();
-            if (errorViewModel.ActionUrl != Url.Action("ConfirmPIN", "Register"))
+            if (result is ViewResult && (((ErrorViewModel)((ViewResult)result).Model).Code != 1107)) return result;
+            if (result is RedirectToRouteResult && !this.ResolveUrl((RedirectToRouteResult)result).EqualsI(Url.Action("ConfirmPIN", "Register")))
                 return result;
 
             //Ensure they have entered a PIN
@@ -658,7 +676,7 @@ namespace GenderPayGap.WebUI.Controllers
                 return View("CustomError", new ErrorViewModel(1113,new {remainingTime= remaining.ToFriendly(maxParts: 2)}));
             }
 
-            if (userOrg.PINCode == model.PIN)
+            if (userOrg.PINHash == model.PIN.ToUpper().GetSHA512Checksum())
             {
                 //Set the user org as confirmed
                 userOrg.PINConfirmedDate = DateTime.Now;
@@ -695,11 +713,10 @@ namespace GenderPayGap.WebUI.Controllers
         {
             //Ensure user has completed the registration process
             User currentUser;
-            var result = CheckUserRegisteredOk(out currentUser) as ViewResult;
+            var result = CheckUserRegisteredOk(out currentUser);
             if (result == null) return new HttpUnauthorizedResult();
-            var errorViewModel = result.Model as ErrorViewModel;
-            if (errorViewModel == null) throw new AuthenticationException();
-            if (errorViewModel.ActionUrl != Url.Action("Step1", "Submit"))
+            if (result is ViewResult) return result;
+            if (result is RedirectToRouteResult && !this.ResolveUrl((RedirectToRouteResult)result).EqualsI(Url.Action("Step1", "Submit")))
                 return result;
 
             //Show the confirmation view

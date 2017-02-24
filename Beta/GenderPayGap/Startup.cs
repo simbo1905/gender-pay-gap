@@ -43,8 +43,8 @@ namespace GenderPayGap
                 RedirectUri = ConfigurationManager.AppSettings["GpgWebServer"],
                 ResponseType = "id_token token",
                 UseTokenLifetime = false,
-                CallbackPath = new PathString("/login/callback"),//MUST HAVE THIS TO PREVENT CALLBACK LOOP
-                //CallbackPath = new PathString("/"),//MUST HAVE THIS TO PREVENT CALLBACK LOOP
+                //CallbackPath = new PathString("/login/callback"),//WARNING: Used for testing only which forces a loop
+                CallbackPath = new PathString("/"),//MUST HAVE THIS TO PREVENT CALLBACK LOOP
                 Scope = "openid profile roles " + ConfigurationManager.AppSettings["GpgApiScope"],
                 SignInAsAuthenticationType = "Cookies",
                 Notifications = new OpenIdConnectAuthenticationNotifications
