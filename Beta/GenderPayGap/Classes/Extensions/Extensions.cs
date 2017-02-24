@@ -114,5 +114,27 @@ namespace GenderPayGap.WebUI.Classes
             return new MvcHtmlString(builder.ToString(TagRenderMode.SelfClosing));
         }
         #endregion
+
+        #region Authentication
+        public static void ExpireAllCookies(this HttpContextBase context)
+        {
+            int cookieCount = context.Request.Cookies.Count;
+            for (var i = 0; i < cookieCount; i++)
+            {
+                var cookie = context.Request.Cookies[i];
+                if (cookie != null)
+                {
+                    var cookieName = cookie.Name;
+                    var expiredCookie = new HttpCookie(cookieName) { Expires = DateTime.Now.AddDays(-1) };
+                    context.Response.Cookies.Add(expiredCookie); // overwrite it
+                }
+            }
+
+            // clear cookies server side
+            context.Request.Cookies.Clear();
+        }
+
+        #endregion
+
     }
 }

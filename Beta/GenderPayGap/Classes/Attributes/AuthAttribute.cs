@@ -34,6 +34,7 @@ namespace GenderPayGap.WebUI.Classes
             else if (IdentityRedirects.Count >= 10)
             {
                 IdentityRedirects = null;
+                filterContext.HttpContext.ExpireAllCookies();
                 filterContext.Result = new RedirectResult("/Error/?code=310");
             }
             else

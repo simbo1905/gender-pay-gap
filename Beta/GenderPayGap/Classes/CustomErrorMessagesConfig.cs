@@ -186,7 +186,7 @@ namespace GenderPayGap.WebUI.Classes
             }
         }
 
-        [ConfigurationProperty("description", IsRequired = true)]
+        [ConfigurationProperty("description", IsRequired = false)]
         public string Description
         {
             get { return (string)base["description"]; }
