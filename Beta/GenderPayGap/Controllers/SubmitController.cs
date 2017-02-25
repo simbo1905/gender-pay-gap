@@ -328,7 +328,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             @return = new Return()
             {
-                AccountingDate = gExpectStartDate,
+                AccountingDate = model.AccountingDate,
                 CompanyLinkToGPGInfo = model.CompanyLinkToGPGInfo,
                 DiffMeanBonusPercent = model.DiffMeanBonusPercent,
                 DiffMeanHourlyPayPercent = model.DiffMeanHourlyPayPercent,
