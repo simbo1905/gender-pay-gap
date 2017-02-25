@@ -50,11 +50,12 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpGet]
         public ActionResult Step1 /*Create*/()
         {
-            ShowAndActivateCancelButtonLink();
-            
+            //Ensure user has completed the registration process
             User currentUser;
-            var errorView = CheckUserRegisteredOk(out currentUser);
-            if (errorView != null) return errorView;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
+
+            ShowAndActivateCancelButtonLink();
 
             var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
             var Org = Repository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == userOrg.OrganisationId);
@@ -151,9 +152,10 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("Step1")]
         public ActionResult Step1/*Create*/(ReturnViewModel model)
         {
+            //Ensure user has completed the registration process
             User currentUser;
-            var errorView = CheckUserRegisteredOk(out currentUser);
-            if (errorView != null) return errorView;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
 
             ModelState.Remove("FirstName");
             ModelState.Remove("LastName");
@@ -179,11 +181,12 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("Step2")]
         public ActionResult Step2 /*Create*/()
         {
-            ChangeAndActivateBackButtonLinkName();
-
+            //Ensure user has completed the registration process
             User currentUser;
-            var errorView = CheckUserRegisteredOk(out currentUser);
-            if (errorView != null) return errorView;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
+
+            ChangeAndActivateBackButtonLinkName();
 
             //if (TempData.ContainsKey("ErrorMessage")) ModelState.AddModelError("", TempData["ErrorMessage"].ToString());
 
@@ -208,9 +211,10 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("Step2")]
         public ActionResult Step2(ReturnViewModel model, string command)
         {
+            //Ensure user has completed the registration process
             User currentUser;
-            var errorView = CheckUserRegisteredOk(out currentUser);
-            if (errorView != null) return errorView;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
 
             if (!ModelState.IsValid) return View(model);
 
@@ -229,11 +233,12 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("Step3")]
         public ActionResult Step3 /*GPGInfoLink*/()
         {
-            ChangeAndActivateBackButtonLinkName();
-
+            //Ensure user has completed the registration process
             User currentUser;
-            var errorView = CheckUserRegisteredOk(out currentUser);
-            if (errorView != null) return errorView;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
+
+            ChangeAndActivateBackButtonLinkName();
 
             ReturnViewModel model = null;
 
@@ -263,9 +268,10 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("Step3")]
         public ActionResult Step3 /*GPGInfoLink*/(ReturnViewModel model, string command)
         {
+            //Ensure user has completed the registration process
             User currentUser;
-            var errorView = CheckUserRegisteredOk(out currentUser);
-            if (errorView != null) return errorView;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
 
             StashModel(model);
 
@@ -282,9 +288,10 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("Step4")]
         public ActionResult Step4  /*Confirm*/()
         {
+            //Ensure user has completed the registration process
             User currentUser;
-            var errorView = CheckUserRegisteredOk(out currentUser);
-            if (errorView != null) return errorView;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
 
             ReturnViewModel model = null;
 
@@ -298,11 +305,12 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("Step4")]
         public ActionResult Step4  /*Confirm*/(ReturnViewModel model, string command)
         {
-            // model.AccountingDate = gExpectStartDate;
-
+            //Ensure user has completed the registration process
             User currentUser;
-            var errorView = CheckUserRegisteredOk(out currentUser);
-            if (errorView != null) return errorView;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
+
+            // model.AccountingDate = gExpectStartDate;
 
             if (!ModelState.IsValid) return View(model);
 
@@ -357,9 +365,10 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("Step5")]
         public ActionResult Step5(/*long id = 1*/ )
         {
+            //Ensure user has completed the registration process
             User currentUser;
-            var errorView = CheckUserRegisteredOk(out currentUser);
-            if (errorView != null) return errorView;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
 
             var model = UnstashModel<ReturnViewModel>();
 
@@ -383,9 +392,10 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("Step5")]
         public ActionResult Step5(Return model)
         {
+            //Ensure user has completed the registration process
             User currentUser;
-            var errorView = CheckUserRegisteredOk(out currentUser);
-            if (errorView != null) return errorView;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
 
             //var original = GpgDatabase.Default.Return.Find(model.ReturnId);
             var original = Repository.GetAll<Return>().FirstOrDefault(m => m.ReturnId == model.ReturnId);
@@ -421,9 +431,10 @@ namespace GenderPayGap.WebUI.Controllers
 
         public ActionResult Details(int id = 1)
         {
+            //Ensure user has completed the registration process
             User currentUser;
-            var errorView = CheckUserRegisteredOk(out currentUser);
-            if (errorView != null) return errorView;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
 
             //  var qid = Repository.GetAll<Return>().FirstOrDefault(r => r.ReturnId == id);
             //  return View(qid);
@@ -433,8 +444,6 @@ namespace GenderPayGap.WebUI.Controllers
             // var @return = Repository.GetAll<Return>().OrderByDescending
             //     (r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId && r.AccountingDate >= gExpectStartDate && r.AccountingDate < gExpectEndDate);
             return View(@return);
-
-
         }
 
         public void ShowAndActivateCancelButtonLink()

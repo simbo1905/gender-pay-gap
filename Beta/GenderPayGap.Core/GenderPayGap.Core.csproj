@@ -135,9 +135,11 @@
     <Reference Include="System.Transactions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\PagedResult.cs" />
     <Compile Include="Classes\SqlRepository.cs" />
     <Compile Include="Classes\UnitOfWork.cs" />
     <Compile Include="Interfaces\IDbContext.cs" />
+    <Compile Include="Interfaces\IPagedRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
     <Compile Include="Interfaces\IUnitOfWork.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
