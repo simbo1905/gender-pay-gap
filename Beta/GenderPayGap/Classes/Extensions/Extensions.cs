@@ -142,5 +142,17 @@ namespace GenderPayGap.WebUI.Classes
             return controller.Url.RouteUrl(redirectToRouteResult.RouteName, redirectToRouteResult.RouteValues);
         }
 
+
+        public static IEnumerable<T> Page<T>(this IEnumerable<T> list, int pageSize, int page)
+        {
+            var skip = (page - 1) * pageSize;
+            return list.Skip(skip).Take(pageSize);
+        }
+
+        public static IQueryable<T> Page<T>(this IQueryable<T> query, int pageSize, int page)
+        {
+            var skip = (page - 1) * pageSize;
+            return query.Skip(skip).Take(pageSize);
+        }
     }
 }
