@@ -65,7 +65,11 @@ namespace GenderPayGap.WebUI.Models
 
         public bool Expired { get; set; }
         public bool Verified { get; set; }
+        public bool Retry { get; set; }
+        public bool Resend { get; set; }
         public string EmailAddress { get; set; }
+        public bool Sent { get; internal set; }
+        public bool WrongCode { get; internal set; }
     }
 
     public class OrganisationViewModel
@@ -184,7 +188,7 @@ namespace GenderPayGap.WebUI.Models
         }
         [Required(AllowEmptyStrings=false,ErrorMessage="You must enter a PIN code")]
         [Display(Name = "Enter pin")]
-        [Range(1,999999,ErrorMessage = "Pin code must be between 1 and 999999")]
+        [Pin()]
         public string PIN { get; set; }
         public bool AllowResend { get; set; }
         public string Remaining { get; set; }
