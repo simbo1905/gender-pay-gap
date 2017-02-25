@@ -16,13 +16,13 @@ using System.Threading.Tasks;
 using System.Configuration;
 using Autofac;
 using Extensions;
+using System.Web;
 
 [assembly: OwinStartupAttribute(typeof(GenderPayGap.Startup))]
 namespace GenderPayGap
 {
     public partial class Startup
     {
-
         public void Configuration(IAppBuilder app)
         {
             AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimTypes.Subject;
@@ -43,6 +43,7 @@ namespace GenderPayGap
                 RedirectUri = ConfigurationManager.AppSettings["GpgWebServer"],
                 ResponseType = "id_token token",
                 UseTokenLifetime = false,
+                //CallbackPath = new PathString("/login/callback"),//WARNING: Used for testing only which forces a loop
                 CallbackPath = new PathString("/"),//MUST HAVE THIS TO PREVENT CALLBACK LOOP
                 Scope = "openid profile roles " + ConfigurationManager.AppSettings["GpgApiScope"],
                 SignInAsAuthenticationType = "Cookies",

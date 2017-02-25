@@ -254,7 +254,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\API\CompaniesHouseAPI.cs" />
-    <Compile Include="Classes\AuthAttribute.cs" />
+    <Compile Include="Classes\Attributes\AuthAttribute.cs" />
+    <Compile Include="Classes\Attributes\PinAttribute.cs" />
     <Compile Include="Classes\AuthorizationManager.cs" />
     <Compile Include="Classes\BaseClasses\BaseController.cs" />
     <Compile Include="Classes\API\GovNotifyAPI.cs" />
@@ -264,8 +265,11 @@
     <Compile Include="Classes\PublicSectorStorageConfig.cs" />
     <Compile Include="Classes\Extensions\Extensions.cs" />
     <Compile Include="Classes\CustomErrorMessagesConfig.cs" />
-    <Compile Include="Classes\PasswordAttribute.cs" />
-    <Compile Include="Classes\SpamProtectionAttribute.cs" />
+    <Compile Include="Classes\Attributes\StringLengthAttribute.cs" />
+    <Compile Include="Classes\Attributes\RequiredAttribute.cs" />
+    <Compile Include="Classes\Attributes\RangeAttribute.cs" />
+    <Compile Include="Classes\Attributes\PasswordAttribute.cs" />
+    <Compile Include="Classes\Attributes\SpamProtectionAttribute.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
     <Compile Include="Controllers\QueryController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
@@ -374,6 +378,7 @@
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Properties\PublishProfiles\genderpaygap - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\genderpaygap - Web Deploy %283%29.pubxml" />
+    <None Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\wa-t1te-gpg - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
@@ -584,16 +589,7 @@
     <VisualStudio>
       <FlavorProperties GUID="{349c5851-65df-11da-9384-00065b846f21}">
         <WebProjectProperties>
-          <UseIIS>True</UseIIS>
-          <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>17222</DevelopmentServerPort>
-          <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>https://localhost:44371/</IISUrl>
-          <NTLMAuthentication>False</NTLMAuthentication>
-          <UseCustomServer>False</UseCustomServer>
-          <CustomServerUrl>
-          </CustomServerUrl>
-          <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
+          <SaveServerSettingsInUserFile>True</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
     </VisualStudio>
