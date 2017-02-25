@@ -65,7 +65,11 @@ namespace GenderPayGap.WebUI.Models
 
         public bool Expired { get; set; }
         public bool Verified { get; set; }
+        public bool Retry { get; set; }
+        public bool Resend { get; set; }
         public string EmailAddress { get; set; }
+        public bool Sent { get; internal set; }
+        public bool WrongCode { get; internal set; }
     }
 
     public class OrganisationViewModel
