@@ -26,7 +26,7 @@
                     <p>
                         @if (Model.AllowResend)
                         {
-                            <a id="forgotten-password" href="@Url.Action("SendPIN")">Request a new pin</a>
+                            <a id="forgotten-password" href="@Url.Action("SendPIN")">Get another PIN</a>
                         }
                         else
                         {
@@ -35,7 +35,7 @@
                     </p>
                 </details>	<br>
 
-                <input type="submit" class="button" value="Activate &amp; continue" />
+                <input type="submit" class="button" name value="Activate &amp; continue" />
             </div>
         }
     </div>

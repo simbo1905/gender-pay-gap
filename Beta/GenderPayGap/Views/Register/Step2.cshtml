@@ -6,42 +6,71 @@
 <main id="content" role="main">
     <div class="grid-row">
         <div class="column-full">
-            @if (Model.Verified)
+            @using (Html.BeginForm())
             {
-                <div class="govuk-box-highlight">
-                    <h1 class="bold-large">Your email has been confirmed</h1>
-                </div>
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary("", new { @class = "text-danger" })
 
-                <div class="subsection panel-indent">
-                    <div class="bold-small">Next step: Tell us about your organisation.</div>
-                </div>
-                <p></p>
-                <a class="button" href="@Url.Action("Step3")" role="button">Continue</a>
-            }
-            else
-            {
-                <h1 class="heading-large">
-                    <span class="heading-secondary">Step 2 of 5</span>
-                    Confirm your email address
-                </h1>
-                 if (Model.Expired)
-                 {
-                     <p>
-                         To resend another verification email to <b>@Model.EmailAddress</b> click the button below:
-                     </p>
-                     using (Html.BeginForm())
-                     {
-                        @Html.AntiForgeryToken()
-                         <input type="submit" class="button" value="Resend"/>
-                     }
-                 }
-                 else
-                 {
-                     <p>
-                         We have sent you a verification email to <b>@Model.EmailAddress</b>
-                     </p>
-                     <p>Please follow the instructions in your email to continue your registration.</p>
-                 }
+                if (Model.Sent)
+                {
+                    <h1 class="heading-large">
+                        <span class="heading-secondary">Step 2 of 5</span>
+                        Confirm your email address
+                    </h1>
+                    <p>
+                        We have sent you a verification email to <b>@Model.EmailAddress</b>
+                    </p>
+                    <p>Please follow the instructions in your email to continue your registration.</p>
+                }
+                else if (Model.Retry)
+                {
+                    <h1 class="heading-large">
+                        <span class="heading-secondary">Step 2 of 5</span>
+                        Confirm your email address
+                    </h1>
+                    <p>
+                        To retry sending your verification email to <b>@Model.EmailAddress</b> click the button below:
+                    </p>
+                    <input type="submit" class="button" value="Resend" />
+                }
+                else if (Model.Resend)
+                {
+                    <h1 class="heading-large">
+                        <span class="heading-secondary">Step 2 of 5</span>
+                        Confirm your email address
+                    </h1>
+                    if (Model.WrongCode)
+                    {
+                        <p>@GenderPayGap.WebUI.Classes.CustomErrorMessages.GetDescription(1111)</p>
+                    }
+                    <p>
+                        To send another verification email to <b>@Model.EmailAddress</b> click the button below:
+                    </p>
+                    <input type="submit" class="button" value="Resend" />
+                }
+                else if (Model.Verified)
+                {
+                    <div class="govuk-box-highlight">
+                        <h1 class="bold-large">Your email has been confirmed</h1>
+                    </div>
+
+                    <div class="subsection panel-indent">
+                        <div class="bold-small">Next step: Tell us about your organisation.</div>
+                    </div>
+                    <p></p>
+                    <a class="button" href="@Url.Action("Step3")" role="button">Continue</a>
+                }
+                else if (Model.Expired)
+                {
+                    <h1 class="heading-large">
+                        <span class="heading-secondary">Step 2 of 5</span>
+                        Confirm your email address
+                    </h1>
+                    <p>
+                        To resend another verification email to <b>@Model.EmailAddress</b> click the button below:
+                    </p>
+                    <input type="submit" class="button" value="Resend" />
+                }
             }
         </div>
     </div>
