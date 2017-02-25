@@ -10,11 +10,27 @@ using System.Threading.Tasks;
 using System.Web;
 using Extensions;
 using GenderPayGap.WebUI.Models;
+using GenderPayGap.Core.Interfaces;
+using GenderPayGap.Core.Classes;
 
 namespace GenderPayGap
 {
-    public static class CompaniesHouseAPI
+    public class CompaniesHouseAPI: IPagedRepository<EmployerRecord>
     {
+
+        public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize)
+        {
+            var result = new PagedResult<EmployerRecord>();
+            result.CurrentPage = page;
+            result.PageSize = pageSize;
+            var pageCount = (double)result.RowCount / pageSize;
+            result.PageCount = (int)Math.Ceiling(pageCount);
+            int totalRecords;
+            result.Results = SearchEmployers(out totalRecords, searchText, page, pageSize);
+            result.RowCount = totalRecords;
+            return result;
+        }
+
         public static List<EmployerRecord> SearchEmployers(out int totalRecords, string searchText, int page, int pageSize)
         {
             totalRecords = 0;
@@ -55,6 +71,7 @@ namespace GenderPayGap
             }
             return employers;
         }
+
 
         static async Task<string> GetCompany(string companyNumber)
         {
