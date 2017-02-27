@@ -110,7 +110,7 @@ namespace GenderPayGap.WebUI.Controllers
             currentUser.PasswordHash = model.Password.GetSHA512Checksum();
             currentUser.EmailVerifySendDate = null;
             currentUser.EmailVerifiedDate = null;
-            currentUser.EmailVerifyCode = null;
+            currentUser.EmailVerifyHash = null;
             //Save the user to ensure UserId>0 for new status
             Repository.Insert(currentUser);
             Repository.SaveChanges();
@@ -132,7 +132,7 @@ namespace GenderPayGap.WebUI.Controllers
                 if (!this.SendVerifyEmail(currentUser.EmailAddress, verifyCode))
                     throw new Exception("Could not send verification email. Please try again later.");
 
-                currentUser.EmailVerifyCode = verifyCode;
+                currentUser.EmailVerifyHash = verifyCode;
                 currentUser.EmailVerifySendDate = DateTime.Now;
                 Repository.SaveChanges();
             }
@@ -178,7 +178,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (currentUser.VerifyAttempts >= Properties.Settings.Default.MaxEmailVerifyAttempts && remaining > TimeSpan.Zero)
                 return View("CustomError", new ErrorViewModel(1110, new { remainingTime = remaining.ToFriendly(maxParts: 2) }));
 
-            if (currentUser.EmailVerifyCode != code)
+            if (currentUser.EmailVerifyHash != code)
             {
                 currentUser.VerifyAttempts++;
                 result1 = View("CustomError", new ErrorViewModel(1111));
@@ -217,7 +217,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             //Reset the verification send date
             currentUser.EmailVerifySendDate = null;
-            currentUser.EmailVerifyCode = null;
+            currentUser.EmailVerifyHash = null;
             Repository.SaveChanges();
 
             //Call GET action which will automatically resend
@@ -548,7 +548,7 @@ namespace GenderPayGap.WebUI.Controllers
                 };
                 Repository.Insert(userOrg);
             }
-            userOrg.PINCode = null;
+            userOrg.PINHash = null;
             userOrg.PINSentDate = null;
             Repository.SaveChanges();
 
@@ -577,12 +577,12 @@ namespace GenderPayGap.WebUI.Controllers
             var org = Repository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == userOrg.OrganisationId);
 
             //If a pin has never been sent or resend button submitted then send one immediately
-            if (string.IsNullOrWhiteSpace(userOrg.PINCode) || userOrg.PINSentDate.EqualsI(null, DateTime.MinValue) || Request.HttpMethod.EqualsI("POST"))
+            if (string.IsNullOrWhiteSpace(userOrg.PINHash) || userOrg.PINSentDate.EqualsI(null, DateTime.MinValue) || Request.HttpMethod.EqualsI("POST"))
             {
                 try
                 {
                     //Marke the user org as ready to send a pin
-                    userOrg.PINCode = null;
+                    userOrg.PINHash = null;
                     userOrg.PINSentDate = null;
                     Repository.SaveChanges();
 
@@ -598,7 +598,7 @@ namespace GenderPayGap.WebUI.Controllers
                         throw new Exception("Could not send confirmation email. Please try again later.");
 
                     //Save the PIN and confirm code
-                    userOrg.PINCode = pin.ToString("000000");
+                    userOrg.PINHash = pin.ToString("000000");
                     userOrg.PINSentDate = DateTime.Now;
                     Repository.SaveChanges();
                 }
@@ -610,7 +610,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
 
             //Prepare view parameters
-            ViewBag.Resend = !string.IsNullOrWhiteSpace(userOrg.PINCode) && !userOrg.PINSentDate.EqualsI(null, DateTime.MinValue)
+            ViewBag.Resend = !string.IsNullOrWhiteSpace(userOrg.PINHash) && !userOrg.PINSentDate.EqualsI(null, DateTime.MinValue)
                 && userOrg.PINSentDate.Value.AddDays(Properties.Settings.Default.PinInPostMinRepostDays) < DateTime.Now;
             ViewBag.UserFullName = currentUser.Fullname;
             ViewBag.UserJobTitle = currentUser.JobTitle;
@@ -702,7 +702,7 @@ namespace GenderPayGap.WebUI.Controllers
                 return View("CustomError", new ErrorViewModel(1113, new { remainingTime = remaining.ToFriendly(maxParts: 2) }));
             }
 
-            if (userOrg.PINCode == model.PIN)
+            if (userOrg.PINHash == model.PIN)
             {
                 //Set the user org as confirmed
                 userOrg.PINConfirmedDate = DateTime.Now;
