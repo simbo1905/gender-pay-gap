@@ -1,128 +1,118 @@
 ﻿@{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Register: Step 5";
 }
+
 @model GenderPayGap.WebUI.Models.OrganisationViewModel
 
 <main id="content" role="main">
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("Step5","Register"))
     {
         @Html.AntiForgeryToken()
-
-        @Html.HiddenFor(m => m.EmployerCurrentPage)
-        @Html.HiddenFor(m => m.EmployerPages)
-        @Html.HiddenFor(m => m.Employers)
-        @Html.HiddenFor(m => m.SearchText)
-        @Html.HiddenFor(m => m.SelectedEmployerIndex)
-        @Html.HiddenFor(m => m.EmployerPageSize)
-        @Html.HiddenFor(m => m.EmployerEndIndex)
-        @Html.HiddenFor(m => m.EmployerRecords)
         @Html.HiddenFor(m => m.SectorType)
 
-        @Html.HiddenFor(m => m.SearchText)
-
-        @Html.HiddenFor(m => m.Employers[Model.SelectedEmployerIndex].OrgName)
-
-        @Html.HiddenFor(m => m.Employers[Model.SelectedEmployerIndex].FullAddress)
-        @Html.HiddenFor(m => m.Employers[Model.SelectedEmployerIndex].Address1)
-        @Html.HiddenFor(m => m.Employers[Model.SelectedEmployerIndex].Address2)
-        @Html.HiddenFor(m => m.Employers[Model.SelectedEmployerIndex].Address3)
-        @Html.HiddenFor(m => m.Employers[Model.SelectedEmployerIndex].PostCode)
-
+        <input type="submit" style="display:none" name="command" value="">
         <div class="grid-row">
+            @Html.ValidationSummary("", new { @class = "text-danger" })
             <div class="column-full">
                 <h1 class="heading-large">
-                    <span class="heading-secondary">Step 5 of 5</span>
-                    Confirm your organisation’s details
+                    <span class="heading-secondary">Step 5 of @(Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private ? 6 : 7)</span>
+                    <span>Choose your organisation</span>
                 </h1>
-                <table class="confirm-details">
-                    <thead>
-                        <tr>
-                            <th class="question">
-                            </th>
-                            <th class="answer">
-                            </th>
-                            <th class="other">
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>
-                                Organisation name
-                            </td>
 
-                            @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
-                            {
-                                <td>
-                                    @(Model.Employers[Model.SelectedEmployerIndex].Name)
-                                </td>
-                            }
+                <div class="search-bar">
+                    <div class="searchfield">
+                        @Html.EditorFor(model => model.SearchText, new { htmlAttributes = new { @class = "search-input", @placeholder = "Enter an employers name or company no" } })
 
-                            @*whatever is being pulled in here from the field*@
-                            @*if i am pulling the name from the hidden field name then this if might not be neccesary*@
-                            @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Public)
-                            {
-                                <td>
-                                    @(Model.Employers[Model.SelectedEmployerIndex].OrgName)
-                                </td>
-                            }
+                        <button type="submit" class="search-submit" name="command" value="search">Search</button>
+                    </div>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(Model.SearchText))
+                {
+                     if (Model.Employers.Results.Count < 1)
+                     {
+                         <p>No records found</p>
+                     }
+                     else
+                     {
+                         <br>
+                         <table class="search search3">
+                             <caption class="visuallyhidden">Customer and Business search listing</caption>
+                             <thead>
+                             <tr>
+                                 <th scope="col">Organisation name and registered address</th>
 
-                            @*<td></td>*@
-                        </tr>
-                        <tr>
-                            @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
-                            {
-                                <td>
-                                    Registered number
-                                </td>
-                                <td>
-                                    @(Model.Employers[Model.SelectedEmployerIndex].CompanyNumber)
-                                </td>
-                            }
+                                 @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
+                                 {
+                                     <th scope="col">Registered number</th>
+                                 }
 
-                            @*if <td></td>'s dont take up space & formating of tableData <td>'s then remove this if statement as will not be neccessary*@
-                            @*@if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Public)
-                            {
-                                <td>
-                                </td>
-                                <td>
-                                </td>
-                            }*@
-                            
-                            @*<td></td>*@
-                        </tr>
-                        <tr>
-                            @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
-                            {
-                                <td>
-                                    Registered address
-                                </td>
-                            }
+                                 <th scope="col">&nbsp;</th>
 
-                            @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Public)
-                            {
-                                <td>
-                                   Correspondence address
-                                </td>
-                            }
+                             </tr>
+                             </thead>
+                             <tbody>
+                             @for (var i = 0; i < Model.Employers.Results.Count; i++)
+                             {
+                                <tr>
+                                    @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
+                                    {
+                                        <td>@Model.Employers.Results[i].Name <span>@Model.Employers.Results[i].FullAddress</span></td>
 
-                            @*whatever is being pulled in here from the field*@
-                            <td>
-                                @(Model.Employers[Model.SelectedEmployerIndex].FullAddress)
-                            </td>
+                                        <td>
+                                            @Model.Employers.Results[i].CompanyNumber
+                                        </td>
+                                    }
 
-                            @*<td></td>*@
-                        </tr>
-                    </tbody>
-                </table>
-                <fieldset>
-                    <br>
-                    <p><button type="submit" class="button" value="confirm">Confirm &amp; continue</button></p>
+                                    @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Public)
+                                    {
+                                        <td>@Model.Employers.Results[i].Name</td>
+                                    }
+                                    <td>
+                                        <button type="submit" class="link-button" name="command" value="employer_@i">Choose&nbsp;organisation</button>
+                                    </td>
+                                </tr>
+                             }
+                             </tbody>
+                         </table>
 
-                    <p>
-                        @Html.ActionLink("Back", "Step4")
-                    </p>
-                </fieldset>
+                         if (Model.Employers.Results.Count > 1)
+                         {
+                             <div class="pager">
+                                 <div class="pager-controls">
+                                     @if (Model.Employers.CurrentPage > 1)
+                                     {
+                                         <button type="submit" class="link-button" name="command" value="pagePrev">Previous</button>
+                                     }
+                                     <ul class="pager-items">
+                                         @for (var i = Model.PagerStartIndex; i <= Model.PagerEndIndex; i++)
+                                         {
+                                             if (i == Model.Employers.CurrentPage)
+                                             {
+                                                 <li><b>@i</b></li>
+                                             }
+                                             else
+                                             {
+                                                 <li>
+                                                     <button type="submit" class="link-button" name="command" value="page_@i">@i</button>
+                                                 </li>
+                                             }
+                                         }
+                                     </ul>
+                                     @if (Model.Employers.CurrentPage < Model.Employers.PageCount)
+                                     {
+                                         <button type="submit" class="link-button" name="command" value="pageNext">Next</button>
+                                     }
+                                 </div>
+                                 <div class="pager-summary">Showing @Model.EmployerStartIndex – @Model.EmployerEndIndex of @Model.Employers.RowCount employers</div>
+                             </div>
+                         }
+                     }
+                }
+                <br>
+                <p>
+                    @Html.ActionLink("Go back to previous step", "Step3")
+                </p>
+
             </div>
         </div>
     }
