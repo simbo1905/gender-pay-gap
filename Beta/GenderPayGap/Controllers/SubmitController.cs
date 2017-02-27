@@ -57,13 +57,13 @@ namespace GenderPayGap.WebUI.Controllers
 
             ShowAndActivateCancelButtonLink();
 
-            var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
-            var Org = Repository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == userOrg.OrganisationId);
+            var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+            var Org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == userOrg.OrganisationId);
 
             var expectStartDate = GetCurrentAccountYearStartDate(Org);
             var expectEndDate = expectStartDate.AddYears(1).Date.AddDays(1);
 
-            var @return = Repository.GetAll<Return>().OrderByDescending
+            var @return = DataRepository.GetAll<Return>().OrderByDescending
                 (r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId && r.AccountingDate >= expectStartDate && r.AccountingDate < expectEndDate);
 
             var model = UnstashModel<ReturnViewModel>();
@@ -319,7 +319,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             //if (command == "Back") return RedirectToAction("Step3");
 
-            var @return = Repository.GetAll<Return>().FirstOrDefault(r => r.ReturnId == model.ReturnId);
+            var @return = DataRepository.GetAll<Return>().FirstOrDefault(r => r.ReturnId == model.ReturnId);
 
             if (!@return.IsNull())
             {
@@ -351,8 +351,8 @@ namespace GenderPayGap.WebUI.Controllers
                 OrganisationId = model.OrganisationId
             };
 
-            Repository.Insert<Return>(@return);
-            Repository.SaveChanges();
+            DataRepository.Insert<Return>(@return);
+            DataRepository.SaveChanges();
 
             return View("Step5", model);
         }
@@ -397,13 +397,13 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             //var original = GpgDatabase.Default.Return.Find(model.ReturnId);
-            var original = Repository.GetAll<Return>().FirstOrDefault(m => m.ReturnId == model.ReturnId);
+            var original = DataRepository.GetAll<Return>().FirstOrDefault(m => m.ReturnId == model.ReturnId);
 
             if (original == null)
             {
-                var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+                var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
                 model.OrganisationId = userOrg.OrganisationId;
-                Repository.Insert<Return>(model);
+                DataRepository.Insert<Return>(model);
 
             }
             else
@@ -411,12 +411,12 @@ namespace GenderPayGap.WebUI.Controllers
                 //   GpgDatabase.Default.Entry(original).CurrentValues.SetValues(model);
             }
 
-            model.Organisation = Repository.GetAll<Organisation>().FirstOrDefault(m => m.OrganisationId == model.OrganisationId);
+            model.Organisation = DataRepository.GetAll<Organisation>().FirstOrDefault(m => m.OrganisationId == model.OrganisationId);
 
             model.AccountingDate = DateTime.Now;
             try
             {
-                Repository.SaveChanges();
+                DataRepository.SaveChanges();
             }
             catch (Exception ex)
             {
@@ -438,8 +438,8 @@ namespace GenderPayGap.WebUI.Controllers
             //  var qid = Repository.GetAll<Return>().FirstOrDefault(r => r.ReturnId == id);
             //  return View(qid);
 
-            var userOrg = Repository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
-            var @return = Repository.GetAll<Return>().OrderByDescending(r => r.AccountingDate).FirstOrDefault();
+            var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+            var @return = DataRepository.GetAll<Return>().OrderByDescending(r => r.AccountingDate).FirstOrDefault();
             // var @return = Repository.GetAll<Return>().OrderByDescending
             //     (r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId && r.AccountingDate >= gExpectStartDate && r.AccountingDate < gExpectEndDate);
             return View(@return);

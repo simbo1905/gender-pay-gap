@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace GenderPayGap.Core.Classes
 {
+    [Serializable]
     public class PagedResult<T>
     {
         public IList<T> Results { get; set; }
