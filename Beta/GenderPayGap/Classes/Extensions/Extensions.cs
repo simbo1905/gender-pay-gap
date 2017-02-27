@@ -64,7 +64,8 @@ namespace GenderPayGap.WebUI.Classes
             if (string.IsNullOrWhiteSpace(verifyCode)) throw new ArgumentNullException("verifyCode");
 
             //If internal user the load it using the identifier as the UserID
-            return repository.GetAll<User>().FirstOrDefault(u => u.EmailVerifyCode == verifyCode);
+            var verifyHash = verifyCode.GetSHA512Checksum();
+            return repository.GetAll<User>().FirstOrDefault(u => u.EmailVerifyHash == verifyHash);
         }
 
         public static UserOrganisation FindUserOrganisation(this IRepository repository, IPrincipal principal)
@@ -114,5 +115,44 @@ namespace GenderPayGap.WebUI.Classes
             return new MvcHtmlString(builder.ToString(TagRenderMode.SelfClosing));
         }
         #endregion
+
+        #region Authentication
+        public static void ExpireAllCookies(this HttpContextBase context)
+        {
+            int cookieCount = context.Request.Cookies.Count;
+            for (var i = 0; i < cookieCount; i++)
+            {
+                var cookie = context.Request.Cookies[i];
+                if (cookie != null)
+                {
+                    var cookieName = cookie.Name;
+                    var expiredCookie = new HttpCookie(cookieName) { Expires = DateTime.Now.AddDays(-1) };
+                    context.Response.Cookies.Add(expiredCookie); // overwrite it
+                }
+            }
+
+            // clear cookies server side
+            context.Request.Cookies.Clear();
+        }
+
+        #endregion
+
+        public static string ResolveUrl(this Controller controller,RedirectToRouteResult redirectToRouteResult)
+        {
+            return controller.Url.RouteUrl(redirectToRouteResult.RouteName, redirectToRouteResult.RouteValues);
+        }
+
+
+        public static IEnumerable<T> Page<T>(this IEnumerable<T> list, int pageSize, int page)
+        {
+            var skip = (page - 1) * pageSize;
+            return list.Skip(skip).Take(pageSize);
+        }
+
+        public static IQueryable<T> Page<T>(this IQueryable<T> query, int pageSize, int page)
+        {
+            var skip = (page - 1) * pageSize;
+            return query.Skip(skip).Take(pageSize);
+        }
     }
 }
