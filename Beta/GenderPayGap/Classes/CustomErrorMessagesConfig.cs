@@ -21,6 +21,8 @@ namespace GenderPayGap.WebUI.Classes
             get { return (CustomErrorMessages)this[""]; }
             set { this[""] = value; }
         }
+
+
         public override bool IsReadOnly()
         {
             return false;
@@ -55,28 +57,22 @@ namespace GenderPayGap.WebUI.Classes
             return results;
         }
 
+        List<CustomErrorMessage> _List = null;
+        List<CustomErrorMessage> List
+        {
+            get
+            {
+                if (_List == null) _List = this.ToList<CustomErrorMessage>();
+                return _List;
+
+            }
+        }
+
         public CustomErrorMessage this[int code]
         {
             get
             {
-                if (code<400) return null;
-                foreach (CustomErrorMessage setting in this)
-                {
-                    if (setting.Code.EqualsI(code)) return setting;
-                }
-                return null;
-            }
-        }
-
-        internal CustomErrorMessage Default
-        {
-            get
-            {
-                foreach (CustomErrorMessage setting in this)
-                {
-                    if (setting.Default == true) return setting;
-                }
-                return null;
+                return List.FirstOrDefault(s=>s.Code==code);
             }
         }
 
@@ -138,6 +134,40 @@ namespace GenderPayGap.WebUI.Classes
 
             return results;
         }
+
+        static CustomErrorMessagesSection _DefaultSection = null;
+        static CustomErrorMessagesSection DefaultSection
+        {
+            get
+            {
+                if (_DefaultSection == null) _DefaultSection = (CustomErrorMessagesSection)ConfigurationManager.GetSection("CustomErrorMessages");
+                return _DefaultSection;
+            }
+        }
+
+        public static CustomErrorMessage Default
+        {
+            get
+            {
+                return DefaultSection.Messages.List.FirstOrDefault(e=>e.Default);
+            }
+        }
+
+        public static CustomErrorMessage Get(int code)
+        {
+            return DefaultSection.Messages[code];
+        }
+
+        public static string GetTitle(int code)
+        {
+            return DefaultSection.Messages[code]?.Title;
+        }
+
+        public static string GetDescription(int code)
+        {
+            return DefaultSection.Messages[code]?.Description;
+        }
+
     }
 
     [Serializable]
@@ -180,7 +210,7 @@ namespace GenderPayGap.WebUI.Classes
             }
         }
 
-        [ConfigurationProperty("description", IsRequired = true)]
+        [ConfigurationProperty("description", IsRequired = false)]
         public string Description
         {
             get { return (string)base["description"]; }

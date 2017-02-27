@@ -500,13 +500,13 @@ namespace Extensions
         /// <summary>
         /// Returns all characters before the first occurence of a string
         /// </summary>
-        public static string BeforeFirst(this string text, string seperator, StringComparison comparisionType = StringComparison.OrdinalIgnoreCase, bool inclusive = false)
+        public static string BeforeFirst(this string text, string seperator, StringComparison comparisionType = StringComparison.OrdinalIgnoreCase, bool inclusive = false, bool includeWhenNoSeperator = true)
         {
             if (string.IsNullOrWhiteSpace(text)) return text;
 
             var i = text.IndexOf(seperator, 0, comparisionType);
             if (i > -1) return text.Substring(0, inclusive ? i+1 : i);
-            return text;
+            return includeWhenNoSeperator ? text : null;
         }
 
         /// <summary>
@@ -528,13 +528,13 @@ namespace Extensions
         /// <summary>
         /// Returns all characters before the last occurence of a string
         /// </summary>
-        public static string BeforeLast(this string text, string seperator, StringComparison comparisionType = StringComparison.OrdinalIgnoreCase, bool inclusive=false)
+        public static string BeforeLast(this string text, string seperator, StringComparison comparisionType = StringComparison.OrdinalIgnoreCase, bool inclusive=false, bool includeWhenNoSeperator = true)
         {
             if (string.IsNullOrWhiteSpace(text)) return text;
 
             var i = text.LastIndexOf(seperator, text.Length - 1, comparisionType);
             if (i > -1) return text.Substring(0, inclusive ? i + 1 : i);
-            return text;
+            return includeWhenNoSeperator ? text : null;
         }
 
         /// <summary>
