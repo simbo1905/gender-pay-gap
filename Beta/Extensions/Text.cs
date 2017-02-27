@@ -1016,7 +1016,7 @@ namespace Extensions
             pattern = pattern.ToLower();
             if (input == pattern) return true;
             var expression = "^" + Regex.Escape(pattern).Replace("\\*", ".*").Replace("\\?", ".").Replace("+", "\\+") + "$";
-            return Regex.IsMatch(input,pattern);
+            return Regex.IsMatch(input, expression);
         }
 
         public static bool IsEscaped(this Match match, string originalText, string escapePrefix=@"\",string unescapePrefix=@"\\", bool ignoreCase=true)
