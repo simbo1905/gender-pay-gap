@@ -261,7 +261,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
-    <Compile Include="Classes\PublicSectorStorageConfig.cs" />
+    <Compile Include="Classes\PublicSectorConfig.cs" />
     <Compile Include="Classes\Extensions\Extensions.cs" />
     <Compile Include="Classes\CustomErrorMessagesConfig.cs" />
     <Compile Include="Classes\PasswordAttribute.cs" />
@@ -438,6 +438,7 @@
     <Content Include="Views\Submit\Step5.cshtml" />
     <Content Include="Views\Submit\Complete.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
+    <Content Include="Views\Register\Step4a.cshtml" />
     <None Include="Web.DEV.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -18,6 +18,16 @@
         @Html.HiddenFor(m => m.EmployerRecords)
         @Html.HiddenFor(m => m.SectorType)
 
+        @Html.HiddenFor(m => m.SearchText)
+
+        @Html.HiddenFor(m => m.Employers[Model.SelectedEmployerIndex].OrgName)
+
+        @Html.HiddenFor(m => m.Employers[Model.SelectedEmployerIndex].FullAddress)
+        @Html.HiddenFor(m => m.Employers[Model.SelectedEmployerIndex].Address1)
+        @Html.HiddenFor(m => m.Employers[Model.SelectedEmployerIndex].Address2)
+        @Html.HiddenFor(m => m.Employers[Model.SelectedEmployerIndex].Address3)
+        @Html.HiddenFor(m => m.Employers[Model.SelectedEmployerIndex].PostCode)
+
         <div class="grid-row">
             <div class="column-full">
                 <h1 class="heading-large">
@@ -38,39 +48,79 @@
                     <tbody>
                         <tr>
                             <td>
-                                Employer name
+                                Organisation name
                             </td>
-                            <td>
-                                @(Model.Employers[Model.SelectedEmployerIndex].Name)
-                            </td>
-                            <td></td>
+
+                            @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
+                            {
+                                <td>
+                                    @(Model.Employers[Model.SelectedEmployerIndex].Name)
+                                </td>
+                            }
+
+                            @*whatever is being pulled in here from the field*@
+                            @*if i am pulling the name from the hidden field name then this if might not be neccesary*@
+                            @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Public)
+                            {
+                                <td>
+                                    @(Model.Employers[Model.SelectedEmployerIndex].OrgName)
+                                </td>
+                            }
+
+                            @*<td></td>*@
                         </tr>
                         <tr>
-                            <td>
-                                Company number
-                            </td>
-                            <td>
-                                @(Model.Employers[Model.SelectedEmployerIndex].CompanyNumber)
-                            </td>
-                            <td></td>
+                            @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
+                            {
+                                <td>
+                                    Registered number
+                                </td>
+                                <td>
+                                    @(Model.Employers[Model.SelectedEmployerIndex].CompanyNumber)
+                                </td>
+                            }
+
+                            @*if <td></td>'s dont take up space & formating of tableData <td>'s then remove this if statement as will not be neccessary*@
+                            @*@if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Public)
+                            {
+                                <td>
+                                </td>
+                                <td>
+                                </td>
+                            }*@
+                            
+                            @*<td></td>*@
                         </tr>
                         <tr>
-                            <td>
-                                Registered office address
-                            </td>
+                            @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
+                            {
+                                <td>
+                                    Registered address
+                                </td>
+                            }
+
+                            @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Public)
+                            {
+                                <td>
+                                   Correspondence address
+                                </td>
+                            }
+
+                            @*whatever is being pulled in here from the field*@
                             <td>
                                 @(Model.Employers[Model.SelectedEmployerIndex].FullAddress)
                             </td>
-                            <td></td>
+
+                            @*<td></td>*@
                         </tr>
                     </tbody>
                 </table>
                 <fieldset>
                     <br>
-                    <p><input type="submit" class="button" value="Confirm &amp; continue" /></p>
+                    <p><button type="submit" class="button" value="confirm">Confirm &amp; continue</button></p>
 
                     <p>
-                        @Html.ActionLink("Go back to previous step", "Step4")
+                        @Html.ActionLink("Back", "Step4")
                     </p>
                 </fieldset>
             </div>

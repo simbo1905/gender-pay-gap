@@ -150,6 +150,10 @@ namespace GenderPayGap.WebUI.Models
     [Serializable]
     public class EmployerRecord
     {
+        //Public Sector
+        public string OrgName { get; set; }
+        public string EmailPatterns { get; set; }
+
         public string CompanyNumber { get; set; }
         public string CompanyStatus { get; set; }
         public string Name { get; internal set; }
