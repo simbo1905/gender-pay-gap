@@ -82,42 +82,52 @@ namespace GenderPayGap
         #endregion
 
         #region Authorisation Methods
-        protected ActionResult CheckUserRegisteredOk(out User user)
+        protected ActionResult CheckUserRegisteredOk(out User currentUser)
         {
-            user = null;
-            //Ensure only checking authenticated users
+            currentUser = null;
+            //Ensure user is logged in submit or rest of of registration
             if (!User.Identity.IsAuthenticated)
-            {
-                //When enrolling return not errors
-                if (this is RegisterController) return null;
+                return IsAnyAction("Register/Step1") ? null : new HttpUnauthorizedResult();
 
-                //When submitting ensure user is authenticated
-                if (this is SubmitController) return new HttpUnauthorizedResult();
-            }
-
-            //The user can then go through the process of changing their details and email then sending another verification email
-
-            //Get the mapped user from the principle
-            var currentUser = Repository.FindUser(User);
+            //Ensure we get a valid user from the database
+            currentUser = Repository.FindUser(User);
             if (currentUser == null) throw new IdentityNotMappedException();
-            user = currentUser;
 
-            //Ensure the email address is verified
+            //When email not verified
             if (currentUser.EmailVerifiedDate.EqualsI(null, DateTime.MinValue))
             {
-                //Allow resend of verification if sent over 24 hours ago
+                //If email not sent
                 if (currentUser.EmailVerifySendDate.EqualsI(null, DateTime.MinValue))
+                {
+                    if (IsAnyAction("Register/Step2")) return null;
+                    //Tell them to verify email
                     return View("CustomError", new ErrorViewModel(1100));
+                }
 
-                //Allow resend of verification if sent over 24 hours ago
-                if (currentUser.EmailVerifySendDate.Value.AddHours(WebUI.Properties.Settings.Default.EmailVerificationExpiryHours) < DateTime.Now)
+                //If verification code has expired
+                if (currentUser.EmailVerifySendDate.Value.AddHours(Settings.Default.EmailVerificationExpiryHours) < DateTime.Now)
+                {
+                    if (IsAnyAction("Register/Step2")) return null;
+
+                    //prompt user to click to request a new one
                     return View("CustomError", new ErrorViewModel(1101));
+                }
 
-                //Otherwise prompt user to check account only
-                var remainingTime = currentUser.EmailVerifySendDate.Value.AddHours(WebUI.Properties.Settings.Default.EmailVerificationMinResendHours) - DateTime.Now;
+                //If code min time hasnt elapsed 
+                var remainingTime = currentUser.EmailVerifySendDate.Value.AddHours(Settings.Default.EmailVerificationMinResendHours) - DateTime.Now;
                 if (remainingTime > TimeSpan.Zero)
-                    return View("CustomError", new ErrorViewModel(1102, new {remainingTime = remainingTime.ToFriendly(maxParts: 2)}));
+                {
+                    //Process the code if there is one
+                    if (IsAnyAction("Register/Step2") && !string.IsNullOrWhiteSpace(Request.QueryString["code"])) return null;
 
+                    //tell them to wait
+                    return View("CustomError", new ErrorViewModel(1102, new { remainingTime = remainingTime.ToFriendly(maxParts: 2) }));
+                }
+
+                //if the code is still valid but min sent time has elapsed
+                if (IsAnyAction("Register/Step2")) return null;
+
+                //Prompt user to request a new verification code
                 return View("CustomError", new ErrorViewModel(1103));
             }
 
@@ -126,25 +136,43 @@ namespace GenderPayGap
 
             //If they didnt have started organisation registration step then prompt to continue registration
             if (userOrg == null)
+            {
+                if (IsAnyAction("Register/Step3", "Register/Step4", "Register/Step5")) return null;
                 return View("CustomError", new ErrorViewModel(1104));
+            }
 
             if (userOrg.PINConfirmedDate.EqualsI(null, DateTime.MinValue))
             {
-                //Allow resend of PIN if sent over 2 weeks ago
+                //If pin never sent restart step3
                 if (userOrg.PINSentDate.EqualsI(null, DateTime.MinValue))
-                    return RedirectToAction("Step3", "Register");
-                if (userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostExpiryDays) < DateTime.Now)
-                    return RedirectToAction("ConfirmPIN","Register");
-                var remainingTime = userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
-                if (remainingTime > TimeSpan.Zero)
-                    return View("CustomError", new ErrorViewModel(1107, new {remainingTime = remainingTime.ToFriendly(maxParts: 2)}));
+                {
+                    if (IsAnyAction("Register/SendPIN")) return null;
+                    return RedirectToAction("SendPIN", "Register");
+                }
+
+                //If PIN sent and expired then prompt to request a new pin
+                if (userOrg.PINSentDate.Value.AddDays(Settings.Default.PinInPostExpiryDays) < DateTime.Now)
+                {
+                    if (IsAnyAction("Register/SendPIN")) return null;
+                    return View("CustomError", new ErrorViewModel(1106));
+                }
+
+                //If PIN resends are allowed and currently on PIN send page then allow it to continue
+                var remainingTime = userOrg.PINSentDate.Value.AddHours(Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
+                if (remainingTime <= TimeSpan.Zero && IsAnyAction("Register/SendPIN")) return null;
+
+                //If PIN Not expired redirect to confirmPIN where they can either enter the same pin or request a new one 
+                if (IsAnyAction("Register/ConfirmPIN")) return null;
                 return RedirectToAction("ConfirmPIN","Register");
             }
 
+            //Ensure user has completed the registration process
+            //If user is fully registered then start submit process
             if (this is RegisterController)
-                //Ensure user has completed the registration process
-                //If user is fully registered then start submit process
-                return RedirectToAction("Step1", "Submit");
+            {
+                if (IsAnyAction("Register/Complete")) return null;
+                return RedirectToAction("Complete", "Register");
+            }
 
             return null;
         }
@@ -165,6 +193,23 @@ namespace GenderPayGap
         }
 
         #endregion
+
+        bool IsAction(string actionName, string controllerName=null)
+        {
+            return actionName.EqualsI(ActionName) && (controllerName==ControllerName || string.IsNullOrWhiteSpace(controllerName));
+        }
+
+        bool IsAnyAction(params string[] actionUrls)
+        {
+            for (var i=0;i<actionUrls.Length;i++)
+            {
+                var actionUrl = actionUrls[i].TrimI(@" /\");
+                var actionName = actionUrl.AfterFirst("/");
+                var controllerName = actionUrl.BeforeFirst("/",includeWhenNoSeperator:false);
+                if (IsAction(actionName, controllerName)) return true;
+            }
+            return false;
+        }
 
         //Current account Year method
         public DateTime GetCurrentAccountYearStartDate(Organisation org)

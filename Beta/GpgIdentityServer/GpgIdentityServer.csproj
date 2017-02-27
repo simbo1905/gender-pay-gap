@@ -190,6 +190,7 @@
     <Content Include="Content\libs\bootstrap\less\utilities.less" />
     <Content Include="Content\libs\bootstrap\less\variables.less" />
     <Content Include="Content\libs\bootstrap\less\wells.less" />
+    <None Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy %282%29.pubxml" />
     <None Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy.pubxml">
       <SubType>Designer</SubType>
     </None>
