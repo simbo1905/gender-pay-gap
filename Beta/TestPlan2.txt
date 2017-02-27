@@ -359,4 +359,8 @@ Notes:
 Fix pagination.
 check why 'page' argument should be 1 instead of 0 in SearchOrg() method -> for start page of pages with results of pageSize
 
+Bugs:
+ confirm your email address, resend button does not work!
+ 
+ task clean up sub,ission jouney
 
