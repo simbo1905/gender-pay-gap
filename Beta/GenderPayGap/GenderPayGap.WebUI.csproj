@@ -262,6 +262,8 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Classes\PublicSectorRepository.cs" />
+    <Compile Include="Classes\PrivateSectorRepository.cs" />
     <Compile Include="Classes\PublicSectorConfig.cs" />
     <Compile Include="Classes\Extensions\Extensions.cs" />
     <Compile Include="Classes\CustomErrorMessagesConfig.cs" />
@@ -432,8 +434,8 @@
     <Content Include="Views\Register\Complete.cshtml" />
     <Content Include="Views\Shared\CustomError.cshtml" />
     <Content Include="Views\Register\Step2.cshtml" />
-    <Content Include="Views\Register\Step4.cshtml" />
     <Content Include="Views\Register\Step5.cshtml" />
+    <Content Include="Views\Register\ConfirmEmployer.cshtml" />
     <Content Include="Views\Register\SendPIN.cshtml" />
     <Content Include="Views\Register\ConfirmPIN.cshtml" />
     <Content Include="Views\Home\TimedOut.cshtml" />
@@ -444,7 +446,8 @@
     <Content Include="Views\Submit\Step5.cshtml" />
     <Content Include="Views\Submit\Complete.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Register\Step4a.cshtml" />
+    <Content Include="Views\Register\AddAddress.cshtml" />
+    <Content Include="Views\Register\Step4.cshtml" />
     <None Include="Web.DEV.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
