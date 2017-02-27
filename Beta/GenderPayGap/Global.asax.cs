@@ -13,6 +13,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using GenderPayGap.WebUI.Properties;
+using GenderPayGap.WebUI.Models;
 
 namespace GenderPayGap
 {
@@ -76,6 +77,8 @@ namespace GenderPayGap
             //builder.RegisterType<GpgDatabase>().As<IDbContext>();
             //builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
             builder.Register(c => new SqlRepository(new DbContext())).As<IRepository>();
+            //builder.Register(c => new PrivateSectorRepository()).As<IPagedRepository<EmployerRecord>>().WithMetadata("Sector", "Private");
+            //builder.Register(c => new PublicSectorRepository()).As<IPagedRepository<EmployerRecord>>().WithMetadata("Sector", "Public");
 
             return builder.Build();
         }

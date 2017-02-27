@@ -167,5 +167,14 @@ namespace GenderPayGap.WebUI.Properties {
                 return ((string)(this["PinRegexError"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int EmployerPageSize {
+            get {
+                return ((int)(this["EmployerPageSize"]));
+            }
+        }
     }
 }
