@@ -131,5 +131,41 @@ namespace GenderPayGap.WebUI.Properties {
                 return ((global::System.DateTime)(this["PublicAccountingDate"]));
             }
         }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("123456789ABCDEF")]
+        public string PINChars {
+            get {
+                return ((string)(this["PINChars"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("6")]
+        public int PINLength {
+            get {
+                return ((int)(this["PINLength"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("^[A-Za-z0-9]{6}$")]
+        public string PinRegex {
+            get {
+                return ((string)(this["PinRegex"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PIN code must contain 6 alpha or numeric characters")]
+        public string PinRegexError {
+            get {
+                return ((string)(this["PinRegexError"]));
+            }
+        }
     }
 }

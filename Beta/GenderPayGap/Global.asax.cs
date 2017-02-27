@@ -30,6 +30,8 @@ namespace GenderPayGap
             }
         }
 
+       
+
         protected void Application_Start()
         {
 #if DEBUG
@@ -66,7 +68,7 @@ namespace GenderPayGap
                 }
             }
         }
-
+        
         public static IContainer BuildContainerIoC()
         {
             var builder = new ContainerBuilder();
