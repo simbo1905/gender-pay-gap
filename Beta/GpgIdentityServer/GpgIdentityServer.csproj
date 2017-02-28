@@ -217,6 +217,8 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy.pubxml.user" />
+    <Content Include="Properties\PublishProfiles\wa-t1te-gpg - Web Deploy.pubxml.user" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
