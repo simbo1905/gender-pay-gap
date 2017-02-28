@@ -13,7 +13,7 @@
         <input type="submit" style="display:none" name="command" value="">
         <div class="grid-row">
             @Html.ValidationSummary("", new { @class = "text-danger" })
-            <div class="column-full">
+            <div class="column-two-thirds">
                 <h1 class="heading-large">
 
                     @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
@@ -25,12 +25,12 @@
                    {
                         <span class="heading-secondary">Step 4 of 7</span>
                    }
-                    <span>Search for your organisation</span>
+                    <span>Find your organisation</span>
                 </h1>
 
                 <div class="search-bar">
                     <div class="searchfield">
-                        @Html.EditorFor(model => model.SearchText, new { htmlAttributes = new { @class = "search-input", @placeholder = "Enter an employers name or company no" } })
+                        @Html.EditorFor(model => model.SearchText, new { htmlAttributes = new { @class = "search-input", @placeholder = Model.SectorType==GenderPayGap.Models.SqlDatabase.SectorTypes.Public ? "Enter your organisation's name" :"Enter your organisation's name or company no" } })
 
                         <button type="submit" class="search-submit" name="command" value="search">Search</button>
                     </div>
