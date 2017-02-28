@@ -19,71 +19,99 @@ namespace GenderPayGap.WebUI.Models
         [Required]
         [Range(-200.9, 200.9)]
         [Display(Name = "Enter the difference in mean hourly rate")]
+      //[DisplayFormat(DataFormatString = "{0:F1}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:#.#}", ApplyFormatInEditMode = true)]
         public decimal DiffMeanHourlyPayPercent { get; set; }
 
         [Required]
         [Range(-200.9, 200.9)]
         [Display(Name = "Enter the difference in median hourly rate")]
+      //[DisplayFormat(DataFormatString = "{0:F1}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:#.#}", ApplyFormatInEditMode = true)]
         public decimal DiffMedianHourlyPercent { get; set; }
 
         [Required]
-        [Display(Name = "Enter the difference in mean bonus pay")]
+        [Display(Name = "Enter the difference in mean bonus pay, calculated from the mean")]
+       //[DisplayFormat(DataFormatString = "{0:F1}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:#.#}", ApplyFormatInEditMode = true)]
         [Range(-200.9, 200.9)]
         public decimal DiffMeanBonusPercent { get; set; }
 
         [Required]
-        [Display(Name = "Enter the difference in median bonus pay")]
+        [Display(Name = "Enter the difference in median bonus pay, calculated from the mean")]
+      //[DisplayFormat(DataFormatString = "{0:F1}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:#.#}", ApplyFormatInEditMode = true)]
         [Range(-200.9, 200.9)]
         public decimal DiffMedianBonusPercent { get; set; }
 
         [Required]
         [Range(0.0, 200.9)]
-        [Display(Name = "Males who received bonus pay %")]
+        [Display(Name = "Males who received bonus pay")]
+      //[DisplayFormat(DataFormatString = "{0:F1}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:#.#}", ApplyFormatInEditMode = true)]
         public decimal MaleMedianBonusPayPercent { get; set; }
 
         [Required]
         [Range(0.0, 200.9)]
-        [Display(Name = "Females who received bonus pay %")]
+        [Display(Name = "Females who received bonus pay")]
+        //[DisplayFormat(DataFormatString = "{0:F1}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:#.#}", ApplyFormatInEditMode = true)]
         public decimal FemaleMedianBonusPayPercent { get; set; }
 
         [Required]
         [Range(0.0, 200.9)]
         [Display(Name = "Male")]
+        //[DisplayFormat(DataFormatString = "{0:F1}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:#.#}", ApplyFormatInEditMode = true)]
         public decimal MaleLowerPayBand { get; set; }
 
         [Required]
         [Range(0.0, 200.9)]
         [Display(Name = "Female")]
+        //[DisplayFormat(DataFormatString = "{0:F1}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:#.#}", ApplyFormatInEditMode = true)]
         public decimal FemaleLowerPayBand { get; set; }
 
         [Required]
         [Range(0.0, 200.9)]
         [Display(Name = "Male")]
+        //[DisplayFormat(DataFormatString = "{0:F1}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:#.#}", ApplyFormatInEditMode = true)]
         public decimal MaleMiddlePayBand { get; set; }
 
         [Required]
         [Range(0.0, 200.9)]
         [Display(Name = "Female")]
+        //[DisplayFormat(DataFormatString = "{0:F1}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:#.#}", ApplyFormatInEditMode = true)]
         public decimal FemaleMiddlePayBand { get; set; }
 
         [Required]
         [Range(0.0, 200.9)]
         [Display(Name = "Male")]
+        //[DisplayFormat(DataFormatString = "{0:F1}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:#.#}", ApplyFormatInEditMode = true)]
         public decimal MaleUpperPayBand { get; set; }
 
         [Required]
         [Range(0.0, 200.9)]
         [Display(Name = "Female")]
+        //[DisplayFormat(DataFormatString = "{0:F1}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:#.#}", ApplyFormatInEditMode = true)]
         public decimal FemaleUpperPayBand { get; set; }
 
         [Required]
         [Range(0.0, 200.9)]
         [Display(Name = "Male")]
+        //[DisplayFormat(DataFormatString = "{0:F1}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:#.#}", ApplyFormatInEditMode = true)]
         public decimal MaleUpperQuartilePayBand { get; set; }
 
         [Required]
         [Range(0.0, 200.9) ]
         [Display(Name = "Female")]
+        //[DisplayFormat(DataFormatString = "{0:F1}", ApplyFormatInEditMode = true)]
+        [DisplayFormat(DataFormatString = "{0:#.#}", ApplyFormatInEditMode = true)]
         public decimal FemaleUpperQuartilePayBand { get; set; }
 
         public long ReturnId { get; set; }
@@ -103,7 +131,7 @@ namespace GenderPayGap.WebUI.Models
 
 
         [Required(AllowEmptyStrings = false)]
-        [Display(Name = "Title")]
+        [Display(Name = "Job title")]
         public string JobTitle { get; set; }
         [Required]
         [Display(Name = "First name")]

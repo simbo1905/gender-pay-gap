@@ -18,7 +18,7 @@
             <div class="column-two-thirds">
                 <h1 class="heading-large">
                     <span class="heading-secondary">Step 1 of 4</span>
-                        Submit your gender pay gap data for @(Model.AccountingDate.AddYears(-1).Year)  to @(Model.AccountingDate.Year )
+                    Submit your gender pay gap data for @(Model.AccountingDate.AddYears(-1).Year)  to @(Model.AccountingDate.Year )
                 </h1>
 
                 <div class="form-horizontal">
@@ -26,7 +26,7 @@
                     @*<hr />*@
                     @Html.ValidationSummary(false, "", new { @class = "text-danger" })
 
-                    <h2 class="heading-medium">1. Difference in mean hourly rate of pay between male and female employees  </h2>
+                    <h2 class="heading-medium">1. Difference in hourly rate of pay - mean  </h2>
                     <fieldset>
                         <div class="form-group">
                             @Html.LabelFor(model => model.DiffMeanHourlyPayPercent, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -39,7 +39,7 @@
                         </div>
                     </fieldset>
                    
-                    <h2 class="heading-medium">2. Difference in median hourly rate of pay between male and female employees </h2>
+                    <h2 class="heading-medium">2. Difference in hourly rate of pay - median </h2>
                     <fieldset>
                         <div class="form-group">
                             @Html.LabelFor(model => model.DiffMedianHourlyPercent, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -52,7 +52,7 @@
                         </div>
                     </fieldset>
                    
-                    <h2 class="heading-medium">3. Difference in mean bonus pay between male and female employees  </h2>
+                    <h2 class="heading-medium">3. Difference in bonus pay - mean  </h2>
                     <fieldset>
                         <div class="form-group">
                             @Html.LabelFor(model => model.DiffMeanBonusPercent, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -65,7 +65,7 @@
                         </div>
                     </fieldset>
                    
-                    <h2 class="heading-medium">4. Difference in median bonus pay between male and female employees</h2>
+                    <h2 class="heading-medium">4. Difference in bonus pay - median</h2>
                     <fieldset>
                         <div class="form-group">
                             @Html.LabelFor(model => model.DiffMedianBonusPercent, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -79,7 +79,7 @@
 
                     </fieldset>
                    
-                    <h2 class="heading-medium">5. Percentage of male and female employees who received bonus pay</h2>
+                    <h2 class="heading-medium">5. Percentage of employees who received bonus pay</h2>
                     <fieldset>
                         <div class="form-group">
                             @Html.LabelFor(model => model.MaleMedianBonusPayPercent, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -101,7 +101,7 @@
                         </div>
                     </fieldset>
                    
-                    <h2 class="heading-medium">6. Male and female employees by pay quartile	</h2>
+                    <h2 class="heading-medium">6. Employees by pay quartile	</h2>
                     <h3 class="heading-small">Lower quartile</h3>
                     <fieldset>
                         <div class="form-group">
@@ -190,11 +190,22 @@
                 </p>
                 <p>
                     @*<input class="Link" type="hidden/submit" role="button" name="command" value="Cancel" />*@
-                    <input class="Link" type="@TempData["type"]" role="button" name="command" value="@TempData["value"]" />
+                    @*<input class="Link" type="@TempData["type"]" role="button" name="command" value="@TempData["value"]" />*@
                 </p>
                 @*<a href="gpg-overview">Cancel</a>*@
             </div>
+            <div class="column-third">
+                <aside class="govuk-related-items" role="complementary">
+                    <h3 class="heading-small" id="subsection-title">Gender pay gap guidance </h3>
+                    <nav role="navigation" aria-labelledby="subsection-title">
+                        <ul class="font-xsmall">
+                            <li><a target="blank" href="https://www.gov.uk/guidance/gender-pay-gap-reporting-data-you-must-gather">Gender pay gap reporting: data you must gather </a></li>
+                            <li><a target="blank" href="https://www.gov.uk/guidance/gender-pay-gap-reporting-make-your-calculations">Gender pay gap reporting: make your calculations </a></li>
 
+                        </ul>
+                    </nav>
+                </aside>
+            </div>
         </div>
     }
 </main>
