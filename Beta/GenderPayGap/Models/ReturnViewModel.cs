@@ -9,6 +9,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace GenderPayGap.WebUI.Models
 {
+    [Serializable]
     public class ReturnViewModel
     {
         public ReturnViewModel()
