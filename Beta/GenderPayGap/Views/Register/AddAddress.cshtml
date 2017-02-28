@@ -5,7 +5,7 @@
 @model GenderPayGap.WebUI.Models.OrganisationViewModel
 
 <main id="content" role="main">
-    @using (Html.BeginForm("Step6","Register"))
+    @using (Html.BeginForm("Step6", "Register"))
     {
         @Html.AntiForgeryToken()
 
@@ -37,7 +37,7 @@
 
                     <fieldset>
 
-                         @*<div class="form-group form-group-compound">
+                        @*<div class="form-group form-group-compound">
                                 <label class="form-label" for="address-line-1">Address</label>
                                 <input class="form-control" id="address-line-1" type="text">
                             </div>*@
@@ -50,7 +50,7 @@
                         </div>
 
 
-                         @*<div class="form-group">
+                        @*<div class="form-group">
                                 <label class="form-label visuallyhidden" for="address-line-2">Street</label>
                                 <input class="form-control" placeholder="optional" id="address-line-2" type="text">
                             </div>*@
@@ -64,9 +64,9 @@
 
 
                         @*<div class="form-group">
-                            <label class="form-label" for="address-town">Town or City</label>
-                            <input class="form-control form-control-1-4" id="address-town" type="text">
-                        </div>*@
+                                <label class="form-label" for="address-town">Town or City</label>
+                                <input class="form-control form-control-1-4" id="address-town" type="text">
+                            </div>*@
                         <div class="form-group">
                             @*@Html.LabelFor(model => model.Employers[0].Address3, htmlAttributes: new { @class = "control-label col-md-2" })*@
                             <label class="form-label" for="address-town">Town or City</label>
@@ -75,9 +75,9 @@
                                 @Html.EditorFor(model => model.Address3, new { htmlAttributes = new { @class = "form-control form-control-1-4" } })
                             </div>
                         </div>
-                      
 
-                         @*<div class="form-group form-group-compound">
+
+                        @*<div class="form-group form-group-compound">
                                 <label class="form-label" for="address-postcode">Postcode</label>
                                 <input class="form-control form-control-1-8" id="address-postcode" type="text">
                             </div>*@
@@ -96,8 +96,11 @@
                     <input class="button" type="submit" role="button" name="command" value="Submit" />
 
                 </div>
-
+                <br>
+                <p>
+                    @Html.ActionLink("Back", "Step5")
+                </p>
             </div>
         </div>
-                        }
+    }
 </main>
