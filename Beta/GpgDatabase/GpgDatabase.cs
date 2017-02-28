@@ -19,6 +19,7 @@ namespace GenderPayGap.Models.SqlDatabase
 
         public virtual DbSet<Organisation> Organisation { get; set; }
         public virtual DbSet<OrganisationAddress> OrganisationAddress { get; set; }
+        public virtual DbSet<AddressStatus> AddressStatus { get; set; }
         public virtual DbSet<OrganisationStatus> OrganisationStatus { get; set; }
         public virtual DbSet<Return> Return { get; set; }
         public virtual DbSet<ReturnStatus> ReturnStatus { get; set; }
@@ -77,6 +78,67 @@ namespace GenderPayGap.Models.SqlDatabase
             }
             context.SaveChanges();
             return result;
+        }
+
+        public static void Delete(long userId, bool deleteReturns,bool deleteOrg, bool deleteUser)
+        {
+            var context = new DbContext();
+            var user=context.User.FirstOrDefault(u => u.UserId == userId);
+            var orgUser = context.UserOrganisations.FirstOrDefault(uo => uo.UserId == userId);
+            if (orgUser != null)
+            {
+                var org = context.Organisation.FirstOrDefault(o => o.OrganisationId == orgUser.OrganisationId);
+                if (org!=null)
+                {
+                    if (deleteOrg || deleteUser)
+                    {
+                        var addresses = context.OrganisationAddress.Where(a => a.OrganisationId == org.OrganisationId).ToList();
+                        foreach (var address in addresses)
+                            context.AddressStatus.RemoveRange(address.AddressStatuses);
+
+                        context.OrganisationAddress.RemoveRange(addresses);
+                    }
+                    if (deleteOrg || deleteUser || deleteReturns)
+                    {
+                        var returns = context.Return.Where(a => a.OrganisationId == org.OrganisationId).ToList();
+
+                        foreach (var @return in returns)
+                            context.ReturnStatus.RemoveRange(@return.ReturnStatuses);
+
+                        context.Return.RemoveRange(returns);
+                    }
+
+                    if (deleteOrg || deleteUser)
+                    {
+                        context.OrganisationStatus.RemoveRange(org.OrganisationStatuses);
+                        context.Organisation.Remove(org);
+                    }
+                }
+                if (deleteOrg || deleteUser)
+                    context.UserOrganisations.Remove(orgUser);
+            }
+            if (user != null && deleteUser)
+            {
+
+                context.UserStatuses.RemoveRange(user.UserStatuses);
+                context.User.Remove(user);
+            }
+            context.SaveChanges();
+        }
+
+        public static void DeleteReturns(long userId)
+        {
+            Delete(userId, true, false, false);
+        }
+
+        public static void DeleteOrganisations(long userId)
+        {
+            Delete(userId, true, true, false);
+        }
+
+        public static void DeleteAccount(long userId)
+        {
+            Delete(userId, true, true, true);
         }
 
         public static List<string> GetTableList(System.Data.Entity.DbContext db)
