@@ -206,12 +206,24 @@ namespace GenderPayGap
 
         #endregion
 
-        bool IsAction(string actionName, string controllerName=null)
+        /// <summary>
+        /// returns true if previous action 
+        /// </summary>
+        /// <param name="actionName"></param>
+        /// <param name="controllerName"></param>
+        /// <returns></returns>
+        public bool WasAction(string actionName, string controllerName = null, object routeValues=null)
+        {
+            if (string.IsNullOrWhiteSpace(controllerName)) controllerName = ControllerName;
+            return Request.UrlReferrer==null ? false : Request.UrlReferrer.PathAndQuery.EqualsI(Url.Action("Step4", controllerName, routeValues));
+        }
+
+        public bool IsAction(string actionName, string controllerName=null)
         {
             return actionName.EqualsI(ActionName) && (controllerName==ControllerName || string.IsNullOrWhiteSpace(controllerName));
         }
 
-        bool IsAnyAction(params string[] actionUrls)
+        public bool IsAnyAction(params string[] actionUrls)
         {
             for (var i=0;i<actionUrls.Length;i++)
             {
