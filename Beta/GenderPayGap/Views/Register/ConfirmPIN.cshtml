@@ -9,7 +9,7 @@
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
-            @Html.ValidationSummary("", new { @class = "text-danger" })
+            @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
 
             <div class="column-two-thirds">
                 <h1 class="heading-large">
