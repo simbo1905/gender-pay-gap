@@ -449,6 +449,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Register\AddAddress.cshtml" />
     <Content Include="Views\Register\Step4.cshtml" />
+    <Content Include="Views\Shared\_ValidationSummary.cshtml" />
     <None Include="Web.DEV.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

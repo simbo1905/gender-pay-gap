@@ -10,7 +10,7 @@
         @Html.HiddenFor(m => m.SearchText)
 
         <div class="grid-row">
-            @Html.ValidationSummary("", new { @class = "text-danger" })
+            @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
 
 
             <div class="column-full">
