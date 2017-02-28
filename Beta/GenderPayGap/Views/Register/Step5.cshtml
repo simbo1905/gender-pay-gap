@@ -26,6 +26,8 @@
                         <button type="submit" class="search-submit" name="command" value="search">Search</button>
                     </div>
                 </div>
+            </div>
+            <div class="column-full">
 
                 @if (!string.IsNullOrWhiteSpace(Model.SearchText))
                 {
@@ -40,12 +42,10 @@
                             <caption class="visuallyhidden">Customer and Business search listing</caption>
                             <thead>
                                 <tr>
-                                    <th scope="col">Organisation name and registered address</th>
-
                                     @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
                                     {
                                         <th scope="col">Organisation name and registered address</th>
-                                            <th scope="col">Registered number</th>
+                                        <th scope="col">Registered number</th>
                                     }
                                     else
                                     {
@@ -124,7 +124,7 @@
                 </details>
                 <br>
                 <p>
-                    @Html.ActionLink("Go back to previous step", "Step3")
+                    @Html.ActionLink("Back", "Step4")
                 </p>
 
             </div>
