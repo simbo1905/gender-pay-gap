@@ -140,8 +140,8 @@ namespace GenderPayGap.WebUI.Controllers
 
             StashModel(model);
 
-            if(Request.UrlReferrer != null && Request.UrlReferrer.Segments[2].ToString() == "Step4")
-                TempData["Review"] = Request.UrlReferrer.Segments[2].ToString();
+            //if(Request.UrlReferrer != null && Request.UrlReferrer.Segments[2].ToString() == "Step4")
+            //    TempData["Review"] = Request.UrlReferrer.Segments[2].ToString();
 
             var result = View("Step1", model);
             return result;
@@ -452,11 +452,11 @@ namespace GenderPayGap.WebUI.Controllers
             //Set link initial value as there is noreferrer yet
             TempData["type"] = "hidden";
 
-            if (Request.UrlReferrer != null && Request.UrlReferrer.Segments[2].ToString() == "Step4")
-            {
-                TempData["value"] = "Cancel";
-                TempData["type"] = "submit";
-            }
+            //if (Request.UrlReferrer != null && Request.UrlReferrer.Segments[2].ToString() == "Step4")
+            //{
+            //    TempData["value"] = "Cancel";
+            //    TempData["type"] = "submit";
+            //}
         }
 
         //public void UnhideAndChangeLinkName()
