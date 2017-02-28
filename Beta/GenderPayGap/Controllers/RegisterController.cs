@@ -153,11 +153,6 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("Step2")]
         public ActionResult Step2(string code = null)
         {
-
-            //For Testing
-            var m = new RegisterViewModel();
-            return View(m);
-
             var model = UnstashModel<VerifyViewModel>(true);
             if (model != null) return View("Step2", model);
 

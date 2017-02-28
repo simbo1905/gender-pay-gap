@@ -20,41 +20,53 @@
         <input type="submit" style="display:none" name="command" value="">
         <div class="grid-row">
             @Html.ValidationSummary("", new { @class = "text-danger" })
-            <div class="column-full">
+            <div class="column-two-thirds">
                 <h1 class="heading-large">
 
                     @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
                     {
-                        if (Model.EmployerRecords > 0)
+                        @*if (Model.EmployerRecords > 0)
                         {
-                            <span class="heading-secondary">Step 5 of 5</span>
+                            <span class="heading-secondary">Step 5 of 6</span>
                             <span>Choose your organisation</span>
                         }
-                        else
+                        else 
                         {
-                            <span class="heading-secondary">Step 4 of 5</span>
+                            <span class="heading-secondary">Step 4 of 6</span>
+                            <span>Search for your organisation</span>
+                        }*@
+
+                        if (Model.EmployerRecords <= 0 )
+                        {
+                            <span class="heading-secondary">Step 4 of 6</span>
                             <span>Search for your organisation</span>
                         }
                     }
 
                    @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Public)
                    {
-                       if (Model.EmployerRecords > 0)
+                       @*if (Model.EmployerRecords > 0)
                        {
-                            <span class="heading-secondary">Step 5 of 5</span>
+                            <span class="heading-secondary">Step 5 of 6</span>
                             <span>Choose your organisation</span>
                        }
                        else
                        {
-                            <span class="heading-secondary">Step 4 of 5</span>
+                            <span class="heading-secondary">Step 4 of 6</span> //surely not 4 of 5?????!!!! *************************************************************!!!!!!!!!!!!!!!!!!!!
                             <span>Find your organisation</span>
-                       }
+                       }*@
+
+                        if (Model.EmployerRecords <= 0)
+                        {
+                            <span class="heading-secondary">Step 4 of 6</span> //surely not 4 of 5?????!!!! *************************************************************!!!!!!!!!!!!!!!!!!!!
+                            <span>Find your organisation</span>
+                        }
                    }
                 </h1>
 
                 <div class="search-bar">
                     <div class="searchfield">
-                        @Html.EditorFor(model => model.SearchText, new { htmlAttributes = new { @class = "search-input", @placeholder = "Enter an employers name or company no" } })
+                        @Html.EditorFor(model => model.SearchText, new { htmlAttributes = new { @class = "search-input", @placeholder = "Enter an organisation name or company no" } })
 
                         <button type="submit" class="search-submit" name="command" value="search">Search</button>
                     </div>
@@ -70,18 +82,41 @@
                          <br>
                          <table class="search search3">
                              <caption class="visuallyhidden">Customer and Business search listing</caption>
-                             <thead>
+                             @*<thead>
                              <tr>
-                                 <th scope="col">Employer</th>
+                                 <th scope="col">Organisation name and registered address</th>
 
                                  @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
                                  {
-                                     <th scope="col">Company number</th>
+                                     <th scope="col">Registered number</th>
                                  }
 
                                  <th scope="col"></th>
 
                              </tr>
+                             </thead>*@
+
+                             <thead>
+                                 <tr>
+                                    @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
+                                    {
+
+                                     <th scope="col">Organisation name and registered address</th>
+
+                                     <th scope="col">Registered number</th>
+
+                                     <th scope="col"></th>
+                                    }
+
+                                     @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Public)
+                                     {
+                                         <th scope="col">Organisation</th>
+
+                                         @*<th scope="col">Registered number</th>*@
+
+                                         <th scope="col"></th>
+                                     }
+                                 </tr>
                              </thead>
                              <tbody>
                              @for (var i = 0; i < Model.Employers.Count; i++)
@@ -101,7 +136,7 @@
                                         <td>@Model.Employers[i].OrgName <span>@Model.Employers[i].EmailPatterns</span></td>
                                     }
                                     <td>
-                                        <button type="submit" class="link-button" name="command" value="employer_@i">Choose&nbsp;company</button>
+                                        <button type="submit" class="link-button" name="command" value="employer_@i">Choose&nbsp;organisation</button>
                                     </td>
                                 </tr>
                              }
@@ -140,11 +175,21 @@
                              </div>
                          }
                      }
+
+                    <br />
+                    <br/>
+
+                    <details role="group">
+                        <summary role="button" aria-controls="details-content-0" aria-expanded="true">Can't find your organisation?</summary>
+                        <div class="panel panel-border-narrow" id="details-content-0" aria-hidden="false">
+                            <a href="organisation-address?dc=privateManual">Add your employer manually</a>
+                        </div>
+                    </details>
                 }
                 <br>
-                <p>
-                    @Html.ActionLink("Go back to previous step", "Step3")
-                </p>
+                @*<p>
+                    @Html.ActionLink("Back", "Step3")
+                </p>*@
 
             </div>
         </div>

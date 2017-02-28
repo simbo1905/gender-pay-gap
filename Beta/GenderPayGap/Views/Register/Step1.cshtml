@@ -6,9 +6,9 @@
 @using GenderPayGap.WebUI.Classes
 <main id="content" role="main">
     <div class="grid-row">
-        <div class="column-full">
+        <div class="column-two-thirds">
             <h1 class="heading-large">
-                <span class="heading-secondary">Step 1 of 5</span>
+                <span class="heading-secondary">Step 1 of 6</span>
                 About you
             </h1>
             @if (!User.Identity.IsAuthenticated)
@@ -46,7 +46,7 @@
 
                 <fieldset>
                     <legend class="visuallyhidden">Email</legend>
-                    <p>Enter your name and job title. The service will send a gender pay gap PIN by post so you can use the service.</p>
+                    <p>Enter your name and job title. The service will send you a gender pay gap PIN by post so you can report your organisation's data.</p>
                     <div class="form-group ">
                         @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "control-label col-md-10" })
                         <div class="col-md-10">
@@ -81,6 +81,7 @@
                     <legend class="visuallyhidden">Password</legend>
                     <div class="text">
                         <p>Your password must be at least 8 characters long and contain:</p>
+                        <p>It must also have at least one of each of the following:  </p>
                         <ul class="list list-bullet">
                             <li>1 lower-case letter</li>
                             <li>1 capital letter and</li>
