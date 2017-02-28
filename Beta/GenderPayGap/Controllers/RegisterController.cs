@@ -809,10 +809,12 @@ namespace GenderPayGap.WebUI.Controllers
                     DataRepository.SaveChanges();
 
                     //Generate a new pin
-                    var pin = Crypto.GeneratePasscode(Properties.Settings.Default.PINChars.ToCharArray(),Properties.Settings.Default.PINLength);
+                    var pin = ConfigurationManager.AppSettings["TestPIN"];
+                    if (string.IsNullOrWhiteSpace(pin))pin = Crypto.GeneratePasscode(Properties.Settings.Default.PINChars.ToCharArray(),Properties.Settings.Default.PINLength);
 
                     //Try and send the PIN in post
-                    if (!this.SendPinInPost(currentUser, org, pin.ToString()))
+                    var emailPIN = ConfigurationManager.AppSettings["EmailPIN"].ToBoolean(true);
+                    if (emailPIN && !this.SendPinInPost(currentUser, org, pin.ToString()))
                         throw new Exception("Could not send PIN in the POST. Please try again later.");
 
                     //Try and send the confirmation email
