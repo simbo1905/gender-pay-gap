@@ -9,7 +9,7 @@
             @using (Html.BeginForm())
             {
                 @Html.AntiForgeryToken()
-                @Html.ValidationSummary("", new { @class = "text-danger" })
+                @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
 
                 if (Model.Sent)
                 {
