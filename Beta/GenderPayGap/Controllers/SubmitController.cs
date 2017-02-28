@@ -281,7 +281,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             DataRepository.SaveChanges();
 
-            oldReturn.SetStatus(ReturnStatuses.Submitted, currentUser.UserId);
+            newReturn.SetStatus(ReturnStatuses.Submitted, currentUser.UserId);
             DataRepository.SaveChanges();
 
             return View("Step5", model);
