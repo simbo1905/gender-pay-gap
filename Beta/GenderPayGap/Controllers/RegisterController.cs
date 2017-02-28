@@ -818,8 +818,8 @@ namespace GenderPayGap.WebUI.Controllers
                         throw new Exception("Could not send PIN in the POST. Please try again later.");
 
                     //Try and send the confirmation email
-                    if (!this.SendConfirmEmail(currentUser.EmailAddress))
-                        throw new Exception("Could not send confirmation email. Please try again later.");
+                    //if (!this.SendConfirmEmail(currentUser.EmailAddress))
+                    //    throw new Exception("Could not send confirmation email. Please try again later.");
 
                     //Save the PIN and confirm code
                     userOrg.PINHash = pin.GetSHA512Checksum();
