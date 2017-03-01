@@ -62,7 +62,7 @@ namespace GenderPayGap.WebUI.Controllers
             var @return = DataRepository.GetAll<Return>().OrderByDescending
                 (r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId && r.AccountingDate == expectStartDate && r.Status==ReturnStatuses.Submitted);
 
-            var model = UnstashModel<ReturnViewModel>();
+            var model = this.UnstashModel<ReturnViewModel>();
 
             if (model == null)
             {
@@ -106,7 +106,7 @@ namespace GenderPayGap.WebUI.Controllers
             //If redirected from step 4 then save to session and return to view
             model.ReturnToStep4 = returnUrl.EqualsI("Step4");
 
-            StashModel(model);
+            this.StashModel(model);
 
             var result = View("Step1", model);
             return result;
@@ -128,7 +128,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             if (!ModelState.IsValid) return View(model);
 
-            StashModel(model);
+            this.StashModel(model);
 
             return RedirectToAction(returnUrl.EqualsI("Step4") ? "Step4" : "Step2");
         }
@@ -142,7 +142,7 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            var model = UnstashModel<ReturnViewModel>();
+            var model = this.UnstashModel<ReturnViewModel>();
 
             if (model == null)
             {
@@ -169,7 +169,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             if (!ModelState.IsValid) return View(model);
 
-            StashModel(model);
+            this.StashModel(model);
             
             return RedirectToAction(returnUrl.EqualsI("Step4") ? "Step4" : "Step3");
         }
@@ -183,7 +183,7 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            var model = UnstashModel<ReturnViewModel>();
+            var model = this.UnstashModel<ReturnViewModel>();
 
             if (model == null)
             {
@@ -208,7 +208,7 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            StashModel(model);
+            this.StashModel(model);
 
             return RedirectToAction("Step4");
         }
@@ -222,7 +222,7 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            var model = UnstashModel<ReturnViewModel>();
+            var model = this.UnstashModel<ReturnViewModel>();
             if (model == null)
             {
                 TempData["ErrorMessage"] = "You session has timed out and you need to restart";
@@ -299,7 +299,7 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            var model = UnstashModel<ReturnViewModel>();
+            var model = this.UnstashModel<ReturnViewModel>();
             if (model == null)
             {
                 TempData["ErrorMessage"] = "You session has timed out and you need to restart";

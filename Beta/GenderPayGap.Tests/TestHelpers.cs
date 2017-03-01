@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using GenderPayGap.Core.Interfaces;
 using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.WebUI.Controllers;
 using IdentityServer3.Core;
 using Moq;
 using System;
@@ -22,7 +23,7 @@ namespace GenderPayGap.Tests
     public static class TestHelper
     {
         private const string Url = "https://genderpaygap.azurewebsites.net";
-        public static T GetController<T>(long userId=0, params object[] dbObjects) where T : Controller
+        public static T GetController<T>(long userId=0, RouteData routeData=null, params object[] dbObjects) where T : Controller
         {
             var builder = BuildContainerIoC(dbObjects);
 
@@ -46,11 +47,15 @@ namespace GenderPayGap.Tests
             var responseMock = new Mock<HttpResponseBase>();
             responseMock.Setup(x => x.ApplyAppPathModifier(It.IsAny<string>())).Returns((string url) => url);
 
+            //Mock session
+            var sessionMock = new MockHttpSession();
+
             //Mock HttpContext
             var contextMock = new Mock<HttpContextBase>();
             contextMock.Setup(ctx => ctx.User).Returns(mockPrincipal.Object);
-            contextMock.SetupGet(x => x.Request).Returns(requestMock.Object);
-            contextMock.SetupGet(x => x.Response).Returns(responseMock.Object);
+            contextMock.SetupGet(ctx => ctx.Request).Returns(requestMock.Object);
+            contextMock.SetupGet(ctx => ctx.Response).Returns(responseMock.Object);
+            contextMock.Setup(ctx => ctx.Session).Returns(sessionMock);
 
             var routes = new RouteCollection();
             RouteConfig.RegisterRoutes(routes);
@@ -59,13 +64,25 @@ namespace GenderPayGap.Tests
             var controllerContextMock = new Mock<ControllerContext>();
             controllerContextMock.Setup(con => con.HttpContext).Returns(contextMock.Object);
 
+            if (routeData==null) routeData=new RouteData();
             T controller = (T)Activator.CreateInstance(typeof(T), builder);
             controller.ControllerContext = controllerContextMock.Object;
             controller.Url = new UrlHelper(
-                new RequestContext(contextMock.Object, new RouteData()),
+                new RequestContext(contextMock.Object,routeData),
                 routes
             );
             return controller;
+        }
+
+        public class MockHttpSession : HttpSessionStateBase
+        {
+            Dictionary<string, object> m_SessionStorage = new Dictionary<string, object>();
+
+            public override object this[string name]
+            {
+                get { return m_SessionStorage[name]; }
+                set { m_SessionStorage[name] = value; }
+            }
         }
 
         public static IContainer BuildContainerIoC(params object[] dbObjects)

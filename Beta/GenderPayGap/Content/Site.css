@@ -60,6 +60,7 @@
     color: #b10e1e !important;
     font-weight: bold;
     text-decoration: underline;
+    list-style:none;
 }
 
 .error-summary span{

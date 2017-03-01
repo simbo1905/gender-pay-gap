@@ -1,5 +1,7 @@
 ﻿@model GenderPayGap.WebUI.Models.ReturnViewModel
 
+@using GenderPayGap.WebUI.Classes
+
 <main id="content" role="main">
     @using (Html.BeginForm(/*"Step2", "Submit", FormMethod.Post*/))
     {
@@ -32,7 +34,7 @@
                             @Html.LabelFor(model => model.DiffMeanHourlyPayPercent, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.DiffMeanHourlyPayPercent, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.DiffMeanHourlyPayPercent, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                @Html.CustomEditorFor(model => model.DiffMeanHourlyPayPercent, htmlAttributes: new { @class = "form-control form-control-1-4" }) %
                             </div>
                         </div>
                     </fieldset>
@@ -43,7 +45,7 @@
                             @Html.LabelFor(model => model.DiffMedianHourlyPercent, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.DiffMedianHourlyPercent, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.DiffMedianHourlyPercent, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                @Html.CustomEditorFor(model => model.DiffMedianHourlyPercent, htmlAttributes: new { @class = "form-control form-control-1-4" }) %
                             </div>
                         </div>
                     </fieldset>
@@ -54,7 +56,7 @@
                             @Html.LabelFor(model => model.DiffMeanBonusPercent, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.DiffMeanBonusPercent, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.DiffMeanBonusPercent, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                @Html.CustomEditorFor(model => model.DiffMeanBonusPercent, htmlAttributes: new { @class = "form-control form-control-1-4" }) %
                             </div>
                         </div>
                     </fieldset>
@@ -65,7 +67,7 @@
                             @Html.LabelFor(model => model.DiffMedianBonusPercent, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.DiffMedianBonusPercent, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.DiffMedianBonusPercent, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                @Html.CustomEditorFor(model => model.DiffMedianBonusPercent, htmlAttributes: new { @class = "form-control form-control-1-4" }) %
                             </div>
                         </div>
 
@@ -77,14 +79,14 @@
                             @Html.LabelFor(model => model.MaleMedianBonusPayPercent, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.MaleMedianBonusPayPercent, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.MaleMedianBonusPayPercent, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                @Html.CustomEditorFor(model => model.MaleMedianBonusPayPercent, htmlAttributes: new { @class = "form-control form-control-1-4" }) %
                             </div>
                         </div>
                         <div class="form-group">
                             @Html.LabelFor(model => model.FemaleMedianBonusPayPercent, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.FemaleMedianBonusPayPercent, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.FemaleMedianBonusPayPercent, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                @Html.CustomEditorFor(model => model.FemaleMedianBonusPayPercent, htmlAttributes: new { @class = "form-control form-control-1-4" }) %
                             </div>
                         </div>
                     </fieldset>
@@ -96,14 +98,14 @@
                             @Html.LabelFor(model => model.MaleLowerPayBand, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.MaleLowerPayBand, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.MaleLowerPayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                @Html.CustomEditorFor(model => model.MaleLowerPayBand, htmlAttributes: new { @class = "form-control form-control-1-4" }) %
                             </div>
                         </div>
                         <div class="form-group">
                             @Html.LabelFor(model => model.FemaleLowerPayBand, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.FemaleLowerPayBand, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.FemaleLowerPayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                @Html.CustomEditorFor(model => model.FemaleLowerPayBand, htmlAttributes: new { @class = "form-control form-control-1-4" }) %
                             </div>
                         </div>
                     </fieldset>
@@ -113,7 +115,7 @@
                             @Html.LabelFor(model => model.MaleMiddlePayBand, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.MaleMiddlePayBand, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.MaleMiddlePayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                @Html.CustomEditorFor(model => model.MaleMiddlePayBand, htmlAttributes: new { @class = "form-control form-control-1-4" }) %
                             </div>
                         </div>
 
@@ -121,7 +123,7 @@
                             @Html.LabelFor(model => model.FemaleMiddlePayBand, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.FemaleMiddlePayBand, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.FemaleMiddlePayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                @Html.CustomEditorFor(model => model.FemaleMiddlePayBand, htmlAttributes: new { @class = "form-control form-control-1-4" }) %
                             </div>
                         </div>
                     </fieldset>
@@ -131,14 +133,14 @@
                             @Html.LabelFor(model => model.MaleUpperPayBand, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.MaleUpperPayBand, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.MaleUpperPayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                @Html.CustomEditorFor(model => model.MaleUpperPayBand, htmlAttributes: new { @class = "form-control form-control-1-4" }) %
                             </div>
                         </div>
                         <div class="form-group">
                             @Html.LabelFor(model => model.FemaleUpperPayBand, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.FemaleUpperPayBand, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.FemaleUpperPayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                @Html.CustomEditorFor(model => model.FemaleUpperPayBand, htmlAttributes: new { @class = "form-control form-control-1-4" }) %
                             </div>
                         </div>
                     </fieldset>
@@ -148,14 +150,14 @@
                             @Html.LabelFor(model => model.MaleUpperQuartilePayBand, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.MaleUpperQuartilePayBand, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.MaleUpperQuartilePayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                @Html.CustomEditorFor(model => model.MaleUpperQuartilePayBand, htmlAttributes: new { @class = "form-control form-control-1-4" }) %
                             </div>
                         </div>
                         <div class="form-group">
                             @Html.LabelFor(model => model.FemaleUpperQuartilePayBand, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.FemaleUpperQuartilePayBand, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.FemaleUpperQuartilePayBand, new { htmlAttributes = new { @class = "form-control form-control-1-4" } }) %
+                                @Html.CustomEditorFor(model => model.FemaleUpperQuartilePayBand, htmlAttributes: new { @class = "form-control form-control-1-4" }) %
                             </div>
                         </div>
 
