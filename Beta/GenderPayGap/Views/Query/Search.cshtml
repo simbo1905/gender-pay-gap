@@ -1,5 +1,6 @@
 ﻿@model GenderPayGap.WebUI.Models.SearchViewModel
 
+@using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
 
@@ -26,7 +27,7 @@
                             <form class="search" action="Search" method="post">
                                 <div class="search-bar">
                                     <div class="searchfield">
-                                        @Html.EditorFor(model => model.Search, new { htmlAttributes = new { @class = "search-input", @placeholder = "Enter an employers name..." } })
+                                        @Html.CustomEditorFor(model => model.Search, htmlAttributes: new { @class = "search-input", @placeholder = "Enter an employers name..." })
                                         @*<input type="search" name="search" class="search-input" placeholder="Enter an employers name...">*@
                                         <button type="submit" class="search-submit">Search</button>
                                     </div>

@@ -3,6 +3,8 @@
 }
 
 @model GenderPayGap.WebUI.Models.OrganisationViewModel
+@using GenderPayGap.WebUI.Classes
+@using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
     @using (Html.BeginForm("Step4","Register"))
@@ -30,7 +32,7 @@
 
                 <div class="search-bar">
                     <div class="searchfield">
-                        @Html.EditorFor(model => model.SearchText, new { htmlAttributes = new { @class = "search-input", @placeholder = Model.SectorType==GenderPayGap.Models.SqlDatabase.SectorTypes.Public ? "Enter your organisation's name" :"Enter your organisation's name or company no" } })
+                        @Html.CustomEditorFor(model => model.SearchText, htmlAttributes: new { @class = "search-input", @placeholder = Model.SectorType==GenderPayGap.Models.SqlDatabase.SectorTypes.Public ? "Enter your organisation's name" :"Enter your organisation's name or company no" })
 
                         <button type="submit" class="search-submit" name="command" value="search">Search</button>
                     </div>

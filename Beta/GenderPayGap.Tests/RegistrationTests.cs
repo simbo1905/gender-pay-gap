@@ -55,7 +55,7 @@ namespace GenderPayGap.Tests
             // Arrange
             var user = new User() { UserId = 1};
 
-            var controller = TestHelper.GetController<RegisterController>(1, user);
+            var controller = TestHelper.GetController<RegisterController>(1, null, user);
 
             // Act
             var result = controller.Step1() as ViewResult;
@@ -78,7 +78,7 @@ namespace GenderPayGap.Tests
             // Arrange
             var user = new User() { UserId = 1, EmailVerifySendDate=DateTime.Now.AddDays(-7) };
 
-            var controller = TestHelper.GetController<RegisterController>(1, user);
+            var controller = TestHelper.GetController<RegisterController>(1, null, user);
 
             // Act
             var result = controller.Step1() as ViewResult;
@@ -100,7 +100,7 @@ namespace GenderPayGap.Tests
             // Arrange
             var user = new User() { UserId = 1, EmailVerifySendDate = DateTime.Now.AddHours(-1) };
 
-            var controller = TestHelper.GetController<RegisterController>(1, user);
+            var controller = TestHelper.GetController<RegisterController>(1, null, user);
 
             // Act
             var result = controller.Step1() as ViewResult;
@@ -123,7 +123,7 @@ namespace GenderPayGap.Tests
             // Arrange
             var user = new User() { UserId = 1, EmailVerifySendDate = DateTime.Now.AddDays(-3),EmailVerifiedDate = DateTime.Now};
 
-            var controller = TestHelper.GetController<RegisterController>(1, user);
+            var controller = TestHelper.GetController<RegisterController>(1, null, user);
 
             // Act
             var result = controller.Step1() as ViewResult;
@@ -150,7 +150,7 @@ namespace GenderPayGap.Tests
             var user = new User() { UserId = 1, EmailVerifySendDate = DateTime.Now, EmailVerifiedDate = DateTime.Now };
             var userOrg =new UserOrganisation() { UserId = 1, OrganisationId = 1};
 
-            var controller = TestHelper.GetController<RegisterController>(1, user,userOrg);
+            var controller = TestHelper.GetController<RegisterController>(1, null, user,userOrg);
 
             // Act
             var result = controller.Step1() as ViewResult;
@@ -174,7 +174,7 @@ namespace GenderPayGap.Tests
             var user = new User() { UserId = 1, EmailVerifySendDate = DateTime.Now,EmailVerifiedDate = DateTime.Now};
             var userOrg = new UserOrganisation() { UserId = 1, OrganisationId = 1,PINSentDate = DateTime.Now.AddMonths(-3)};
 
-            var controller = TestHelper.GetController<RegisterController>(1, user,userOrg);
+            var controller = TestHelper.GetController<RegisterController>(1, null, user,userOrg);
 
             // Act
             var result = controller.Step1() as ViewResult;
@@ -197,7 +197,7 @@ namespace GenderPayGap.Tests
             var user = new User() { UserId = 1, EmailVerifySendDate = DateTime.Now, EmailVerifiedDate = DateTime.Now };
             var userOrg = new UserOrganisation() { UserId = 1, OrganisationId = 1, PINSentDate = DateTime.Now.AddHours(-1) };
 
-            var controller = TestHelper.GetController<RegisterController>(1, user,userOrg);
+            var controller = TestHelper.GetController<RegisterController>(1, null, user,userOrg);
 
             // Act
             var result = controller.Step1() as ViewResult;
@@ -221,7 +221,7 @@ namespace GenderPayGap.Tests
             var user = new User() { UserId = 1, EmailVerifySendDate = DateTime.Now, EmailVerifiedDate = DateTime.Now };
             var userOrg = new UserOrganisation() { UserId = 1, OrganisationId = 1, PINSentDate = DateTime.Now.AddHours(-1), PINConfirmedDate = DateTime.Now};
 
-            var controller = TestHelper.GetController<RegisterController>(1, user, userOrg);
+            var controller = TestHelper.GetController<RegisterController>(1, null, user, userOrg);
 
             // Act
             var result = controller.Step1() as ViewResult;

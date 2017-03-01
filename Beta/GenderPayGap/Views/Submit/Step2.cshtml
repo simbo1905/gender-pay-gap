@@ -1,5 +1,7 @@
 ﻿@model GenderPayGap.WebUI.Models.ReturnViewModel
 
+@using GenderPayGap.WebUI.Classes
+
 <main id="content" role="main">
     @using (Html.BeginForm())
     {
@@ -46,7 +48,7 @@
                             @Html.LabelFor(model => model.FirstName, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.FirstName, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.FirstName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.CustomEditorFor(model => model.FirstName, htmlAttributes: new { @class = "form-control" })
                             </div>
                         </div>
 
@@ -55,7 +57,7 @@
                             @Html.LabelFor(model => model.LastName, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.LastName, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.LastName, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.CustomEditorFor(model => model.LastName, htmlAttributes: new { @class = "form-control" })
                             </div>
                         </div>
 
@@ -64,7 +66,7 @@
                             @Html.LabelFor(model => model.JobTitle, htmlAttributes: new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.JobTitle, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.JobTitle, new { htmlAttributes = new { @class = "form-control" } })
+                                @Html.CustomEditorFor(model => model.JobTitle, htmlAttributes: new { @class = "form-control" })
                             </div>
                         </div>
                     </fieldset>
