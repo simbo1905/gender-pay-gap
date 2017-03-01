@@ -6,6 +6,7 @@ using Microsoft.AspNet.Identity;
 using Microsoft.Owin.Security;
 using System;
 using System.ComponentModel.DataAnnotations.Schema;
+using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap.WebUI.Models
 {

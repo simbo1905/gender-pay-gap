@@ -10,6 +10,11 @@ using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using GenderPayGap.WebUI.Controllers;
+using System.Web.Mvc.Html;
+using System.Linq.Expressions;
+using System.Xml.Linq;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
 
 namespace GenderPayGap.WebUI.Classes
 {
@@ -137,6 +142,125 @@ namespace GenderPayGap.WebUI.Classes
 
         #endregion
 
+        #region Session Handling
+
+        public static void StashModel<T>(this Controller controller, T model)
+        {
+            controller.Session[controller + ":Model"] = model;
+        }
+        public static void ClearStash(this Controller controller)
+        {
+            controller.Session.Remove(controller + ":Model");
+        }
+
+        public static T UnstashModel<T>(this Controller controller, bool delete = false) where T : class
+        {
+            var result = controller.Session[controller + ":Model"] as T;
+            if (delete) controller.Session.Remove(controller + ":Model");
+            return result;
+        }
+
+        #endregion
+
+        #region Helpers
+        public static MvcHtmlString CustomEditorFor<TModel, TProperty>(this HtmlHelper<TModel> helper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null)
+        {
+            var containerType = typeof(TModel);
+
+            string propertyName = ExpressionHelper.GetExpressionText(expression);
+            var propertyInfo = containerType.GetPropertyInfo(propertyName);
+
+            var displayAttribute = propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
+            var displayName = displayAttribute == null ? propertyName : displayAttribute.Name;
+
+            string par1 = null;
+            string par2 = null;
+
+            var htmlAttr = htmlAttributes.ToPropertyDictionary();
+            if (propertyInfo != null)
+                foreach (ValidationAttribute attribute in propertyInfo.GetCustomAttributes(typeof(ValidationAttribute), false))
+                {
+                    var validatorKey = $"{containerType.Name}.{propertyName}:{attribute.GetType().Name.TrimSuffix("Attribute")}";
+                    var altError = CustomErrorMessages.GetValidationError(validatorKey);
+                    if (altError == null)
+                    {
+#if DEBUG
+                        var csvFile = FileSystem.ExpandLocalPath("~/App_Data/CustomErrors.csv");
+                        File.AppendAllText(csvFile, $"{validatorKey},{attribute.ErrorMessage},{displayName}\n");
+#endif
+                        continue;
+                    }
+
+                    //Set the message from the description
+                    if (attribute.ErrorMessage != altError.Description)
+                        attribute.ErrorMessage = altError.Description;
+
+                    //Set the inline error message
+                    string errorMessageString = Misc.GetPropertyValue(attribute, "ErrorMessageString") as string;
+                    if (string.IsNullOrWhiteSpace(errorMessageString)) errorMessageString = attribute.ErrorMessage;
+
+                    //Set the summary error message
+                    if (altError.Title != errorMessageString)
+                        errorMessageString = altError.Title;
+
+                    //Set the display name
+                    if (!string.IsNullOrWhiteSpace(altError.DisplayName) && altError.DisplayName != displayName)
+                    {
+                        Misc.SetPropertyValue(displayAttribute, "Name", altError.DisplayName);
+                        displayName = altError.DisplayName;
+                    }
+
+                    string altAttr = null;
+                    if (attribute is RequiredAttribute)
+                        altAttr = "data-val-required-alt";
+                    else if (attribute is System.ComponentModel.DataAnnotations.CompareAttribute)
+                        altAttr = "data-val-equalto-alt";
+                    else if (attribute is RegularExpressionAttribute)
+                        altAttr = "data-val-regex-alt";
+                    else if (attribute is RangeAttribute)
+                    {
+                        altAttr = "data-val-range-alt";
+                        par1 = ((RangeAttribute)attribute).Minimum.ToString();
+                        par2 = ((RangeAttribute)attribute).Maximum.ToString();
+                    }
+                    else if (attribute is DataTypeAttribute)
+                    {
+                        var type = ((DataTypeAttribute)attribute).DataType.ToString().ToLower();
+                        switch (type)
+                        {
+                            case "password":
+                                continue;
+                            case "emailaddress":
+                                type = "email";
+                                break;
+                        }
+                        altAttr = $"data-val-{type}-alt";
+                    }
+                    else if (attribute is MinLengthAttribute)
+                    {
+                        altAttr = "data-val-minlength-alt";
+                        par1 = ((MinLengthAttribute)attribute).Length.ToString();
+                    }
+                    else if (attribute is MaxLengthAttribute)
+                    {
+                        altAttr = "data-val-maxlength-alt";
+                        par1 = ((MaxLengthAttribute)attribute).Length.ToString();
+                    }
+                    else if (attribute is StringLengthAttribute)
+                    {
+                        altAttr = "data-val-length-alt";
+                        par1 = ((StringLengthAttribute)attribute).MinimumLength.ToString();
+                        par2 = ((StringLengthAttribute)attribute).MaximumLength.ToString();
+                    }
+
+                    htmlAttr[altAttr.TrimSuffix("-alt")] = string.Format(attribute.ErrorMessage, displayName, par1, par2);
+                    htmlAttr[altAttr] = string.Format(errorMessageString, displayName, par1, par2); ;
+                }
+
+            return helper.EditorFor(expression, null, new { htmlAttributes = htmlAttr });
+        }
+
+        #endregion
         public static string ResolveUrl(this Controller controller,RedirectToRouteResult redirectToRouteResult)
         {
             return controller.Url.RouteUrl(redirectToRouteResult.RouteName, redirectToRouteResult.RouteValues);

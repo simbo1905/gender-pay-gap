@@ -1,12 +1,12 @@
 ﻿@model GenderPayGap.WebUI.Models.ReturnViewModel
-
-@Html.HiddenFor(model => Model.AccountingDate)
+@using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
 
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => Model.AccountingDate)
 
         @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
         <div class="grid-row">
