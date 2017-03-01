@@ -50,3 +50,5 @@
 2049,,,,,,OrganisationViewModel.Address2:MaxLength,Address2,
 2050,,,,,,OrganisationViewModel.Address3:MaxLength,Address3,
 2051,,,,,,OrganisationViewModel.PostCode:MaxLength,PostCode,
+RegisterViewModel.EmailAddress:EmailAddress,The {0} field is not a valid e-mail address.,Email address
+RegisterViewModel.EmailAddress:EmailAddress,The {0} field is not a valid e-mail address.,Email address
