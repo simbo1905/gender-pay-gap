@@ -56,7 +56,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (result != null) return result;
 
             //Clear the stash
-            ClearStash();
+           this.ClearStash();
 
             //Start new user registration
             return View("Step1", new Models.RegisterViewModel());
@@ -122,7 +122,7 @@ namespace GenderPayGap.WebUI.Controllers
             currentUser.SetStatus(UserStatuses.New, currentUser.UserId);
 
             //Send the verification code and showconfirmation
-            StashModel(model);
+            this.StashModel(model);
             return RedirectToAction("Step2");
         }
 
@@ -163,12 +163,12 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             //Make sure we are coming from step1 or the user is logged in
-            var m = UnstashModel<RegisterViewModel>();
+            var m = this.UnstashModel<RegisterViewModel>();
             if (m == null && currentUser == null) return new HttpUnauthorizedResult();
 
             if (currentUser == null)currentUser = DataRepository.FindUserByEmail(m.EmailAddress);
             var model = new VerifyViewModel() { EmailAddress = currentUser.EmailAddress };
-            ClearStash();
+            this.ClearStash();
 
             //If email not sent
             if (currentUser.EmailVerifySendDate.EqualsI(null, DateTime.MinValue))
@@ -285,7 +285,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             var model = new OrganisationViewModel();
-            StashModel(model);
+            this.StashModel(model);
             return View("Step3", model);
         }
 
@@ -304,7 +304,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             //Make sure we can load employers from session
-            var m = UnstashModel<OrganisationViewModel>();
+            var m = this.UnstashModel<OrganisationViewModel>();
             if (m == null)return View("CustomError", new ErrorViewModel(1112));
             model.Employers = m.Employers;
 
@@ -320,7 +320,7 @@ namespace GenderPayGap.WebUI.Controllers
             //TODO Remove this when public sector is available
             //if (!model.SectorType.EqualsI(SectorTypes.Private))throw new NotImplementedException();
 
-            StashModel(model);
+            this.StashModel(model);
             return RedirectToAction("Step4");
         }
 
@@ -336,7 +336,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             //Make sure we can load employers from session
-            var model = UnstashModel<OrganisationViewModel>();
+            var model = this.UnstashModel<OrganisationViewModel>();
             if (model == null) return View("CustomError", new ErrorViewModel(1112));
 
             return View("Step4", model);
@@ -357,7 +357,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             //Make sure we can load employers from session
-            var m = UnstashModel<OrganisationViewModel>();
+            var m = this.UnstashModel<OrganisationViewModel>();
             if (m == null) return View("CustomError", new ErrorViewModel(1112));
             model.Employers = m.Employers;
 
@@ -394,7 +394,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
 
             ModelState.Clear();
-            StashModel(model);
+            this.StashModel(model);
 
             //Search again if no results
             if (model.Employers.Results.Count<1)return View("Step4", model);
@@ -418,7 +418,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             //Make sure we can load employers from session
-            var model = UnstashModel<OrganisationViewModel>();
+            var model = this.UnstashModel<OrganisationViewModel>();
             if (model == null) return View("CustomError", new ErrorViewModel(1112));
 
             return View("Step5", model);
@@ -440,7 +440,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             //Make sure we can load employers from session
-            var m = UnstashModel<OrganisationViewModel>();
+            var m = this.UnstashModel<OrganisationViewModel>();
             if (m == null) return View("CustomError", new ErrorViewModel(1112));
             model.Employers = m.Employers;
 
@@ -517,7 +517,7 @@ namespace GenderPayGap.WebUI.Controllers
                 }
 
                 ModelState.Clear();
-                StashModel(model);
+                this.StashModel(model);
 
                 //Go back if no results
                 if (model.Employers.Results.Count<1)return RedirectToAction("Step4");
@@ -572,7 +572,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
 
             ModelState.Clear();
-            StashModel(model);
+            this.StashModel(model);
 
             //If we havend selected one the reshow same view
             if (model.SelectedEmployerIndex < 0)return View("Step5", model);
@@ -597,7 +597,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             //Make sure we can load employers from session
-            var model = UnstashModel<OrganisationViewModel>();
+            var model = this.UnstashModel<OrganisationViewModel>();
             if (model == null) return View("CustomError", new ErrorViewModel(1112));
 
             if (model.SectorType == SectorTypes.Public) return View("AddAddress",model);
@@ -620,7 +620,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             //Load the employers from session
-            var m = UnstashModel<OrganisationViewModel>();
+            var m = this.UnstashModel<OrganisationViewModel>();
             if (m == null) return View("CustomError", new ErrorViewModel(1112));
             model.Employers = m.Employers;
 
@@ -641,7 +641,7 @@ namespace GenderPayGap.WebUI.Controllers
                 model.SelectedEmployer.PoBox = model.PoBox;
 
                 //Go to confirm step
-                StashModel(model);
+                this.StashModel(model);
                 return RedirectToAction("Step7");
             }
 
@@ -649,7 +649,7 @@ namespace GenderPayGap.WebUI.Controllers
             SaveRegistration(currentUser, model);
 
             //Redirect to send pin
-            StashModel(model);
+            this.StashModel(model);
             return RedirectToAction("SendPIN");
         }
 
@@ -752,7 +752,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             //Make sure we can load employers from session
-            var model = UnstashModel<OrganisationViewModel>();
+            var model = this.UnstashModel<OrganisationViewModel>();
             if (model == null) return View("CustomError", new ErrorViewModel(1112));
 
             return View("ConfirmEmployer", model);
@@ -773,7 +773,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             //Load the employers from session
-            var m = UnstashModel<OrganisationViewModel>();
+            var m = this.UnstashModel<OrganisationViewModel>();
             if (m == null) return View("CustomError", new ErrorViewModel(1112));
             model.Employers = m.Employers;
 
@@ -781,7 +781,7 @@ namespace GenderPayGap.WebUI.Controllers
             SaveRegistration(currentUser, model);
 
             //Redirect to complete form
-            StashModel(model);
+            this.StashModel(model);
             return RedirectToAction("Complete");
         }
 
@@ -956,7 +956,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             //Ensure the stash is cleared
-            ClearStash();
+            this.ClearStash();
 
             //Show the confirmation view
             return View("Complete");
