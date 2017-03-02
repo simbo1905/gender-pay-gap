@@ -670,9 +670,6 @@ namespace GenderPayGap.Tests.Submission
 
 
 
-
-
-
         [Test]
         [Description("Create action result should load the return model view")]
         public void Step1_VerifyActionReturns_ValidReturnModel()
@@ -686,7 +683,6 @@ namespace GenderPayGap.Tests.Submission
             var routeData = new RouteData();
             routeData.Values.Add("action", "step1");
             routeData.Values.Add("controller", "submit");
-
 
             var controller = TestHelper.GetController<SubmitController>(1, routeData ,user, organisation, userOrganisation);
             //Act
