@@ -374,7 +374,7 @@ ACT
 
 
  check ReturnResult
-			Viewresult
-			RouteReditectResult
+			:Viewresult
+			:RouteReditectResult
 check the model,
 check db
