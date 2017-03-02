@@ -212,6 +212,10 @@
     <Content Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Extensions\GenderPayGap.Extensions.csproj">
+      <Project>{50D3DD00-E740-410B-87F6-C4F5FBD0657C}</Project>
+      <Name>GenderPayGap.Extensions</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GenderPayGap.Core\GenderPayGap.Core.csproj">
       <Project>{1D7F0E3C-97D7-4EF4-BD3B-683249F67802}</Project>
       <Name>GenderPayGap.Core</Name>
