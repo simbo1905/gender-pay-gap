@@ -5,32 +5,23 @@ using Notify.Models;
 using Extensions;
 using System;
 using System.Threading.Tasks;
+using GenderPayGap.WebUI.Classes;
+using Autofac.Core;
+using Autofac;
 
 namespace GenderPayGap
 {
     public static class GovNotifyAPI
     {
-        const string ClientReference = "GpgAlphaTest";
-        static string ApiKey = ConfigurationManager.AppSettings["GovNotifyApiKey"];
         static string VerifyTemplateId = ConfigurationManager.AppSettings["GovNotifyVerifyTemplateId"];
         static string PINTemplateId = ConfigurationManager.AppSettings["GovNotifyPINTemplateId"];
         static string ConfirmTemplateId = ConfigurationManager.AppSettings["GovNotifyConfirmTemplateId"];
 
-        private static Notification SendEmail(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation)
-        {
-            var client = new NotificationClient(ApiKey);
-            var result = client.SendEmail(emailAddress, templateId, personalisation, ClientReference);
-            var notification = client.GetNotificationById(result.id);
-            return notification;
-        }
+        static IGovNotify GovNotify;
 
-        private static Notification SendSms(string mobileNumber, string templateId, Dictionary<string, dynamic> personalisation)
+        public static void Initialise(IContainer container)
         {
-            var client = new NotificationClient(ApiKey);
-            var result = client.SendSms(mobileNumber, templateId, personalisation, ClientReference);
-            var notification = client.GetNotificationById(result.id);
-            return notification;
-
+            GovNotify=container.Resolve<IGovNotify>();
         }
 
         public static bool SendVerifyEmail(string verifyUrl,string emailAddress, string verifyCode)
@@ -40,7 +31,7 @@ namespace GenderPayGap
             Notification result = null;
             try
             {
-                result = SendEmail(emailAddress, VerifyTemplateId, personalisation);
+                result = GovNotify.SendEmail(emailAddress, VerifyTemplateId, personalisation);
             }
             catch (Exception ex)
             {
@@ -69,7 +60,7 @@ namespace GenderPayGap
             Notification result = null;
             try
             {
-                result = SendEmail(emailAddress, ConfirmTemplateId, personalisation);
+                result = GovNotify.SendEmail(emailAddress, ConfirmTemplateId, personalisation);
             }
             catch (Exception ex)
             {
@@ -99,7 +90,7 @@ namespace GenderPayGap
             Notification result = null;
             try
             {
-                result=SendEmail(address, PINTemplateId, personalisation);
+                result= GovNotify.SendPost(address, PINTemplateId, personalisation);
             }
             catch (Exception ex)
             {
