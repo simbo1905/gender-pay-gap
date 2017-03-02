@@ -1,5 +1,6 @@
 ﻿@model GenderPayGap.WebUI.Models.SearchViewModel
 
+@using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
 
@@ -18,7 +19,7 @@
                     </ul>
                 </div>
                 <div class="tabs-content">
-                    @Html.ValidationSummary("", new { @class = "text-danger" })
+                    @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
                     <div class="tabs-panel" id="tab-1">
                         <div class="tabs-panel-inner text">
                             <h2 class="heading-medium">Search for employers</h2>
@@ -26,7 +27,7 @@
                             <form class="search" action="Search" method="post">
                                 <div class="search-bar">
                                     <div class="searchfield">
-                                        @Html.EditorFor(model => model.Search, new { htmlAttributes = new { @class = "search-input", @placeholder = "Enter an employers name..." } })
+                                        @Html.CustomEditorFor(model => model.Search, htmlAttributes: new { @class = "search-input", @placeholder = "Enter an employers name..." })
                                         @*<input type="search" name="search" class="search-input" placeholder="Enter an employers name...">*@
                                         <button type="submit" class="search-submit">Search</button>
                                     </div>

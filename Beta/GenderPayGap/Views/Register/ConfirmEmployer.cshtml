@@ -2,6 +2,7 @@
     ViewBag.Title = "Confirm your organisation - Gender pay gap reporting service";
 }
 @model GenderPayGap.WebUI.Models.OrganisationViewModel
+@using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
     @using (Html.BeginForm(Model.SectorType==GenderPayGap.Models.SqlDatabase.SectorTypes.Private ? "Step6" : "Step7"))

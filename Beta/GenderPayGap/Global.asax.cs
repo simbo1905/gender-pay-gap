@@ -43,7 +43,7 @@ namespace GenderPayGap
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
+        
             //Create Inversion of Control container
             ContainerIOC = BuildContainerIoC();
 
