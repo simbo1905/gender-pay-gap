@@ -19,6 +19,8 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using GenderPayGap.Core.Classes;
 using Extensions;
+using GenderPayGap.WebUI.Classes;
+using Notify.Models;
 
 namespace GenderPayGap.Tests
 {
@@ -31,6 +33,9 @@ namespace GenderPayGap.Tests
         public static T GetController<T>(long userId = 0, RouteData routeData = null, params object[] dbObjects) where T : Controller
         {
             var builder = BuildContainerIoC(dbObjects);
+
+            //Initialise static classes with IoC container
+            GovNotifyAPI.Initialise(builder);
 
             //Mock UserId as claim
             var claims = new List<Claim>();
@@ -97,7 +102,7 @@ namespace GenderPayGap.Tests
             builder.Register(c => new MockRepository(dbObjects)).As<IRepository>();
             builder.RegisterType<MockEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Private");
             builder.RegisterType<MockEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Public");
-
+            builder.Register(g => new MockGovNotify()).As<IGovNotify>();
 
             return builder.Build();
         }
@@ -180,6 +185,40 @@ namespace GenderPayGap.Tests
         PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize)
         {
             throw new NotImplementedException();
+        }
+    }
+
+    public class MockGovNotify : IGovNotify
+    {
+        string _Status = "delivered";
+
+        public Notification SendEmail(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation)
+        {
+            return new Notification()
+            {
+                status = _Status
+            };
+        }
+
+        public Notification SendSms(string mobileNumber, string templateId, Dictionary<string, dynamic> personalisation)
+        {
+            return new Notification()
+            {
+                status = _Status
+            };
+        }
+
+        public Notification SendPost(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation)
+        {
+            return new Notification()
+            {
+                status = _Status
+            };
+        }
+
+        public void SetStatus(string status)
+        {
+            _Status = status;
         }
     }
 
