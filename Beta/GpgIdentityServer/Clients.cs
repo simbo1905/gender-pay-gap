@@ -13,7 +13,7 @@ namespace GpgIdentityServer
             {
                 new Client 
                 {
-                    ClientName = "Gender Pay Gap (Alpha)",
+                    ClientName = "Gender Pay Gap (Beta)",
                     ClientId = "gpgWeb",
                     Flow = Flows.Implicit,
                     RequireConsent = false,
@@ -35,7 +35,7 @@ namespace GpgIdentityServer
                 },
                 new Client
                 {
-                    ClientName = "Gender Pay Gap (Alpha)",   
+                    ClientName = "Gender Pay Gap (Beta)",   
                     ClientId = "gpg_portal",
                     Flow = Flows.ClientCredentials,
                     RequireConsent = false,

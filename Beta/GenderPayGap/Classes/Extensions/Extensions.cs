@@ -10,6 +10,12 @@ using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
 using GenderPayGap.WebUI.Controllers;
+using System.Web.Mvc.Html;
+using System.Linq.Expressions;
+using System.Xml.Linq;
+using System.ComponentModel.DataAnnotations;
+using System.IO;
+using System.Reflection;
 
 namespace GenderPayGap.WebUI.Classes
 {
@@ -137,22 +143,178 @@ namespace GenderPayGap.WebUI.Classes
 
         #endregion
 
+        #region Session Handling
+
+        public static void StashModel<T>(this Controller controller, T model)
+        {
+            controller.Session[controller + ":Model"] = model;
+        }
+        public static void ClearStash(this Controller controller)
+        {
+            controller.Session.Remove(controller + ":Model");
+        }
+
+        public static T UnstashModel<T>(this Controller controller, bool delete = false) where T : class
+        {
+            var result = controller.Session[controller + ":Model"] as T;
+            if (delete) controller.Session.Remove(controller + ":Model");
+            return result;
+        }
+
+        #endregion
+
+        #region Helpers
+        public static MvcHtmlString CustomEditorFor<TModel, TProperty>(this HtmlHelper<TModel> helper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null)
+        {
+            var containerType = typeof(TModel);
+
+            string propertyName = ExpressionHelper.GetExpressionText(expression);
+            var propertyInfo = containerType.GetPropertyInfo(propertyName);
+
+            var displayAttribute = propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
+            var displayName = displayAttribute == null ? propertyName : displayAttribute.Name;
+
+            string par1 = null;
+            string par2 = null;
+
+            var htmlAttr = htmlAttributes.ToPropertyDictionary();
+            if (propertyInfo != null)
+                foreach (ValidationAttribute attribute in propertyInfo.GetCustomAttributes(typeof(ValidationAttribute), false))
+                {
+                    var validatorKey = $"{containerType.Name}.{propertyName}:{attribute.GetType().Name.TrimSuffix("Attribute")}";
+                    var customError = CustomErrorMessages.GetValidationError(validatorKey);
+                    if (customError == null)
+                    {
+#if DEBUG
+                        var csvFile = FileSystem.ExpandLocalPath("~/App_Data/CustomErrors.csv");
+                        File.AppendAllText(csvFile, $"{validatorKey},{attribute.ErrorMessage},{displayName}\n");
+#endif
+                        continue;
+                    }
+
+                    //Set the message from the description
+                    if (attribute.ErrorMessage != customError.Description)
+                        attribute.ErrorMessage = customError.Description;
+
+                    //Set the inline error message
+                    string errorMessageString = Misc.GetPropertyValue(attribute, "ErrorMessageString") as string;
+                    if (string.IsNullOrWhiteSpace(errorMessageString)) errorMessageString = attribute.ErrorMessage;
+
+                    //Set the summary error message
+                    if (customError.Title != errorMessageString)
+                        errorMessageString = customError.Title;
+
+                    //Set the display name
+                    if (!string.IsNullOrWhiteSpace(customError.DisplayName) && customError.DisplayName != displayName)
+                    {
+                        Misc.SetPropertyValue(displayAttribute, "Name", customError.DisplayName);
+                        displayName = customError.DisplayName;
+                    }
+
+                    string altAttr = null;
+                    if (attribute is RequiredAttribute)
+                        altAttr = "data-val-required-alt";
+                    else if (attribute is System.ComponentModel.DataAnnotations.CompareAttribute)
+                        altAttr = "data-val-equalto-alt";
+                    else if (attribute is RegularExpressionAttribute)
+                        altAttr = "data-val-regex-alt";
+                    else if (attribute is RangeAttribute)
+                    {
+                        altAttr = "data-val-range-alt";
+                        par1 = ((RangeAttribute)attribute).Minimum.ToString();
+                        par2 = ((RangeAttribute)attribute).Maximum.ToString();
+                    }
+                    else if (attribute is DataTypeAttribute)
+                    {
+                        var type = ((DataTypeAttribute)attribute).DataType.ToString().ToLower();
+                        switch (type)
+                        {
+                            case "password":
+                                continue;
+                            case "emailaddress":
+                                type = "email";
+                                break;
+                        }
+                        altAttr = $"data-val-{type}-alt";
+                    }
+                    else if (attribute is MinLengthAttribute)
+                    {
+                        altAttr = "data-val-minlength-alt";
+                        par1 = ((MinLengthAttribute)attribute).Length.ToString();
+                    }
+                    else if (attribute is MaxLengthAttribute)
+                    {
+                        altAttr = "data-val-maxlength-alt";
+                        par1 = ((MaxLengthAttribute)attribute).Length.ToString();
+                    }
+                    else if (attribute is StringLengthAttribute)
+                    {
+                        altAttr = "data-val-length-alt";
+                        par1 = ((StringLengthAttribute)attribute).MinimumLength.ToString();
+                        par2 = ((StringLengthAttribute)attribute).MaximumLength.ToString();
+                    }
+
+                    htmlAttr[altAttr.TrimSuffix("-alt")] = string.Format(attribute.ErrorMessage, displayName, par1, par2);
+                    htmlAttr[altAttr] = string.Format(errorMessageString, displayName, par1, par2); ;
+                }
+
+            return helper.EditorFor(expression, null, new { htmlAttributes = htmlAttr });
+        }
+
+        public static void AddModelError(this BaseController controller, string errorContext,string propertyName=null, object parameters=null)
+        {
+            //Try and get the custom error
+            var validatorKey = $"{controller.ControllerName.TrimSuffix("Controller")}/{controller.ActionName}:{errorContext}" +(string.IsNullOrWhiteSpace(propertyName) ? null : $":{propertyName}");
+            var customError = CustomErrorMessages.GetValidationError(validatorKey);
+            if (customError == null) throw new ArgumentException("errorContext", "Cannot find custom error message for this context" + (string.IsNullOrWhiteSpace(propertyName) ? null :" and property"));
+
+            //Add the error to the modelstate
+            var title = customError.Title;
+            var description = customError.Description;
+
+            //Bind the parameters
+            if (parameters != null)
+                foreach (var prop in parameters.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+                {
+                    var value = prop.GetValue(parameters, null) as string;
+                    if (string.IsNullOrWhiteSpace((prop.Name)) || string.IsNullOrWhiteSpace(value)) continue;
+                    title = title.ReplaceI("{" + prop.Name + "}", value);
+                    description = description.ReplaceI("{" + prop.Name + "}", value);
+                }
+
+            if (!string.IsNullOrWhiteSpace(title)) controller.ModelState.AddModelError("", title);
+            if (!string.IsNullOrWhiteSpace(description)) controller.ModelState.AddModelError(propertyName, description);
+        }
+
+        public static void AddModelError(this BaseController controller, int errorCode, object parameters = null)
+        {
+            //Try and get the custom error
+            var customError = CustomErrorMessages.GetError(errorCode);
+            if (customError == null) throw new ArgumentException("errorCode", "Cannot find custom error message with this code");
+
+            //Add the error to the modelstate
+            var title = customError.Title;
+            var description = customError.Description;
+
+            //Bind the parameters
+            if (parameters != null)
+                foreach (var prop in parameters.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+                {
+                    var value = prop.GetValue(parameters, null) as string;
+                    if (string.IsNullOrWhiteSpace((prop.Name)) || string.IsNullOrWhiteSpace(value)) continue;
+                    title = title.ReplaceI("{" + prop.Name + "}", value);
+                    description = description.ReplaceI("{" + prop.Name + "}", value);
+                }
+
+            var error = title;
+            if (!string.IsNullOrWhiteSpace(description)) error += " " + description;
+            if (!string.IsNullOrWhiteSpace(title)) controller.ModelState.AddModelError("", error);
+        }
+
+        #endregion
         public static string ResolveUrl(this Controller controller,RedirectToRouteResult redirectToRouteResult)
         {
             return controller.Url.RouteUrl(redirectToRouteResult.RouteName, redirectToRouteResult.RouteValues);
-        }
-
-
-        public static IEnumerable<T> Page<T>(this IEnumerable<T> list, int pageSize, int page)
-        {
-            var skip = (page - 1) * pageSize;
-            return list.Skip(skip).Take(pageSize);
-        }
-
-        public static IQueryable<T> Page<T>(this IQueryable<T> query, int pageSize, int page)
-        {
-            var skip = (page - 1) * pageSize;
-            return query.Skip(skip).Take(pageSize);
         }
     }
 }

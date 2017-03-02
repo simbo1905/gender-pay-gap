@@ -14,7 +14,7 @@ namespace GenderPayGap.WebUI.Models
         public ErrorViewModel(int code, object parameters=null)
         {
             Code = code;
-            var customErrorMessage = CustomErrorMessages.Get(code) ?? CustomErrorMessages.Default;
+            var customErrorMessage = CustomErrorMessages.GetPageError(code) ?? CustomErrorMessages.DefaultPageError;
 
             Title = customErrorMessage.Title;
             Description = customErrorMessage.Description;
