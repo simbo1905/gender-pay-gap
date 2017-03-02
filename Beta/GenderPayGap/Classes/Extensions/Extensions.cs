@@ -15,6 +15,7 @@ using System.Linq.Expressions;
 using System.Xml.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
+using System.Reflection;
 
 namespace GenderPayGap.WebUI.Classes
 {
@@ -181,8 +182,8 @@ namespace GenderPayGap.WebUI.Classes
                 foreach (ValidationAttribute attribute in propertyInfo.GetCustomAttributes(typeof(ValidationAttribute), false))
                 {
                     var validatorKey = $"{containerType.Name}.{propertyName}:{attribute.GetType().Name.TrimSuffix("Attribute")}";
-                    var altError = CustomErrorMessages.GetValidationError(validatorKey);
-                    if (altError == null)
+                    var customError = CustomErrorMessages.GetValidationError(validatorKey);
+                    if (customError == null)
                     {
 #if DEBUG
                         var csvFile = FileSystem.ExpandLocalPath("~/App_Data/CustomErrors.csv");
@@ -192,22 +193,22 @@ namespace GenderPayGap.WebUI.Classes
                     }
 
                     //Set the message from the description
-                    if (attribute.ErrorMessage != altError.Description)
-                        attribute.ErrorMessage = altError.Description;
+                    if (attribute.ErrorMessage != customError.Description)
+                        attribute.ErrorMessage = customError.Description;
 
                     //Set the inline error message
                     string errorMessageString = Misc.GetPropertyValue(attribute, "ErrorMessageString") as string;
                     if (string.IsNullOrWhiteSpace(errorMessageString)) errorMessageString = attribute.ErrorMessage;
 
                     //Set the summary error message
-                    if (altError.Title != errorMessageString)
-                        errorMessageString = altError.Title;
+                    if (customError.Title != errorMessageString)
+                        errorMessageString = customError.Title;
 
                     //Set the display name
-                    if (!string.IsNullOrWhiteSpace(altError.DisplayName) && altError.DisplayName != displayName)
+                    if (!string.IsNullOrWhiteSpace(customError.DisplayName) && customError.DisplayName != displayName)
                     {
-                        Misc.SetPropertyValue(displayAttribute, "Name", altError.DisplayName);
-                        displayName = altError.DisplayName;
+                        Misc.SetPropertyValue(displayAttribute, "Name", customError.DisplayName);
+                        displayName = customError.DisplayName;
                     }
 
                     string altAttr = null;
@@ -260,23 +261,60 @@ namespace GenderPayGap.WebUI.Classes
             return helper.EditorFor(expression, null, new { htmlAttributes = htmlAttr });
         }
 
+        public static void AddModelError(this BaseController controller, string errorContext,string propertyName=null, object parameters=null)
+        {
+            //Try and get the custom error
+            var validatorKey = $"{controller.ControllerName.TrimSuffix("Controller")}/{controller.ActionName}:{errorContext}" +(string.IsNullOrWhiteSpace(propertyName) ? null : $":{propertyName}");
+            var customError = CustomErrorMessages.GetValidationError(validatorKey);
+            if (customError == null) throw new ArgumentException("errorContext", "Cannot find custom error message for this context" + (string.IsNullOrWhiteSpace(propertyName) ? null :" and property"));
+
+            //Add the error to the modelstate
+            var title = customError.Title;
+            var description = customError.Description;
+
+            //Bind the parameters
+            if (parameters != null)
+                foreach (var prop in parameters.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+                {
+                    var value = prop.GetValue(parameters, null) as string;
+                    if (string.IsNullOrWhiteSpace((prop.Name)) || string.IsNullOrWhiteSpace(value)) continue;
+                    title = title.ReplaceI("{" + prop.Name + "}", value);
+                    description = description.ReplaceI("{" + prop.Name + "}", value);
+                }
+
+            if (!string.IsNullOrWhiteSpace(title)) controller.ModelState.AddModelError("", title);
+            if (!string.IsNullOrWhiteSpace(description)) controller.ModelState.AddModelError(propertyName, description);
+        }
+
+        public static void AddModelError(this BaseController controller, int errorCode, object parameters = null)
+        {
+            //Try and get the custom error
+            var customError = CustomErrorMessages.GetError(errorCode);
+            if (customError == null) throw new ArgumentException("errorCode", "Cannot find custom error message with this code");
+
+            //Add the error to the modelstate
+            var title = customError.Title;
+            var description = customError.Description;
+
+            //Bind the parameters
+            if (parameters != null)
+                foreach (var prop in parameters.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+                {
+                    var value = prop.GetValue(parameters, null) as string;
+                    if (string.IsNullOrWhiteSpace((prop.Name)) || string.IsNullOrWhiteSpace(value)) continue;
+                    title = title.ReplaceI("{" + prop.Name + "}", value);
+                    description = description.ReplaceI("{" + prop.Name + "}", value);
+                }
+
+            var error = title;
+            if (!string.IsNullOrWhiteSpace(description)) error += " " + description;
+            if (!string.IsNullOrWhiteSpace(title)) controller.ModelState.AddModelError("", error);
+        }
+
         #endregion
         public static string ResolveUrl(this Controller controller,RedirectToRouteResult redirectToRouteResult)
         {
             return controller.Url.RouteUrl(redirectToRouteResult.RouteName, redirectToRouteResult.RouteValues);
-        }
-
-
-        public static IEnumerable<T> Page<T>(this IEnumerable<T> list, int pageSize, int page)
-        {
-            var skip = (page - 1) * pageSize;
-            return list.Skip(skip).Take(pageSize);
-        }
-
-        public static IQueryable<T> Page<T>(this IQueryable<T> query, int pageSize, int page)
-        {
-            var skip = (page - 1) * pageSize;
-            return query.Skip(skip).Take(pageSize);
         }
     }
 }

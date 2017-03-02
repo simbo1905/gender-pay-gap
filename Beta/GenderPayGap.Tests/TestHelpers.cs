@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using GenderPayGap.Core.Interfaces;
 using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.WebUI.Models;
 using IdentityServer3.Core;
 using Moq;
 using System;
@@ -16,12 +17,17 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using GenderPayGap.Core.Classes;
+using Extensions;
 
 namespace GenderPayGap.Tests
 {
     public static class TestHelper
     {
         private const string Url = "https://genderpaygap.azurewebsites.net";
+
+    
+
         public static T GetController<T>(long userId = 0, RouteData routeData = null, params object[] dbObjects) where T : Controller
         {
             var builder = BuildContainerIoC(dbObjects);
@@ -56,20 +62,16 @@ namespace GenderPayGap.Tests
             contextMock.SetupGet(ctx => ctx.Response).Returns(responseMock.Object);
             contextMock.Setup(ctx => ctx.Session).Returns(sessionMock);
 
-            var routes = new RouteCollection();
-            RouteConfig.RegisterRoutes(routes);
-
             //Mock the httpcontext to the controllercontext
             var controllerContextMock = new Mock<ControllerContext>();
             controllerContextMock.Setup(con => con.HttpContext).Returns(contextMock.Object);
             controllerContextMock.Setup(con => con.RouteData).Returns(routeData);
             if (routeData == null) routeData = new RouteData();
             T controller = (T)Activator.CreateInstance(typeof(T), builder);
+            var routes = new RouteCollection();
+            RouteConfig.RegisterRoutes(routes);
             controller.ControllerContext = controllerContextMock.Object;
-            controller.Url = new UrlHelper(
-                new RequestContext(contextMock.Object, routeData),
-                routes
-            );
+            controller.Url = new UrlHelper(new RequestContext(contextMock.Object, routeData),routes);
             return controller;
         }
 
@@ -93,6 +95,8 @@ namespace GenderPayGap.Tests
 
             //Create the mock repository
             builder.Register(c => new MockRepository(dbObjects)).As<IRepository>();
+            builder.RegisterType<MockEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Private");
+            builder.RegisterType<MockEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Public");
 
 
             return builder.Build();
@@ -147,4 +151,36 @@ namespace GenderPayGap.Tests
         {
         }
     }
+
+    public class MockEmployerRepository : IPagedRepository<EmployerRecord>
+    {
+        public List<EmployerRecord> AllEmployers = new List<EmployerRecord>();
+
+        public void Delete(EmployerRecord employer)
+        {
+            AllEmployers.Remove(employer);
+        }
+
+        public void Insert(EmployerRecord employer)
+        {
+            AllEmployers.Add(employer);
+        }
+
+        public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize)
+        {
+            var result = new PagedResult<EmployerRecord>();
+            result.Results = AllEmployers.Where(e => e.Name.ContainsI(searchText)).Page(page, pageSize).ToList();
+            result.RowCount = result.Results.Count;
+            result.CurrentPage = page;
+            result.PageSize = pageSize;
+            result.PageCount = (int)Math.Ceiling((double)result.RowCount / pageSize);
+            return result;
+        }
+
+        PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
 }
