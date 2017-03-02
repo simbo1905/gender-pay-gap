@@ -1,7 +1,8 @@
 ﻿@{
-    ViewBag.Title = "Register";
+    ViewBag.Title = "Your organisation type - Gender pay gap reporting service";
 }
 @model GenderPayGap.WebUI.Models.OrganisationViewModel
+@using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
     @using (Html.BeginForm())
@@ -10,7 +11,7 @@
         @Html.HiddenFor(m => m.SearchText)
 
         <div class="grid-row">
-            @Html.ValidationSummary("", new { @class = "text-danger" })
+            @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
 
 
             <div class="column-full">
@@ -18,7 +19,7 @@
                     <span class="heading-secondary">Step 3 of 5</span>
                     Your type of organisation
                 </h1>
-                <p>Please select the type of organisation you’re registering to report gender pay gap data. </p>
+                <p>Please select the type of organisation you’re registering. </p>
 
                 <div class="form-section">
                     <!-- "Chunky" Radio buttons, stacked -->
@@ -40,7 +41,7 @@
                     </div>
                     <br>
 
-                    <input type="submit" class="button" value="Continue" />
+                    <input type="submit" class="button" value="Confirm" />
                 </div>
             </div>
         </div>

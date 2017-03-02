@@ -337,6 +337,11 @@ namespace Extensions
             return trimChars == null || trimChars.Length == 0 ? source.Trim() : source.Trim(trimChars);
         }
 
+        public static string TrimSuffix(this string source, string suffix)
+        {
+            if (source.EndsWith(suffix,StringComparison.CurrentCultureIgnoreCase))source = source.Remove(source.Length - suffix.Length);
+            return source;
+        }
         public static string TrimEndI(this string source, string trimChars)
         {
             if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(trimChars)) return source;
@@ -1016,7 +1021,7 @@ namespace Extensions
             pattern = pattern.ToLower();
             if (input == pattern) return true;
             var expression = "^" + Regex.Escape(pattern).Replace("\\*", ".*").Replace("\\?", ".").Replace("+", "\\+") + "$";
-            return Regex.IsMatch(input,pattern);
+            return Regex.IsMatch(input, expression);
         }
 
         public static bool IsEscaped(this Match match, string originalText, string escapePrefix=@"\",string unescapePrefix=@"\\", bool ignoreCase=true)

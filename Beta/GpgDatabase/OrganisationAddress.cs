@@ -17,6 +17,7 @@ namespace GenderPayGap.Models.SqlDatabase
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long OrganisationAddressId { get; set; }
 
+        [MaxLength(100)]
         public string Address1 { get; set; }
 
         [MaxLength(100)]
@@ -34,7 +35,7 @@ namespace GenderPayGap.Models.SqlDatabase
         [MaxLength(100)]
         public string Country { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(20)]
         public string PostCode { get; set; }
 
         [Required]

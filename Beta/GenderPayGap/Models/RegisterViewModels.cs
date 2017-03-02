@@ -5,6 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using Extensions;
 using GenderPayGap.Models.SqlDatabase;
 using GenderPayGap.WebUI.Classes;
+using GenderPayGap.Core.Classes;
 
 namespace GenderPayGap.WebUI.Models
 {
@@ -17,20 +18,20 @@ namespace GenderPayGap.WebUI.Models
         }
 
         [Required(AllowEmptyStrings = false)]
-        [Display(Name = "First Name")]
+        [Display(Name = "First name")]
         public string FirstName { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        [Display(Name = "Last Name")]
+        [Display(Name = "Last name")]
         public string LastName { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        [Display(Name = "Job Title")]
+        [Display(Name = "Job title")]
         public string JobTitle { get; set; }
 
         [Required(AllowEmptyStrings = false)]
         [EmailAddress]
-        [Display(Name = "Email Address")]
+        [Display(Name = "Email address")]
         public string EmailAddress { get; set; }
 
         [Required(AllowEmptyStrings = false)]
@@ -63,6 +64,7 @@ namespace GenderPayGap.WebUI.Models
 
         }
 
+        public long UserId { get; set; }
         public bool Expired { get; set; }
         public bool Verified { get; set; }
         public bool Retry { get; set; }
@@ -82,11 +84,6 @@ namespace GenderPayGap.WebUI.Models
 
         }
 
-        public OrganisationViewModel(int pageSize)
-        {
-            EmployerPageSize = pageSize;
-        }
-
         [Required]
         [EnumDataType(typeof(SectorTypes), ErrorMessage = "You must select the type of your organisation")]
         public SectorTypes? SectorType { get; set; }
@@ -96,56 +93,65 @@ namespace GenderPayGap.WebUI.Models
         [DisplayName("Search")]
         public string SearchText { get; set; }
 
-        public List<EmployerRecord> Employers { get; set; }
+        public PagedResult<EmployerRecord> Employers { get; set; }
+
+        [MaxLength(100)]
+        public string Address1 { get; set; }
+        [MaxLength(100)]
+        public string Address2 { get; set; }
+        [MaxLength(100)]
+        public string Address3 { get; set; }
+        public string Country { get; set; }
+        [MaxLength(20)]
+        public string PostCode { get; set; }
+        public string PoBox { get; set; }
 
         public int SelectedEmployerIndex { get; set; }
 
-        public int EmployerRecords { get; set; }
-
-        public int EmployerCurrentPage { get; set; } 
-
-        public int EmployerPageSize { get; set; }=10;
-
-        public int EmployerPages
+        public EmployerRecord SelectedEmployer
         {
             get
             {
-                return (int) Math.Ceiling((double) EmployerRecords / EmployerPageSize); 
+                if (SelectedEmployerIndex > -1 && SelectedEmployerIndex < Employers.Results.Count)
+                    return Employers.Results[SelectedEmployerIndex];
+                return null;
             }
         }
+
         public int EmployerStartIndex
         {
             get
             {
-                if (Employers == null || Employers.Count < 1) return 1;
-                return ((EmployerCurrentPage * EmployerPageSize) - EmployerPageSize) + 1;
+                if (Employers==null || Employers.Results == null || Employers.Results.Count < 1) return 1;
+                return ((Employers.CurrentPage * Employers.PageSize) - Employers.PageSize) + 1;
             }
         }
         public int EmployerEndIndex
         {
             get
             {
-                if (Employers == null || Employers.Count < 1) return 1;
-                return EmployerStartIndex + Employers.Count-1;
+                if (Employers==null || Employers.Results == null || Employers.Results.Count < 1) return 1;
+                return EmployerStartIndex + Employers.Results.Count-1;
             }
         }
         public int PagerStartIndex
         {
             get
             {
-                if (EmployerPages <= 5) return 1;
-                if (EmployerCurrentPage < 4) return 1;
-                if (EmployerCurrentPage + 2 > EmployerPages) return EmployerPages-4;
+                if (Employers==null || Employers.PageCount <= 5) return 1;
+                if (Employers.CurrentPage < 4) return 1;
+                if (Employers.CurrentPage + 2 > Employers.PageCount) return Employers.PageCount - 4;
 
-                return EmployerCurrentPage -2;
+                return Employers.CurrentPage - 2;
             }
         }
         public int PagerEndIndex
         {
             get
             {
-                if (EmployerPages <=5) return EmployerPages;
-                if (PagerStartIndex + 4 > EmployerPages) return EmployerPages;
+                if (Employers == null) return 1;
+                if (Employers.PageCount <= 5) return Employers.PageCount;
+                if (PagerStartIndex + 4 > Employers.PageCount) return Employers.PageCount;
                 return PagerStartIndex + 4;
             }
         }
@@ -157,12 +163,22 @@ namespace GenderPayGap.WebUI.Models
         public string CompanyNumber { get; set; }
         public string CompanyStatus { get; set; }
         public string Name { get; internal set; }
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(100)]
         public string Address1 { get; set; }
+        [MaxLength(100)]
         public string Address2 { get; set; }
+        [Required(AllowEmptyStrings = false)]
+        [MaxLength(100)]
         public string Address3 { get; set; }
         public string Country { get; set; }
+        [Required(AllowEmptyStrings =false)]
+        [MaxLength(20)]
         public string PostCode { get; set; }
         public string PoBox { get; set; }
+
+        //Public Sector
+        public string EmailPatterns { get; set; }
 
         public string FullAddress
         {
@@ -177,6 +193,13 @@ namespace GenderPayGap.WebUI.Models
                 list.Add(PoBox);
                 return list.ToDelimitedString(", ");
             }
+        }
+
+        public bool IsAuthorised(string emailAddress)
+        {
+            if (!emailAddress.IsEmailAddress()) throw new ArgumentException("Bad email address");
+            if (string.IsNullOrWhiteSpace(EmailPatterns)) throw new ArgumentException("Missing email pattern");
+            return emailAddress.LikeAny(EmailPatterns.SplitI(";"));
         }
     }
 

@@ -1,26 +1,30 @@
 ﻿@{
-    ViewBag.Title = "Register: Step 2";
+    ViewBag.Title = Model.Verified ? "Email confirmed - Gender pay gap reporting service" : "Verify your email address - Gender pay gap reporting service";
 }
 @model GenderPayGap.WebUI.Models.VerifyViewModel
 @using Extensions
+@using GenderPayGap.WebUI.Classes
+
 <main id="content" role="main">
     <div class="grid-row">
         <div class="column-full">
             @using (Html.BeginForm())
             {
                 @Html.AntiForgeryToken()
-                @Html.ValidationSummary("", new { @class = "text-danger" })
+                @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
 
                 if (Model.Sent)
                 {
                     <h1 class="heading-large">
                         <span class="heading-secondary">Step 2 of 5</span>
-                        Confirm your email address
+                        Verify your email address
                     </h1>
                     <p>
-                        We have sent you a verification email to <b>@Model.EmailAddress</b>
+                        We have sent you a confirmation email to <br /><b>@Model.EmailAddress</b>
                     </p>
-                    <p>Please follow the instructions in your email to continue your registration.</p>
+                    <p>Follow the instructions in the email to continue your registration.</p>
+                    <h2 class="heading-small">No email yet?</h2>
+                    <p>Our email can take a few minutes to arrive. If you can’t see it in your inbox, check your junk mail folder.</p>
                 }
                 else if (Model.Retry)
                 {
@@ -51,7 +55,7 @@
                 else if (Model.Verified)
                 {
                     <div class="govuk-box-highlight">
-                        <h1 class="bold-large">Your email has been confirmed</h1>
+                        <h1 class="bold-large">You've confirmed your email address</h1>
                     </div>
 
                     <div class="subsection panel-indent">
