@@ -89,6 +89,12 @@ namespace GenderPayGap.Tests
                 get { return m_SessionStorage[name]; }
                 set { m_SessionStorage[name] = value; }
             }
+
+
+            public override void Remove(string name)
+            {
+                m_SessionStorage.Remove(name);
+            }
         }
 
         public static IContainer BuildContainerIoC(params object[] dbObjects)

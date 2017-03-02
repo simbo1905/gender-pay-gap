@@ -102,7 +102,11 @@ namespace GenderPayGap.WebUI.Controllers
         {
             if (model.Password.ContainsI("password")) ModelState.AddModelError("Password", "Password cannot contain the word 'password'");
             //TODO validate the submitted fields
-            if (!ModelState.IsValid) return View("Step1", model);
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<RegisterViewModel>();
+                return View("Step1", model);
+            }
 
             //Ensure email is always lower case
             model.EmailAddress = model.EmailAddress.ToLower();
@@ -666,7 +670,11 @@ namespace GenderPayGap.WebUI.Controllers
                 if (string.IsNullOrWhiteSpace(model.PostCode)) ModelState.AddModelError("PostCode", "You must supply a 'Postcode'");
 
                 //Renter address if invalid
-                if (!ModelState.IsValid) return View("AddAddress", model);
+                if (!ModelState.IsValid)
+                {
+                    this.CleanModelErrors<OrganisationViewModel>();
+                    View("AddAddress", model);
+                }
 
                 model.SelectedEmployer.Address1 = model.Address1;
                 model.SelectedEmployer.Address2 = model.Address2;
@@ -937,7 +945,11 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             //Ensure they have entered a PIN
-            if (!ModelState.IsValid) return View("ConfirmPIN", model);
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<CompleteViewModel>();
+                return View("ConfirmPIN", model);
+            }
 
             //Get the user organisation
             var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);

@@ -210,7 +210,7 @@ namespace GenderPayGap
 
         public bool IsAction(string actionName, string controllerName=null)
         {
-            return actionName.EqualsI(ActionName) && (controllerName==ControllerName || string.IsNullOrWhiteSpace(controllerName));
+            return actionName.EqualsI(ActionName) && (controllerName.EqualsI(ControllerName) || string.IsNullOrWhiteSpace(controllerName));
         }
 
         public bool IsAnyAction(params string[] actionUrls)
