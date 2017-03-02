@@ -77,8 +77,8 @@ namespace GenderPayGap
             //builder.RegisterType<GpgDatabase>().As<IDbContext>();
             //builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
             builder.Register(c => new SqlRepository(new DbContext())).As<IRepository>();
-            //builder.Register(c => new PrivateSectorRepository()).As<IPagedRepository<EmployerRecord>>().WithMetadata("Sector", "Private");
-            //builder.Register(c => new PublicSectorRepository()).As<IPagedRepository<EmployerRecord>>().WithMetadata("Sector", "Public");
+            builder.RegisterType<PrivateSectorRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Private");
+            builder.RegisterType<PublicSectorRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Public");
 
             return builder.Build();
         }

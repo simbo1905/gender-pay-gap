@@ -874,6 +874,18 @@ namespace Extensions
             }
         }
 
+        public static IEnumerable<T> Page<T>(this IEnumerable<T> list, int pageSize, int page)
+        {
+            var skip = (page - 1) * pageSize;
+            return list.Skip(skip).Take(pageSize);
+        }
+
+        public static IQueryable<T> Page<T>(this IQueryable<T> query, int pageSize, int page)
+        {
+            var skip = (page - 1) * pageSize;
+            return query.Skip(skip).Take(pageSize);
+        }
+
         public static IEnumerable<IEnumerable<T>> GetPermutations<T>(this IEnumerable<T> list, int length)
         {
             if (length == 1) return list.Select(t => new T[] { t });
