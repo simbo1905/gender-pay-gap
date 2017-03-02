@@ -622,7 +622,7 @@ namespace GenderPayGap.Tests
 
 
         [Test]
-        [Description("Ensure the Step1 succeeds when all fields are good")]
+        [Description("Ensure the Step2 succeeds when all fields are good")]
         public void Step2_Get_RedirectResult_Success()
         {
             //ARRANGE:
@@ -630,6 +630,8 @@ namespace GenderPayGap.Tests
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+
+            //Set the user up as if finished step1 which is email known etc but not sent
 
             var routeData = new RouteData();
             routeData.Values.Add("action", "Step2");
@@ -646,9 +648,12 @@ namespace GenderPayGap.Tests
             var result = controller.Step2(string.Empty) as RedirectToRouteResult;
 
             //ASSERT:
+            //Check the user is return the confirmation view
+            //Check the user verifcation is now marked as sent
+            //Check a verification has been set against user 
             Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
-            Assert.That(result.RouteValues["action"].ToString() == "Step2", "");
-
+            Assert.That(result.RouteValues["action"].ToString() == "Complete", "");
+            //Assert.That(result.RouteValues["action"].ToString() == "Step2", ""); *** will be in the failing tests
         }
 
 
@@ -658,7 +663,8 @@ namespace GenderPayGap.Tests
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var code = "abcdefg";
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now,EmailVerifyHash=code.GetMD512};
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
@@ -666,7 +672,7 @@ namespace GenderPayGap.Tests
             routeData.Values.Add("action", "Step2");
             routeData.Values.Add("controller", "register");
 
-            var model = new VerifyViewModel();
+            //var model = new VerifyViewModel();
 
             //var controller = TestHelper.GetController<RegisterController>();
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user, organisation, userOrganisation);
@@ -674,17 +680,32 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step2(string.Empty) as ViewResult;
+            var result = controller.Step2(Encryption.EncryptUrl(code)) as ViewResult;
 
             //ASSERT:
+            //Ensure confimation view is retuned
+            //Ensure the model is correct
+            //ensure uswr is marked as verified
             Assert.NotNull(result as ViewResult, "Expected ViewResult");
             Assert.NotNull(result.Model as VerifyViewModel, "Expected VerifyViewModel");
         }
 
         [Test]
-        [Description("Ensure the Step1 succeeds when all fields are good")]
+        [Description("Ensure the Step2 user verification succeeds")]
         public void Step2_Post_Success()
         {
+
+            //ARRANGE:
+            //1.Arrange the test setup variables
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var organisation = new Organisation() { OrganisationId = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+
+            //SEt user email address verified code and expired sent date
+            var routeData = new RouteData();
+            routeData.Values.Add("action", "Step2");
+            routeData.Values.Add("controller", "register");
+
             //ARRANGE:
             //1.Arrange the test setup variables
             var model = new VerifyViewModel();
@@ -692,12 +713,15 @@ namespace GenderPayGap.Tests
             model.Expired = false;
             model.Resend = false;
             model.Retry = false;
+            //Set model as if email
+
             // model.Sent = true;
             model.UserId = 1;
             model.Verified = true;
             // model.WrongCode = false;
 
-            var controller = TestHelper.GetController<RegisterController>();
+            //var controller = TestHelper.GetController<RegisterController>();
+            var controller = TestHelper.GetController<RegisterController>(1, routeData, user, organisation, userOrganisation);
             controller.Bind(model);
 
             //ACT:
@@ -708,7 +732,8 @@ namespace GenderPayGap.Tests
             Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step3", "");
+           // Assert.That(result.RouteValues["action"].ToString() == "Step3", "");
+            Assert.That(result.RouteValues["action"].ToString() == "Complete", "");
 
             //5.If the redirection successfull retrieve the model stash sent with the redirect.
             var unStashedmodel = controller.UnstashModel<RegisterViewModel>();
