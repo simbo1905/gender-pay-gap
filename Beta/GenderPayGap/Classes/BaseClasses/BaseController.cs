@@ -186,25 +186,30 @@ namespace GenderPayGap
 
         #endregion
 
-        #region Session Handling
+        //#region Session Handling
 
-        protected void StashModel<T>(T model)
-        {
-            Session[this+":Model"] = model;
-        }
-        protected void ClearStash()
-        {
-            Session.Remove(this + ":Model");
-        }
+        ///// <summary>
+        ///// not working properly. Session cannot handle 'this'
+        ///// </summary>
+        ///// <typeparam name="T"></typeparam>
+        ///// <param name="model"></param>
+        //public void StashModel<T>(T model)
+        //{
+        //    Session[this+":Model"] = model;
+        //}
+        //public void ClearStash()
+        //{
+        //    Session.Remove(this + ":Model");
+        //}
 
-        protected T UnstashModel<T>(bool delete=false) where T:class
-        {
-            var result=Session[this + ":Model"] as T;
-            if (delete) Session.Remove(this + ":Model");
-            return result;
-        }
+        //public T UnstashModel<T>(bool delete=false) where T:class
+        //{
+        //    var result=Session[this + ":Model"] as T;
+        //    if (delete) Session.Remove(this + ":Model");
+        //    return result;
+        //}
 
-        #endregion
+        //#endregion
 
         bool IsAction(string actionName, string controllerName=null)
         {

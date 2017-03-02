@@ -137,6 +137,31 @@ namespace GenderPayGap.WebUI.Classes
 
         #endregion
 
+        #region Session Handling
+
+        /// <summary>
+        /// not working properly. Session cannot handle 'this'
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="model"></param>
+        public static void StashModel<T>(this Controller controller, T model)
+        {
+            controller.Session[controller + ":Model"] = model;
+        }
+        public static void ClearStash(this Controller controller)
+        {
+            controller.Session.Remove(controller + ":Model");
+        }
+
+        public static T UnstashModel<T>(this Controller controller, bool delete = false) where T : class
+        {
+            var result = controller.Session[controller + ":Model"] as T;
+            if (delete) controller.Session.Remove(controller + ":Model");
+            return result;
+        }
+
+        #endregion
+
         public static string ResolveUrl(this Controller controller,RedirectToRouteResult redirectToRouteResult)
         {
             return controller.Url.RouteUrl(redirectToRouteResult.RouteName, redirectToRouteResult.RouteValues);
