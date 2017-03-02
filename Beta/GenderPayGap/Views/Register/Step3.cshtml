@@ -2,6 +2,7 @@
     ViewBag.Title = "Your organisation type - Gender pay gap reporting service";
 }
 @model GenderPayGap.WebUI.Models.OrganisationViewModel
+@using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
     @using (Html.BeginForm())
@@ -10,7 +11,7 @@
         @Html.HiddenFor(m => m.SearchText)
 
         <div class="grid-row">
-            @Html.ValidationSummary("", new { @class = "text-danger" })
+            @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
 
 
             <div class="column-full">

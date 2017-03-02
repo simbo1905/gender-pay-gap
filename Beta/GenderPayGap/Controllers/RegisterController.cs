@@ -56,17 +56,17 @@ namespace GenderPayGap.WebUI.Controllers
             if (result != null) return result;
 
             //Clear the stash
-            this.ClearStash();
+           this.ClearStash();
 
             //Start new user registration
-            return View("Step1", new RegisterViewModel());
+            return View("Step1", new Models.RegisterViewModel());
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [SpamProtection()]
         [Route("Step1")]
-        public ActionResult Step1(RegisterViewModel model)
+        public ActionResult Step1(Models.RegisterViewModel model)
         {
             if (model.Password.ContainsI("password")) ModelState.AddModelError("Password", "Password cannot contain the word 'password'");
             //TODO validate the submitted fields
@@ -818,8 +818,8 @@ namespace GenderPayGap.WebUI.Controllers
                         throw new Exception("Could not send PIN in the POST. Please try again later.");
 
                     //Try and send the confirmation email
-                    if (!this.SendConfirmEmail(currentUser.EmailAddress))
-                        throw new Exception("Could not send confirmation email. Please try again later.");
+                    //if (!this.SendConfirmEmail(currentUser.EmailAddress))
+                    //    throw new Exception("Could not send confirmation email. Please try again later.");
 
                     //Save the PIN and confirm code
                     userOrg.PINHash = pin.GetSHA512Checksum();

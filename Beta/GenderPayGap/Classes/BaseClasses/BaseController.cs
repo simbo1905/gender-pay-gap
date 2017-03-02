@@ -186,37 +186,24 @@ namespace GenderPayGap
 
         #endregion
 
-        //#region Session Handling
+        /// <summary>
+        /// returns true if previous action 
+        /// </summary>
+        /// <param name="actionName"></param>
+        /// <param name="controllerName"></param>
+        /// <returns></returns>
+        public bool WasAction(string actionName, string controllerName = null, object routeValues=null)
+        {
+            if (string.IsNullOrWhiteSpace(controllerName)) controllerName = ControllerName;
+            return Request.UrlReferrer==null ? false : Request.UrlReferrer.PathAndQuery.EqualsI(Url.Action("Step4", controllerName, routeValues));
+        }
 
-        ///// <summary>
-        ///// not working properly. Session cannot handle 'this'
-        ///// </summary>
-        ///// <typeparam name="T"></typeparam>
-        ///// <param name="model"></param>
-        //public void StashModel<T>(T model)
-        //{
-        //    Session[this+":Model"] = model;
-        //}
-        //public void ClearStash()
-        //{
-        //    Session.Remove(this + ":Model");
-        //}
-
-        //public T UnstashModel<T>(bool delete=false) where T:class
-        //{
-        //    var result=Session[this + ":Model"] as T;
-        //    if (delete) Session.Remove(this + ":Model");
-        //    return result;
-        //}
-
-        //#endregion
-
-        bool IsAction(string actionName, string controllerName=null)
+        public bool IsAction(string actionName, string controllerName=null)
         {
             return actionName.EqualsI(ActionName) && (controllerName==ControllerName || string.IsNullOrWhiteSpace(controllerName));
         }
 
-        bool IsAnyAction(params string[] actionUrls)
+        public bool IsAnyAction(params string[] actionUrls)
         {
             for (var i=0;i<actionUrls.Length;i++)
             {

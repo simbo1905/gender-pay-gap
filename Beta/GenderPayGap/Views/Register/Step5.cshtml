@@ -3,6 +3,7 @@
 }
 
 @model GenderPayGap.WebUI.Models.OrganisationViewModel
+@using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
     @using (Html.BeginForm("Step5", "Register"))
@@ -12,7 +13,7 @@
 
         <input type="submit" style="display:none" name="command" value="">
         <div class="grid-row">
-            @Html.ValidationSummary("", new { @class = "text-danger" })
+            @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
             <div class="column-two-thirds">
                 <h1 class="heading-large">
                     <span class="heading-secondary">Step 5 of @(Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private ? 6 : 7)</span>
@@ -21,11 +22,13 @@
 
                 <div class="search-bar">
                     <div class="searchfield">
-                        @Html.EditorFor(model => model.SearchText, new { htmlAttributes = new { @class = "search-input", @placeholder = "Enter an employers name or company no" } })
+                        @Html.CustomEditorFor(model => model.SearchText, htmlAttributes: new { @class = "search-input", @placeholder = "Enter an employers name or company no" })
 
                         <button type="submit" class="search-submit" name="command" value="search">Search</button>
                     </div>
                 </div>
+            </div>
+            <div class="column-full">
 
                 @if (!string.IsNullOrWhiteSpace(Model.SearchText))
                 {
@@ -40,12 +43,10 @@
                             <caption class="visuallyhidden">Customer and Business search listing</caption>
                             <thead>
                                 <tr>
-                                    <th scope="col">Organisation name and registered address</th>
-
                                     @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
                                     {
                                         <th scope="col">Organisation name and registered address</th>
-                                            <th scope="col">Registered number</th>
+                                        <th scope="col">Registered number</th>
                                     }
                                     else
                                     {
@@ -124,7 +125,7 @@
                 </details>
                 <br>
                 <p>
-                    @Html.ActionLink("Go back to previous step", "Step3")
+                    @Html.ActionLink("Back", "Step4")
                 </p>
 
             </div>
