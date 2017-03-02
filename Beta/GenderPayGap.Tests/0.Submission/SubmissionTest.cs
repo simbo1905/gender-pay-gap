@@ -631,7 +631,7 @@ namespace GenderPayGap.Tests.Submission
             };
            
             //Act
-            var result = (ViewResult)controller.Step3(model, string.Empty);
+            var result = (ViewResult)controller.Step3(model /*, string.Empty*/);
             var returnModel = result.Model as Return;
 
             //Assert
@@ -660,7 +660,7 @@ namespace GenderPayGap.Tests.Submission
             var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
 
             //Act
-            var result = (ViewResult)controller.Step3(model, string.Empty);
+            var result = (ViewResult)controller.Step3(model /*, string.Empty*/) as ViewResult;
             //controller.Bind(model);
             var returnModel = result.Model as Return;
 
