@@ -84,11 +84,11 @@ namespace GenderPayGap.WebUI.Models
 
         }
 
-        [Required]
+        [Required(AllowEmptyStrings=false)]
         [EnumDataType(typeof(SectorTypes), ErrorMessage = "You must select the type of your organisation")]
         public SectorTypes? SectorType { get; set; }
 
-        [Required]
+        [Required(AllowEmptyStrings=false)]
         [StringLength(100,ErrorMessage = "You must enter an employers name or company number between 3 and 100 characters in length",MinimumLength = 3)]
         [DisplayName("Search")]
         public string SearchText { get; set; }

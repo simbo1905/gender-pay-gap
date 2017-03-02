@@ -261,6 +261,99 @@ namespace GenderPayGap.WebUI.Classes
             return helper.EditorFor(expression, null, new { htmlAttributes = htmlAttr });
         }
 
+        public static void CleanModelErrors<TModel>(this Controller controller)
+        {
+            var containerType = typeof(TModel);
+            var oldModelState = new ModelStateDictionary();
+            foreach (var modelState in controller.ModelState)
+            {
+                oldModelState.Add(modelState.Key, modelState.Value);
+            }
+
+            controller.ModelState.Clear();
+
+            foreach (var modelState in oldModelState)
+            {
+                //Get the property name
+                var propertyName = modelState.Key;
+
+                var propertyInfo = string.IsNullOrWhiteSpace(propertyName) ? null : containerType.GetPropertyInfo(propertyName);
+                var attributes = propertyInfo == null ? null : propertyInfo.GetCustomAttributes(typeof(ValidationAttribute), false).ToList<ValidationAttribute>();
+
+                var displayAttribute = propertyInfo==null ? null : propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
+                var displayName = displayAttribute == null ? propertyName : displayAttribute.Name;
+
+
+                foreach (var error in modelState.Value.Errors)
+                { 
+                    var title = error.ErrorMessage;
+                    var description = error.ErrorMessage;
+
+                    if (error.ErrorMessage.Like("The value * is not valid for *."))
+                    {
+                        title = "There is a problem with your values.";
+                        description = "The value here is invalid.";
+                    }
+
+                    if (attributes == null || attributes.Count() == 0) goto addModelError;
+
+                    var attribute = attributes.FirstOrDefault(a => a.FormatError(a.GetErrorString(),displayName) == error.ErrorMessage);
+                    if (attribute == null) goto addModelError;
+                    var validatorKey = $"{containerType.Name}.{propertyName}:{attribute.GetType().Name.TrimSuffix("Attribute")}";
+                    var customError = CustomErrorMessages.GetValidationError(validatorKey);
+                    if (customError == null) goto addModelError;
+
+                    title = attribute.FormatError(customError.Title, displayName);
+                    description = attribute.FormatError(customError.Description, displayName);
+
+                addModelError:
+
+                    //add the summary message if it doesnt already exist
+                    if (!string.IsNullOrWhiteSpace(title) && !controller.ModelState.Any(m => m.Key == "" && m.Value.Errors.Any(e => e.ErrorMessage == title)))
+                        controller.ModelState.AddModelError("", title);
+
+                    //add the inline message if it doesnt already exist
+                    if (!string.IsNullOrWhiteSpace(description) && !string.IsNullOrWhiteSpace(propertyName) && !controller.ModelState.Any(m => m.Key.EqualsI(propertyName) && m.Value.Errors.Any(e => e.ErrorMessage == description)))
+                        controller.ModelState.AddModelError(propertyName, description);
+                }
+            }
+        }
+
+        public static string GetErrorString(this ValidationAttribute attribute)
+        {
+            string errorString = Misc.GetPropertyValue(attribute, "ErrorMessageString") as string;
+            if (string.IsNullOrWhiteSpace(errorString)) errorString = attribute.ErrorMessage;
+            return errorString;
+        }
+
+        public static string FormatError(this ValidationAttribute attribute, string error, string displayName)
+        {
+            if (string.IsNullOrWhiteSpace(error)) return error;
+
+            string par1 = null;
+            string par2 = null;
+
+            if (attribute is RangeAttribute)
+            {
+                par1 = ((RangeAttribute)attribute).Minimum.ToString();
+                par2 = ((RangeAttribute)attribute).Maximum.ToString();
+            }
+            else if (attribute is MinLengthAttribute)
+            {
+                par1 = ((MinLengthAttribute)attribute).Length.ToString();
+            }
+            else if (attribute is MaxLengthAttribute)
+            {
+                par1 = ((MaxLengthAttribute)attribute).Length.ToString();
+            }
+            else if (attribute is StringLengthAttribute)
+            {
+                par1 = ((StringLengthAttribute)attribute).MinimumLength.ToString();
+                par2 = ((StringLengthAttribute)attribute).MaximumLength.ToString();
+            }
+            return string.Format(error, displayName, par1, par2);
+        }
+
         public static void AddModelError(this BaseController controller, string errorContext,string propertyName=null, object parameters=null)
         {
             //Try and get the custom error
@@ -282,8 +375,13 @@ namespace GenderPayGap.WebUI.Classes
                     description = description.ReplaceI("{" + prop.Name + "}", value);
                 }
 
-            if (!string.IsNullOrWhiteSpace(title)) controller.ModelState.AddModelError("", title);
-            if (!string.IsNullOrWhiteSpace(description)) controller.ModelState.AddModelError(propertyName, description);
+            //add the summary message if it doesnt already exist
+            if (!string.IsNullOrWhiteSpace(title) && !controller.ModelState.Any(m=>m.Key=="" && m.Value.Errors.Any(e=>e.ErrorMessage==title)))
+                controller.ModelState.AddModelError("", title);
+            
+            //add the inline message if it doesnt already exist
+            if (!string.IsNullOrWhiteSpace(description) && !controller.ModelState.Any(m => m.Key.EqualsI(propertyName) && m.Value.Errors.Any(e => e.ErrorMessage == description)))
+                controller.ModelState.AddModelError(propertyName, description);
         }
 
         public static void AddModelError(this BaseController controller, int errorCode, object parameters = null)
