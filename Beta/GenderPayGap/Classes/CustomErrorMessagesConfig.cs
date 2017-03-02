@@ -173,6 +173,11 @@ namespace GenderPayGap.WebUI.Classes
             return DefaultSection.Messages.ValidationErrors.ContainsKey(validator) ? DefaultSection.Messages.ValidationErrors[validator] : null;
         }
 
+        public static CustomErrorMessage GetError(int errorCode)
+        {
+            return DefaultSection.Messages[errorCode];
+        }
+
         public static string GetTitle(int code)
         {
             return DefaultSection.Messages[code]?.Title;
@@ -189,6 +194,11 @@ namespace GenderPayGap.WebUI.Classes
         }
 
         public static string GetDescription(string validator)
+        {
+            return DefaultSection.Messages.ValidationErrors[validator]?.Description;
+        }
+
+        public static string GetModelError(string validator)
         {
             return DefaultSection.Messages.ValidationErrors[validator]?.Description;
         }
