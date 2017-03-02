@@ -518,6 +518,7 @@ namespace GenderPayGap.Tests
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
+
             var routeData = new RouteData();
             routeData.Values.Add("action", "Step1");
             routeData.Values.Add("controller", "register");
@@ -814,6 +815,8 @@ namespace GenderPayGap.Tests
         [Description("Ensure the Step1 succeeds when all fields are good")]
         public void Step4_Get_Success()
         {
+            var controller = TestHelper.GetController<RegisterController>();
+            controller.PublicSectorRepository.Insert(new EmployerRecord());
 
         }
 
