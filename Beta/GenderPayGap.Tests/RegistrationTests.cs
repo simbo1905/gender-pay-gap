@@ -509,6 +509,11 @@ namespace GenderPayGap.Tests
         #region Test enrollment step 1 - verify email
         #endregion
 
+
+
+
+
+        //Happy Path - Registration GET and POST Actions
         [Test]
         [Description("Ensure the Step1 succeeds and gets a new registration form for newly authorized users to register")]
         public void Step1_Get_RegistrationComplete_Success()
@@ -695,7 +700,6 @@ namespace GenderPayGap.Tests
         [Description("Ensure the Step2 user verification succeeds")]
         public void Step2_Post_Success()
         {
-
             //ARRANGE:
             //1.Arrange the test setup variables
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -714,6 +718,7 @@ namespace GenderPayGap.Tests
             model.Expired = false;
             model.Resend = false;
             model.Retry = false;
+
             //Set model as if email
 
             // model.Sent = true;
@@ -722,7 +727,7 @@ namespace GenderPayGap.Tests
             // model.WrongCode = false;
 
             //var controller = TestHelper.GetController<RegisterController>();
-            var controller = TestHelper.GetController<RegisterController>(1, routeData, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<RegisterController>(1, routeData, user/*, organisation, userOrganisation*/);
             controller.Bind(model);
 
             //ACT:
@@ -762,7 +767,7 @@ namespace GenderPayGap.Tests
         [Description("Ensure the Step1 succeeds when all fields are good")]
         public void Step3_Get_Success()
         {
-
+            Assert.AreEqual(true, false, "");
         }
 
         [Test]
@@ -814,7 +819,7 @@ namespace GenderPayGap.Tests
         [Description("Ensure the Step1 succeeds when all fields are good")]
         public void Step4_Get_Success()
         {
-
+            Assert.AreEqual(true, false, "");
         }
 
         [Test]
@@ -866,7 +871,7 @@ namespace GenderPayGap.Tests
         [Description("Ensure the Step1 succeeds when all fields are good")]
         public void Step5_Get_Success()
         {
-
+            Assert.AreEqual(true, false, "");
         }
 
         [Test]
@@ -919,7 +924,7 @@ namespace GenderPayGap.Tests
         [Description("Ensure the Step1 succeeds when all fields are good")]
         public void Step6_Get_Success()
         {
-
+            Assert.AreEqual(true, false, "");
         }
 
         [Test]
@@ -972,7 +977,7 @@ namespace GenderPayGap.Tests
         [Description("Ensure the Step1 succeeds when all fields are good")]
         public void Step7_Get_Success()
         {
-
+            Assert.AreEqual(true, false, "");
         }
 
         [Test]
