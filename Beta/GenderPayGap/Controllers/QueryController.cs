@@ -9,6 +9,7 @@ using Extensions;
 using Autofac;
 
 using GenderPayGap;
+using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -56,6 +57,7 @@ namespace GenderPayGap.WebUI.Controllers
                 model.Results = DataRepository.GetAll<Organisation>().Select(o => o).ToArray();
             }
 
+            this.CleanModelErrors<SearchViewModel>();
             return View(model);
         }
          

@@ -126,7 +126,11 @@ namespace GenderPayGap.WebUI.Controllers
             ModelState.Remove("LastName");
             ModelState.Remove("JobTitle");
 
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<ReturnViewModel>();
+                return View(model);
+            }
 
             this.StashModel(model);
 
@@ -167,7 +171,12 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<ReturnViewModel>();
+                return View(model);
+            }
+
 
             this.StashModel(model);
             
@@ -242,7 +251,11 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<ReturnViewModel>();
+                return View(model);
+            }
 
             var oldReturn = DataRepository.GetAll<Return>().FirstOrDefault(r => r.ReturnId == model.ReturnId);
 
