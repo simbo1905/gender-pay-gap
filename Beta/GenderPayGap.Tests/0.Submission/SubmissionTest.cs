@@ -621,7 +621,6 @@ namespace GenderPayGap.Tests.Submission
             routeData.Values.Add("action", "step3");
             routeData.Values.Add("controller", "submit");
 
-
             var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
 
             var model = new ReturnViewModel()
@@ -652,7 +651,6 @@ namespace GenderPayGap.Tests.Submission
             var routeData = new RouteData();
             routeData.Values.Add("action", "step3");
             routeData.Values.Add("controller", "submit");
-
 
             var model = new ReturnViewModel();
             model.CompanyLinkToGPGInfo = "http://www.test.com";
