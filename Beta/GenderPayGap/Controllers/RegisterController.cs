@@ -15,6 +15,7 @@ using Thinktecture.IdentityModel.Mvc;
 using System.Configuration;
 using System.Collections.Generic;
 using GenderPayGap.WebUI.Properties;
+using GenderPayGap.Core.Interfaces;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -37,6 +38,37 @@ namespace GenderPayGap.WebUI.Controllers
             MvcApplication.Log.WriteLine("Register Controller Initialised");
 #endif
             return new EmptyResult();
+        }
+        #endregion
+
+        #region IoC Properties
+
+        IPagedRepository<EmployerRecord> _PrivateSectorRepository = null;
+        public IPagedRepository<EmployerRecord> PrivateSectorRepository
+        {
+            get
+            {
+
+                if (_PrivateSectorRepository == null)
+                {
+                    _PrivateSectorRepository = containerIOC.ResolveKeyed<IPagedRepository<EmployerRecord>>("Private");
+                }
+                return _PrivateSectorRepository;
+            }
+        }
+
+        IPagedRepository<EmployerRecord> _PublicSectorRepository = null;
+        public IPagedRepository<EmployerRecord> PublicSectorRepository
+        {
+            get
+            {
+
+                if (_PublicSectorRepository == null)
+                {
+                    _PublicSectorRepository = containerIOC.ResolveKeyed<IPagedRepository<EmployerRecord>>("Public");
+                }
+                return _PublicSectorRepository;
+            }
         }
         #endregion
 
@@ -83,13 +115,15 @@ namespace GenderPayGap.WebUI.Controllers
                 {
                     if (currentUser.EmailVerifiedDate != null)
                     {
-                        ModelState.AddModelError("", "A registered user with this email already exists.");
-                        ModelState.AddModelError("", "Please enter a different email address.");
+                        //A registered user with this email already exists.
+                        AddModelError("EmailAddress","Email registered");
                         return View("Step1", model);
                     }
                     var remainingTime = currentUser.EmailVerifySendDate.Value.AddHours(WebUI.Properties.Settings.Default.EmailVerificationExpiryHours) - DateTime.Now;
                     if (remainingTime > TimeSpan.Zero)
                     {
+                        AddModelError("EmailAddress", "Email registering",new { remainingTime= remainingTime.ToFriendly(maxParts: 2) });
+
                         ModelState.AddModelError("", "Another user is trying to register using this email address.");
                         ModelState.AddModelError("", "Please enter a different email address or try again in " + remainingTime.ToFriendly(maxParts: 2) + ".");
                         return View("Step1", model);
@@ -201,7 +235,8 @@ namespace GenderPayGap.WebUI.Controllers
                     return View("CustomError", new ErrorViewModel(1102, new { remainingTime = remainingLock.ToFriendly(maxParts: 2) }));
                 else
                 {
-                    ModelState.AddModelError("", CustomErrorMessages.GetTitle(1103));
+                    //Expired with rezend
+                    AddModelError(1103);
 
                     //Prompt to click resend
                     model.Resend = true;
@@ -224,7 +259,7 @@ namespace GenderPayGap.WebUI.Controllers
                 {
                     model.Resend = true;
                     model.WrongCode = true;
-                    ModelState.AddModelError("", CustomErrorMessages.GetTitle(1111));
+                    AddModelError(1111);
                     //Prompt user to request a new verification code
                     result = View("Step2", model);
                 }
@@ -379,13 +414,13 @@ namespace GenderPayGap.WebUI.Controllers
             {
                 case SectorTypes.Private:
 
-                    model.Employers = PrivateSectorRepository.Default.Search(model.SearchText,1, Settings.Default.EmployerPageSize);
+                    model.Employers = PrivateSectorRepository.Search(model.SearchText,1, Settings.Default.EmployerPageSize);
 
                     break;
 
                 case SectorTypes.Public:
 
-                    model.Employers = PublicSectorRepository.Default.Search(model.SearchText, 1, Settings.Default.EmployerPageSize);
+                    model.Employers = PublicSectorRepository.Search(model.SearchText, 1, Settings.Default.EmployerPageSize);
 
                     break;
 
@@ -505,11 +540,11 @@ namespace GenderPayGap.WebUI.Controllers
                 switch (model.SectorType)
                 {
                     case SectorTypes.Private:
-                        model.Employers = PrivateSectorRepository.Default.Search(model.SearchText, nextPage, Settings.Default.EmployerPageSize);
+                        model.Employers = PrivateSectorRepository.Search(model.SearchText, nextPage, Settings.Default.EmployerPageSize);
                         break;
 
                     case SectorTypes.Public:
-                        model.Employers = PublicSectorRepository.Default.Search(model.SearchText, nextPage, Settings.Default.EmployerPageSize);
+                        model.Employers = PublicSectorRepository.Search(model.SearchText, nextPage, Settings.Default.EmployerPageSize);
                         break;
 
                     default:
@@ -653,14 +688,57 @@ namespace GenderPayGap.WebUI.Controllers
             return RedirectToAction("SendPIN");
         }
 
+        [HttpGet]
+        [Auth]
+        [Route("Step7")]
+        public ActionResult Step7()
+        {
+            //Ensure user has completed the registration process
+            User currentUser;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
+
+            //Make sure we can load employers from session
+            var model = this.UnstashModel<OrganisationViewModel>();
+            if (model == null) return View("CustomError", new ErrorViewModel(1112));
+
+            return View("ConfirmEmployer", model);
+        }
+
+        /// <summary>
+        /// Public confirm submit
+        /// </summary>
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Auth]
+        [Route("Step7")]
+        public ActionResult Step7(OrganisationViewModel model)
+        {
+            //Ensure user has completed the registration process
+            User currentUser;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
+
+            //Load the employers from session
+            var m = this.UnstashModel<OrganisationViewModel>();
+            if (m == null) return View("CustomError", new ErrorViewModel(1112));
+            model.Employers = m.Employers;
+
+            //Save the public sector employer registration
+            SaveRegistration(currentUser, model);
+
+            //Redirect to complete form
+            this.StashModel(model);
+            return RedirectToAction("Complete");
+        }
 
         /// <summary>
         /// Save the current users registration
         /// </summary>
         /// <param name="currentUser"></param>
         /// <param name="model"></param>
-        void SaveRegistration(User currentUser,OrganisationViewModel model)
-        {            
+        void SaveRegistration(User currentUser, OrganisationViewModel model)
+        {
             var employer = model.SelectedEmployer;
 
             //Save the new organisation
@@ -739,50 +817,6 @@ namespace GenderPayGap.WebUI.Controllers
 
                 DataRepository.SaveChanges();
             }
-        }
-
-        [HttpGet]
-        [Auth]
-        [Route("Step7")]
-        public ActionResult Step7()
-        {
-            //Ensure user has completed the registration process
-            User currentUser;
-            var checkResult = CheckUserRegisteredOk(out currentUser);
-            if (checkResult != null) return checkResult;
-
-            //Make sure we can load employers from session
-            var model = this.UnstashModel<OrganisationViewModel>();
-            if (model == null) return View("CustomError", new ErrorViewModel(1112));
-
-            return View("ConfirmEmployer", model);
-        }
-
-        /// <summary>
-        /// Public confirm submit
-        /// </summary>
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Auth]
-        [Route("Step7")]
-        public ActionResult Step7(OrganisationViewModel model)
-        {
-            //Ensure user has completed the registration process
-            User currentUser;
-            var checkResult = CheckUserRegisteredOk(out currentUser);
-            if (checkResult != null) return checkResult;
-
-            //Load the employers from session
-            var m = this.UnstashModel<OrganisationViewModel>();
-            if (m == null) return View("CustomError", new ErrorViewModel(1112));
-            model.Employers = m.Employers;
-
-            //Save the public sector employer registration
-            SaveRegistration(currentUser, model);
-
-            //Redirect to complete form
-            this.StashModel(model);
-            return RedirectToAction("Complete");
         }
 
         ActionResult GetSendPIN(string command=null)

@@ -15,6 +15,7 @@ using System.Web.Mvc;
 using GenderPayGap.WebUI.Controllers;
 using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Properties;
+using System.Linq.Expressions;
 
 namespace GenderPayGap
 {
@@ -36,7 +37,7 @@ namespace GenderPayGap
         protected IContainer containerIOC;
 
         IRepository _DataRepository;
-        protected IRepository DataRepository
+        public IRepository DataRepository
         {
             get
             {
@@ -80,6 +81,15 @@ namespace GenderPayGap
             }
         }
 
+        protected void AddModelError(string propertyName, string errorContext, object parameters = null)
+        {
+            GenderPayGap.WebUI.Classes.Extensions.AddModelError(this, propertyName, errorContext,parameters);
+        }
+
+        public void AddModelError(int errorCode, object parameters = null)
+        {
+            GenderPayGap.WebUI.Classes.Extensions.AddModelError(this,errorCode,parameters);
+        }
         #endregion
 
         #region Authorisation Methods
@@ -200,7 +210,8 @@ namespace GenderPayGap
 
         public bool IsAction(string actionName, string controllerName=null)
         {
-            return actionName.EqualsI(ActionName) && (controllerName==ControllerName || string.IsNullOrWhiteSpace(controllerName));
+            //String comparison must happen case agnostic( upper or lower case of the exact string must be equal.
+            return actionName.EqualsI(ActionName) && (controllerName.Equals(ControllerName, StringComparison.InvariantCultureIgnoreCase) || string.IsNullOrWhiteSpace(controllerName));
         }
 
         public bool IsAnyAction(params string[] actionUrls)
