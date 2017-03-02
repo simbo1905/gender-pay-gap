@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using System.Web.Mvc;
 using GenderPayGap.WebUI.Classes;
 using System.Web.Routing;
+using Extensions;
 
 namespace GenderPayGap.Tests
 {
@@ -664,7 +665,7 @@ namespace GenderPayGap.Tests
             //ARRANGE:
             //1.Arrange the test setup variables
             var code = "abcdefg";
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now,EmailVerifyHash=code.GetMD512};
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now, EmailVerifyHash = code.GetSHA512Checksum()};
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
@@ -680,10 +681,10 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step2(Encryption.EncryptUrl(code)) as ViewResult;
+            var result = controller.Step2(Encryption.EncryptQuerystring(code)) as ViewResult;
 
             //ASSERT:
-            //Ensure confimation view is retuned
+            //Ensure confimation view is returned
             //Ensure the model is correct
             //ensure uswr is marked as verified
             Assert.NotNull(result as ViewResult, "Expected ViewResult");
