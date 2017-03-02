@@ -364,3 +364,17 @@ Bugs:
  
  task clean up sub,ission jouney
 
+ assign
+	setup route
+	setup db
+	setup model
+
+ACT
+	call the action
+
+
+ check ReturnResult
+			Viewresult
+			RouteReditectResult
+check the model,
+check db
