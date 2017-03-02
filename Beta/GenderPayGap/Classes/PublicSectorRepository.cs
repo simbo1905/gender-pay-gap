@@ -29,17 +29,14 @@ namespace GenderPayGap
             }
         }
 
-        static PublicSectorRepository _Default = null;
-        public static PublicSectorRepository Default
+        public void Delete(EmployerRecord entity)
         {
-            get
-            {
-                if (_Default == null)
-                {
-                    _Default = new PublicSectorRepository();
-                }
-                return _Default;
-            }
+            throw new NotImplementedException();
+        }
+
+        public void Insert(EmployerRecord entity)
+        {
+            throw new NotImplementedException();
         }
 
         #endregion
