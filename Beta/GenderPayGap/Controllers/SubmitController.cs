@@ -66,7 +66,7 @@ namespace GenderPayGap.WebUI.Controllers
             var @return = DataRepository.GetAll<Return>().OrderByDescending
                 (r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId && r.AccountingDate >= expectStartDate && r.AccountingDate < expectEndDate);
 
-            var model = UnstashModel<ReturnViewModel>();
+            var model = this.UnstashModel<ReturnViewModel>();
 
             if (model == null)
             {
@@ -138,7 +138,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             if (TempData.ContainsKey("ErrorMessage")) ModelState.AddModelError("", TempData["ErrorMessage"].ToString());
 
-            StashModel(model);
+            this.StashModel(model);
 
             //if(Request.UrlReferrer != null && Request.UrlReferrer.Segments[2].ToString() == "Step4")
             //    TempData["Review"] = Request.UrlReferrer.Segments[2].ToString();
@@ -163,7 +163,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             if (!ModelState.IsValid) return View(model);
 
-            StashModel(model);
+            this.StashModel(model);
 
 
             var review = TempData["Review"];
@@ -191,7 +191,7 @@ namespace GenderPayGap.WebUI.Controllers
             //if (TempData.ContainsKey("ErrorMessage")) ModelState.AddModelError("", TempData["ErrorMessage"].ToString());
 
             ReturnViewModel model = null;
-            model = UnstashModel<ReturnViewModel>();
+            model = this.UnstashModel<ReturnViewModel>();
 
             if (model == null)
             {
@@ -218,7 +218,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             if (!ModelState.IsValid) return View(model);
 
-            StashModel(model);
+            this.StashModel(model);
 
             var review = TempData["Review"];
             if (command == "Cancel" || command == "Continue" && review != null && review.ToString() == "Step4")
@@ -242,7 +242,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             ReturnViewModel model = null;
 
-            model = UnstashModel<ReturnViewModel>();
+            model = this.UnstashModel<ReturnViewModel>();
 
             if (model == null)
             {
@@ -273,7 +273,7 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            StashModel(model);
+            this.StashModel(model);
 
             var review = TempData["Review"];
             if (command == "Cancel" || command == "Continue" && review != null && review.ToString() == "Step4")
@@ -295,7 +295,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             ReturnViewModel model = null;
 
-            model = UnstashModel<ReturnViewModel>();
+            model = this.UnstashModel<ReturnViewModel>();
 
             return View(model);
         }
@@ -369,7 +369,7 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            var model = UnstashModel<ReturnViewModel>();
+            var model = this.UnstashModel<ReturnViewModel>();
 
             //try
             //{
