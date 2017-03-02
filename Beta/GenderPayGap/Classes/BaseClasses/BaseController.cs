@@ -15,6 +15,7 @@ using System.Web.Mvc;
 using GenderPayGap.WebUI.Controllers;
 using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Properties;
+using System.Linq.Expressions;
 
 namespace GenderPayGap
 {
@@ -80,6 +81,15 @@ namespace GenderPayGap
             }
         }
 
+        protected void AddModelError(string propertyName, string errorContext, object parameters = null)
+        {
+            GenderPayGap.WebUI.Classes.Extensions.AddModelError(this, propertyName, errorContext,parameters);
+        }
+
+        public void AddModelError(int errorCode, object parameters = null)
+        {
+            GenderPayGap.WebUI.Classes.Extensions.AddModelError(this,errorCode,parameters);
+        }
         #endregion
 
         #region Authorisation Methods

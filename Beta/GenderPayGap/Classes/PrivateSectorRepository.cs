@@ -20,18 +20,14 @@ namespace GenderPayGap
     {
         const Models.SqlDatabase.SectorTypes Type = Models.SqlDatabase.SectorTypes.Private;
 
-        static PrivateSectorRepository _Default = null;
-        public static PrivateSectorRepository Default
+        public void Delete(EmployerRecord entity)
         {
-            get
-            {
+            throw new NotImplementedException();
+        }
 
-                if (_Default == null)
-                {
-                    _Default = new PrivateSectorRepository();
-                }
-                return _Default;
-            }
+        public void Insert(EmployerRecord entity)
+        {
+            throw new NotImplementedException();
         }
 
         public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize)
