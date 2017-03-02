@@ -67,8 +67,13 @@ namespace GenderPayGap.Tests.Submission
             //simulated return from mock db
             var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
+            //set mock routeData
+            var routeData = new RouteData();
+            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("controller", "submit");
+
             //Add a return to the mock repo to simulate one in the database
-            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation, @return);
+            var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation, @return);
            // controller.bind();
 
             //Act:
@@ -83,15 +88,21 @@ namespace GenderPayGap.Tests.Submission
 
         [Test]
         [Description("If a user does not have a return existing in the database, a new one should be created and verified with default values")]
-        public void Step1_UserHasNoReturn_ShowNewReturn()
+        public void Step1_UserHasNoReturn_ShowNewPrivateSectorReturn()
         {
             // Arrange:
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
-            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
-           // controller.Bind(model);
+            //set mock routeData
+            var routeData = new RouteData();
+            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("controller", "submit");
+
+            var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
+            var PrivateAccountingDate = new DateTime(2017, 4, 5);
+            // controller.Bind(model);
 
 
             //Act:
@@ -101,19 +112,102 @@ namespace GenderPayGap.Tests.Submission
             //Assert:
             Assert.That(resultModel.ReturnId == 0, "ReturnId expected 0");
             Assert.That(resultModel.OrganisationId == 1, "Organisation Id ");
+            Assert.That(resultModel.AccountingDate == PrivateAccountingDate, "Private sector Return start date expected");
         }
 
+        [Test]
+        [Description("If a user does not have a return existing in the database, a new one should be created and verified with default values")]
+        public void Step1_UserHasNoReturn_ShowNewPublicSectorReturn()
+        {
+            // Arrange:
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var organisation = new Organisation() { OrganisationId = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+
+            //set mock routeData
+            var routeData = new RouteData();
+            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("controller", "submit");
+
+            var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
+            var PublicAccountingDate = new DateTime(2017, 3, 31);
+            // controller.Bind(model);
 
 
+            //Act:
+            var result = (ViewResult)controller.Step1();
+            var resultModel = result.Model as ReturnViewModel;
+
+            //Assert:
+            Assert.That(resultModel.ReturnId == 0, "ReturnId expected 0");
+            Assert.That(resultModel.OrganisationId == 1, "Organisation Id ");
+            Assert.That(resultModel.AccountingDate == PublicAccountingDate, "Public sector Return start date expected ");
+        }
 
         [Test]
-        [Description("Ensure that Step1 fails when any field is empty")]
+        [Description("Step1 should fail when any field is empty")]
         public void Step1_EmptyFields_ShowAllErrors()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "1" };
+
+            //set mock routeData
+            var routeData = new RouteData();
+            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("controller", "submit");
+
+            //empty model without values
+            var model = new ReturnViewModel();
+
+            var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
+            controller.Bind(model);
+
+            // Act
+            var result = controller.Step1(model) as ViewResult;
+
+            // Assert
+            Assert.Multiple(() =>
+            {
+                Assert.NotNull(result, "Expected ViewResult");
+                Assert.That(result.ViewName == "Step1", "Incorrect view returned");
+
+                Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
+
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMeanBonusPercent"), false, "Expected DiffMeanBonusPercent failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMeanHourlyPayPercent"), false, "Expected DiffMeanHourlyPayPercent failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMedianBonusPercent"), false, "Expected DiffMedianBonusPercent failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMedianHourlyPercent"), false, "Expected DiffMedianHourlyPercent failure");
+
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleLowerPayBand"), false, "Expected FemaleLowerPayBand failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleMedianBonusPayPercent"), false, "Expected FemaleMedianBonusPayPercent failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleMiddlePayBand"), false, "Expected FemaleMiddlePayBand  failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleUpperPayBand"), false, "Expected FemaleUpperPayBand  failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleUpperQuartilePayBand"), false, "Expected FemaleUpperQuartilePayBand  failure");
+
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleLowerPayBand"), false, "Expected MaleLowerPayBand  failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleMedianBonusPayPercent"), false, "Expected MaleMedianBonusPayPercent  failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleMiddlePayBand"), false, "Expected MaleMiddlePayBand  failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleUpperPayBand"), false, "Expected MaleUpperPayBand  failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleUpperQuartilePayBand"), false, "Expected MaleUpperQuartilePayBand  failure");
+
+            });
+        }
+
+        [Test]
+        [Description("Ensure that Step1 passes when all zero values are entered in all/any of the fields as zero is a valid value")]
+        public void Step1_ZeroValidValueInFields_NoError()
+        {
+            // Arrange
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var organisation = new Organisation() { OrganisationId = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "1" };
+
+            //set mock routeData
+            var routeData = new RouteData();
+            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("controller", "submit");
 
             decimal zero = 0;
 
@@ -136,7 +230,7 @@ namespace GenderPayGap.Tests.Submission
             };
 
 
-            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
             controller.Bind(model);
 
             // Act
@@ -150,28 +244,27 @@ namespace GenderPayGap.Tests.Submission
 
                 Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
 
-                Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMeanBonusPercent"),        false, "Expected DiffMeanBonusPercent failure");
-                Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMeanHourlyPayPercent"),    false, "Expected DiffMeanHourlyPayPercent failure");
-                Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMedianBonusPercent"),      false, "Expected DiffMedianBonusPercent failure");
-                Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMedianHourlyPercent"),     false, "Expected DiffMedianHourlyPercent failure");
-
-                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleLowerPayBand"),          false, "Expected FemaleLowerPayBand failure");
-                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleMedianBonusPayPercent"), false, "Expected FemaleMedianBonusPayPercent failure");
-                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleMiddlePayBand"),         false, "Expected FemaleMiddlePayBand  failure");
-                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleUpperPayBand"),          false, "Expected FemaleUpperPayBand  failure");
-                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleUpperQuartilePayBand"),  false, "Expected FemaleUpperQuartilePayBand  failure");
-
-                Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleLowerPayBand"),            false, "Expected MaleLowerPayBand  failure");
-                Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleMedianBonusPayPercent"),   false, "Expected MaleMedianBonusPayPercent  failure");
-                Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleMiddlePayBand"),           false, "Expected MaleMiddlePayBand  failure");
-                Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleUpperPayBand"),            false, "Expected MaleUpperPayBand  failure");
-                Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleUpperQuartilePayBand"),    false, "Expected MaleUpperQuartilePayBand  failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMeanBonusPercent"),        true, "Expected DiffMeanBonusPercent failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMeanHourlyPayPercent"),    true, "Expected DiffMeanHourlyPayPercent failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMedianBonusPercent"),      true, "Expected DiffMedianBonusPercent failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMedianHourlyPercent"),     true, "Expected DiffMedianHourlyPercent failure");
+                                                                                                        
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleLowerPayBand"),          true, "Expected FemaleLowerPayBand failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleMedianBonusPayPercent"), true, "Expected FemaleMedianBonusPayPercent failure");                                                                         
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleMiddlePayBand"),         true, "Expected FemaleMiddlePayBand  failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleUpperPayBand"),          true, "Expected FemaleUpperPayBand  failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleUpperQuartilePayBand"),  true, "Expected FemaleUpperQuartilePayBand  failure");                                                                            
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleLowerPayBand"),            true, "Expected MaleLowerPayBand  failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleMedianBonusPayPercent"),   true, "Expected MaleMedianBonusPayPercent  failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleMiddlePayBand"),           true, "Expected MaleMiddlePayBand  failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleUpperPayBand"),            true, "Expected MaleUpperPayBand  failure");
+                Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleUpperQuartilePayBand"),    true, "Expected MaleUpperQuartilePayBand  failure");
                 
             });
         }
 
         [Test]
-        [Description("Ensure the Step1 succeeds when all fields have valid values")]
+        [Description("Step1 should succeed when all fields have valid values")]
         public void Step1_ValidValueInFields_NoError()
         {
             // Arrange
@@ -201,7 +294,7 @@ namespace GenderPayGap.Tests.Submission
 
 
             var controller = TestHelper.GetController<SubmitController>();
-            //controller.Bind(model);
+            controller.Bind(model);
 
             // Act
             var result = controller.Step1(model) as ViewResult;
@@ -236,13 +329,18 @@ namespace GenderPayGap.Tests.Submission
         }
 
         [Test]
-        [Description("Ensure that Step1 fails when any field is outside of the minimum allowed range of valid values")]
+        [Description("Step1 should fail when any field is outside of the minimum allowed range of valid values")]
         public void Step1_MinInValidValues_ShowAllErrors()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "1" };
+
+            //set mock routeData
+            var routeData = new RouteData();
+            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("controller", "submit");
 
             decimal minOutOfRangeValue = -201M;
 
@@ -265,8 +363,8 @@ namespace GenderPayGap.Tests.Submission
             };
 
 
-            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
-            //controller.Bind(model);
+            var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
+            controller.Bind(model);
 
             // Act
             var result = controller.Step1(model) as ViewResult;
@@ -300,13 +398,18 @@ namespace GenderPayGap.Tests.Submission
         }
 
         [Test]
-        [Description("Ensure that Step1 fails when any field is outside of the maximum allowed range of valid values")]
+        [Description("Step1 should fail when any field is outside of the maximum allowed range of valid values")]
         public void Step1_MaxInValidValues_ShowAllErrors()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "1" };
+
+            //set mock routeData
+            var routeData = new RouteData();
+            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("controller", "register");
 
             decimal maxOutOfRangeValue = 201M;
 
@@ -329,8 +432,8 @@ namespace GenderPayGap.Tests.Submission
             };
 
 
-            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
-            //controller.Bind(model);
+            var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
+            controller.Bind(model);
 
             // Act
             var result = controller.Step1(model) as ViewResult;
@@ -364,8 +467,6 @@ namespace GenderPayGap.Tests.Submission
         }
 
 
-
-
         #region Person Responsible
         [Test]
         [Description("Ensure the Step2 fails when any field is empty")]
@@ -375,6 +476,10 @@ namespace GenderPayGap.Tests.Submission
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "1" };
+
+            var routeData = new RouteData();
+            routeData.Values.Add("action", "step2");
+            routeData.Values.Add("controller", "submit");
 
             string emptyString = string.Empty;
 
@@ -387,7 +492,7 @@ namespace GenderPayGap.Tests.Submission
 
             var command = "";
 
-            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
             //controller.bind();
 
             //Act:
@@ -416,6 +521,12 @@ namespace GenderPayGap.Tests.Submission
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "1" };
 
+            var routeData = new RouteData();
+            routeData.Values.Add("action", "step2");
+            routeData.Values.Add("controller", "submit");
+
+
+
             string emptyString = null;
 
             var model = new ReturnViewModel()
@@ -427,7 +538,7 @@ namespace GenderPayGap.Tests.Submission
 
             var command = "";
 
-            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
             //controller.bind();
 
             //Act:
@@ -456,6 +567,11 @@ namespace GenderPayGap.Tests.Submission
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "1" };
 
+
+            var routeData = new RouteData();
+            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("controller", "register");
+
             var model = new ReturnViewModel()
             {
                 JobTitle  = "Director",
@@ -465,7 +581,7 @@ namespace GenderPayGap.Tests.Submission
 
             var command = "";
 
-            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
             //controller.bind();
 
             //Act:
@@ -501,7 +617,12 @@ namespace GenderPayGap.Tests.Submission
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
             var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
-            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
+            var routeData = new RouteData();
+            routeData.Values.Add("action", "step3");
+            routeData.Values.Add("controller", "submit");
+
+
+            var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
 
             var model = new ReturnViewModel()
             {
@@ -510,7 +631,7 @@ namespace GenderPayGap.Tests.Submission
             };
            
             //Act
-            var result = (ViewResult)controller.Step3(model, string.Empty);
+            var result = (ViewResult)controller.Step3(model /*, string.Empty*/);
             var returnModel = result.Model as Return;
 
             //Assert
@@ -528,13 +649,18 @@ namespace GenderPayGap.Tests.Submission
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
             var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
+            var routeData = new RouteData();
+            routeData.Values.Add("action", "step3");
+            routeData.Values.Add("controller", "submit");
+
+
             var model = new ReturnViewModel();
             model.CompanyLinkToGPGInfo = "http://www.test.com";
 
-            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
+            var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
 
             //Act
-            var result = (ViewResult)controller.Step3(model, string.Empty);
+            var result = (ViewResult)controller.Step3(model /*, string.Empty*/) as ViewResult;
             //controller.Bind(model);
             var returnModel = result.Model as Return;
 
@@ -551,15 +677,20 @@ namespace GenderPayGap.Tests.Submission
 
         [Test]
         [Description("Create action result should load the return model view")]
-        public void VerifyStep1ActionReturnsAValidReturnModel()
+        public void Step1_VerifyActionReturns_ValidReturnModel()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
-            var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
+            //var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
-            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
+            var routeData = new RouteData();
+            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("controller", "submit");
+
+
+            var controller = TestHelper.GetController<SubmitController>(1, routeData ,user, organisation, userOrganisation);
             //Act
             var result = (ViewResult)controller.Step1();
             var model = result.Model as ReturnViewModel;
@@ -570,7 +701,7 @@ namespace GenderPayGap.Tests.Submission
        
         [Test]
         [Description("Create action result should load the return model view")]
-        public void VerifyStep1ActionReturnsAnExistingReturn()
+        public void Step1_VerifyActionReturns_AnExistingReturn()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -578,7 +709,11 @@ namespace GenderPayGap.Tests.Submission
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
             var @return = new Return() { ReturnId = 1, OrganisationId = 1, CompanyLinkToGPGInfo = "https://www.test.com" };
 
-            var controller = TestHelper.GetController<SubmitController>(1, user, organisation, userOrganisation);
+            var routeData = new RouteData();
+            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("controller", "register");
+
+            var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation, @return);
 
             //Act
             //var result = (ViewResult)controller.Step1(@return);

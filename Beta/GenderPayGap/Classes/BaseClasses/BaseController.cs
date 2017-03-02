@@ -15,6 +15,7 @@ using System.Web.Mvc;
 using GenderPayGap.WebUI.Controllers;
 using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Properties;
+using System.Linq.Expressions;
 
 namespace GenderPayGap
 {
@@ -35,15 +36,16 @@ namespace GenderPayGap
         #region IoC fields
         protected IContainer containerIOC;
 
-        IRepository _Repository;
-        protected IRepository Repository
+        IRepository _DataRepository;
+        protected IRepository DataRepository
         {
             get
             {
-                if (_Repository==null)_Repository = containerIOC.Resolve<IRepository>();
-                return _Repository;
+                if (_DataRepository==null)_DataRepository = containerIOC.Resolve<IRepository>();
+                return _DataRepository;
             }
         }
+
         #endregion
 
         #region Public fields
@@ -79,6 +81,15 @@ namespace GenderPayGap
             }
         }
 
+        protected void AddModelError(string propertyName, string errorContext, object parameters = null)
+        {
+            GenderPayGap.WebUI.Classes.Extensions.AddModelError(this, propertyName, errorContext,parameters);
+        }
+
+        public void AddModelError(int errorCode, object parameters = null)
+        {
+            GenderPayGap.WebUI.Classes.Extensions.AddModelError(this,errorCode,parameters);
+        }
         #endregion
 
         #region Authorisation Methods
@@ -87,10 +98,10 @@ namespace GenderPayGap
             currentUser = null;
             //Ensure user is logged in submit or rest of of registration
             if (!User.Identity.IsAuthenticated)
-                return IsAnyAction("Register/Step1") ? null : new HttpUnauthorizedResult();
+                return IsAnyAction("Register/Step1", "Register/Step2") ? null : new HttpUnauthorizedResult();
 
             //Ensure we get a valid user from the database
-            currentUser = Repository.FindUser(User);
+            currentUser = DataRepository.FindUser(User);
             if (currentUser == null) throw new IdentityNotMappedException();
 
             //When email not verified
@@ -132,38 +143,44 @@ namespace GenderPayGap
             }
 
             //Get the current users organisation registration
-            var userOrg = Repository.GetUserOrg(currentUser);
+            var userOrg = DataRepository.GetUserOrg(currentUser);
+            var org = userOrg==null ? null : DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == userOrg.OrganisationId);
 
             //If they didnt have started organisation registration step then prompt to continue registration
-            if (userOrg == null)
+            if (userOrg == null || org==null)
             {
-                if (IsAnyAction("Register/Step3", "Register/Step4", "Register/Step5")) return null;
+                if (IsAnyAction("Register/Step3", "Register/Step4", "Register/Step5", "Register/Step6")) return null;
+
+                if ((org==null || org.SectorType== SectorTypes.Public) && IsAnyAction("Register/Step7")) return null;
                 return View("CustomError", new ErrorViewModel(1104));
             }
 
-            if (userOrg.PINConfirmedDate.EqualsI(null, DateTime.MinValue))
+            if (org.SectorType == SectorTypes.Private)
             {
-                //If pin never sent restart step3
-                if (userOrg.PINSentDate.EqualsI(null, DateTime.MinValue))
+                if (userOrg.PINConfirmedDate.EqualsI(null, DateTime.MinValue))
                 {
-                    if (IsAnyAction("Register/SendPIN")) return null;
-                    return RedirectToAction("SendPIN", "Register");
+                    //If pin never sent restart step3
+                    if (userOrg.PINSentDate.EqualsI(null, DateTime.MinValue))
+                    {
+                        if (IsAnyAction("Register/SendPIN")) return null;
+                        return RedirectToAction("SendPIN", "Register");
+                    }
+
+                    //If PIN sent and expired then prompt to request a new pin
+                    if (userOrg.PINSentDate.Value.AddDays(Settings.Default.PinInPostExpiryDays) < DateTime.Now)
+                    {
+                        if (IsAnyAction("Register/SendPIN")) return null;
+                        return View("CustomError", new ErrorViewModel(1106));
+                    }
+
+                    //If PIN resends are allowed and currently on PIN send page then allow it to continue
+                    var remainingTime = userOrg.PINSentDate.Value.AddHours(Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
+                    if (remainingTime <= TimeSpan.Zero && IsAnyAction("Register/SendPIN")) return null;
+
+                    //If PIN Not expired redirect to confirmPIN where they can either enter the same pin or request a new one 
+                    if (IsAnyAction("Register/ConfirmPIN")) return null;
+                    return RedirectToAction("ConfirmPIN", "Register");
                 }
-
-                //If PIN sent and expired then prompt to request a new pin
-                if (userOrg.PINSentDate.Value.AddDays(Settings.Default.PinInPostExpiryDays) < DateTime.Now)
-                {
-                    if (IsAnyAction("Register/SendPIN")) return null;
-                    return View("CustomError", new ErrorViewModel(1106));
-                }
-
-                //If PIN resends are allowed and currently on PIN send page then allow it to continue
-                var remainingTime = userOrg.PINSentDate.Value.AddHours(Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
-                if (remainingTime <= TimeSpan.Zero && IsAnyAction("Register/SendPIN")) return null;
-
-                //If PIN Not expired redirect to confirmPIN where they can either enter the same pin or request a new one 
-                if (IsAnyAction("Register/ConfirmPIN")) return null;
-                return RedirectToAction("ConfirmPIN","Register");
             }
 
             //Ensure user has completed the registration process
@@ -179,27 +196,24 @@ namespace GenderPayGap
 
         #endregion
 
-        #region Session Handling
-
-        protected void StashModel<T>(T model)
+        /// <summary>
+        /// returns true if previous action 
+        /// </summary>
+        /// <param name="actionName"></param>
+        /// <param name="controllerName"></param>
+        /// <returns></returns>
+        public bool WasAction(string actionName, string controllerName = null, object routeValues=null)
         {
-            Session[this+":Model"] = model;
-        }
-        protected T UnstashModel<T>(bool delete=false)
-        {
-            var result=(T)Session[this + ":Model"];
-            if (delete) Session.Remove(this + ":Model");
-            return result;
+            if (string.IsNullOrWhiteSpace(controllerName)) controllerName = ControllerName;
+            return Request.UrlReferrer==null ? false : Request.UrlReferrer.PathAndQuery.EqualsI(Url.Action("Step4", controllerName, routeValues));
         }
 
-        #endregion
-
-        bool IsAction(string actionName, string controllerName=null)
+        public bool IsAction(string actionName, string controllerName=null)
         {
             return actionName.EqualsI(ActionName) && (controllerName==ControllerName || string.IsNullOrWhiteSpace(controllerName));
         }
 
-        bool IsAnyAction(params string[] actionUrls)
+        public bool IsAnyAction(params string[] actionUrls)
         {
             for (var i=0;i<actionUrls.Length;i++)
             {

@@ -132,5 +132,30 @@ namespace GenderPayGap.Models.SqlDatabase
             StatusDate = DateTime.Now;
             StatusDetails = details;
         }
+
+        public bool Equals(Return model)
+        {
+            if (AccountingDate != model.AccountingDate)return false;
+            if (CompanyLinkToGPGInfo != model.CompanyLinkToGPGInfo)return false;
+            if (DiffMeanBonusPercent != model.DiffMeanBonusPercent)return false;
+            if (DiffMeanHourlyPayPercent != model.DiffMeanHourlyPayPercent)return false;
+            if (DiffMedianBonusPercent != model.DiffMedianBonusPercent)return false;
+            if (DiffMedianHourlyPercent != model.DiffMedianBonusPercent)return false;
+            if (FemaleLowerPayBand != model.FemaleLowerPayBand)return false;
+            if (FemaleMedianBonusPayPercent != model.FemaleMedianBonusPayPercent)return false;
+            if (FemaleMiddlePayBand != model.FemaleMiddlePayBand)return false;
+            if (FemaleUpperPayBand != model.FemaleUpperPayBand)return false;
+            if (FemaleUpperQuartilePayBand != model.FemaleUpperQuartilePayBand)return false;
+            if (FirstName != model.FirstName)return false;
+            if (LastName != model.LastName)return false;
+            if (JobTitle != model.JobTitle)return false;
+            if (MaleLowerPayBand != model.MaleLowerPayBand)return false;
+            if (MaleMedianBonusPayPercent != model.MaleMedianBonusPayPercent)return false;
+            if (MaleUpperQuartilePayBand != model.MaleUpperQuartilePayBand)return false;
+            if (MaleMiddlePayBand != model.MaleMiddlePayBand)return false;
+            if (MaleUpperPayBand != model.MaleUpperPayBand)return false;
+            if (OrganisationId != model.OrganisationId) return false;
+            return true;
+        }
     }
 }

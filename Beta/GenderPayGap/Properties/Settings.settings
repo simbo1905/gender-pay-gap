@@ -27,16 +27,16 @@
       <Value Profile="(Default)">3</Value>
     </Setting>
     <Setting Name="MaxEmailVerifyAttempts" Type="System.Int32" Scope="Application">
-      <Value Profile="(Default)">1</Value>
+      <Value Profile="(Default)">3</Value>
     </Setting>
     <Setting Name="LockoutMinutes" Type="System.Int32" Scope="Application">
       <Value Profile="(Default)">30</Value>
     </Setting>
     <Setting Name="PrivateAccountingDate" Type="System.DateTime" Scope="Application">
-      <Value Profile="(Default)">2017-04-05</Value>
+      <Value Profile="(Default)">2017-04-04</Value>
     </Setting>
     <Setting Name="PublicAccountingDate" Type="System.DateTime" Scope="Application">
-      <Value Profile="(Default)">2017-03-31</Value>
+      <Value Profile="(Default)">2017-04-01</Value>
     </Setting>
     <Setting Name="PINChars" Type="System.String" Scope="Application">
       <Value Profile="(Default)">123456789ABCDEF</Value>
@@ -49,6 +49,9 @@
     </Setting>
     <Setting Name="PinRegexError" Type="System.String" Scope="Application">
       <Value Profile="(Default)">PIN code must contain 6 alpha or numeric characters</Value>
+    </Setting>
+    <Setting Name="EmployerPageSize" Type="System.Int32" Scope="Application">
+      <Value Profile="(Default)">10</Value>
     </Setting>
   </Settings>
 </SettingsFile>

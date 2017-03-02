@@ -1,7 +1,8 @@
 ﻿@{
-    ViewBag.Title = "Registration: Confirm PIN";
+    ViewBag.Title = "Enter your PIN - Gender pay gap reporting service";
 }
 @model GenderPayGap.WebUI.Models.CompleteViewModel
+@using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
     <div class="grid-row">
@@ -9,16 +10,16 @@
         @using (Html.BeginForm())
         {
             @Html.AntiForgeryToken()
-            @Html.ValidationSummary("", new { @class = "text-danger" })
+            @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
 
-            <div class="column-full">
+            <div class="column-two-thirds">
                 <h1 class="heading-large">
                     Please enter your gender pay gap PIN
                 </h1>
-                <br>
+                <p>Enter the pin sent to your organisation's registered address by post. The pin will activate the gender pay gap reporting service.</p>
                 <div class="form-group ">
-                    @Html.LabelFor(model => model.PIN, htmlAttributes: new { @class = "form-label" })
-                    @Html.EditorFor(model => model.PIN, null, new { htmlAttributes = new { @placeholder = "PIN Code", @class = "form-control",style= "text-transform: uppercase;" } })
+                    @Html.LabelFor(model => model.PIN, "Enter PIN",htmlAttributes: new { @class = "form-label" })
+                    @Html.CustomEditorFor(model => model.PIN, htmlAttributes: new { @placeholder = "PIN Code", @class = "form-control",style= "text-transform: uppercase;" })
                 </div>
 
                 <details>
@@ -35,7 +36,7 @@
                     </p>
                 </details>	<br>
 
-                <input type="submit" class="button" name value="Activate &amp; continue" />
+                <input type="submit" class="button" name="command" value="Activate &amp; continue" />
             </div>
         }
     </div>

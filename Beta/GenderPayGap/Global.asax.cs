@@ -13,6 +13,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using GenderPayGap.WebUI.Properties;
+using GenderPayGap.WebUI.Models;
 
 namespace GenderPayGap
 {
@@ -42,7 +43,7 @@ namespace GenderPayGap
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
-
+        
             //Create Inversion of Control container
             ContainerIOC = BuildContainerIoC();
 
@@ -76,6 +77,8 @@ namespace GenderPayGap
             //builder.RegisterType<GpgDatabase>().As<IDbContext>();
             //builder.RegisterType<UnitOfWork>().As<IUnitOfWork>();
             builder.Register(c => new SqlRepository(new DbContext())).As<IRepository>();
+            builder.RegisterType<PrivateSectorRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Private");
+            builder.RegisterType<PublicSectorRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Public");
 
             return builder.Build();
         }

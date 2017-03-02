@@ -57,14 +57,24 @@ namespace GenderPayGap.WebUI.Classes
             return results;
         }
 
-        List<CustomErrorMessage> _List = null;
-        List<CustomErrorMessage> List
+        Dictionary<int, CustomErrorMessage> _PageErrors = null;
+        public Dictionary<int, CustomErrorMessage> PageErrors
         {
             get
             {
-                if (_List == null) _List = this.ToList<CustomErrorMessage>();
-                return _List;
+                if (_PageErrors == null) _PageErrors = this.ToList<CustomErrorMessage>().Where(e=>string.IsNullOrWhiteSpace(e.Validator)).ToDictionary(c => c.Code);
+                return _PageErrors;
 
+            }
+        }
+
+        Dictionary<string, CustomErrorMessage> _ValidationErrors = null;
+        public Dictionary<string,CustomErrorMessage> ValidationErrors
+        {
+            get
+            {
+                if (_ValidationErrors == null) _ValidationErrors = this.ToList<CustomErrorMessage>().Where(e => !string.IsNullOrWhiteSpace(e.Validator)).ToDictionary(c=>c.Validator,StringComparer.CurrentCultureIgnoreCase);
+                return _ValidationErrors;
             }
         }
 
@@ -72,7 +82,7 @@ namespace GenderPayGap.WebUI.Classes
         {
             get
             {
-                return List.FirstOrDefault(s=>s.Code==code);
+                return PageErrors[code];
             }
         }
 
@@ -145,17 +155,27 @@ namespace GenderPayGap.WebUI.Classes
             }
         }
 
-        public static CustomErrorMessage Default
+        public static CustomErrorMessage DefaultPageError
         {
             get
             {
-                return DefaultSection.Messages.List.FirstOrDefault(e=>e.Default);
+                return DefaultSection.Messages.PageErrors.Values.FirstOrDefault(e=>e.Default);
             }
         }
 
-        public static CustomErrorMessage Get(int code)
+        public static CustomErrorMessage GetPageError(int code)
         {
-            return DefaultSection.Messages[code];
+            return DefaultSection.Messages.PageErrors[code];
+        }
+
+        public static CustomErrorMessage GetValidationError(string validator)
+        {
+            return DefaultSection.Messages.ValidationErrors.ContainsKey(validator) ? DefaultSection.Messages.ValidationErrors[validator] : null;
+        }
+
+        public static CustomErrorMessage GetError(int errorCode)
+        {
+            return DefaultSection.Messages[errorCode];
         }
 
         public static string GetTitle(int code)
@@ -166,6 +186,21 @@ namespace GenderPayGap.WebUI.Classes
         public static string GetDescription(int code)
         {
             return DefaultSection.Messages[code]?.Description;
+        }
+
+        public static string GetTitle(string validator)
+        {
+            return DefaultSection.Messages.ValidationErrors[validator]?.Title;
+        }
+
+        public static string GetDescription(string validator)
+        {
+            return DefaultSection.Messages.ValidationErrors[validator]?.Description;
+        }
+
+        public static string GetModelError(string validator)
+        {
+            return DefaultSection.Messages.ValidationErrors[validator]?.Description;
         }
 
     }
@@ -237,6 +272,26 @@ namespace GenderPayGap.WebUI.Classes
             set
             {
                 base["actionUrl"] = value;
+            }
+        }
+
+        [ConfigurationProperty("validator", IsRequired = false)]
+        public string Validator
+        {
+            get { return (string)base["validator"]; }
+            set
+            {
+                base["validator"] = value;
+            }
+        }
+
+        [ConfigurationProperty("displayName", IsRequired = false)]
+        public string DisplayName
+        {
+            get { return (string)base["displayName"]; }
+            set
+            {
+                base["displayName"] = value;
             }
         }
 

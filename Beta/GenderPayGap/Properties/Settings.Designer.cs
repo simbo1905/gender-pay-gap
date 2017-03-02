@@ -98,7 +98,7 @@ namespace GenderPayGap.WebUI.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
         public int MaxEmailVerifyAttempts {
             get {
                 return ((int)(this["MaxEmailVerifyAttempts"]));
@@ -116,7 +116,7 @@ namespace GenderPayGap.WebUI.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2017-04-05")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2017-04-04")]
         public global::System.DateTime PrivateAccountingDate {
             get {
                 return ((global::System.DateTime)(this["PrivateAccountingDate"]));
@@ -125,7 +125,7 @@ namespace GenderPayGap.WebUI.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2017-03-31")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2017-04-01")]
         public global::System.DateTime PublicAccountingDate {
             get {
                 return ((global::System.DateTime)(this["PublicAccountingDate"]));
@@ -165,6 +165,15 @@ namespace GenderPayGap.WebUI.Properties {
         public string PinRegexError {
             get {
                 return ((string)(this["PinRegexError"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int EmployerPageSize {
+            get {
+                return ((int)(this["EmployerPageSize"]));
             }
         }
     }

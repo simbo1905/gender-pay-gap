@@ -10,6 +10,8 @@ using System.Web.UI.WebControls.WebParts;
 using Microsoft.VisualBasic;
 using Table = System.Web.UI.WebControls.Table;
 using static Extensions.DateTimeRoutines;
+using System.Linq.Expressions;
+using System.Dynamic;
 
 namespace Extensions
 {
@@ -379,41 +381,102 @@ namespace Extensions
             return defaultValue;
         }
 
+        public static PropertyInfo GetPropertyInfo<TSource, TProperty>(this TSource source,Expression<Func<TSource, TProperty>> propertyLambda)
+        {
+            Type type = typeof(TSource);
+
+            MemberExpression member = propertyLambda.Body as MemberExpression;
+            if (member == null)
+                throw new ArgumentException(string.Format(
+                    "Expression '{0}' refers to a method, not a property.",
+                    propertyLambda.ToString()));
+
+            PropertyInfo propInfo = member.Member as PropertyInfo;
+            if (propInfo == null)
+                throw new ArgumentException(string.Format(
+                    "Expression '{0}' refers to a field, not a property.",
+                    propertyLambda.ToString()));
+
+            if (type != propInfo.ReflectedType &&
+                !type.IsSubclassOf(propInfo.ReflectedType))
+                throw new ArgumentException(string.Format(
+                    "Expresion '{0}' refers to a property that is not from type {1}.",
+                    propertyLambda.ToString(),
+                    type));
+
+            return propInfo;
+        }
         public static object GetPropertyValue(object Object, string PropertyName)
         {
-            PropertyInfo myInfo = null;
-            var myType = Object.GetType();
             try
             {
-                var i = PropertyName.IndexOf(".");
-                if (i > -1)
-                {
-                    myInfo = myType.GetProperty(PropertyName.Substring(0, i));
-                    i++;
-                    return GetPropertyValue(myInfo.GetValue(Object, null), PropertyName.Substring(i, PropertyName.Length - i));
-                }
-                myInfo = myType.GetProperty(PropertyName);
+                var myInfo = Object.GetType().GetPropertyInfo(PropertyName);
                 return myInfo.GetValue(Object, null);
             }
             catch { }
             return null;
         }
 
-        public static void SetPropertyValue(object Object, string PropertyName, object value)
+        public static PropertyInfo GetPropertyInfo(this Type type,string propertyName)
         {
-            PropertyInfo myInfo = null;
-            var myType = Object.GetType();
             try
             {
-                var i = PropertyName.IndexOf(".");
-                if (i > -1)
-                    myInfo = myType.GetProperty(PropertyName.Substring(0, i));
-                else
-                    myInfo = myType.GetProperty(PropertyName);
+                var i = propertyName.IndexOf(".");
+                if (i > -1)return type.GetType().GetProperty(propertyName.Substring(0, i));
+                return type.GetProperty(propertyName, BindingFlags.Instance | BindingFlags.Public |
+                    BindingFlags.NonPublic);
 
-                myInfo.SetValue(Object, value, null);
+
             }
-            catch { }
+            catch 
+            {
+
+            }
+            return null;
+        }
+
+        public static dynamic Merge(object item1, object item2)
+        {
+            if (item1 == null || item2 == null)
+                return item1 ?? item2 ?? new ExpandoObject();
+
+            dynamic expando = new ExpandoObject();
+            var result = expando as IDictionary<string, object>;
+            foreach (System.Reflection.PropertyInfo fi in item1.GetType().GetProperties())
+            {
+                result[fi.Name] = fi.GetValue(item1, null);
+            }
+            foreach (System.Reflection.PropertyInfo fi in item2.GetType().GetProperties())
+            {
+                result[fi.Name] = fi.GetValue(item2, null);
+            }
+            return result;
+        }
+
+        public static Dictionary<string, object> ToPropertyDictionary(this object obj, StringComparer comparer=null, bool newIfEmpty = false)
+        {
+            if (comparer == null) comparer = StringComparer.CurrentCultureIgnoreCase;
+            if (obj == null) return newIfEmpty ? new Dictionary<string, object>(comparer) : null; 
+            return obj.GetType().GetProperties().ToDictionary(x => x.Name, x => x.GetValue(obj, null),comparer);
+        }
+
+        public static bool SetPropertyValue(object obj, string propertyName, object value)
+        {
+            PropertyInfo myInfo = null;
+            var myType = obj.GetType();
+            try
+            {
+                myInfo = GetPropertyInfo(myType, propertyName);
+                if (myInfo == null) return false;
+
+                myInfo.SetValue(obj, value, null);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                var m = ex.Message;
+            }
+            return false;
         }
 
         public static void CopyProperties(this object source, object target)
