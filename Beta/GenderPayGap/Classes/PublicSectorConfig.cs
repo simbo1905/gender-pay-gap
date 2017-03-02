@@ -9,6 +9,7 @@ using System.Linq;
 using System.Xml;
 using Extensions;
 using System.Threading.Tasks;
+using GenderPayGap.WebUI.Models;
 
 namespace GenderPayGap.WebUI.Classes
 {
@@ -56,21 +57,17 @@ namespace GenderPayGap.WebUI.Classes
         }
 
     
-        List<PublicSectorOrg> _List = null;
-        List<PublicSectorOrg> List
+        IEnumerable<PublicSectorOrg> _List = null;
+        public IEnumerable<PublicSectorOrg> List
         {
             get
             {
-                if (_List == null) _List = this.ToList<PublicSectorOrg>();
-                return List;
+                if (_List == null) _List = this.ToList<PublicSectorOrg>().OrderBy(o => o.OrgName);
+                return _List;
             }
         }
-        public PublicSectorOrg Find(string search)
-        {
-            return List.FirstOrDefault(o => o.OrgName.ContainsI(search));
-        }
 
-        public PublicSectorOrg this[string orgName]
+        public new PublicSectorOrg this[string orgName]
         {
             get
             {
@@ -82,18 +79,6 @@ namespace GenderPayGap.WebUI.Classes
                 return null;
             }
         }
-
-        //internal PublicSectorOrg Default
-        //{
-        //    get
-        //    {
-        //        foreach (PublicSectorOrg setting in this)
-        //        {
-        //            if (setting.Default == true) return setting;
-        //        }
-        //        return null;
-        //    }
-        //}
 
         protected override ConfigurationElement CreateNewElement()
         {
@@ -155,7 +140,6 @@ namespace GenderPayGap.WebUI.Classes
         }
     }
 
-    //elements for Public Sector change this for it
     [Serializable]
     public class PublicSectorOrg : ConfigurationElement
     {
@@ -165,7 +149,7 @@ namespace GenderPayGap.WebUI.Classes
 
         public override bool IsReadOnly()
         {
-            return true;
+            return false;//true;
         }
 
         [ConfigurationProperty("orgName", IsKey = true, IsRequired = true)]
@@ -182,10 +166,15 @@ namespace GenderPayGap.WebUI.Classes
             }
         }
 
-        [ConfigurationProperty("emailPatterns", IsRequired = true)]
+        [ConfigurationProperty("emailPatterns", IsRequired = false)]
         public string EmailPatterns
         {
-            get { return (string)base["emailPatterns"]; }
+            get
+            {
+                var emailPatterns=(string)base["emailPatterns"];
+                emailPatterns = emailPatterns.SplitI(";").Select(ep => ep.ContainsI("*@") ? ep : ep.Contains('@') ? "*"+ep : "*@"+ep).ToDelimitedString(";");
+                return emailPatterns;
+            }
             set
             {
                 base["emailPatterns"] = value;

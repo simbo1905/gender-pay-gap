@@ -1,24 +1,19 @@
 ﻿@model GenderPayGap.WebUI.Models.ReturnViewModel
-
-@Html.HiddenFor(model => Model.AccountingDate)
+@using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
 
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => Model.AccountingDate)
 
-
-        if (!ViewData.ModelState.IsValid)
-        {
-            @Html.ValidationSummary("ERRORS:", new { @class = "text-danger" })
-        }
-
+        @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
         <div class="grid-row">
 
             <div class="column-two-thirds">
                 <div class="govuk-box-highlight">
-                    <h1 class="bold-large">You have successfully submitted your gender pay gap data for @(Model.AccountingDate.AddYears(-1).Year)  to @(Model.AccountingDate.Year )</h1>
+                    <h1 class="bold-large">You have successfully submitted your gender pay gap data for @(Model.AccountingDate.Year)  to @(Model.AccountingDate.AddYears(1).Year )</h1>
                 </div>
                 <!--       <p>We have sent you a confirmation email.</p>
                  -->
