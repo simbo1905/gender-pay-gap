@@ -254,6 +254,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\API\CompaniesHouseAPI.cs" />
+    <Compile Include="Classes\API\GovNotify.cs" />
+    <Compile Include="Classes\API\IGovNotify.cs" />
     <Compile Include="Classes\Attributes\AuthAttribute.cs" />
     <Compile Include="Classes\Attributes\UrlAttribute.cs" />
     <Compile Include="Classes\Attributes\EmailAttribute.cs" />
