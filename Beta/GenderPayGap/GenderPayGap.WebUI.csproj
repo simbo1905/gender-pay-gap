@@ -255,6 +255,8 @@
   <ItemGroup>
     <Compile Include="Classes\API\CompaniesHouseAPI.cs" />
     <Compile Include="Classes\Attributes\AuthAttribute.cs" />
+    <Compile Include="Classes\Attributes\UrlAttribute.cs" />
+    <Compile Include="Classes\Attributes\EmailAttribute.cs" />
     <Compile Include="Classes\Attributes\PinAttribute.cs" />
     <Compile Include="Classes\AuthorizationManager.cs" />
     <Compile Include="Classes\BaseClasses\BaseController.cs" />
@@ -267,9 +269,6 @@
     <Compile Include="Classes\PublicSectorConfig.cs" />
     <Compile Include="Classes\Extensions\Extensions.cs" />
     <Compile Include="Classes\CustomErrorMessagesConfig.cs" />
-    <Compile Include="Classes\Attributes\StringLengthAttribute.cs" />
-    <Compile Include="Classes\Attributes\RequiredAttribute.cs" />
-    <Compile Include="Classes\Attributes\RangeAttribute.cs" />
     <Compile Include="Classes\Attributes\PasswordAttribute.cs" />
     <Compile Include="Classes\Attributes\SpamProtectionAttribute.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
@@ -280,10 +279,8 @@
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
-    <Compile Include="Models\AccountViewModels.cs" />
     <Compile Include="Models\ErrorViewModel.cs" />
     <Compile Include="Models\RegisterViewModels.cs" />
-    <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Models\ReturnViewModel.cs" />
     <Compile Include="Models\SearchViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -402,6 +399,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\Validate.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
@@ -449,6 +447,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Register\AddAddress.cshtml" />
     <Content Include="Views\Register\Step4.cshtml" />
+    <Content Include="Views\Shared\_ValidationSummary.cshtml" />
     <None Include="Web.DEV.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

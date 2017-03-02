@@ -3,13 +3,15 @@
 }
 @model GenderPayGap.WebUI.Models.VerifyViewModel
 @using Extensions
+@using GenderPayGap.WebUI.Classes
+
 <main id="content" role="main">
     <div class="grid-row">
         <div class="column-full">
             @using (Html.BeginForm())
             {
                 @Html.AntiForgeryToken()
-                @Html.ValidationSummary("", new { @class = "text-danger" })
+                @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
 
                 if (Model.Sent)
                 {

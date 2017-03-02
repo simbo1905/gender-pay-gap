@@ -3,9 +3,10 @@
 }
 
 @model GenderPayGap.WebUI.Models.OrganisationViewModel
+@using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
-    @using (Html.BeginForm("Step6","Register"))
+    @using (Html.BeginForm("Step6", "Register"))
     {
         @Html.AntiForgeryToken()
 
@@ -17,7 +18,7 @@
 
         <input type="submit" style="display:none" name="command" value="">
         <div class="grid-row">
-            @Html.ValidationSummary("", new { @class = "text-danger" })
+            @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
             <div class="column-two-thirds">
 
                 <h1 class="heading-large">
@@ -37,55 +38,55 @@
 
                     <fieldset>
 
-                         @*<div class="form-group form-group-compound">
+                        @*<div class="form-group form-group-compound">
                                 <label class="form-label" for="address-line-1">Address</label>
                                 <input class="form-control" id="address-line-1" type="text">
                             </div>*@
                         <div class="form-group">
                             @Html.LabelFor(model => model.Address1, htmlAttributes: new { @class = "form-label col-md-2" })
-                            @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.Address1, new { htmlAttributes = new { @class = "form-control" } })
-                            </div>
-                        </div>
-
-
-                         @*<div class="form-group">
-                                <label class="form-label visuallyhidden" for="address-line-2">Street</label>
-                                <input class="form-control" placeholder="optional" id="address-line-2" type="text">
-                            </div>*@
-                        <div class="form-group">
-                            @Html.LabelFor(model => model.Address2, htmlAttributes: new { @class = "form-label col-md-2 visuallyhidden" })
-                            @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "text-danger" })
-                            <div class="col-md-10">
-                                @Html.EditorFor(model => model.Address2, new { htmlAttributes = new { @class = "form-control", placeholder = "optional" } })
+                                @Html.CustomEditorFor(model => model.Address1, htmlAttributes: new { @class = "form-control" })
                             </div>
                         </div>
 
 
                         @*<div class="form-group">
-                            <label class="form-label" for="address-town">Town or City</label>
-                            <input class="form-control form-control-1-4" id="address-town" type="text">
-                        </div>*@
+                                <label class="form-label visuallyhidden" for="address-line-2">Street</label>
+                                <input class="form-control" placeholder="optional" id="address-line-2" type="text">
+                            </div>*@
+                        <div class="form-group">
+                            @Html.LabelFor(model => model.Address2, htmlAttributes: new { @class = "form-label col-md-2 visuallyhidden" })
+                            @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "error-danger" })
+                            <div class="col-md-10">
+                                @Html.CustomEditorFor(model => model.Address2, htmlAttributes: new { @class = "form-control", placeholder = "optional" })
+                            </div>
+                        </div>
+
+
+                        @*<div class="form-group">
+                                <label class="form-label" for="address-town">Town or City</label>
+                                <input class="form-control form-control-1-4" id="address-town" type="text">
+                            </div>*@
                         <div class="form-group">
                             @*@Html.LabelFor(model => model.Employers[0].Address3, htmlAttributes: new { @class = "control-label col-md-2" })*@
                             <label class="form-label" for="address-town">Town or City</label>
-                            @Html.ValidationMessageFor(model => model.Address3, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(model => model.Address3, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.Address3, new { htmlAttributes = new { @class = "form-control form-control-1-4" } })
+                                @Html.CustomEditorFor(model => model.Address3, htmlAttributes: new { @class = "form-control form-control-1-4" })
                             </div>
                         </div>
-                      
 
-                         @*<div class="form-group form-group-compound">
+
+                        @*<div class="form-group form-group-compound">
                                 <label class="form-label" for="address-postcode">Postcode</label>
                                 <input class="form-control form-control-1-8" id="address-postcode" type="text">
                             </div>*@
                         <div class="form-group">
                             @Html.LabelFor(model => model.PostCode, htmlAttributes: new { @class = "form-label col-md-2" })
-                            @Html.ValidationMessageFor(model => model.PostCode, "", new { @class = "text-danger" })
+                            @Html.ValidationMessageFor(model => model.PostCode, "", new { @class = "error-danger" })
                             <div class="col-md-10">
-                                @Html.EditorFor(model => model.PostCode, new { htmlAttributes = new { @class = "form-control form-control-1-8" } })
+                                @Html.CustomEditorFor(model => model.PostCode, htmlAttributes: new { @class = "form-control form-control-1-8" })
                             </div>
                         </div>
 
@@ -96,8 +97,11 @@
                     <input class="button" type="submit" role="button" name="command" value="Submit" />
 
                 </div>
-
+                <br>
+                <p>
+                    @Html.ActionLink("Back", "Step5")
+                </p>
             </div>
         </div>
-                        }
+    }
 </main>
