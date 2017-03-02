@@ -18,20 +18,20 @@ namespace GenderPayGap.WebUI.Models
         }
 
         [Required(AllowEmptyStrings = false)]
-        [Display(Name = "First Name")]
+        [Display(Name = "First name")]
         public string FirstName { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        [Display(Name = "Last Name")]
+        [Display(Name = "Last name")]
         public string LastName { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        [Display(Name = "Job Title")]
+        [Display(Name = "Job title")]
         public string JobTitle { get; set; }
 
         [Required(AllowEmptyStrings = false)]
         [EmailAddress]
-        [Display(Name = "Email Address")]
+        [Display(Name = "Email address")]
         public string EmailAddress { get; set; }
 
         [Required(AllowEmptyStrings = false)]
