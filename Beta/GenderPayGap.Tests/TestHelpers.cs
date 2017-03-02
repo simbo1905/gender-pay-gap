@@ -22,19 +22,19 @@ namespace GenderPayGap.Tests
     public static class TestHelper
     {
         private const string Url = "https://genderpaygap.azurewebsites.net";
-        public static T GetController<T>(long userId=0, params object[] dbObjects) where T : Controller
+        public static T GetController<T>(long userId = 0, RouteData routeData = null, params object[] dbObjects) where T : Controller
         {
             var builder = BuildContainerIoC(dbObjects);
 
             //Mock UserId as claim
             var claims = new List<Claim>();
 
-            if (userId>0)claims.Add(new Claim(Constants.ClaimTypes.Subject, userId.ToString()));
-            
+            if (userId > 0) claims.Add(new Claim(Constants.ClaimTypes.Subject, userId.ToString()));
+
             var mockPrincipal = new Mock<ClaimsPrincipal>();
             mockPrincipal.Setup(m => m.Claims).Returns(claims);
             mockPrincipal.Setup(m => m.Identity.IsAuthenticated).Returns(userId > 0);
-            if (userId>0)mockPrincipal.Setup(m => m.Identity.Name).Returns(userId.ToString());
+            if (userId > 0) mockPrincipal.Setup(m => m.Identity.Name).Returns(userId.ToString());
 
             //Mock HttpRequest
             var requestMock = new Mock<HttpRequestBase>();
@@ -46,11 +46,15 @@ namespace GenderPayGap.Tests
             var responseMock = new Mock<HttpResponseBase>();
             responseMock.Setup(x => x.ApplyAppPathModifier(It.IsAny<string>())).Returns((string url) => url);
 
+            //Mock session
+            var sessionMock = new MockHttpSession();
+
             //Mock HttpContext
             var contextMock = new Mock<HttpContextBase>();
             contextMock.Setup(ctx => ctx.User).Returns(mockPrincipal.Object);
-            contextMock.SetupGet(x => x.Request).Returns(requestMock.Object);
-            contextMock.SetupGet(x => x.Response).Returns(responseMock.Object);
+            contextMock.SetupGet(ctx => ctx.Request).Returns(requestMock.Object);
+            contextMock.SetupGet(ctx => ctx.Response).Returns(responseMock.Object);
+            contextMock.Setup(ctx => ctx.Session).Returns(sessionMock);
 
             var routes = new RouteCollection();
             RouteConfig.RegisterRoutes(routes);
@@ -58,14 +62,26 @@ namespace GenderPayGap.Tests
             //Mock the httpcontext to the controllercontext
             var controllerContextMock = new Mock<ControllerContext>();
             controllerContextMock.Setup(con => con.HttpContext).Returns(contextMock.Object);
-
+            controllerContextMock.Setup(con => con.RouteData).Returns(routeData);
+            if (routeData == null) routeData = new RouteData();
             T controller = (T)Activator.CreateInstance(typeof(T), builder);
             controller.ControllerContext = controllerContextMock.Object;
             controller.Url = new UrlHelper(
-                new RequestContext(contextMock.Object, new RouteData()),
+                new RequestContext(contextMock.Object, routeData),
                 routes
             );
             return controller;
+        }
+
+        public class MockHttpSession : HttpSessionStateBase
+        {
+            Dictionary<string, object> m_SessionStorage = new Dictionary<string, object>();
+
+            public override object this[string name]
+            {
+                get { return m_SessionStorage[name]; }
+                set { m_SessionStorage[name] = value; }
+            }
         }
 
         public static IContainer BuildContainerIoC(params object[] dbObjects)
@@ -96,15 +112,15 @@ namespace GenderPayGap.Tests
 
     public class MockRepository : IRepository
     {
-        private readonly List<object> context=new List<object>();
+        private readonly List<object> context = new List<object>();
 
         public MockRepository()
         {
-            
+
         }
         public MockRepository(IEnumerable<object> context)
         {
-            if (context != null)this.context = context.ToList();
+            if (context != null) this.context = context.ToList();
         }
 
         public IQueryable<TEntity> GetAll<TEntity>() where TEntity : class
