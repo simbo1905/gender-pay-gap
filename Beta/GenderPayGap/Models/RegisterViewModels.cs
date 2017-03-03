@@ -65,13 +65,11 @@ namespace GenderPayGap.WebUI.Models
         }
 
         public long UserId { get; set; }
-        public bool Expired { get; set; }
         public bool Verified { get; set; }
         public bool Retry { get; set; }
         public bool Resend { get; set; }
         public string EmailAddress { get; set; }
         public bool Sent { get; internal set; }
-        public bool WrongCode { get; internal set; }
     }
 
     public class OrganisationViewModel
@@ -88,7 +86,6 @@ namespace GenderPayGap.WebUI.Models
         [EnumDataType(typeof(SectorTypes), ErrorMessage = "You must select the type of your organisation")]
         public SectorTypes? SectorType { get; set; }
 
-        [Required(AllowEmptyStrings=false)]
         [StringLength(100,ErrorMessage = "You must enter an employers name or company number between 3 and 100 characters in length",MinimumLength = 3)]
         [DisplayName("Search")]
         public string SearchText { get; set; }

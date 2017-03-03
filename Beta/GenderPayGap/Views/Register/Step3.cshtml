@@ -24,6 +24,7 @@
                 <div class="form-section">
                     <!-- "Chunky" Radio buttons, stacked -->
                     <h2 class="heading-small">Organisation type</h2>
+                    @Html.ValidationMessageFor(model => model.SectorType, null, new { @class = "error-danger" })
                     <div class="form-group">
                         <fieldset>
                             <label class="block-label selection-button-radio" for="radio-1">

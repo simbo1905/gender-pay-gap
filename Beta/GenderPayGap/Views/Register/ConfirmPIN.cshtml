@@ -19,6 +19,7 @@
                 <p>Enter the pin sent to your organisation's registered address by post. The pin will activate the gender pay gap reporting service.</p>
                 <div class="form-group ">
                     @Html.LabelFor(model => model.PIN, "Enter PIN",htmlAttributes: new { @class = "form-label" })
+                    @Html.ValidationMessageFor(model => model.PIN, null, new { @class = "error-danger" })
                     @Html.CustomEditorFor(model => model.PIN, htmlAttributes: new { @placeholder = "PIN Code", @class = "form-control",style= "text-transform: uppercase;" })
                 </div>
 
