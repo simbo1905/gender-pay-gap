@@ -37,7 +37,7 @@ namespace GenderPayGap
         protected IContainer containerIOC;
 
         IRepository _DataRepository;
-        protected IRepository DataRepository
+        public IRepository DataRepository
         {
             get
             {
@@ -89,10 +89,6 @@ namespace GenderPayGap
         public void AddModelError(int errorCode, string propertyName=null, object parameters = null)
         {
             GenderPayGap.WebUI.Classes.Extensions.AddModelError(this.ModelState,errorCode, propertyName,parameters);
-        }
-
-        public void CleanModelErrors<T>(){
-            GenderPayGap.WebUI.Classes.Extensions.CleanModelErrors<T>(this);
         }
 
         #endregion

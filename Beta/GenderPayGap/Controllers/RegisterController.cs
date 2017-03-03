@@ -101,10 +101,10 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Step1(Models.RegisterViewModel model)
         {
             //Validate the submitted fields
-            if (model.Password.ContainsI("password")) AddModelError(3000,"");
+            if (model.Password.ContainsI("password")) AddModelError(3000,"Password");
             if (!ModelState.IsValid)
             {
-                CleanModelErrors<RegisterViewModel>();
+                this.CleanModelErrors<RegisterViewModel>();
                 return View("Step1", model);
             }
 
@@ -121,14 +121,14 @@ namespace GenderPayGap.WebUI.Controllers
                     {
                         //A registered user with this email already exists.
                         AddModelError(3001, "EmailAddress");
-                        CleanModelErrors<RegisterViewModel>();
+                        this.CleanModelErrors<RegisterViewModel>();
                         return View("Step1", model);
                     }
                     var remainingTime = currentUser.EmailVerifySendDate.Value.AddHours(WebUI.Properties.Settings.Default.EmailVerificationExpiryHours) - DateTime.Now;
                     if (remainingTime > TimeSpan.Zero)
                     {
                         AddModelError(3002,"EmailAddress",new { remainingTime= remainingTime.ToFriendly(maxParts: 2) });
-                        CleanModelErrors<RegisterViewModel>();
+                        this.CleanModelErrors<RegisterViewModel>();
                         return View("Step1", model);
                     }
                 }
@@ -240,7 +240,7 @@ namespace GenderPayGap.WebUI.Controllers
                 {
                     //Expired with resend
                     AddModelError(3016);
-                    CleanModelErrors<VerifyViewModel>();
+                    this.CleanModelErrors<VerifyViewModel>();
 
                     //Prompt to click resend
                     model.Resend = true;
@@ -265,7 +265,7 @@ namespace GenderPayGap.WebUI.Controllers
                     AddModelError(3004);
 
                     //Prompt user to request a new verification code
-                    CleanModelErrors<VerifyViewModel>();
+                    this.CleanModelErrors<VerifyViewModel>();
                     result = View("Step2", model);
                 }
                 else if (currentUser.VerifyAttempts >= Properties.Settings.Default.MaxEmailVerifyAttempts && remainingLock > TimeSpan.Zero)
@@ -354,7 +354,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (!model.SectorType.EqualsI(SectorTypes.Private, SectorTypes.Public))
             {
                 AddModelError(3005,"SectorType");
-                CleanModelErrors<OrganisationViewModel>();
+                this.CleanModelErrors<OrganisationViewModel>();
                 return View("Step3", model);
             }
 
@@ -408,13 +408,13 @@ namespace GenderPayGap.WebUI.Controllers
             if (string.IsNullOrWhiteSpace(model.SearchText))
             {
                 AddModelError(3006,"SearchText",new {orCompanyNumber=model.SectorType==SectorTypes.Private ? " or company number" : ""});
-                CleanModelErrors<OrganisationViewModel>();
+                this.CleanModelErrors<OrganisationViewModel>();
                 return View("Step4", model);
             }
             if (model.SearchText.Length < 3 || model.SearchText.Length > 100)
             {
                 AddModelError(3007,"SearchText");
-                CleanModelErrors<OrganisationViewModel>();
+                this.CleanModelErrors<OrganisationViewModel>();
                 return View("Step4", model);
             }
 
@@ -499,13 +499,13 @@ namespace GenderPayGap.WebUI.Controllers
                 if (string.IsNullOrWhiteSpace(model.SearchText))
                 {
                     AddModelError(3006, "SearchText", new { orCompanyNumber = model.SectorType == SectorTypes.Private ? " or company number" : "" });
-                    CleanModelErrors<OrganisationViewModel>();
+                    this.CleanModelErrors<OrganisationViewModel>();
                     return View("Step5", model);
                 }
                 if (model.SearchText.Length < 3 || model.SearchText.Length > 100)
                 {
                     AddModelError(3007, "SearchText");
-                    CleanModelErrors<OrganisationViewModel>();
+                    this.CleanModelErrors<OrganisationViewModel>();
                     return View("Step5", model);
                 }
 
@@ -586,7 +586,7 @@ namespace GenderPayGap.WebUI.Controllers
                         if (userOrg.PINSentDate != null || org.SectorType == SectorTypes.Public && org.Status == OrganisationStatuses.Active)
                         {
                             AddModelError(3008);
-                            CleanModelErrors<OrganisationViewModel>();
+                            this.CleanModelErrors<OrganisationViewModel>();
                             return View("Step4", model);
                         }
                         else if (org.SectorType == SectorTypes.Private)
@@ -595,7 +595,7 @@ namespace GenderPayGap.WebUI.Controllers
                             if (remainingTime > TimeSpan.Zero)
                             {
                                 AddModelError(3009);
-                                CleanModelErrors<OrganisationViewModel>();
+                                this.CleanModelErrors<OrganisationViewModel>();
                                 return View("Step4", model);
                             }
                         }
@@ -606,7 +606,7 @@ namespace GenderPayGap.WebUI.Controllers
                 if (model.SectorType == SectorTypes.Public && !employer.IsAuthorised(currentUser.EmailAddress))
                 {
                     AddModelError(3010);
-                    CleanModelErrors<OrganisationViewModel>();
+                    this.CleanModelErrors<OrganisationViewModel>();
                     return View("Step5", model);
                 }
 
@@ -675,7 +675,7 @@ namespace GenderPayGap.WebUI.Controllers
                 //Renter address if invalid
                 if (!ModelState.IsValid)
                 {
-                    CleanModelErrors<OrganisationViewModel>();
+                    this.CleanModelErrors<OrganisationViewModel>();
                     View("AddAddress", model);
                 }
 
@@ -951,7 +951,7 @@ namespace GenderPayGap.WebUI.Controllers
             //Ensure they have entered a PIN
             if (!ModelState.IsValid)
             {
-                CleanModelErrors<CompleteViewModel>();
+                this.CleanModelErrors<CompleteViewModel>();
                 return View("ConfirmPIN", model);
             }
 

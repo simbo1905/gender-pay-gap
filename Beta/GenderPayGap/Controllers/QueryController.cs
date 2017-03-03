@@ -57,7 +57,7 @@ namespace GenderPayGap.WebUI.Controllers
                 model.Results = DataRepository.GetAll<Organisation>().Select(o => o).ToArray();
             }
 
-            CleanModelErrors<SearchViewModel>();
+            this.CleanModelErrors<SearchViewModel>();
             return View(model);
         }
          
