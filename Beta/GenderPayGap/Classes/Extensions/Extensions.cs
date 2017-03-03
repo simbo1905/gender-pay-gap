@@ -367,13 +367,10 @@ namespace GenderPayGap.WebUI.Classes
 
             //Bind the parameters
             if (parameters != null)
-                foreach (var prop in parameters.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
-                {
-                    var value = prop.GetValue(parameters, null) as string;
-                    if (string.IsNullOrWhiteSpace((prop.Name)) || string.IsNullOrWhiteSpace(value)) continue;
-                    title = title.ReplaceI("{" + prop.Name + "}", value);
-                    description = description.ReplaceI("{" + prop.Name + "}", value);
-                }
+            {
+                title = parameters.Format(title);
+                description = parameters.Format(description);
+            }
 
             //add the summary message if it doesnt already exist
             if (!string.IsNullOrWhiteSpace(title) && !controller.ModelState.Any(m=>m.Key=="" && m.Value.Errors.Any(e=>e.ErrorMessage==title)))
@@ -384,7 +381,7 @@ namespace GenderPayGap.WebUI.Classes
                 controller.ModelState.AddModelError(propertyName, description);
         }
 
-        public static void AddModelError(this BaseController controller, int errorCode, object parameters = null)
+        public static void AddModelError(this ModelStateDictionary modelState, int errorCode, string propertyName=null,object parameters = null)
         {
             //Try and get the custom error
             var customError = CustomErrorMessages.GetError(errorCode);
@@ -394,19 +391,30 @@ namespace GenderPayGap.WebUI.Classes
             var title = customError.Title;
             var description = customError.Description;
 
-            //Bind the parameters
+            //Resolve the parameters
             if (parameters != null)
-                foreach (var prop in parameters.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
+                title = parameters.Format(title);
+                description = parameters.Format(description);
+            }
+
+            //add the summary message if it doesnt already exist
+            if (!string.IsNullOrWhiteSpace(title) && !modelState.Any(m => m.Key == "" && m.Value.Errors.Any(e => e.ErrorMessage == title)))
+                modelState.AddModelError("", title);
+
+            if (!string.IsNullOrWhiteSpace(description))
+            {
+                //If no property then add description as second line of summary
+                if (string.IsNullOrWhiteSpace(propertyName))
                 {
-                    var value = prop.GetValue(parameters, null) as string;
-                    if (string.IsNullOrWhiteSpace((prop.Name)) || string.IsNullOrWhiteSpace(value)) continue;
-                    title = title.ReplaceI("{" + prop.Name + "}", value);
-                    description = description.ReplaceI("{" + prop.Name + "}", value);
+                    if (!string.IsNullOrWhiteSpace(title) && !modelState.Any(m => m.Key == "" && m.Value.Errors.Any(e => e.ErrorMessage == title)))
+                        modelState.AddModelError("", title);
                 }
 
-            var error = title;
-            if (!string.IsNullOrWhiteSpace(description)) error += " " + description;
-            if (!string.IsNullOrWhiteSpace(title)) controller.ModelState.AddModelError("", error);
+                //add the inline message if it doesnt already exist
+                else if (!modelState.Any(m => m.Key.EqualsI(propertyName) && m.Value.Errors.Any(e => e.ErrorMessage == description)))
+                    modelState.AddModelError(propertyName, description);
+            }
         }
 
         #endregion

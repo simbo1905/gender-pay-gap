@@ -86,10 +86,15 @@ namespace GenderPayGap
             GenderPayGap.WebUI.Classes.Extensions.AddModelError(this, propertyName, errorContext,parameters);
         }
 
-        public void AddModelError(int errorCode, object parameters = null)
+        public void AddModelError(int errorCode, string propertyName=null, object parameters = null)
         {
-            GenderPayGap.WebUI.Classes.Extensions.AddModelError(this,errorCode,parameters);
+            GenderPayGap.WebUI.Classes.Extensions.AddModelError(this.ModelState,errorCode, propertyName,parameters);
         }
+
+        public void CleanModelErrors<T>(){
+            GenderPayGap.WebUI.Classes.Extensions.CleanModelErrors<T>(this);
+        }
+
         #endregion
 
         #region Authorisation Methods
