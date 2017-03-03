@@ -43,10 +43,6 @@
                         <span class="heading-secondary">Step 2 of 5</span>
                         Confirm your email address
                     </h1>
-                    if (Model.WrongCode)
-                    {
-                        <p>@GenderPayGap.WebUI.Classes.CustomErrorMessages.GetDescription(1111)</p>
-                    }
                     <p>
                         To send another verification email to <b>@Model.EmailAddress</b> click the button below:
                     </p>
@@ -63,17 +59,6 @@
                     </div>
                     <p></p>
                     <a class="button" href="@Url.Action("Step3")" role="button">Continue</a>
-                }
-                else if (Model.Expired)
-                {
-                    <h1 class="heading-large">
-                        <span class="heading-secondary">Step 2 of 5</span>
-                        Confirm your email address
-                    </h1>
-                    <p>
-                        To resend another verification email to <b>@Model.EmailAddress</b> click the button below:
-                    </p>
-                    <input type="submit" class="button" value="Resend" />
                 }
             }
         </div>

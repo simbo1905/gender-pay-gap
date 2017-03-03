@@ -28,6 +28,7 @@
                         <span class="heading-secondary">Step 4 of 7</span>
                    }
                     <span>Find your organisation</span>
+                    @Html.ValidationMessageFor(model => model.SearchText, null, new { @class = "error-danger" })
                 </h1>
 
                 <div class="search-bar">
