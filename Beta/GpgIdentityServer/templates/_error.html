@@ -1,0 +1,12 @@
+﻿<main id="content" role="main">
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <div class="error-summary validation-summary-errors" data-valmsg-summary="true" ng-show="model.errorMessage">
+                <span>Something’s gone wrong</span>
+                <ul><li>{{model.errorMessage}}</li></ul>
+            </div>
+
+            <div class="request-id">Request Id: <span ng-bind="model.requestId"></span></div>
+        </div>
+    </div>
+</main>

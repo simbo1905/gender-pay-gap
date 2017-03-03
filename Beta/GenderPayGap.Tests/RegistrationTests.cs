@@ -313,7 +313,7 @@ namespace GenderPayGap.Tests
 
             var controller = TestHelper.GetController<RegisterController>();
             controller.Bind(model);
-
+            
             // Act
             var result = controller.Step1(model) as ViewResult;
             // Assert

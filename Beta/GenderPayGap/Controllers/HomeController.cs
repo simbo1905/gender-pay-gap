@@ -80,8 +80,8 @@ namespace GenderPayGap.WebUI.Controllers
             return RedirectToAction("Index");
         }
 
-        [Route("LogOut")]
-        public ActionResult Logout()
+        [Route("SignOut")]
+        public ActionResult SignOut()
         {
             Session.Abandon();
             Request.GetOwinContext().Authentication.SignOut();

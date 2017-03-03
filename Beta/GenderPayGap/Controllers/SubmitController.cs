@@ -128,7 +128,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             if (!ModelState.IsValid)
             {
-                CleanModelErrors<ReturnViewModel>();
+                this.CleanModelErrors<ReturnViewModel>();
                 return View(model);
             }
 
@@ -173,7 +173,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             if (!ModelState.IsValid)
             {
-                CleanModelErrors<ReturnViewModel>();
+                this.CleanModelErrors<ReturnViewModel>();
                 return View(model);
             }
 
@@ -253,7 +253,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             if (!ModelState.IsValid)
             {
-                CleanModelErrors<ReturnViewModel>();
+                this.CleanModelErrors<ReturnViewModel>();
                 return View(model);
             }
 
