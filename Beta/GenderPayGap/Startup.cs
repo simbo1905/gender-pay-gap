@@ -63,7 +63,7 @@ namespace GenderPayGap
 
                         var userInfo = await userInfoClient.GetAsync();
 
-                        // keep the id_token for logout
+                        // keep the id_token for signout
                         nid.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
 
                         // add access token for GPG API

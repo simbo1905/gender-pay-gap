@@ -1,0 +1,20 @@
+﻿<main id="content" role="main">
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <div class="govuk-box-highlight">
+                <h1 class="bold-large">Signed Out</h1>
+            </div>
+            <p>Your are now signed out of the Gender pay gap service.</p>
+
+            <div ng-show="model.redirectUrl">
+
+                <div class="subsection panel-indent">
+                    <div class="bold-small">Click the  button below to return to the <span ng-bind="model.clientName"></span></div>
+                </div>
+
+                <p></p>
+                <a class="button" ng-href="{{model.redirectUrl}}" role="button">Continue</a>
+            </div>
+        </div>
+    </div>
+</main>
