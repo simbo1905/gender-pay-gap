@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using GenderPayGap.Models.SqlDatabase;
-using GenderPayGap.WebUI.Models;
-using Extensions;
 using Autofac;
-
-using GenderPayGap;
 using GenderPayGap.WebUI.Classes;
+using GenderPayGap.WebUI.Models.Search;
 
 namespace GenderPayGap.WebUI.Controllers
 {

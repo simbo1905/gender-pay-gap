@@ -2,9 +2,7 @@
 using System.Configuration;
 using Notify.Client;
 using Notify.Models;
-using Extensions;
 using System;
-using System.Threading.Tasks;
 using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap

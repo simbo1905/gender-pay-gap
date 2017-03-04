@@ -2,11 +2,11 @@
     ViewBag.Title = "Choose your organisation - Gender pay gap reporting service";
 }
 
-@model GenderPayGap.WebUI.Models.OrganisationViewModel
+@model GenderPayGap.WebUI.Models.Register.OrganisationViewModel
 @using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
-    @using (Html.BeginForm("Step5", "Register"))
+    @using (Html.BeginForm("ChooseOrganisation", "Register"))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.SectorType)
@@ -16,7 +16,6 @@
             @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
             <div class="column-two-thirds">
                 <h1 class="heading-large">
-                    <span class="heading-secondary">Step 5 of @(Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private ? 6 : 7)</span>
                     <span>Choose your organisation</span>
                 </h1>
 
@@ -119,13 +118,13 @@
                 <details role="group">
                     <summary role="button" aria-controls="details-content-0" aria-expanded="true">Can't find your organisation?</summary>
                     <div class="panel panel-border-narrow" id="details-content-0" aria-hidden="false">
-                        <a href="organisation-address?dc=privateManual">Add your employer manually</a>
+                        @Html.ActionLink("Tell us about your organisation","AddOrganisation")
 
                     </div>
                 </details>
                 <br>
                 <p>
-                    @Html.ActionLink("Back", "Step4")
+                    @Html.ActionLink("Back", "OrganisationSearch")
                 </p>
 
             </div>

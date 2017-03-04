@@ -1,7 +1,7 @@
-﻿using GenderPayGap.Models.SqlDatabase;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using GenderPayGap.Models.SqlDatabase;
 
-namespace GenderPayGap.WebUI.Models
+namespace GenderPayGap.WebUI.Models.Search
 {
     public class SearchViewModel
     {

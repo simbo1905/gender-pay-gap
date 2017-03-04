@@ -4,18 +4,14 @@ using GenderPayGap.Core.Interfaces;
 using GenderPayGap.WebUI.Classes;
 using GenderPayGap.Models.SqlDatabase;
 using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Security.Authentication;
 using System.Security.Principal;
-using System.Text;
 using System.Web;
 using System.Web.Mvc;
 using GenderPayGap.WebUI.Controllers;
 using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Properties;
-using System.Linq.Expressions;
 
 namespace GenderPayGap
 {
