@@ -1,3 +1,5 @@
+using System.Linq;
+
 namespace GenderPayGap.Models.SqlDatabase
 {
     using System;
@@ -39,5 +41,17 @@ namespace GenderPayGap.Models.SqlDatabase
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
+
+        /// <summary>
+        /// Latest ACTIVE address
+        /// </summary>
+        public OrganisationAddress Address
+        {
+            get
+            {
+                //Get the latest address for the organisation
+                return Organisation.OrganisationAddresses.FirstOrDefault(a => a.OrganisationId == OrganisationId && a.CreatedByUser.UserId == UserId); ;
+            }
+        }
     }
 }

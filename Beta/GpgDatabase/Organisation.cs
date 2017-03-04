@@ -75,12 +75,15 @@ namespace GenderPayGap.Models.SqlDatabase
             StatusDetails = details;
         }
 
+        /// <summary>
+        /// Latest ACTIVE address
+        /// </summary>
         public OrganisationAddress Address
         {
             get
             {
                 //Get the latest address for the organisation
-                return OrganisationAddresses.OrderByDescending(oa => oa.Modified).FirstOrDefault(oa => oa.OrganisationId == OrganisationId);
+                return OrganisationAddresses.OrderByDescending(oa => oa.Modified).FirstOrDefault(oa => oa.OrganisationId == OrganisationId && oa.Status==AddressStatuses.Active);
             }
         }
     }

@@ -21,15 +21,17 @@ namespace GenderPayGap.Models.SqlDatabase
         Suspended = 2,
         Active = 3,
         Retired = 4,
+        Pending = 5,
     }
 
     public enum AddressStatuses : byte
     {
         Unknown = 0,
         New = 1,
-        Unconfirmed = 2,
-        Confirmed = 3,
+        Suspended = 2,
+        Active = 3,
         Retired = 4,
+        Pending
     }
 
     public enum ReturnStatuses : byte

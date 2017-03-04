@@ -3186,3 +3186,8 @@ span.status-tag {
 }
 
 /*# sourceMappingURL=application.css.map */
+
+/* line 78, /app/govuk_modules/govuk-elements-sass/elements/_forms.scss */
+.form-group-compound {
+  margin-bottom: 10px;
+}
