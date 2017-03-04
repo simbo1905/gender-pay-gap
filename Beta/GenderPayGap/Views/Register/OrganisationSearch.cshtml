@@ -2,12 +2,11 @@
     ViewBag.Title = "Search for your organisation - Gender pay gap reporting service";
 }
 
-@model GenderPayGap.WebUI.Models.OrganisationViewModel
-@using GenderPayGap.WebUI.Classes
+@model GenderPayGap.WebUI.Models.Register.OrganisationViewModel
 @using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
-    @using (Html.BeginForm("Step4","Register"))
+    @using (Html.BeginForm("OrganisationSearch","Register"))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.SectorType)
@@ -18,15 +17,6 @@
             <div class="column-two-thirds">
                 <h1 class="heading-large">
 
-                    @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
-                    {
-                        <span class="heading-secondary">Step 4 of 6</span>
-                    }
-
-                   @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Public)
-                   {
-                        <span class="heading-secondary">Step 4 of 7</span>
-                   }
                     <span>Find your organisation</span>
                     @Html.ValidationMessageFor(model => model.SearchText, null, new { @class = "error-danger" })
                 </h1>
@@ -41,10 +31,17 @@
                 @if (!string.IsNullOrWhiteSpace(Model.SearchText) && Model.Employers.Results.Count < 1)
                 {
                     <p>No records found</p>
+                    <br/>
+                    <details role="group">
+                        <summary role="button" aria-controls="details-content-0" aria-expanded="true">Can't find your organisation?</summary>
+                        <div class="panel panel-border-narrow" id="details-content-0" aria-hidden="false">
+                            @Html.ActionLink("Tell us about your organisation", "AddOrganisation")
+                        </div>
+                    </details>
                 }
                 <br>
                 <p>
-                    @Html.ActionLink("Back", "Step3")
+                    @Html.ActionLink("Back", "OrganisationType")
                 </p>
             </div>
         </div>

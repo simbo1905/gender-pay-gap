@@ -18,6 +18,7 @@ using GenderPayGap.WebUI.Controllers;
 using GenderPayGap.Models.SqlDatabase;
 using System.Text.RegularExpressions;
 using GenderPayGap.WebUI.Models;
+using GenderPayGap.WebUI.Models.Submit;
 
 namespace GenderPayGap.Tests.Submission
 {

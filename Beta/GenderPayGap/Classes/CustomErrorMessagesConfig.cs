@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -8,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using Extensions;
-using System.Threading.Tasks;
 
 namespace GenderPayGap.WebUI.Classes
 {
