@@ -3,7 +3,6 @@ using GenderPayGap.Core.Interfaces;
 using GenderPayGap.Models.SqlDatabase;
 using IdentityServer3.Core;
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -12,10 +11,8 @@ using System.Web.Mvc;
 using GenderPayGap.WebUI.Controllers;
 using System.Web.Mvc.Html;
 using System.Linq.Expressions;
-using System.Xml.Linq;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
-using System.Reflection;
 
 namespace GenderPayGap.WebUI.Classes
 {
@@ -91,7 +88,7 @@ namespace GenderPayGap.WebUI.Classes
 
         public static bool SendVerifyEmail(this RegisterController controller, string emailAddress, string verifyCode)
         {
-            var verifyUrl=controller.Url.Action("Step2", "Register", new {code= verifyCode },"https");
+            var verifyUrl=controller.Url.Action("VerifyEmail", "Register", new {code= verifyCode },"https");
             return GovNotifyAPI.SendVerifyEmail(verifyUrl,emailAddress, verifyCode);
         }
         public static bool SendConfirmEmail(this RegisterController controller, string emailAddress)
@@ -106,6 +103,22 @@ namespace GenderPayGap.WebUI.Classes
             var address = organisation.Address.GetAddress();
             var returnUrl = controller.Url.Action("ConfirmPIN", "Register",null,"https");
             return GovNotifyAPI.SendPinInPost(returnUrl, name, user.EmailAddress, pin);
+        }
+
+        public static bool SendRegistrationRequest(this RegisterController controller, string contactName, string contactOrg, string reportingOrg, string reportingAddress, string reviewCode)
+        {
+            var verifyUrl = controller.Url.Action("ReviewRequest", "Register", new { code = reviewCode }, "https");
+            return GovNotifyAPI.SendRegistrationRequest(verifyUrl, contactName, contactOrg, reportingOrg, reportingAddress);
+        }
+
+        public static bool SendRegistrationDeclined(string returnUrl,string emailAddress)
+        {
+            return GovNotifyAPI.SendRegistrationDeclined(returnUrl,emailAddress);
+        }
+
+        public static bool SendRegistrationAccepted(string returnUrl, string emailAddress)
+        {
+            return GovNotifyAPI.SendRegistrationAccepted(returnUrl,emailAddress);
         }
 
         #endregion

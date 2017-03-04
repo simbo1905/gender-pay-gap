@@ -16,6 +16,7 @@ namespace GenderPayGap.Models.SqlDatabase
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long OrganisationAddressId { get; set; }
+        public long CreatedByUserId { get; set; }
 
         [MaxLength(100)]
         public string Address1 { get; set; }
@@ -49,6 +50,9 @@ namespace GenderPayGap.Models.SqlDatabase
 
         [MaxLength(255)]
         public string StatusDetails { get; set; }
+
+        [ForeignKey("CreatedByUserId")]
+        public virtual User CreatedByUser { get; set; }
 
         [Required]
         public System.DateTime Created { get; set; } = DateTime.Now;

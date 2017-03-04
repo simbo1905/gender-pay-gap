@@ -1,18 +1,7 @@
-﻿using Microsoft.IdentityModel.Protocols;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Diagnostics;
-using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web;
-using Extensions;
-using GenderPayGap.WebUI.Models;
+﻿using System;
 using GenderPayGap.Core.Interfaces;
 using GenderPayGap.Core.Classes;
-using Autofac;
+using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap
 {

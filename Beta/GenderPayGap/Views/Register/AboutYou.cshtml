@@ -1,7 +1,7 @@
 ﻿@{
     ViewBag.Title = "About you - Gender pay gap reporting service";
 }
-@model GenderPayGap.WebUI.Models.RegisterViewModel
+@model GenderPayGap.WebUI.Models.Register.RegisterViewModel
 @using Extensions
 @using GenderPayGap.WebUI.Classes
 <main id="content" role="main">
@@ -14,7 +14,6 @@
             @Html.SpamProtectionTimeStamp()
             @Html.HiddenFor(m => m.IdentityProvider)
             <h1 class="heading-large">
-                <span class="heading-secondary">Step 1 of 5</span>
                 About you
             </h1>
             if (!User.Identity.IsAuthenticated)

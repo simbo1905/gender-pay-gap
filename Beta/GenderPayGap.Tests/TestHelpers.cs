@@ -20,6 +20,7 @@ using System.Web.Routing;
 using GenderPayGap.Core.Classes;
 using Extensions;
 using GenderPayGap.WebUI.Classes;
+using GenderPayGap.WebUI.Models.Register;
 using Notify.Models;
 
 namespace GenderPayGap.Tests

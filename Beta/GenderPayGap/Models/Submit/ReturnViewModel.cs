@@ -1,14 +1,7 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
-using GenderPayGap.Models.SqlDatabase;
-using Microsoft.AspNet.Identity;
-using Microsoft.Owin.Security;
-using System;
-using System.ComponentModel.DataAnnotations.Schema;
-using GenderPayGap.WebUI.Classes;
 
-namespace GenderPayGap.WebUI.Models
+namespace GenderPayGap.WebUI.Models.Submit
 {
     [Serializable]
     public class ReturnViewModel
