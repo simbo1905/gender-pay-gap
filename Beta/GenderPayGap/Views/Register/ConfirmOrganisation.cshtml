@@ -11,9 +11,10 @@
         @Html.HiddenFor(m => m.SearchText)
         @Html.HiddenFor(m => m.SelectedEmployerIndex)
         @Html.HiddenFor(m => m.SectorType)
+        @Html.HiddenFor(model => model.ManualRegistration)
 
         <div class="grid-row">
-            <div class="column-full">
+            <div class="column-two-thirds">
                 <h1 class="heading-large">
                     Confirm your organisation’s details
                 </h1>
@@ -28,11 +29,14 @@
                         </tr>
                     </thead>
                     <tbody>
+                    @if (Model.ManualRegistration)
+                    {
                         <tr class="dynamic-content privateManual publicManual" style="display: table-row;">
                             <td colspan="3">
                                 Organisation you’re reporting for
                             </td>
                         </tr>
+                    }
                     <tr>
                         <td>
                             Organisation name

@@ -1,4 +1,10 @@
-﻿    $('form').bind('invalid-form.validate', function (e, v) {
+﻿jQuery.validator.defaults.ignore = ":hidden";
+
+$(function () {
+    $('form').validate().settings.ignore = ':hidden';
+});
+
+    $('form').bind('invalid-form.validate', function (e, v) {
 
         window.setTimeout(function () {
             var list = $(".validation-summary-errors ul");

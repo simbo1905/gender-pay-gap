@@ -40,6 +40,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Search(SearchViewModel model)
         {
             if (ModelState.IsValid && !string.IsNullOrWhiteSpace(model.Search))
@@ -86,6 +87,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         // POST: Query/Create
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
@@ -108,6 +110,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         // POST: Query/Edit/5
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
@@ -130,6 +133,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         // POST: Query/Delete/5
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {

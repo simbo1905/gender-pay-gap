@@ -3,6 +3,7 @@ using GenderPayGap.Core.Interfaces;
 using GenderPayGap.Models.SqlDatabase;
 using IdentityServer3.Core;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -173,6 +174,20 @@ namespace GenderPayGap.WebUI.Classes
         #region Helpers
         public static MvcHtmlString CustomEditorFor<TModel, TProperty>(this HtmlHelper<TModel> helper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null)
         {
+            var htmlAttr = CustomAttributesFor(expression, htmlAttributes);
+
+            return helper.EditorFor(expression, null, new { htmlAttributes = htmlAttr });
+        }
+
+        public static MvcHtmlString CustomRadioButtonFor<TModel, TProperty>(this HtmlHelper<TModel> helper, Expression<Func<TModel, TProperty>> expression, object value, object htmlAttributes = null)
+        {
+            var htmlAttr = CustomAttributesFor(expression, htmlAttributes);
+
+            return helper.RadioButtonFor(expression, value, htmlAttr );
+        }
+
+        private static Dictionary<string, object> CustomAttributesFor<TModel, TProperty>(Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null)
+        {
             var containerType = typeof(TModel);
 
             string propertyName = ExpressionHelper.GetExpressionText(expression);
@@ -214,7 +229,7 @@ namespace GenderPayGap.WebUI.Classes
                     //Set the display name
                     if (!string.IsNullOrWhiteSpace(customError.DisplayName) && customError.DisplayName != displayName)
                     {
-                        Misc.SetPropertyValue(displayAttribute, "Name", customError.DisplayName);
+                        if (displayAttribute != null) Misc.SetPropertyValue(displayAttribute, "Name", customError.DisplayName);
                         displayName = customError.DisplayName;
                     }
 
@@ -241,6 +256,9 @@ namespace GenderPayGap.WebUI.Classes
                             case "emailaddress":
                                 type = "email";
                                 break;
+                            case "phonenumber":
+                                type = "tel";
+                                break;
                         }
                         altAttr = $"data-val-{type}-alt";
                     }
@@ -265,8 +283,9 @@ namespace GenderPayGap.WebUI.Classes
                     htmlAttr[altAttr] = string.Format(errorMessageString, displayName, par1, par2); ;
                 }
 
-            return helper.EditorFor(expression, null, new { htmlAttributes = htmlAttr });
+            return htmlAttr;
         }
+
 
         public static void CleanModelErrors<TModel>(this Controller controller)
         {
@@ -386,6 +405,28 @@ namespace GenderPayGap.WebUI.Classes
             //add the inline message if it doesnt already exist
             if (!string.IsNullOrWhiteSpace(description) && !controller.ModelState.Any(m => m.Key.EqualsI(propertyName) && m.Value.Errors.Any(e => e.ErrorMessage == description)))
                 controller.ModelState.AddModelError(propertyName, description);
+        }
+
+        //Removes all but the specified properties from the model state
+        public static void Include(this ModelStateDictionary modelState, params string[] properties)
+        {
+            foreach (var key in modelState.Keys.ToList())
+            {
+                if (string.IsNullOrWhiteSpace(key)) continue;
+                if (properties.ContainsI(key)) continue;
+                modelState.Remove(key);
+            }
+        }
+
+        //Removes all the specified properties from the model state
+        public static void Exclude(this ModelStateDictionary modelState, params string[] properties)
+        {
+            foreach (var key in modelState.Keys.ToList())
+            {
+                if (string.IsNullOrWhiteSpace(key)) continue;
+                if (!properties.ContainsI(key)) continue;
+                modelState.Remove(key);
+            }
         }
 
         public static void AddModelError(this ModelStateDictionary modelState, int errorCode, string propertyName=null,object parameters = null)
