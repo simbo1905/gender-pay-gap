@@ -16,7 +16,7 @@ namespace GenderPayGap
         static string ConfirmTemplateId = ConfigurationManager.AppSettings["GovNotifyConfirmTemplateId"];
         static string RegistrationRequestTemplateId = ConfigurationManager.AppSettings["GovNotifyRegistrationRequestTemplateId"];
         static string RegistrationRequestEmailAddress = ConfigurationManager.AppSettings["RegistrationRequestEmailAddress"];
-        static string RegistrationAcceptedTemplateId = ConfigurationManager.AppSettings["GovNotifyRegistrationAcceptedTemplateId"];
+        static string RegistrationApprovedTemplateId = ConfigurationManager.AppSettings["GovNotifyRegistrationApprovedTemplateId"];
         static string RegistrationDeclinedTemplateId = ConfigurationManager.AppSettings["GovNotifyRegistrationDeclinedTemplateId"];
 
         static IGovNotify GovNotify;
@@ -117,7 +117,7 @@ namespace GenderPayGap
 
         public static bool SendRegistrationRequest(string reviewUrl, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
         {
-            var personalisation = new Dictionary<string, dynamic> { { "url", reviewUrl }, {"contactName",contactName}, { "contactOrg", contactOrg }, { "reportingOrg", reportingOrg },{ "reportingAddress", reportingAddress} };
+            var personalisation = new Dictionary<string, dynamic> { { "url", reviewUrl }, {"name",contactName}, { "org1", contactOrg }, { "org2", reportingOrg },{ "address", reportingAddress} };
 
             Notification result = null;
             try
@@ -130,13 +130,13 @@ namespace GenderPayGap
                 {
                     try
                     {
-                        var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/RegistrationRequest.txt"));
-                        html = html.Replace("((ReviewUrl))", reviewUrl);
-                        html = html.Replace("((ContactName))", contactName);
-                        html = html.Replace("((ContactOrg))", contactOrg);
-                        html = html.Replace("((ReportingOrg))", reportingOrg);
-                        html = html.Replace("((ReportingAddress))", reportingAddress);
-                        Email.QuickSend("GPG Registration Request", RegistrationRequestEmailAddress, html);
+                        var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/RegistrationRequest.html"));
+                        html = html.Replace("((url))", reviewUrl);
+                        html = html.Replace("((name))", contactName);
+                        html = html.Replace("((org1))", contactOrg);
+                        html = html.Replace("((org2))", reportingOrg);
+                        html = html.Replace("((address))", reportingAddress);
+                        Email.QuickSend("Registration Request - Gender pay gap reporting service", RegistrationRequestEmailAddress, html);
                         result = new Notification() { status = "delivered" };
                     }
                     catch (Exception ex1)
@@ -148,14 +148,14 @@ namespace GenderPayGap
             return result.status.EqualsI("created", "sending", "delivered");
         }
 
-        public static bool SendRegistrationAccepted(string returnUrl, string emailAddress)
+        public static bool SendRegistrationApproved(string returnUrl, string emailAddress)
         {
             var personalisation = new Dictionary<string, dynamic> { { "url", returnUrl } };
 
             Notification result = null;
             try
             {
-                result = GovNotify.SendEmail(emailAddress, RegistrationAcceptedTemplateId, personalisation);
+                result = GovNotify.SendEmail(emailAddress, RegistrationApprovedTemplateId, personalisation);
             }
             catch (Exception ex)
             {
@@ -163,9 +163,9 @@ namespace GenderPayGap
                 {
                     try
                     {
-                        var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/RegistrationAccepted.txt"));
-                        html = html.Replace("((ReturnUrl))", returnUrl);
-                        Email.QuickSend("Gender Pay Gap Application", emailAddress, html);
+                        var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/RegistrationApproved.html"));
+                        html = html.Replace("((url))", returnUrl);
+                        Email.QuickSend("Registration approved - Gender pay gap reporting service", emailAddress, html);
                         result = new Notification() { status = "delivered" };
                     }
                     catch (Exception ex1)
@@ -192,9 +192,9 @@ namespace GenderPayGap
                 {
                     try
                     {
-                        var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/RegistrationDeclined.txt"));
-                        html = html.Replace("((ReturnUrl))", returnUrl);
-                        Email.QuickSend("Gender Pay Gap Application", emailAddress, html);
+                        var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/RegistrationDeclined.html"));
+                        html = html.Replace("((url))", returnUrl);
+                        Email.QuickSend("Registration declined - Gender pay gap reporting service", emailAddress, html);
                         result = new Notification() { status = "delivered" };
                     }
                     catch (Exception ex1)

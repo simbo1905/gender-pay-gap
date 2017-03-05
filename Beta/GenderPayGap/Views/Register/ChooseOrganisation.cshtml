@@ -6,7 +6,7 @@
 @using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
-    @using (Html.BeginForm("ChooseOrganisation", "Register"))
+    @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.SectorType)
