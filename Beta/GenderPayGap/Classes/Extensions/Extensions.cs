@@ -12,6 +12,7 @@ using GenderPayGap.WebUI.Controllers;
 using System.Web.Mvc.Html;
 using System.Linq.Expressions;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.IO;
 
 namespace GenderPayGap.WebUI.Classes
@@ -37,7 +38,17 @@ namespace GenderPayGap.WebUI.Classes
 
         #endregion
 
+        private static string AdminEmails = ConfigurationManager.AppSettings["AdminEmails"];
+
         #region User Entity
+
+        public static bool IsAdministrator(this User user)
+        {
+            if (!user.EmailAddress.IsEmailAddress()) throw new ArgumentException("Bad email address");
+            if (string.IsNullOrWhiteSpace(AdminEmails)) throw new ArgumentException("Missing AdminEmails from web.config");
+            return user.EmailAddress.LikeAny(AdminEmails.SplitI(";"));
+        }
+
         public static UserOrganisation GetUserOrg(this IRepository repository, User user)
         {
             return repository.GetAll<UserOrganisation>().FirstOrDefault(uo=>uo.UserId==user.UserId);
@@ -93,7 +104,7 @@ namespace GenderPayGap.WebUI.Classes
         }
         public static bool SendConfirmEmail(this RegisterController controller, string emailAddress)
         {
-            var confirmUrl = controller.Url.Action("ConfirmPIN", "Register", null,"https");
+            var confirmUrl = controller.Url.Action("ActivateService", "Register", null,"https");
             return GovNotifyAPI.SendConfirmEmail(confirmUrl, emailAddress);
         }
 
@@ -101,26 +112,9 @@ namespace GenderPayGap.WebUI.Classes
         {
             var name = user.Fullname + " (" + user.JobTitle + ")";
             var address = organisation.Address.GetAddress();
-            var returnUrl = controller.Url.Action("ConfirmPIN", "Register",null,"https");
+            var returnUrl = controller.Url.Action("ActivateService", "Register",null,"https");
             return GovNotifyAPI.SendPinInPost(returnUrl, name, user.EmailAddress, pin);
         }
-
-        public static bool SendRegistrationRequest(this RegisterController controller, string contactName, string contactOrg, string reportingOrg, string reportingAddress, string reviewCode)
-        {
-            var verifyUrl = controller.Url.Action("ReviewRequest", "Register", new { code = reviewCode }, "https");
-            return GovNotifyAPI.SendRegistrationRequest(verifyUrl, contactName, contactOrg, reportingOrg, reportingAddress);
-        }
-
-        public static bool SendRegistrationDeclined(string returnUrl,string emailAddress)
-        {
-            return GovNotifyAPI.SendRegistrationDeclined(returnUrl,emailAddress);
-        }
-
-        public static bool SendRegistrationAccepted(string returnUrl, string emailAddress)
-        {
-            return GovNotifyAPI.SendRegistrationAccepted(returnUrl,emailAddress);
-        }
-
         #endregion
 
         #region AntiSpam

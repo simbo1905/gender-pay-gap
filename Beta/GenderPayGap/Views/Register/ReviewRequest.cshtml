@@ -1,21 +1,18 @@
 ﻿@{
-    ViewBag.Title = "Confirm your organisation - Gender pay gap reporting service";
+    ViewBag.Title = "Review registration request - Gender pay gap reporting service";
 }
 @model GenderPayGap.WebUI.Models.Register.OrganisationViewModel
 
 <main id="content" role="main">
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("ReviewRequestPost"))
     {
+        @Html.ValidationSummary("", new { @class = "error-summary" })
         @Html.AntiForgeryToken()
-
-        @Html.HiddenFor(m => m.SearchText)
-        @Html.HiddenFor(m => m.SelectedEmployerIndex)
-        @Html.HiddenFor(m => m.SectorType)
 
         <div class="grid-row">
             <div class="column-full">
                 <h1 class="heading-large">
-                    Confirm your organisation’s details
+                    Approve employer's application
                 </h1>
                 <table class="confirm-details">
                     <thead>
@@ -28,49 +25,9 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr class="dynamic-content privateManual publicManual" style="display: table-row;">
-                            <td colspan="3">
-                                Organisation you’re reporting for
-                            </td>
-                        </tr>
-                    <tr>
-                        <td>
-                            Organisation name
-                        </td>
-
-                        <td>
-                            @Model.Name
-                        </td>
-
-                        <td></td>
-                    </tr>
-                    @if (!Model.ManualRegistration && Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
-                    {
-                        <tr>
-                            <td>
-                                Registered number
-                            </td>
-                            <td>
-                                @(Model.CompanyNumber)
-                            </td>
-                            <td></td>
-
-                        </tr>
-                    }
-                    <tr>
-                        <td>
-                            Registered address
-                        </td>
-                        <td>
-                            @Model.FullAddress
-                        </td>
-                        <td></td>
-                    </tr>
-                    @if (Model.ManualRegistration)
-                    {
                         <tr class="row dynamic-content publicManual privateManual" style="display: table-row;">
                             <td>
-                                <br>Your contact details
+                                <br>Person registering to report
                             </td>
                             <td>
                                 <!-- Default Dynamic Section -->
@@ -89,7 +46,7 @@
                         </tr>
                         <tr class="row dynamic-content publicManual privateManual" style="display: table-row;">
                             <td>
-                                Your organisation
+                                Organisation
                             </td>
                             <td>
                                 <!-- Default Dynamic Section -->
@@ -117,27 +74,37 @@
                             </td>
                             <td></td>
                         </tr>
-                    }
+                        <tr class="dynamic-content privateManual publicManual" style="display: table-row;">
+                            <td colspan="3">
+                                Gender pay gap reporting entity
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Organisation
+                            </td>
+
+                            <td>
+                                @Model.Name
+                            </td>
+
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Correspondence address
+                            </td>
+                            <td>
+                                @Model.FullAddress
+                            </td>
+                            <td></td>
+                        </tr>
                     </tbody>
                 </table>
                 <fieldset>
                     <br>
-                    <p><button type="submit" class="button" value="confirm">Confirm &amp; continue</button></p>
-
-                    <p>
-                        @if (Model.ManualRegistration)
-                        {
-                            @Html.ActionLink("Back", "AddContact")
-                        }
-                        else if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
-                        {
-                            @Html.ActionLink("Back", "ChooseOrganisation")
-                        }
-                        else
-                        {
-                            @Html.ActionLink("Back", "AddOrganisation")
-                        }
-                    </p>
+                    <p><button type="submit" class="button" value="approve">Confirm and complete registration</button></p>
+                    <p><button type="submit" class="link-button" value="decline">Cancel registration</button></p>
                 </fieldset>
             </div>
         </div>

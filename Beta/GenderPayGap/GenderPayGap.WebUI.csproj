@@ -313,8 +313,11 @@
     </Content>
     <Content Include="App_Data\Pin.txt" />
     <Content Include="App_Data\RegistrationAccepted.txt" />
+    <Content Include="App_Data\RegistrationApproved.html" />
     <Content Include="App_Data\RegistrationDeclined.txt" />
+    <Content Include="App_Data\RegistrationRequest.html" />
     <Content Include="App_Data\RegistrationRequest.txt" />
+    <Content Include="App_Data\Verify.html" />
     <Content Include="App_Data\Verify.txt" />
     <None Include="Content\application.css.New" />
     <Content Include="Content\application.css" />
@@ -444,8 +447,8 @@
     <Content Include="Views\Register\VerifyEmail.cshtml" />
     <Content Include="Views\Register\ChooseOrganisation.cshtml" />
     <Content Include="Views\Register\ConfirmOrganisation.cshtml" />
-    <Content Include="Views\Register\SendPIN.cshtml" />
-    <Content Include="Views\Register\ConfirmPIN.cshtml" />
+    <Content Include="Views\Register\PINSent.cshtml" />
+    <Content Include="Views\Register\ActivateService.cshtml" />
     <Content Include="Views\Home\TimedOut.cshtml" />
     <Content Include="Views\Submit\Step1.cshtml" />
     <Content Include="Views\Submit\Step2.cshtml" />
@@ -456,10 +459,17 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Register\OrganisationSearch.cshtml" />
     <Content Include="Views\Shared\_ValidationSummary.cshtml" />
-    <Content Include="Views\Register\AddOrganisation.cshtml" />
-    <Content Include="Views\Register\EmailConfirmed.cshtml" />
     <Content Include="Views\Register\AddContact.cshtml" />
+    <Content Include="Views\Register\EmailConfirmed.cshtml" />
+    <Content Include="Views\Register\AddOrgtanisation.cshtml" />
     <Content Include="Views\Register\RequestReceived.cshtml" />
+    <Content Include="Views\Shared\CustomError - Copy.cshtml" />
+    <Content Include="Views\Register\ReviewRequest.cshtml" />
+    <Content Include="Views\Register\RequestAccepted.cshtml" />
+    <Content Include="Views\Register\RequestCancelled.cshtml" />
+    <Content Include="Views\Register\RequestApproved.cshtml" />
+    <Content Include="Views\Register\ConfirmCancellation.cshtml" />
+    <Content Include="Views\Register\RequestPIN.cshtml" />
     <None Include="Web.DEV.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

@@ -36,6 +36,9 @@ namespace GenderPayGap.Models.SqlDatabase
         [MaxLength(100)]
         public string Country { get; set; }
 
+        [MaxLength(30)]
+        public string PoBox { get; set; }
+
         [MaxLength(20)]
         public string PostCode { get; set; }
 
@@ -78,6 +81,7 @@ namespace GenderPayGap.Models.SqlDatabase
             list.Add(County);
             list.Add(Country);
             list.Add(PostCode);
+            list.Add(PoBox);
             return list.ToDelimitedString(delimiter);
         }
 

@@ -141,6 +141,9 @@ namespace GenderPayGap.WebUI.Models.Register
                 return PagerStartIndex + 4;
             }
         }
+
+        public string ReviewCode { get; set; }
+        public string CancellationReason { get; set; }
     }
     
 }
