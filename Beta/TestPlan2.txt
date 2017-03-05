@@ -362,9 +362,10 @@ check why 'page' argument should be 1 instead of 0 in SearchOrg() method -> for 
 Bugs:
  confirm your email address, resend button does not work!
  
- task clean up sub,ission jouney
+ task clean up submission jouney
 
- assign
+
+ARRANGE:
 	setup route
 	setup db
 	setup model
@@ -372,9 +373,541 @@ Bugs:
 ACT
 	call the action
 
-
+ASSERT:
  check ReturnResult
 			:Viewresult
+				:Is not null
+				:Check Type
+				:Check name
+				
 			:RouteReditectResult
-check the model,
+				:Is not null
+				:Check Type
+				:Check name
+				
+
+check the model
+			:Is not null
+			:Check Type
+			:Check ModelState
 check db
+	  :get item from mock repository
+
+
+
+
+
+
+
+Step1 GET:
+Input (ARRANGE):
+	USER:
+	 //new user ,who is does not exist in the db:
+		var user = new User() { UserId = 0 };
+
+
+	ROUTEDATA:
+	//IsAction("Step1","Register"
+		 routeData.Values.Add("action", "Step1");
+         routeData.Values.Add("Controller", "Register");
+	
+	MODEL:
+	 Stash a new RegisterViewModel
+
+Notes:
+stash is cleared, so Stash a new RegisterViewModel object for this.ClearStash()
+
+Execute(ACT):
+	call controller.Step_Number() 
+
+Output(ASSERT):
+expecting a viewResult type
+a view named step1 and a new model RegistrationViewModel for entry
+Assert viewResult and model using ASSERT Sample above.
+
+
+Step1 POST:
+Input (ARRANGE):
+	USER:
+	 //new user, who is does not exist in the db:
+		var user = new User() { UserId = 0  };
+
+		MODEL:
+		var model = new RegisterViewModel();
+            model.EmailAddress = "magnuski@hotmail.com";
+            model.ConfirmEmailAddress = "magnuski@hotmail.com";
+            model.FirstName = "Kingsley";
+            model.LastName = "Eweka";
+            model.JobTitle = "Dev";
+            model.Password = "K1ngsl3y"; //model.Password cannot be 'password' use this for negative 
+            model.ConfirmPassword = "K1ngsl3y";
+
+	A view from Step1 GET with the above user and model entered in the form.
+
+Notes:
+user does not exist in the db (user.userid = 0)
+model.Password cannot be 'password'
+modelstate must be valid
+model.EmailAddress is in lowercase
+model filled in from STEP1 GET (arrange the model above) passed in to execute below
+model is stashed.
+
+
+currentUser.EmailVerifySendDate is not null
+currentUser.EmailVerifiedDate is not null
+
+Execute(ACT):
+	call controller.Step_Number with (model) 
+
+Output:
+expecting a RedirectToRouteResult type
+expecting a redirect to View named step2
+
+retrieve the user from the mock db and compare with RegisterViewModel model 
+arranged above 
+
+Assert all the fields from the model including:
+	Assert.That( user.Userid > 0, "") 
+	Assert.NotNull( currentUser.EmailVerifySendDate is not null;
+	Assert.NotNull( currentUser.EmailVerifiedDate is not null;
+	Assert.NotNull( user.EmailVerifyHash is not null;
+	Assert.That( user.Status should be new 
+	Assert.That( user/model.Password is not 'password'
+
+	assert that the modelstate is valid
+Assert viewResult and model using ASSERT Sample above.
+
+
+
+Verify Step 2 is doing this STEP 2 Call Twice one when it is loaded 
+and 2 when the verified link is clicked and that
+
+-->  User.EmailVerifySendDate = null the first time when Step2 Get is not called
+VERIFIED LINK NOT SENT OR CLICKED YET
+Step2 GET:
+Input:
+	CODE:
+	code 
+	USER:
+	 //new user ,who is does not exist in the db:
+		var user = new User() { UserId = 0, User.EmailVerifySendDate = null };
+
+
+	ROUTEDATA:
+	//IsAction("Step1","Register"
+		 routeData.Values.Add("action", "Step1");
+         routeData.Values.Add("Controller", "Register");
+
+		 create a model to stash
+		 MODEL:
+		var model = new RegisterViewModel();
+            model.EmailAddress = "magnuski@hotmail.com";
+            model.ConfirmEmailAddress = "magnuski@hotmail.com";
+            model.FirstName = "Kingsley";
+            model.LastName = "Eweka";
+            model.JobTitle = "Dev";
+            model.Password = "K1ngsl3y"; //model.Password cannot be 'password' use this for negative 
+            model.ConfirmPassword = "K1ngsl3y";
+
+	
+	
+	User.EmailVerifySendDate = null;	 
+
+Notes:
+a new VerifyViewModel is created with model's emailaddress
+user is verified so VerifyViewModel will have verified and user.EmailVerifiedDate will have a valid value
+expects user.status as active
+
+
+Output:
+expects user.status to be active assert this
+expecting a ViewResult type
+expecting a expecting View named step2
+expecting a model of VerifyViewModel
+with the user.email address is valid and verified == true
+Assert viewResult and model using ASSERT Sample above.
+
+-->  User.EmailVerifySendDate = has a valid value second time time when linked is clicked in email
+VERIFIED LINK CLICKED:
+Step2 GET:
+Input:
+	CODE:
+	code string has value from the Link clicked
+
+	USER:
+	 //new user ,who is does not exist in the db:
+		var user = new User() { UserId = 0, User.EmailVerifySendDate = Valid Date };
+
+
+	ROUTEDATA:
+	//IsAction("Step1","Register"
+		 routeData.Values.Add("action", "Step1");
+         routeData.Values.Add("Controller", "Register");
+
+		 create a model to stash
+		 MODEL:
+		var model = new RegisterViewModel();
+            model.EmailAddress = "magnuski@hotmail.com";
+            model.ConfirmEmailAddress = "magnuski@hotmail.com";
+            model.FirstName = "Kingsley";
+            model.LastName = "Eweka";
+            model.JobTitle = "Dev";
+            model.Password = "K1ngsl3y"; //model.Password cannot be 'password' use this for negative 
+            model.ConfirmPassword = "K1ngsl3y";
+
+	
+	
+	User.EmailVerifySendDate = Valid Date
+	User.EmailVerifyHash = valid value
+    User.currentUser.EmailVerifiedDate 	 
+	User.Status = UserStatuses.Active
+	
+	 
+Notes:
+details = "Email verified"
+
+a new VerifyViewModel is created with model's emailaddress
+user is verified so VerifyViewModel will have verified and user.EmailVerifiedDate will have a valid value
+expects user.status as active
+
+
+Output:
+expects user.status to be active assert this
+expecting a ViewResult type
+expecting a expecting View named step2
+expecting a model of VerifyViewModel
+with the user.email address is valid and verified == true
+Assert viewResult and model using ASSERT Sample above.
+
+
+
+
+
+
+
+
+Step2 POST:
+Input:
+	USER:
+	//new user ,who exists in the db:
+	var user = new User() { UserId = 1,  EmailVerifiedDate = DateTime.Now };
+	
+	//var organisation = new Organisation() { OrganisationId = 1 };
+   //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+
+	ROUTEDATA:
+	//IsAction("Step1","Register"
+	routeData.Values.Add("action", "Step2");
+    routeData.Values.Add("Controller", "Register")
+
+	MODEL:
+	var model = new VerifyViewModel();
+	model.EmailAddress = "test@hotmail.com";
+	model.Expired = false;
+	model.Resend = false;
+	model.Retry = false;
+	model.Sent = false;
+    model.UserId = 1;
+    model.Verified = true;
+    model.WrongCode = false;
+
+
+user.EmailVerifySendDate = have a valid value
+
+Notes:
+
+wierd line this error is Shown
+ if ((org==null || org.SectorType == SectorTypes.Public) && IsAnyAction("Register/Step7")) return null;
+       -->         return View("CustomError", new ErrorViewModel(1104));
+
+Transalation:
+org is null and !(org.SectorTypes.public) && !(IsAnyAction("Register/Step7"))) 
+this line throws this custome error when the verifiction email has not been clicked from your email address!
+
+user.EmailVerifySendDate should have a valid value for email to be sent.
+
+Output:
+
+
+
+Step3 GET:
+Input:
+	USER:
+	//new user ,who exists in the db:
+	var user = new User() { UserId = 1,  EmailVerifiedDate = DateTime.Now, status = Active };
+	//var organisation  =null
+   //var userOrganisation = null
+
+
+	ROUTEDATA:
+	//IsAction("Step3","Register"
+		 routeData.Values.Add("action", "Step3");
+         routeData.Values.Add("Controller", "Register");
+
+	MODEL:
+	
+
+Notes:
+model is stashed
+user.EmailVerifiedDate = have a valid value
+user.EmailVerifySendDate = have a valid value
+user.EmailVerifyHash = have a valid value
+
+Execute(ACT):
+	call controller.Step_Number() 
+
+Output(ASSERT):
+expecting a viewResult type
+a view named step3 and a new model OrganisationViewModel for entry
+Assert viewResult and model using ASSERT Sample above.
+
+
+
+
+
+Step3 POST:
+Input:
+	USER:
+
+Notes:
+
+Execute(ACT):
+	call controller.Step_Number() 
+
+Output:
+
+
+
+Step4 GET:
+Input:
+	USER:
+	//new user ,who exists in the db:
+	var user = new User() { UserId = 1,  EmailVerifiedDate = DateTime.Now, status = Active };
+	//var organisation  =null
+   //var userOrganisation = null
+
+
+	ROUTEDATA:
+	//IsAction("Step4","Register"
+		 routeData.Values.Add("Action", "Step4");
+         routeData.Values.Add("Controller", "Register");
+
+	MODEL:
+	
+
+Notes:
+model is unstashed
+user.EmailVerifiedDate = have a valid value
+user.EmailVerifySendDate = have a valid value
+user.EmailVerifyHash = have a valid value
+
+Execute(ACT):
+	call controller.Step_Number() 
+
+Output(ASSERT):
+expecting a viewResult type
+a view named step4 and an unstashed model OrganisationViewModel for entry
+Assert viewResult and model using ASSERT Sample above.
+
+Step4 POST:
+Input:
+	USER:
+
+Notes:
+
+Execute(ACT):
+	call controller.Step_Number() 
+
+Output:
+
+
+
+Step5 GET:
+Input:
+	USER:
+	//new user ,who exists in the db:
+	var user = new User() { UserId = 1,  EmailVerifiedDate = DateTime.Now, status = Active };
+	//var organisation  =null
+   //var userOrganisation = null
+
+
+	ROUTEDATA:
+	//IsAction("Step5","Register"
+		 routeData.Values.Add("Action", "Step5");
+         routeData.Values.Add("Controller", "Register");
+
+	MODEL:
+	
+
+Notes:
+model is unstashed
+user.EmailVerifiedDate = have a valid value
+user.EmailVerifySendDate = have a valid value
+user.EmailVerifyHash = have a valid value
+
+Execute(ACT):
+	call controller.Step_Number() 
+
+Output(ASSERT):
+expecting a viewResult type
+a view named step5 and an unstashed model OrganisationViewModel for entry
+Assert viewResult and model using ASSERT Sample above.
+
+Step5 POST:
+Input:
+	USER:
+
+Notes:
+
+Execute(ACT):
+	call controller.Step_Number() 
+
+Output:
+
+
+
+Step6 GET(Private Sector):
+Input:
+	USER:
+	//new user ,who exists in the db:
+	var user = new User() { UserId = 1,  EmailVerifiedDate = DateTime.Now, status = Active };
+	//var organisation  =null
+   //var userOrganisation = null
+
+
+	ROUTEDATA:
+	//IsAction("Step6","Register"
+		 routeData.Values.Add("Action", "Step6");
+         routeData.Values.Add("Controller", "Register");
+
+	MODEL:
+
+
+	PrivateSectorOrg:	
+	model.SectorType = SectorTypes.Public
+
+Notes:
+model is unstashed
+user.EmailVerifiedDate = have a valid value
+user.EmailVerifySendDate = have a valid value
+user.EmailVerifyHash = have a valid value
+model.SectorType is set to SectorTypes.Private in the model above
+
+
+Execute(ACT):
+	call controller.Step_Number() 
+
+
+Output(ASSERT):
+expecting a viewResult type
+a view named AddAddress and an unstashed model OrganisationViewModel for entry
+Assert viewResult and model using ASSERT Sample above.
+
+
+Step6 GET(Public Sector):
+Input:
+	USER:
+	//new user ,who exists in the db:
+	var user = new User() { UserId = 1,  EmailVerifiedDate = DateTime.Now, status = Active };
+	//var organisation  =null
+   //var userOrganisation = null
+
+
+	ROUTEDATA:
+	//IsAction("Step6","Register"
+		 routeData.Values.Add("Action", "Step6");
+         routeData.Values.Add("Controller", "Register");
+
+	MODEL:
+
+
+	Public Sector Org:	
+	model.SectorType = SectorTypes.Public
+
+Notes:
+model is unstashed
+user.EmailVerifiedDate = have a valid value
+user.EmailVerifySendDate = have a valid value
+user.EmailVerifyHash = have a valid value
+model.SectorType is set to SectorTypes.Public in the model above
+
+
+Execute(ACT):
+	call controller.Step_Number() 
+
+
+Output(ASSERT):
+expecting a viewResult type
+a view named 'ConfirmEmployer' and unstashed model OrganisationViewModel for entry
+Assert viewResult and model using ASSERT Sample above.
+
+
+Step6 POST:
+Input:
+
+Notes:
+
+Execute(ACT):
+	call controller.Step_Number() 
+
+Output:
+
+
+
+Step7 GET:
+Input:
+	USER:
+	//new user ,who exists in the db:
+	var user = new User() { UserId = 1,  EmailVerifiedDate = DateTime.Now, status = Active };
+	//var organisation  =null
+   //var userOrganisation = null
+
+
+	ROUTEDATA:
+	//IsAction("Step7","Register"
+		 routeData.Values.Add("Action", "Step7");
+         routeData.Values.Add("Controller", "Register");
+
+	MODEL:
+	
+
+Notes:
+model is unstashed
+user.EmailVerifiedDate = have a valid value
+user.EmailVerifySendDate = have a valid value
+user.EmailVerifyHash = have a valid value
+
+
+
+Output(ASSERT):
+expecting a viewResult type
+a view named step5 and an unstashed model OrganisationViewModel for entry
+Assert viewResult and model using ASSERT Sample above.
+
+Step7 POST:
+Input(ARRANGE):
+	ORGANISATION:
+	 org setup object
+	 orgAdress setup
+
+	USER:
+		user set up object
+
+
+
+Notes:
+
+Execute(ACT):
+call save on repository...even though data is entered as above in arrange section.
+
+Output(ASSERT):
+
+
+Save Step:
+Input:
+	USER:
+
+Notes:
+
+Output:
+retrieve user from the mock repository and see if he was saved in it
