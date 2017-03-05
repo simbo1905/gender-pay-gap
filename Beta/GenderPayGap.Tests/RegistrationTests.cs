@@ -567,8 +567,8 @@ namespace GenderPayGap.Tests
             var user = new User() { UserId = 0 };
 
             var routeData = new RouteData();
-            routeData.Values.Add("action", "Step1");
-            routeData.Values.Add("Controller", "register");
+            routeData.Values.Add("Action", "Step1");
+            routeData.Values.Add("Controller", "Register"); ;
 
             //Stash an object to pass in for this.ClearStash()
             var model = new RegisterViewModel();
@@ -580,8 +580,10 @@ namespace GenderPayGap.Tests
 
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
+            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
             Assert.That(result.ViewName == "Step1", "Incorrect view returned");
             Assert.NotNull(result.Model as RegisterViewModel, "Expected RegisterViewModel");
+            Assert.That(result.Model.GetType() == typeof(RegisterViewModel), "Incorrect resultType returned");
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
 
         }
@@ -658,6 +660,8 @@ namespace GenderPayGap.Tests
             });
         }
 
+
+
         [Test]
         [Description("Ensure the Step2 succeeds when is verified and an email is sent")]
         public void Step2_Get_ViewResult_Success()
@@ -723,8 +727,8 @@ namespace GenderPayGap.Tests
             //Set the user up as if finished step1 which is email known etc but not sent
 
             var routeData = new RouteData();
-            routeData.Values.Add("action", "Step2");
-            routeData.Values.Add("controller", "register");
+            routeData.Values.Add("Action", "Step2");
+            routeData.Values.Add("Controller", "Register");
 
             var model = new VerifyViewModel();
 
@@ -744,10 +748,7 @@ namespace GenderPayGap.Tests
             Assert.That(result.RouteValues["action"].ToString() == "Complete", "");
             
         }
-
-
        
-
         [Test]
         [Description("Ensure the Step2 user verification succeeds")]
         public void Step2_Post_Success()
@@ -755,8 +756,9 @@ namespace GenderPayGap.Tests
             //ARRANGE:
             //1.Arrange the test setup variables
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
-            var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+
+            //var organisation = new Organisation() { OrganisationId = 1 };
+            //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
             //Set user email address verified code and expired sent date
             var routeData = new RouteData();
@@ -816,12 +818,31 @@ namespace GenderPayGap.Tests
 
 
 
-
         [Test]
         [Description("Ensure the Step1 succeeds when all fields are good")]
         public void Step3_Get_Success()
         {
-            Assert.AreEqual(true, false, "");
+            //ARRANGE:
+            //create a user who does exist in the db
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+
+            var routeData = new RouteData();
+            routeData.Values.Add("Action", "Step3");
+            routeData.Values.Add("Controller", "Register");
+
+            var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
+            //controller.StashModel(model);
+
+            //ACT:
+            var result = controller.Step3() as ViewResult;
+
+            //ASSERT:
+            Assert.NotNull(result, "Expected ViewResult");
+            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
+            Assert.That(result.ViewName == "Step3", "Incorrect view returned");
+            Assert.NotNull(result.Model as OrganisationViewModel, "Expected RegisterViewModel");
+            Assert.That(result.Model.GetType() == typeof(OrganisationViewModel), "Incorrect resultType returned");
+            Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
         }
 
         [Test]
@@ -876,13 +897,38 @@ namespace GenderPayGap.Tests
         }
 
 
+
         [Test]
         [Description("Ensure the Step1 succeeds when all fields are good")]
         public void Step4_Get_Success()
         {
-            var controller = TestHelper.GetController<RegisterController>();
-            controller.PublicSectorRepository.Insert(new EmployerRecord());
+            //ARRANGE:
+            //create a user who does exist in the db
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
 
+            var routeData = new RouteData();
+            routeData.Values.Add("Action", "Step4");
+            routeData.Values.Add("Controller", "Register");
+
+            var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
+            //controller.StashModel(model);
+
+            var orgModel = new OrganisationViewModel();
+            controller.StashModel(orgModel);
+
+            //ACT:
+            var result = controller.Step4() as ViewResult;
+
+            //ASSERT:
+            Assert.NotNull(result, "Expected ViewResult");
+            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
+            Assert.That(result.ViewName == "Step4", "Incorrect view returned");
+            Assert.NotNull(result.Model as OrganisationViewModel, "Expected RegisterViewModel");
+            Assert.That(result.Model.GetType() == typeof(OrganisationViewModel), "Incorrect resultType returned");
+            Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
+
+            // var controller = TestHelper.GetController<RegisterController>();
+            // controller.PublicSectorRepository.Insert(new EmployerRecord());
         }
 
         [Test]
@@ -930,11 +976,35 @@ namespace GenderPayGap.Tests
         }
 
 
+
         [Test]
         [Description("Ensure the Step1 succeeds when all fields are good")]
         public void Step5_Get_Success()
         {
-            Assert.AreEqual(true, false, "");
+            //ARRANGE:
+            //create a user who does exist in the db
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+
+            var routeData = new RouteData();
+            routeData.Values.Add("Action", "Step5");
+            routeData.Values.Add("Controller", "Register");
+
+            var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
+            //controller.StashModel(model);
+
+            var orgModel = new OrganisationViewModel();
+            controller.StashModel(orgModel);
+
+            //ACT:
+            var result = controller.Step5() as ViewResult;
+
+            //ASSERT:
+            Assert.NotNull(result, "Expected ViewResult");
+            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
+            Assert.That(result.ViewName == "Step5", "Incorrect view returned");
+            Assert.NotNull(result.Model as OrganisationViewModel, "Expected RegisterViewModel");
+            Assert.That(result.Model.GetType() == typeof(OrganisationViewModel), "Incorrect resultType returned");
+            Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
         }
 
         [Test]
@@ -983,11 +1053,66 @@ namespace GenderPayGap.Tests
 
 
 
+        //PRIVATE SECTOR
+        [Test]
+        [Description("Ensure the Step6 succeeds when all fields are good")]
+        public void Step6_Get_ConfirmEmployer_Success()
+        {
+            //ARRANGE:
+            //create a user who does exist in the db
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+
+            var routeData = new RouteData();
+            routeData.Values.Add("Action", "Step6");
+            routeData.Values.Add("Controller", "Register");
+
+            var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
+            //controller.StashModel(model);
+
+            var orgModel = new OrganisationViewModel() { SectorType = SectorTypes.Private };
+            controller.StashModel(orgModel);
+
+            //ACT:
+            var result = controller.Step6() as ViewResult;
+
+            //ASSERT:
+            Assert.NotNull(result, "Expected ViewResult");
+            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
+            Assert.That(result.ViewName == "ConfirmEmployer", "Incorrect view returned");
+            Assert.NotNull(result.Model as OrganisationViewModel, "Expected RegisterViewModel");
+            Assert.That(result.Model.GetType() == typeof(OrganisationViewModel), "Incorrect resultType returned");
+            Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
+        }
+
+        //PUBLIC SECTOR
         [Test]
         [Description("Ensure the Step1 succeeds when all fields are good")]
-        public void Step6_Get_Success()
+        public void Step6_Get_AddAddress_Success()
         {
-            Assert.AreEqual(true, false, "");
+            //ARRANGE:
+            //create a user who does exist in the db
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+
+            var routeData = new RouteData();
+            routeData.Values.Add("Action", "Step6");
+            routeData.Values.Add("Controller", "Register");
+
+            var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
+            //controller.StashModel(model);
+
+            var orgModel = new OrganisationViewModel() { SectorType = SectorTypes.Public };
+            controller.StashModel(orgModel);
+
+            //ACT:
+            var result = controller.Step6() as ViewResult;
+
+            //ASSERT:
+            Assert.NotNull(result, "Expected ViewResult");
+            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
+            Assert.That(result.ViewName == "AddAddress", "Incorrect view returned");
+            Assert.NotNull(result.Model as OrganisationViewModel, "Expected RegisterViewModel");
+            Assert.That(result.Model.GetType() == typeof(OrganisationViewModel), "Incorrect resultType returned");
+            Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
         }
 
         [Test]
@@ -1040,7 +1165,30 @@ namespace GenderPayGap.Tests
         [Description("Ensure the Step1 succeeds when all fields are good")]
         public void Step7_Get_Success()
         {
-            Assert.AreEqual(true, false, "");
+            //ARRANGE:
+            //create a user who does exist in the db
+            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+
+            var routeData = new RouteData();
+            routeData.Values.Add("Action", "Step7");
+            routeData.Values.Add("Controller", "Register");
+
+            var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
+            //controller.StashModel(model);
+
+            var orgModel = new OrganisationViewModel();
+            controller.StashModel(orgModel);
+
+            //ACT:
+            var result = controller.Step7() as ViewResult;
+
+            //ASSERT:
+            Assert.NotNull(result, "Expected ViewResult");
+            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
+            Assert.That(result.ViewName == "ConfirmEmployer", "Incorrect view returned");
+            Assert.NotNull(result.Model as OrganisationViewModel, "Expected RegisterViewModel");
+            Assert.That(result.Model.GetType() == typeof(OrganisationViewModel), "Incorrect resultType returned");
+            Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
         }
 
         [Test]
