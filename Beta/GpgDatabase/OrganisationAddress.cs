@@ -54,7 +54,6 @@ namespace GenderPayGap.Models.SqlDatabase
         [MaxLength(255)]
         public string StatusDetails { get; set; }
 
-        [ForeignKey("CreatedByUserId")]
         public virtual User CreatedByUser { get; set; }
 
         [Required]
