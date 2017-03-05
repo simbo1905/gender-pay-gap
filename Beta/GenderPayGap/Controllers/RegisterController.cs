@@ -8,6 +8,8 @@ using Autofac;
 using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Classes;
 using System.Configuration;
+using System.Net;
+using System.Web;
 using GenderPayGap.WebUI.Properties;
 using GenderPayGap.Core.Interfaces;
 using GenderPayGap.WebUI.Models.Register;
@@ -281,6 +283,7 @@ namespace GenderPayGap.WebUI.Controllers
 
                 currentUser.VerifyAttempts = 0;
 
+                //If not an administrator show confirmation action to choose next step
                 result = RedirectToAction("EmailConfirmed");
             }
             currentUser.VerifyAttemptDate = DateTime.Now;
@@ -321,7 +324,16 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("email-confirmed")]
         public ActionResult EmailConfirmed()
         {
-            return View();
+            //Ensure user has completed the registration process
+            User currentUser;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
+
+            if (currentUser.IsAdministrator())
+                //If its an administrator show confirmation and logout message
+                return View("CustomError", new ErrorViewModel(1116));
+
+            return View("EmailConfirmed");
         }
         #endregion
 
@@ -665,16 +677,26 @@ namespace GenderPayGap.WebUI.Controllers
                     }
                 }
 
+                model.Name = model.SelectedEmployer.Name;
+
                 //Check the user email is authorised for public organisation
-                if (model.SectorType == SectorTypes.Public && !employer.IsAuthorised(currentUser.EmailAddress))
+                if (model.SectorType == SectorTypes.Public)
                 {
-                    AddModelError(3010);
-                    this.CleanModelErrors<OrganisationViewModel>();
-                    return View("ChooseOrganisation", model);
+                    if (string.IsNullOrWhiteSpace(employer.EmailPatterns))
+                    {
+                        model.ManualRegistration = true;
+                        return RedirectToAction("AddOrganisation");
+                    }
+                
+                    if (!employer.IsAuthorised(currentUser.EmailAddress))
+                    {
+                        AddModelError(3010);
+                        this.CleanModelErrors<OrganisationViewModel>();
+                        return View("ChooseOrganisation", model);
+                    }
                 }
 
                 model.SelectedEmployerIndex = employerIndex;
-                model.Name = model.SelectedEmployer.Name;
                 model.CompanyNumber = model.SelectedEmployer.CompanyNumber;
                 model.Address1 = model.SelectedEmployer.Address1;
                 model.Address2 = model.SelectedEmployer.Address2;
@@ -723,6 +745,9 @@ namespace GenderPayGap.WebUI.Controllers
             var model =this.UnstashModel<OrganisationViewModel>();
             if (model == null) return View("CustomError", new ErrorViewModel(1112));
 
+            //Prepopulate name if it empty
+            if (string.IsNullOrWhiteSpace(model.Name) && !string.IsNullOrWhiteSpace(model.SearchText))model.Name = model.SearchText;
+
             return View("AddOrganisation",model);
         }
 
@@ -747,9 +772,6 @@ namespace GenderPayGap.WebUI.Controllers
             var m = this.UnstashModel<OrganisationViewModel>();
             if (m == null) return View("CustomError", new ErrorViewModel(1112));
             model.Employers = m.Employers;
-
-
-
 
             this.StashModel(model);
             if (model.ManualRegistration)
@@ -891,7 +913,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (model.SectorType==SectorTypes.Public) RedirectToAction("Complete");
 
             //If private sector then send the pin
-            return RedirectToAction("SendPIN");
+            return RedirectToAction("PINSent");
         }
 
 
@@ -969,7 +991,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (model.ManualRegistration)
             {
                 //Send request to GEO
-                SendRegistrationRequest(userOrg,$"{currentUser.ContactFirstName} {currentUser.ContactLastName} ({currentUser.JobTitle})",currentUser.ContactOrganisation,org.OrganisationName,address.GetAddress());
+                SendRegistrationRequest(userOrg, $"{currentUser.ContactFirstName} {currentUser.ContactLastName} ({currentUser.JobTitle})", currentUser.ContactOrganisation, org.OrganisationName, address.GetAddress());
             }
 
             //Set the status to active
@@ -991,13 +1013,13 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         //Send the registration request
-        public void SendRegistrationRequest(UserOrganisation userOrg, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
+        protected void SendRegistrationRequest(UserOrganisation userOrg, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
         {
             //Send a verification link to the email address
             try
             {
                 var reviewCode = Encryption.EncryptQuerystring(userOrg.UserId + ":" + userOrg.OrganisationId + ":" + DateTime.Now.ToSmallDateTime());
-                if (!this.SendRegistrationRequest(contactName, contactOrg, reportingOrg, reportingAddress,reviewCode))
+                if (!GovNotifyAPI.SendRegistrationRequest(contactName, contactOrg, reportingOrg, reportingAddress, reviewCode))
                     throw new Exception("Could not send registration request email. Please try again later.");
             }
             catch (Exception ex)
@@ -1008,7 +1030,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
         }
 
-        [Auth]
+
         [HttpGet]
         [Route("request-received")]
         public ActionResult RequestReceived()
@@ -1018,7 +1040,7 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            //Clearf the stash
+            //Clear the stash
             this.ClearStash();
 
             return View("RequestReceived");
@@ -1026,11 +1048,195 @@ namespace GenderPayGap.WebUI.Controllers
 
         #endregion
 
-        #region Step7
-        [HttpGet]
+        #region ReviewRequest
         [Auth]
-        [Route("Step7")]
-        public ActionResult Step7()
+        [HttpGet]
+        [Route("review-request")]
+        public ActionResult ReviewRequest(string code)
+        {
+            //Ensure user has completed the registration process
+            User currentUser;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
+
+            var model = new OrganisationViewModel();
+
+            if (string.IsNullOrWhiteSpace(code))
+            {
+                //Load the employers from session
+                model = this.UnstashModel<OrganisationViewModel>();
+                if (model == null) return View("CustomError", new ErrorViewModel(1114));
+
+                code = model.ReviewCode;
+            }
+            else
+                model.ReviewCode = code;
+
+            //Unwrap code
+            UserOrganisation userOrg;
+            OrganisationAddress address;
+            
+            var result=UnwrapRegistrationRequest(code, out userOrg, out address);
+            if (result != null) return result;
+
+            //Tell reviewer if this has already been approved
+            if (userOrg.Organisation.Status==OrganisationStatuses.Active)
+                AddModelError(3017, parameters: new {approvedDate = userOrg.Organisation.StatusDate.ToShortDateString()});
+
+            //Load view model
+            model.ContactFirstName = userOrg.User.ContactFirstName;
+            model.ContactLastName = userOrg.User.ContactLastName;
+            model.ContactJobTitle = userOrg.User.ContactJobTitle;
+            model.ContactOrganisation = userOrg.User.ContactOrganisation;
+            model.ContactEmailAddress = userOrg.User.ContactEmailAddress;
+            model.ContactPhoneNumber = userOrg.User.ContactPhoneNumber;
+
+            model.Name = userOrg.Organisation.OrganisationName;
+            model.SectorType = userOrg.Organisation.SectorType;
+
+            model.Address1 = address.Address1;
+            model.Address2 = address.Address2;
+            model.Address3 = address.Address3;
+            model.Country = address.Country;
+            model.PostCode = address.PostCode;
+            model.PoBox = address.PoBox;
+
+            //Tell reviewer how many other open regitrations for same organisation
+            var requestCount = DataRepository.GetAll<UserOrganisation>().Count(uo => uo.UserId != userOrg.UserId && uo.OrganisationId == userOrg.OrganisationId && uo.Organisation.Status==OrganisationStatuses.Pending);
+            if (requestCount > 0) AddModelError(3018, parameters: new { requestCount });
+
+            return View("ReviewRequest", model);
+        }
+
+        private ActionResult UnwrapRegistrationRequest(string code, out UserOrganisation userOrg, out OrganisationAddress address)
+        {
+            userOrg = null;
+            address = null;
+
+            long userId=0;
+            long orgId=0;
+            try
+            {
+                code = Encryption.DecryptQuerystring(code);
+                var args = code.SplitI(":");
+                if (args.Length != 3) throw new ArgumentException("Too few parameters in registration review code");
+                userId = args[0].ToLong();
+                if (userId == 0) throw new ArgumentException("Invalid user id in registration review code");
+                orgId = args[1].ToLong();
+                if (orgId == 0) throw new ArgumentException("Invalid organisation id in registration review code");
+            }
+            catch (Exception ex)
+            {
+                return View("CustomError", new ErrorViewModel(1114));
+            }
+
+            //Get the user oganisation
+            userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == userId && uo.OrganisationId == orgId);
+
+            if (userOrg == null) return View("CustomError", new ErrorViewModel(1115));
+
+            switch (userOrg.Organisation.Status)
+            {
+                case OrganisationStatuses.Active:
+                case OrganisationStatuses.Pending:
+                    break;
+                default:
+                    throw new ArgumentException(
+                        $"Invalid organisation status {userOrg.Organisation.Status} user {userId} and organisation {orgId} for reviewing registration request");
+            }
+
+            address = DataRepository.GetAll<OrganisationAddress>().FirstOrDefault(oa => oa.CreatedByUserId == userId && oa.OrganisationId == orgId);
+            if (address == null)throw new Exception($"Cannot find address for user {userId} and organisation {orgId} for reviewing registration request");
+
+            switch (address.Status)
+            {
+                case AddressStatuses.Active:
+                    break;
+                case AddressStatuses.Pending:
+                    break;
+                default:
+                    throw new ArgumentException($"Invalid organisation address status {address.Status} for address {address.OrganisationAddressId}, user {userId} and organisation {orgId} for reviewing registration request");
+            }
+
+            return null;
+        }
+
+        [HttpPost]
+        [Auth]
+        [ValidateAntiForgeryToken]
+        [Route("review-request")]
+        public ActionResult ReviewRequest(OrganisationViewModel model,string command)
+        {
+            //Ensure user has completed the registration process
+            User currentUser;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
+
+            ActionResult result;
+
+            if (command.EqualsI("decline"))
+            {
+                result = RedirectToAction("ConfirmCancellation");
+            }
+            else if (command.EqualsI("approve"))
+            {            
+                //Unwrap code
+                UserOrganisation userOrg;
+                OrganisationAddress address;
+
+                result = UnwrapRegistrationRequest(model.ReviewCode, out userOrg, out address);
+                if (result != null) return result;
+
+                //Activate the address for this user and organisation
+                address.SetStatus(AddressStatuses.Active, currentUser.UserId,"Manually registered");
+
+                //Activate the org user
+                userOrg.PINConfirmedDate = DateTime.Now;
+
+                //Activate the organisation 
+                userOrg.Organisation.SetStatus(OrganisationStatuses.Active, currentUser.UserId,"Manually registered");
+
+                //Send the approved email to the applicant
+                SendRegistrationAccepted(userOrg.User.ContactEmailAddress);
+                result = RedirectToAction("RequestAccepted");
+            }
+            else 
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest,"Invalid command on 'review-request' postback");
+
+            //Save the changes and redirect
+            DataRepository.SaveChanges();
+
+            //Save the model for the redirect
+            this.StashModel(model);
+
+            return result;
+        }
+
+        //Send the registration request
+        protected void SendRegistrationAccepted(string emailAddress)
+        {
+            //Send a verification link to the email address
+            try
+            {
+                string returnUrl = Url.Action("Step1","Submit");
+                if (!GovNotifyAPI.SendRegistrationApproved(returnUrl, emailAddress))
+                    throw new Exception("Could not send registration accepted email.");
+            }
+            catch (Exception ex)
+            {
+                //Log the exception
+                MvcApplication.Log.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+
+        /// <summary>
+        /// ask the reviewer for decline reason and confirmation /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("confirm-cancellation")]
+        public ActionResult ConfirmCancellation()
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -1041,17 +1247,18 @@ namespace GenderPayGap.WebUI.Controllers
             var model = this.UnstashModel<OrganisationViewModel>();
             if (model == null) return View("CustomError", new ErrorViewModel(1112));
 
-            return View("ConfirmEmployer", model);
+            return View("ConfirmCancellation", model);
         }
 
         /// <summary>
-        /// Public confirm submit
+        /// On confirmation save the organisation
         /// </summary>
+        /// <returns></returns>
+        [Auth]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Auth]
-        [Route("Step7")]
-        public ActionResult Step7(OrganisationViewModel model)
+        [Route("confirm-cancellation")]
+        public ActionResult ConfirmCancellation(OrganisationViewModel model, string command)
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -1061,19 +1268,106 @@ namespace GenderPayGap.WebUI.Controllers
             //Load the employers from session
             var m = this.UnstashModel<OrganisationViewModel>();
             if (m == null) return View("CustomError", new ErrorViewModel(1112));
-            model.Employers = m.Employers;
 
-            //Save the public sector employer registration
-            SaveRegistration(currentUser, model);
+            //If cancel button clicked the n return to review page
+            if (command.EqualsI("Cancel")) return RedirectToAction("ReviewRequest");
 
-            //Redirect to complete form
+            //Unwrap code
+            UserOrganisation userOrg;
+            OrganisationAddress address;
+
+            var result = UnwrapRegistrationRequest(model.ReviewCode, out userOrg, out address);
+            if (result != null) return result;
+
+            //Delete address for this user and organisation
+            DataRepository.Delete(address);
+
+            //Delete the org user
+            DataRepository.Delete(userOrg);
+
+            //Delete the organisation if there are no other registrations pending
+            var requestCount = DataRepository.GetAll<UserOrganisation>().Count(uo => uo.UserId != userOrg.UserId && uo.OrganisationId == userOrg.OrganisationId);
+            if (requestCount == 0)DataRepository.Delete(userOrg.Organisation);
+
+            //Send the declined email to the applicant
+            SendRegistrationDeclined(userOrg.User.ContactEmailAddress,model.CancellationReason);
+
+            //Save the changes and redirect
+            DataRepository.SaveChanges();
+
+            //Save the model for the redirect
             this.StashModel(model);
-            return RedirectToAction("Complete");
+
+            //If private sector then send the pin
+            return RedirectToAction("RequestCancelled");
+        }
+
+
+        //Send the registration request
+        protected void SendRegistrationDeclined(string emailAddress,string reason)
+        {
+            //Send a verification link to the email address
+            try
+            {
+                string returnUrl = Url.Action("OrganisationType", "Register");
+                if (!GovNotifyAPI.SendRegistrationDeclined(emailAddress, reason))
+                    throw new Exception("Could not send registration declined email.");
+            }
+            catch (Exception ex)
+            {
+                //Log the exception
+                MvcApplication.Log.WriteLine(ex.Message);
+                throw;
+            }
+        }
+        /// <summary>
+        /// Show review accepted confirmation
+        /// <returns></returns>
+        [HttpGet]
+        [Route("request-accepted")]
+        public ActionResult RequestAccepted()
+        {
+            //Ensure user has completed the registration process
+            User currentUser;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
+
+            //Make sure we can load model from session
+            var model = this.UnstashModel<OrganisationViewModel>();
+            if (model == null) return View("CustomError", new ErrorViewModel(1112));
+
+            //Clear the stash
+            this.ClearStash();
+
+            return View("RequestAccepted", model);
+        }
+
+        /// <summary>
+        /// Show review cancel confirmation
+        /// <returns></returns>
+        [Auth]
+        [HttpGet]
+        [Route("request-cancelled")]
+        public ActionResult RequestCancelled()
+        {
+            //Ensure user has completed the registration process
+            User currentUser;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
+
+            //Make sure we can load model from session
+            var model = this.UnstashModel<OrganisationViewModel>();
+            if (model == null) return View("CustomError", new ErrorViewModel(1112));
+
+            //Clear the stash
+            this.ClearStash();
+
+            return View("RequestCancelled", model);
         }
         #endregion
 
-        #region SendPIN
-        ActionResult GetSendPIN(string command=null)
+        #region PINSent
+        ActionResult GetSendPIN()
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -1083,26 +1377,18 @@ namespace GenderPayGap.WebUI.Controllers
             //Get the user organisation
             var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
 
-            //Get the organisation
-            var org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == userOrg.OrganisationId);
-
             //If a pin has never been sent or resend button submitted then send one immediately
-            if (string.IsNullOrWhiteSpace(userOrg.PINHash) || userOrg.PINSentDate.EqualsI(null, DateTime.MinValue) || command.EqualsI("Resend"))
+            if (string.IsNullOrWhiteSpace(userOrg.PINHash) || userOrg.PINSentDate.EqualsI(null, DateTime.MinValue))
             {
                 try
                 {
-                    //Marke the user org as ready to send a pin
-                    userOrg.PINHash = null;
-                    userOrg.PINSentDate = null;
-                    DataRepository.SaveChanges();
-
                     //Generate a new pin
                     var pin = ConfigurationManager.AppSettings["TestPIN"];
                     if (string.IsNullOrWhiteSpace(pin))pin = Crypto.GeneratePasscode(Properties.Settings.Default.PINChars.ToCharArray(),Properties.Settings.Default.PINLength);
 
                     //Try and send the PIN in post
                     var emailPIN = ConfigurationManager.AppSettings["EmailPIN"].ToBoolean(true);
-                    if (emailPIN && !this.SendPinInPost(currentUser, org, pin.ToString()))
+                    if (emailPIN && !this.SendPinInPost(currentUser, userOrg.Organisation, pin.ToString()))
                         throw new Exception("Could not send PIN in the POST.");
 
                     //Try and send the confirmation email
@@ -1118,43 +1404,79 @@ namespace GenderPayGap.WebUI.Controllers
                 {
                     MvcApplication.Log.WriteLine(ex.Message);
                     AddModelError(3014);
-                    return View("SendPIN");
+                    return View("PINSent");
                 }
             }
 
             //Prepare view parameters
-            ViewBag.Resend = !string.IsNullOrWhiteSpace(userOrg.PINHash) && !userOrg.PINSentDate.EqualsI(null, DateTime.MinValue)
-                && userOrg.PINSentDate.Value.AddDays(Properties.Settings.Default.PinInPostMinRepostDays) < DateTime.Now;
             ViewBag.UserFullName = currentUser.Fullname;
             ViewBag.UserJobTitle = currentUser.JobTitle;
-            ViewBag.Organisation = org.OrganisationName;
-            ViewBag.Address = org.Address.GetAddress(",<br/>");
-            return View("SendPIN");
+            ViewBag.Organisation = userOrg.Organisation.OrganisationName;
+            ViewBag.Address = userOrg.Organisation.Address.GetAddress(",<br/>");
+            return View("PINSent");
         }
 
         [Auth]
         [HttpGet]
-        [Route("SendPIN")]
-        public ActionResult SendPIN()
+        [Route("pin-sent")]
+        public ActionResult PINSent()
         {
             return GetSendPIN();
         }
 
+        #endregion
+
+        #region RequestPIN
+        [HttpGet]
+        [Auth]
+        [Route("request-pin")]
+        public ActionResult RequestPIN()
+        {
+            //Ensure user has completed the registration process
+            User currentUser;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
+
+            //Get the user organisation
+            var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+
+            //Prepare view parameters
+            ViewBag.UserFullName = currentUser.Fullname;
+            ViewBag.UserJobTitle = currentUser.JobTitle;
+            ViewBag.Organisation = userOrg.Organisation.OrganisationName;
+            ViewBag.Address = userOrg.Organisation.Address.GetAddress(",<br/>");
+            //Show the PIN textbox and button
+            return View("RequestPIN");
+        }
+
+        [HttpPost]
         [Auth]
         [ValidateAntiForgeryToken]
-        [HttpPost]
-        [Route("SendPIN")]
-        public ActionResult SendPIN(string command)
+        [Route("request-pin")]
+        public ActionResult RequestPIN(CompleteViewModel model)
         {
-            return GetSendPIN(command);
+            //Ensure user has completed the registration process
+            User currentUser;
+            var checkResult = CheckUserRegisteredOk(out currentUser);
+            if (checkResult != null) return checkResult;
+
+            //Get the user organisation
+            var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
+
+            //Marke the user org as ready to send a pin
+            userOrg.PINHash = null;
+            userOrg.PINSentDate = null;
+            DataRepository.SaveChanges();
+
+            return RedirectToAction("PINSent");
         }
         #endregion
 
-        #region ConfirmPIN
+        #region ActivateService
         [HttpGet]
         [Auth]
-        [Route("ConfirmPIN")]
-        public ActionResult ConfirmPIN()
+        [Route("activate-service")]
+        public ActionResult ActivateService()
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -1178,14 +1500,14 @@ namespace GenderPayGap.WebUI.Controllers
             model.AllowResend = remaining <= TimeSpan.Zero;
             model.Remaining = remaining.ToFriendly(maxParts: 2);
             //Show the PIN textbox and button
-            return View("ConfirmPIN", model);
+            return View("ActivateService", model);
         }
 
         [HttpPost]
         [Auth]
         [ValidateAntiForgeryToken]
-        [Route("ConfirmPIN")]
-        public ActionResult ConfirmPIN(CompleteViewModel model)
+        [Route("activate-service")]
+        public ActionResult ActivateService(CompleteViewModel model)
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -1196,7 +1518,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (!ModelState.IsValid)
             {
                 this.CleanModelErrors<CompleteViewModel>();
-                return View("ConfirmPIN", model);
+                return View("ActivateService", model);
             }
 
             //Get the user organisation
@@ -1229,7 +1551,7 @@ namespace GenderPayGap.WebUI.Controllers
             {
                 userOrg.ConfirmAttempts++;
                 AddModelError(3015,"PIN");
-                result1 = View("ConfirmPIN", model);
+                result1 = View("ActivateService", model);
             }
             userOrg.ConfirmAttemptDate = DateTime.Now;
 

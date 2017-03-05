@@ -95,7 +95,9 @@ namespace GenderPayGap
             currentUser = null;
             //Ensure user is logged in submit or rest of of registration
             if (!User.Identity.IsAuthenticated)
-                return IsAnyAction("Register/Step1", "Register/Step2") ? null : new HttpUnauthorizedResult();
+            {
+                return IsAnyAction("Register/AboutYou", "Register/VerifyEmail") ? null : new HttpUnauthorizedResult();
+            }
 
             //Ensure we get a valid user from the database
             currentUser = DataRepository.FindUser(User);
@@ -107,7 +109,7 @@ namespace GenderPayGap
                 //If email not sent
                 if (currentUser.EmailVerifySendDate.EqualsI(null, DateTime.MinValue))
                 {
-                    if (IsAnyAction("Register/Step2")) return null;
+                    if (IsAnyAction("Register/VerifyEmail")) return null;
                     //Tell them to verify email
                     return View("CustomError", new ErrorViewModel(1100));
                 }
@@ -115,7 +117,7 @@ namespace GenderPayGap
                 //If verification code has expired
                 if (currentUser.EmailVerifySendDate.Value.AddHours(Settings.Default.EmailVerificationExpiryHours) < DateTime.Now)
                 {
-                    if (IsAnyAction("Register/Step2")) return null;
+                    if (IsAnyAction("Register/VerifyEmail")) return null;
 
                     //prompt user to click to request a new one
                     return View("CustomError", new ErrorViewModel(1101));
@@ -126,18 +128,26 @@ namespace GenderPayGap
                 if (remainingTime > TimeSpan.Zero)
                 {
                     //Process the code if there is one
-                    if (IsAnyAction("Register/Step2") && !string.IsNullOrWhiteSpace(Request.QueryString["code"])) return null;
+                    if (IsAnyAction("Register/VerifyEmail") && !string.IsNullOrWhiteSpace(Request.QueryString["code"])) return null;
 
                     //tell them to wait
                     return View("CustomError", new ErrorViewModel(1102, new { remainingTime = remainingTime.ToFriendly(maxParts: 2) }));
                 }
 
                 //if the code is still valid but min sent time has elapsed
-                if (IsAnyAction("Register/Step2")) return null;
+                if (IsAnyAction("Register/VerifyEmail", "Register/EmailConfirmed")) return null;
 
                 //Prompt user to request a new verification code
                 return View("CustomError", new ErrorViewModel(1103));
             }
+
+            //Ensure manual registration pages only allowed by GEO email addresses
+            if (!currentUser.IsAdministrator() && IsAnyAction("Register/ReviewRequest", "Register/ConfirmCancellation", "Register/RequestAccepted", "Register/RequestCancelled")) 
+                return new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden);
+
+            //Ensure manual registration pages only allowed by GEO email addresses
+            if (currentUser.IsAdministrator() && !IsAnyAction("Register/ReviewRequest", "Register/ConfirmCancellation", "Register/RequestAccepted", "Register/RequestCancelled"))
+                return View("CustomError", new ErrorViewModel(1117));
 
             //Get the current users organisation registration
             var userOrg = DataRepository.GetUserOrg(currentUser);
@@ -146,9 +156,9 @@ namespace GenderPayGap
             //If they didnt have started organisation registration step then prompt to continue registration
             if (userOrg == null || org==null)
             {
-                if (IsAnyAction("Register/Step3", "Register/Step4", "Register/Step5", "Register/Step6")) return null;
+                if (IsAnyAction("Register/OrganisationType", "Register/OrganisationSearch", "Register/ChooseOrganisation", "Register/ConfirmOrganisation")) return null;
 
-                if ((org==null || org.SectorType== SectorTypes.Public) && IsAnyAction("Register/Step7")) return null;
+                if ((org==null || org.SectorType==SectorTypes.Public) && IsAnyAction("Register/AddOrganisation")) return null;
                 return View("CustomError", new ErrorViewModel(1104));
             }
 
@@ -159,24 +169,24 @@ namespace GenderPayGap
                     //If pin never sent restart step3
                     if (userOrg.PINSentDate.EqualsI(null, DateTime.MinValue))
                     {
-                        if (IsAnyAction("Register/SendPIN")) return null;
-                        return RedirectToAction("SendPIN", "Register");
+                        if (IsAnyAction("Register/PINSent", "Register/RequestPIN")) return null;
+                        return RedirectToAction("PINSent", "Register");
                     }
 
                     //If PIN sent and expired then prompt to request a new pin
                     if (userOrg.PINSentDate.Value.AddDays(Settings.Default.PinInPostExpiryDays) < DateTime.Now)
                     {
-                        if (IsAnyAction("Register/SendPIN")) return null;
+                        if (IsAnyAction("Register/PINSent", "Register/RequestPIN")) return null;
                         return View("CustomError", new ErrorViewModel(1106));
                     }
 
                     //If PIN resends are allowed and currently on PIN send page then allow it to continue
                     var remainingTime = userOrg.PINSentDate.Value.AddHours(Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
-                    if (remainingTime <= TimeSpan.Zero && IsAnyAction("Register/SendPIN")) return null;
+                    if (remainingTime <= TimeSpan.Zero && IsAnyAction("Register/PINSent","Register/RequestPIN")) return null;
 
-                    //If PIN Not expired redirect to confirmPIN where they can either enter the same pin or request a new one 
-                    if (IsAnyAction("Register/ConfirmPIN")) return null;
-                    return RedirectToAction("ConfirmPIN", "Register");
+                    //If PIN Not expired redirect to ActivateService where they can either enter the same pin or request a new one 
+                    if (IsAnyAction("Register/ActivateService")) return null;
+                    return RedirectToAction("ActivateService", "Register");
                 }
             }
 
