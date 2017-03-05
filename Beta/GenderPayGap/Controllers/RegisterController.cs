@@ -319,7 +319,6 @@ namespace GenderPayGap.WebUI.Controllers
         #region EmailConfirmed
 
         [HttpGet]
-        [ValidateAntiForgeryToken]
         [Auth]
         [Route("email-confirmed")]
         public ActionResult EmailConfirmed()
@@ -416,7 +415,7 @@ namespace GenderPayGap.WebUI.Controllers
             model.Country = null;
             model.PostCode = null;
             model.PoBox = null;
-
+            
             this.StashModel(model);
 
             return View("OrganisationSearch", model);
@@ -441,6 +440,8 @@ namespace GenderPayGap.WebUI.Controllers
             if (m == null) return View("CustomError", new ErrorViewModel(1112));
             model.Employers = m.Employers;
 
+            ModelState.Include("SearchText");
+
             model.ManualRegistration = true;
             model.BackAction = "OrganisationSearch";
             model.SelectedEmployerIndex = -1;
@@ -453,19 +454,7 @@ namespace GenderPayGap.WebUI.Controllers
             model.PostCode = null;
             model.PoBox = null;
 
-            model.SearchText = model.SearchText.Trim();
-            if (string.IsNullOrWhiteSpace(model.SearchText))
-            {
-                AddModelError(3006,"SearchText",new {orCompanyNumber=model.SectorType==SectorTypes.Private ? " or company number" : ""});
-                this.CleanModelErrors<OrganisationViewModel>();
-                return View("OrganisationSearch", model);
-            }
-            if (model.SearchText.Length < 3 || model.SearchText.Length > 100)
-            {
-                AddModelError(3007,"SearchText");
-                this.CleanModelErrors<OrganisationViewModel>();
-                return View("OrganisationSearch", model);
-            }
+            model.SearchText = model.SearchText.TrimI();
 
             switch (model.SectorType)
             {
@@ -553,7 +542,8 @@ namespace GenderPayGap.WebUI.Controllers
 
             var nextPage = m.Employers.CurrentPage;
 
-            model.ManualRegistration = true;
+            ModelState.Include("SearchText");
+
             model.BackAction = "ChooseOrganisation";
             model.SelectedEmployerIndex = -1;
             model.Name = null;
@@ -677,6 +667,8 @@ namespace GenderPayGap.WebUI.Controllers
                     }
                 }
 
+                model.SelectedEmployerIndex = employerIndex;
+
                 model.Name = model.SelectedEmployer.Name;
 
                 //Check the user email is authorised for public organisation
@@ -685,6 +677,7 @@ namespace GenderPayGap.WebUI.Controllers
                     if (string.IsNullOrWhiteSpace(employer.EmailPatterns))
                     {
                         model.ManualRegistration = true;
+                        this.StashModel(model);
                         return RedirectToAction("AddOrganisation");
                     }
                 
@@ -695,8 +688,8 @@ namespace GenderPayGap.WebUI.Controllers
                         return View("ChooseOrganisation", model);
                     }
                 }
+                model.ManualRegistration = false;
 
-                model.SelectedEmployerIndex = employerIndex;
                 model.CompanyNumber = model.SelectedEmployer.CompanyNumber;
                 model.Address1 = model.SelectedEmployer.Address1;
                 model.Address2 = model.SelectedEmployer.Address2;
@@ -732,7 +725,7 @@ namespace GenderPayGap.WebUI.Controllers
         #region AddOrganisation
 
         [HttpGet]
-        //[Auth]
+        [Auth]
         [Route("add-organisation")]
         public ActionResult AddOrganisation()
         {
@@ -752,7 +745,8 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpPost]
-        //[Auth]
+        [ValidateAntiForgeryToken]
+        [Auth]
         [Route("add-organisation")]
         public ActionResult AddOrganisation(OrganisationViewModel model)
         {
@@ -760,6 +754,10 @@ namespace GenderPayGap.WebUI.Controllers
             User currentUser;
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
+
+
+            //Exclude the cotact details
+            ModelState.Exclude("ContactFirstName", "ContactLastName", "ContactJobTitle", "ContactOrganisation", "ContactEmailAddress", "ContactPhoneNumber");
 
             //Check model is valid
             if (!ModelState.IsValid)
@@ -780,7 +778,9 @@ namespace GenderPayGap.WebUI.Controllers
                 var org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationName.ToLower() == model.Name.ToLower());
                 if (org != null && org.Status == OrganisationStatuses.Active)
                 {
-                    
+                    AddModelError(3008);
+                    this.CleanModelErrors<OrganisationViewModel>();
+                    return View("AddOrganisation", model);
                 }
                 return RedirectToAction("AddContact");
             }
@@ -792,7 +792,7 @@ namespace GenderPayGap.WebUI.Controllers
         #region AddContact
 
         [HttpGet]
-        //[Auth]
+        [Auth]
         [Route("add-contact")]
         public ActionResult AddContact()
         {
@@ -832,7 +832,8 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpPost]
-        //[Auth]
+        [ValidateAntiForgeryToken]
+        [Auth]
         [Route("add-contact")]
         public ActionResult AddContact(OrganisationViewModel model)
         {
@@ -854,7 +855,7 @@ namespace GenderPayGap.WebUI.Controllers
             model.Employers = m.Employers;
 
             this.StashModel(model);
-            return RedirectToAction("ConfirmEmployer");
+            return RedirectToAction("ConfirmOrganisation");
         }
         #endregion
 
@@ -1032,6 +1033,7 @@ namespace GenderPayGap.WebUI.Controllers
 
 
         [HttpGet]
+        [Auth]
         [Route("request-received")]
         public ActionResult RequestReceived()
         {
@@ -1235,6 +1237,7 @@ namespace GenderPayGap.WebUI.Controllers
         /// ask the reviewer for decline reason and confirmation /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Auth]
         [Route("confirm-cancellation")]
         public ActionResult ConfirmCancellation()
         {
@@ -1324,6 +1327,7 @@ namespace GenderPayGap.WebUI.Controllers
         /// Show review accepted confirmation
         /// <returns></returns>
         [HttpGet]
+        [Auth]
         [Route("request-accepted")]
         public ActionResult RequestAccepted()
         {
@@ -1412,7 +1416,7 @@ namespace GenderPayGap.WebUI.Controllers
             ViewBag.UserFullName = currentUser.Fullname;
             ViewBag.UserJobTitle = currentUser.JobTitle;
             ViewBag.Organisation = userOrg.Organisation.OrganisationName;
-            ViewBag.Address = userOrg.Organisation.Address.GetAddress(",<br/>");
+            ViewBag.Address = userOrg.Address.GetAddress(",<br/>");
             return View("PINSent");
         }
 

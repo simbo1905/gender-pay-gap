@@ -10,6 +10,7 @@
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(m => m.SectorType)
+        @Html.HiddenFor(m => m.ManualRegistration)
 
         <input type="submit" style="display:none" name="command" value="">
         <div class="grid-row">
@@ -18,9 +19,8 @@
                 <h1 class="heading-large">
 
                     <span>Find your organisation</span>
-                    @Html.ValidationMessageFor(model => model.SearchText, null, new { @class = "error-danger" })
                 </h1>
-
+                @Html.ValidationMessageFor(model => model.SearchText, null, new { @class = "error-danger" })
                 <div class="search-bar">
                     <div class="searchfield">
                         @Html.CustomEditorFor(model => model.SearchText, htmlAttributes: new { @class = "search-input", @placeholder = Model.SectorType==GenderPayGap.Models.SqlDatabase.SectorTypes.Public ? "Enter your organisation's name" :"Enter your organisation's name or company no" })

@@ -314,6 +314,7 @@
     <Content Include="App_Data\Pin.txt" />
     <Content Include="App_Data\RegistrationAccepted.txt" />
     <Content Include="App_Data\RegistrationApproved.html" />
+    <Content Include="App_Data\RegistrationDeclined.html" />
     <Content Include="App_Data\RegistrationDeclined.txt" />
     <Content Include="App_Data\RegistrationRequest.html" />
     <Content Include="App_Data\RegistrationRequest.txt" />
@@ -461,7 +462,7 @@
     <Content Include="Views\Shared\_ValidationSummary.cshtml" />
     <Content Include="Views\Register\AddContact.cshtml" />
     <Content Include="Views\Register\EmailConfirmed.cshtml" />
-    <Content Include="Views\Register\AddOrgtanisation.cshtml" />
+    <Content Include="Views\Register\AddOrganisation.cshtml" />
     <Content Include="Views\Register\RequestReceived.cshtml" />
     <Content Include="Views\Shared\CustomError - Copy.cshtml" />
     <Content Include="Views\Register\ReviewRequest.cshtml" />

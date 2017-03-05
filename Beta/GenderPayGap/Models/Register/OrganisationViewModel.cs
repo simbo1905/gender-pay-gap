@@ -21,9 +21,9 @@ namespace GenderPayGap.WebUI.Models.Register
         }
 
         [Required(AllowEmptyStrings=false)]
-        [EnumDataType(typeof(SectorTypes), ErrorMessage = "You must select the type of your organisation")]
         public SectorTypes? SectorType { get; set; }
 
+        [Required]
         [StringLength(100,ErrorMessage = "You must enter an employers name or company number between 3 and 100 characters in length",MinimumLength = 3)]
         [DisplayName("Search")]
         public string SearchText { get; set; }
@@ -42,6 +42,7 @@ namespace GenderPayGap.WebUI.Models.Register
         [MaxLength(100)]
         public string Address2 { get; set; }
 
+        [Required(AllowEmptyStrings = false)]
         [DisplayName("Town or City")]
         [MaxLength(100)]
         public string Address3 { get; set; }
