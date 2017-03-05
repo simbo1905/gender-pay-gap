@@ -51,6 +51,8 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+
         [Route("Execute")]
         public ActionResult Execute(string command)
         {

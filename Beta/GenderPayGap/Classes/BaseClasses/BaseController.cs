@@ -151,18 +151,15 @@ namespace GenderPayGap
 
             //Get the current users organisation registration
             var userOrg = DataRepository.GetUserOrg(currentUser);
-            var org = userOrg==null ? null : DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == userOrg.OrganisationId);
 
             //If they didnt have started organisation registration step then prompt to continue registration
-            if (userOrg == null || org==null)
+            if (userOrg == null)
             {
-                if (IsAnyAction("Register/OrganisationType", "Register/OrganisationSearch", "Register/ChooseOrganisation", "Register/ConfirmOrganisation")) return null;
-
-                if ((org==null || org.SectorType==SectorTypes.Public) && IsAnyAction("Register/AddOrganisation")) return null;
+                if (IsAnyAction("Register/EmailConfirmed","Register/OrganisationType", "Register/OrganisationSearch", "Register/ChooseOrganisation", "Register/AddOrganisation", "Register/AddContact", "Register/ConfirmOrganisation")) return null;
                 return View("CustomError", new ErrorViewModel(1104));
             }
 
-            if (org.SectorType == SectorTypes.Private)
+            if (userOrg.Organisation.SectorType == SectorTypes.Private)
             {
                 if (userOrg.PINConfirmedDate.EqualsI(null, DateTime.MinValue))
                 {
