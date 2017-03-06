@@ -6,26 +6,25 @@
 @using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
-    @using (Html.BeginForm("AddContact", "Register"))
-        {
+    @using (Html.BeginForm("AddOrganisation", "Register"))
+    {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.SelectedEmployerIndex)
         @Html.HiddenFor(model => model.ManualRegistration)
-        @Html.HiddenFor(model=>model.BackAction)
+        @Html.HiddenFor(model => model.BackAction)
         @Html.HiddenFor(model => model.SearchText)
         @Html.HiddenFor(model => model.SectorType)
         @Html.HiddenFor(model => model.Name)
-
-        @Html.HiddenFor(model => model.Address1)
-        @Html.HiddenFor(model => model.Address2)
-        @Html.HiddenFor(model => model.Address3)
-        @Html.HiddenFor(model => model.Country)
-        @Html.HiddenFor(model => model.PostCode)
-        @Html.HiddenFor(model => model.PoBox)
+        @Html.HiddenFor(model => model.ContactFirstName)
+        @Html.HiddenFor(model => model.ContactLastName)
+        @Html.HiddenFor(model => model.ContactJobTitle)
+        @Html.HiddenFor(model => model.ContactOrganisation)
+        @Html.HiddenFor(model => model.ContactEmailAddress)
+        @Html.HiddenFor(model => model.ContactPhoneNumber)
 
         <div class="grid-row">
+            @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
             <div class="column-two-thirds">
-                @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
 
                 <h1 class="heading-large">
                     Address of the organisation you're reporting for
@@ -35,51 +34,51 @@
                     <p>Enter the correspondence address for the organisation whose gender pay gap data you’re reporting.</p>
                     <h2 class="heading-medium">Employer's name</h2>
 
-                    @if (!Model.ManualRegistration || Model.SelectedEmployerIndex > -1)
-                        {
-                        <p>@Html.LabelFor(model => model.ContactFirstName, "First name",new {@class = "form-label col-md-2"})</p>
+                    @if (!Model.ManualRegistration)
+                    {
+                        <p>@Html.ValueFor(model => model.Name)</p>
                     }
                     else
                     {
-                        <div class="form-group">
-                            @Html.ValidationMessageFor(model => model.ContactFirstName, "", new { @class = "error-danger" })
-                            @Html.CustomEditorFor(model => model.ContactFirstName, new { @class = "form-control" })
-                            <div class="col-md-10">
-                                @Html.LabelFor(model => model.ContactLastName, "Last name", new { @class = "form-label col-md-2" })
+                            <div class="form-group">
+                                @Html.LabelFor(model => model.Name, "Organisation name", new { @class = "form-label col-md-2" })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "error-danger" })
+                                <div class="col-md-10">
+                                    @Html.CustomEditorFor(model => model.Name, new { @class = "form-control" })
+                                </div>
                             </div>
-                        </div>
                     }
                     <h2 class="heading-medium">Organisation address</h2>
 
                     <div class="form-group form-group-compound">
-                        @Html.ValidationMessageFor(model => model.ContactLastName, "", new { @class = "error-danger" })
-                        @Html.CustomEditorFor(model => model.ContactLastName, new { @class = "form-control" })
+                        @Html.LabelFor(model => model.Address1, new { @class = "form-label col-md-2" })
+                        @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "error-danger" })
                         <div class="col-md-10">
-                            @Html.LabelFor(model => model.ContactJobTitle, "Job title", new { @class = "form-label col-md-2" })
+                            @Html.CustomEditorFor(model => model.Address1, new { @class = "form-control" })
                         </div>
                     </div>
                     <div class="form-group">
-                        @Html.ValidationMessageFor(model => model.ContactJobTitle, "", new { @class = "error-danger" })
-                        @Html.CustomEditorFor(model => model.ContactJobTitle, new { @class = "form-control" })
+                        @Html.LabelFor(model => model.Address2, new { @class = "form-label col-md-2 visuallyhidden" })
+                        @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "error-danger" })
                         <div class="col-md-10">
-                            @Html.LabelFor(model => model.ContactOrganisation, "Your organisation", new { @class = "form-label col-md-2" })
+                            @Html.CustomEditorFor(model => model.Address2, new { @class = "form-control", placeholder = "optional" })
                         </div>
                     </div>
 
                     <div class="form-group">
-                        @Html.ValidationMessageFor(model => model.ContactOrganisation, "", new { @class = "error-danger" })
-                        @Html.CustomEditorFor(model => model.ContactOrganisation, new { @class = "form-control" })
+                        @Html.LabelFor(model => model.Address3, htmlAttributes: new { @class = "form-label col-md-2" })
+                        @Html.ValidationMessageFor(model => model.Address3, "", new { @class = "error-danger" })
                         <div class="col-md-10">
-                            @Html.LabelFor(model => model.ContactEmailAddress, "Email address", new { @class = "form-label col-md-2" })
+                            @Html.CustomEditorFor(model => model.Address3, new { @class = "form-control form-control-1-4" })
                         </div>
                     </div>
 
 
                     <div class="form-group">
-                        @Html.ValidationMessageFor(model => model.ContactEmailAddress, "", new { @class = "error-danger" })
-                        @Html.CustomEditorFor(model => model.ContactEmailAddress, new { @class = "form-control" })
+                        @Html.LabelFor(model => model.PostCode, new { @class = "form-label col-md-2" })
+                        @Html.ValidationMessageFor(model => model.PostCode, "", new { @class = "error-danger" })
                         <div class="col-md-10">
-                            @Html.LabelFor(model => model.ContactPhoneNumber, "", new { @class = "form-label col-md-2" })
+                            @Html.CustomEditorFor(model => model.PostCode, new { @class = "form-control form-control-1-8" })
                         </div>
                     </div>
 
@@ -89,7 +88,7 @@
 
                 </div>
                 <p>
-                    @Html.ValidationMessageFor(model => model.ContactPhoneNumber, "", new { @class = "error-danger" })
+                    @Html.ActionLink("Back", Model.BackAction)
                 </p>
             </div>
         </div>
