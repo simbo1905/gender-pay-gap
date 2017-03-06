@@ -32,6 +32,10 @@ namespace GenderPayGap
             result.Results = searchResults;
             return result;
         }
-        
+
+        public string GetSicCodes(string companyNumber)
+        {
+            return CompaniesHouseAPI.GetSicCodes(companyNumber);
+        }
     }
 }
