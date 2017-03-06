@@ -42,6 +42,25 @@ namespace GenderPayGap
             }
         }
 
+        /// <summary>
+        /// Return admin if only one concrete admin email who exists in database
+        /// </summary>
+        private User _SingleAdmin = null;
+        public User SingleAdmin
+        {
+            get
+            {
+                if (_SingleAdmin == null)
+                {
+                    var args = MvcApplication.AdminEmails.SplitI(";");
+                    if (args.Length == 1 && !string.IsNullOrWhiteSpace(args[0]) && !args[0].ContainsAny('*', '?') &&
+                        args[0].IsEmailAddress())
+                        _SingleAdmin=DataRepository.FindUserByEmail(args[0].ToLower());
+                }
+                return _SingleAdmin;
+            }
+        }
+
         #endregion
 
         #region Public fields
@@ -96,7 +115,14 @@ namespace GenderPayGap
             //Ensure user is logged in submit or rest of of registration
             if (!User.Identity.IsAuthenticated)
             {
-                return IsAnyAction("Register/AboutYou", "Register/VerifyEmail") ? null : new HttpUnauthorizedResult();
+                //Allow anonymous users when in single admin mode
+                if (SingleAdmin!=null && IsAnyAction("Register/ReviewRequest", "Register/ConfirmCancellation", "Register/RequestAccepted", "Register/RequestCancelled")) return null;
+
+                //Allow anonymous users when starting registration
+                if (IsAnyAction("Register/AboutYou", "Register/VerifyEmail")) return null;
+
+                //Otherwise ask the user to login
+                return new HttpUnauthorizedResult();
             }
 
             //Ensure we get a valid user from the database
