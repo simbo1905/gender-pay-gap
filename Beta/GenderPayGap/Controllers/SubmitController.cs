@@ -126,7 +126,7 @@ namespace GenderPayGap.WebUI.Controllers
             ModelState.Remove("LastName");
             ModelState.Remove("JobTitle");
 
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid) return View("Step1", model);
 
             this.StashModel(model);
 
