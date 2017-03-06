@@ -19,6 +19,7 @@ using System.Web.Mvc;
 using System.Web.Routing;
 using GenderPayGap.Core.Classes;
 using Extensions;
+using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap.Tests
 {
@@ -183,8 +184,83 @@ namespace GenderPayGap.Tests
 
         PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize)
         {
-            throw new NotImplementedException();
+            //throw new NotImplementedException();
+
+            //Private Sector:
+            int totalRecords;
+           // var searchResults = CompaniesHouseAPI.SearchEmployers(out totalRecords, searchText, page, pageSize);
+            var result = new PagedResult<EmployerRecord>()
+            {
+                Results = new List<EmployerRecord>()
+                            {
+                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+                            }
+            };
+
+            result.RowCount = totalRecords = 15;
+            result.CurrentPage = page;
+            result.PageSize = pageSize;
+            var pageCount = (double)result.RowCount / pageSize;
+            result.PageCount = (int)Math.Ceiling(pageCount);
+            // result.Results = searchResults;
+            return result;
+
+            //Public Sector:
+            //var searchResults = PublicSectorOrgs.Messages.List.Where(o => o.OrgName.ContainsI(searchText));
+            //var result = new PagedResult<EmployerRecord>();
+            //result.RowCount = searchResults.Count();
+            //result.CurrentPage = page;
+            //result.PageSize = pageSize;
+            //var pageCount = (double)result.RowCount / pageSize;
+            //result.PageCount = (int)Math.Ceiling(pageCount);
+            //result.Results = searchResults.Page(pageSize, page).Select(e => ToEmployer(e)).ToList();
+            //return result;
+
         }
+
     }
 
 }
