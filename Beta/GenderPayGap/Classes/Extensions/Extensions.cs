@@ -39,15 +39,13 @@ namespace GenderPayGap.WebUI.Classes
 
         #endregion
 
-        private static string AdminEmails = ConfigurationManager.AppSettings["AdminEmails"];
-
         #region User Entity
 
         public static bool IsAdministrator(this User user)
         {
             if (!user.EmailAddress.IsEmailAddress()) throw new ArgumentException("Bad email address");
-            if (string.IsNullOrWhiteSpace(AdminEmails)) throw new ArgumentException("Missing AdminEmails from web.config");
-            return user.EmailAddress.LikeAny(AdminEmails.SplitI(";"));
+            if (string.IsNullOrWhiteSpace(MvcApplication.AdminEmails)) throw new ArgumentException("Missing AdminEmails from web.config");
+            return user.EmailAddress.LikeAny(MvcApplication.AdminEmails.SplitI(";"));
         }
 
         public static UserOrganisation GetUserOrg(this IRepository repository, User user)
