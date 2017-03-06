@@ -177,9 +177,9 @@ namespace GenderPayGap
             return result.status.EqualsI("created", "sending", "delivered");
         }
 
-        public static bool SendRegistrationDeclined(string returnUrl, string emailAddress)
+        public static bool SendRegistrationDeclined(string returnUrl, string emailAddress, string reason)
         {
-            var personalisation = new Dictionary<string, dynamic> { { "url", returnUrl } };
+            var personalisation = new Dictionary<string, dynamic> { { "url", returnUrl }, { "reason", reason} };
 
             Notification result = null;
             try
@@ -194,6 +194,7 @@ namespace GenderPayGap
                     {
                         var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/RegistrationDeclined.html"));
                         html = html.Replace("((url))", returnUrl);
+                        html = html.Replace("((reason))", reason);
                         Email.QuickSend("Registration declined - Gender pay gap reporting service", emailAddress, html);
                         result = new Notification() { status = "delivered" };
                     }

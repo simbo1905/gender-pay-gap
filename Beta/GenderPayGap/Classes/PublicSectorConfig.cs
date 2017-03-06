@@ -167,7 +167,12 @@ namespace GenderPayGap.WebUI.Classes
         {
             get
             {
-                var emailPatterns=(string)base["emailPatterns"];
+#if TEST
+                var emailPatterns = ConfigurationManager.AppSettings["TESTING-PublicSectorEmailPatterns"];
+                if (string.IsNullOrWhiteSpace(emailPatterns)) emailPatterns = (string)base["emailPatterns"]);
+#else
+                var emailPatterns = (string)base["emailPatterns"];
+#endif
                 emailPatterns = emailPatterns.SplitI(";").Select(ep => ep.ContainsI("*@") ? ep : ep.Contains('@') ? "*"+ep : "*@"+ep).ToDelimitedString(";");
                 return emailPatterns;
             }
