@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap.WebUI.Models.Register
 {
 
+    [Serializable]
     public class RegisterViewModel
     {
         public RegisterViewModel()

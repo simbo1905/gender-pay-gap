@@ -1,5 +1,8 @@
-﻿namespace GenderPayGap.WebUI.Models.Register
+﻿using System;
+
+namespace GenderPayGap.WebUI.Models.Register
 {
+    [Serializable]
     public class VerifyViewModel
     {
         public VerifyViewModel()
