@@ -13,9 +13,9 @@ namespace GenderPayGap.Models.SqlDatabase
         {
             this.OrganisationAddresses = new HashSet<OrganisationAddress>();
             this.OrganisationStatuses = new HashSet<OrganisationStatus>();
+            this.OrganisationSicCodes = new HashSet<OrganisationSicCode>();
             this.Returns = new HashSet<Return>();
         }
-
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -56,6 +56,8 @@ namespace GenderPayGap.Models.SqlDatabase
         public virtual ICollection<OrganisationAddress> OrganisationAddresses { get; set; }
 
         public virtual ICollection<OrganisationStatus> OrganisationStatuses { get; set; }
+
+        public virtual ICollection<OrganisationSicCode> OrganisationSicCodes { get; set; }
 
         public virtual ICollection<Return> Returns { get; set; }
 

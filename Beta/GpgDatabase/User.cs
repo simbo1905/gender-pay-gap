@@ -1,14 +1,10 @@
 namespace GenderPayGap.Models.SqlDatabase
 {
     using Extensions;
-    using IdentityServer3.Core;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Security.Principal;
 
     public partial class User
     {

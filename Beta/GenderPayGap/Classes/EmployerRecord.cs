@@ -17,6 +17,15 @@ namespace GenderPayGap.WebUI.Classes
         public string Country { get; set; }
         public string PostCode { get; set; }
         public string PoBox { get; set; }
+        public string SicCodes { get; set; }
+
+        public IEnumerable<int> GetSicCodes()
+        {
+            var codes=new HashSet<int>();
+            foreach (var sicCode in SicCodes.SplitI())
+                codes.Add(sicCode.ToInt32());
+            return codes;
+        } 
 
         //Public Sector
         public string EmailPatterns { get; set; }

@@ -901,6 +901,10 @@ namespace GenderPayGap.WebUI.Controllers
             if (m == null) return View("CustomError", new ErrorViewModel(1112));
             model.Employers = m.Employers;
 
+            //Get the sic codes from companies house
+            if (!model.ManualRegistration && model.SectorType == SectorTypes.Private && model.SelectedEmployer!=null)
+                model.SelectedEmployer.SicCodes = PrivateSectorRepository.GetSicCodes(model.SelectedEmployer.CompanyNumber);
+
             //Save the registration
             SaveRegistration(currentUser, model);
 
@@ -946,6 +950,16 @@ namespace GenderPayGap.WebUI.Controllers
                 org.Status = OrganisationStatuses.New;
                 DataRepository.Insert(org);
                 DataRepository.SaveChanges();
+
+                //Use public sector code or get from employer
+                var sicCodes = model.SectorType == SectorTypes.Public ? new []{1} : employer.GetSicCodes();
+            
+                //Save the sic codes for the organisation
+                foreach (var code in sicCodes)
+                {
+                    var sicCode = code==0 ? null : DataRepository.GetAll<SicCode>().FirstOrDefault(sic => sic.SicCodeId == code);
+                    if (sicCode != null)org.OrganisationSicCodes.Add(new OrganisationSicCode() {Organisation = org, SicCode = sicCode});
+                }
 
                 org.SetStatus(model.ManualRegistration ? OrganisationStatuses.Pending : OrganisationStatuses.Active, currentUser.UserId);
                 DataRepository.SaveChanges();
@@ -1167,7 +1181,7 @@ namespace GenderPayGap.WebUI.Controllers
                 case AddressStatuses.Pending:
                     break;
                 default:
-                    throw new ArgumentException($"Invalid organisation address status {address.Status} for address {address.OrganisationAddressId}, user {userId} and organisation {orgId} for reviewing registration request");
+                    throw new ArgumentException($"Invalid organisation address status {address.Status} for address {address.AddressId}, user {userId} and organisation {orgId} for reviewing registration request");
             }
 
             //Load view model
