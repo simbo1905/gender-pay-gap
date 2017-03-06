@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using GenderPayGap.Core.Classes;
 using GenderPayGap.Models.SqlDatabase;
@@ -8,6 +9,7 @@ using Extensions;
 
 namespace GenderPayGap.WebUI.Models.Register
 {
+    [Serializable]
     public class OrganisationViewModel
     {
         public bool PINSent;
