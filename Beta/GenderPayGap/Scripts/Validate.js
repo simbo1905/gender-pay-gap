@@ -1,9 +1,4 @@
-﻿jQuery.validator.defaults.ignore = ":hidden";
-
-$(function () {
-    $('form').validate().settings.ignore = ':hidden';
-});
-
+﻿
     $('form').bind('invalid-form.validate', function (e, v) {
 
         window.setTimeout(function () {

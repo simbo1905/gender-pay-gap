@@ -932,15 +932,15 @@ namespace GenderPayGap.WebUI.Controllers
             if (model.SectorType == SectorTypes.Private)
                 org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.PrivateSectorReference == employer.CompanyNumber);
             else
-                org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.SectorType == SectorTypes.Public && o.OrganisationName.ToLower() == employer.Name.ToLower());
+                org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.SectorType == SectorTypes.Public && o.OrganisationName.ToLower() == model.Name.ToLower());
 
             if (org == null)
             {
                 var now = DateTime.Now;
                 org = new Organisation();
                 org.SectorType = model.SectorType.Value;
-                org.OrganisationName = employer.Name;
-                org.PrivateSectorReference = employer.CompanyNumber;
+                org.OrganisationName = model.Name;
+                org.PrivateSectorReference = employer==null ? null : employer.CompanyNumber;
                 org.Created = now;
                 org.Modified = now;
                 org.Status = OrganisationStatuses.New;
@@ -952,25 +952,40 @@ namespace GenderPayGap.WebUI.Controllers
             }
             
             //Save the new address
-            var address = DataRepository.GetAll<OrganisationAddress>().FirstOrDefault(a => a.OrganisationId == org.OrganisationId && a.CreatedByUser.UserId==currentUser.UserId);
+            var address = DataRepository.GetAll<OrganisationAddress>().FirstOrDefault(a => a.OrganisationId == org.OrganisationId && a.CreatedByUserId==currentUser.UserId);
             if (address == null)
             {
                 address = new OrganisationAddress();
                 address.OrganisationId = org.OrganisationId;
                 address.Status= AddressStatuses.New;
-                address.CreatedByUser = currentUser;
+                address.CreatedByUserId = currentUser.UserId;
                 DataRepository.Insert(address);
                 DataRepository.SaveChanges();
             }
-            address.Address1 = employer.Address1;
-            address.Address2 = employer.Address2;
-            address.Address3 = employer.Address3;
-            address.Country = employer.Country;
-            address.PostCode = employer.PostCode;
+            
+            if (model.ManualRegistration || model.SectorType == SectorTypes.Public)
+            {
+                address.Address1 = model.Address1;
+                address.Address2 = model.Address2;
+                address.Address3 = model.Address3;
+                address.Country = model.Country;
+                address.PostCode = model.PostCode;
+            }
+            else
+            {
+                address.Address1 = employer.Address1;
+                address.Address2 = employer.Address2;
+                address.Address3 = employer.Address3;
+                address.Country = employer.Country;
+                address.PostCode = employer.PostCode;
+            }
+
             if (model.ManualRegistration || model.SectorType == SectorTypes.Private)
                 address.SetStatus(AddressStatuses.Pending, currentUser.UserId);
             else
                 address.SetStatus(AddressStatuses.Active, currentUser.UserId);
+
+           
             DataRepository.SaveChanges();
 
             var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.OrganisationId == org.OrganisationId && uo.UserId==currentUser.UserId);
@@ -991,8 +1006,20 @@ namespace GenderPayGap.WebUI.Controllers
 
             if (model.ManualRegistration)
             {
+                currentUser.ContactFirstName = model.ContactFirstName;
+                currentUser.ContactLastName = model.ContactLastName;
+                currentUser.ContactJobTitle = model.ContactJobTitle;
+                currentUser.ContactOrganisation = model.ContactOrganisation;
+                currentUser.ContactEmailAddress = model.ContactEmailAddress;
+                currentUser.ContactPhoneNumber = model.ContactPhoneNumber;
+                DataRepository.SaveChanges();
+
                 //Send request to GEO
-                SendRegistrationRequest(userOrg, $"{currentUser.ContactFirstName} {currentUser.ContactLastName} ({currentUser.JobTitle})", currentUser.ContactOrganisation, org.OrganisationName, address.GetAddress());
+                var adminEmail = GovNotifyAPI.RegistrationRequestEmailAddress;
+#if DEBUG
+                if (string.IsNullOrWhiteSpace(adminEmail)) adminEmail = currentUser.EmailAddress;
+#endif
+                SendRegistrationRequest(userOrg,adminEmail, $"{model.ContactFirstName} {currentUser.ContactLastName} ({currentUser.JobTitle})", currentUser.ContactOrganisation, org.OrganisationName, address.GetAddress());
             }
 
             //Set the status to active
@@ -1014,13 +1041,15 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         //Send the registration request
-        protected void SendRegistrationRequest(UserOrganisation userOrg, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
+        protected void SendRegistrationRequest(UserOrganisation userOrg, string adminEmail, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
         {
             //Send a verification link to the email address
             try
             {
                 var reviewCode = Encryption.EncryptQuerystring(userOrg.UserId + ":" + userOrg.OrganisationId + ":" + DateTime.Now.ToSmallDateTime());
-                if (!GovNotifyAPI.SendRegistrationRequest(contactName, contactOrg, reportingOrg, reportingAddress, reviewCode))
+                var reviewUrl = Url.Action("ReviewRequest", "Register", new { code = reviewCode }, "https");
+
+                if (!GovNotifyAPI.SendRegistrationRequest(adminEmail,reviewUrl,contactName, contactOrg, reportingOrg, reportingAddress))
                     throw new Exception("Could not send registration request email. Please try again later.");
             }
             catch (Exception ex)
@@ -1069,48 +1098,29 @@ namespace GenderPayGap.WebUI.Controllers
                 model = this.UnstashModel<OrganisationViewModel>();
                 if (model == null) return View("CustomError", new ErrorViewModel(1114));
 
-                code = model.ReviewCode;
             }
-            else
-                model.ReviewCode = code;
+            model.ReviewCode = code;
 
             //Unwrap code
             UserOrganisation userOrg;
             OrganisationAddress address;
             
-            var result=UnwrapRegistrationRequest(code, out userOrg, out address);
+            var result=UnwrapRegistrationRequest(model, out userOrg, out address);
             if (result != null) return result;
 
             //Tell reviewer if this has already been approved
             if (userOrg.Organisation.Status==OrganisationStatuses.Active)
                 AddModelError(3017, parameters: new {approvedDate = userOrg.Organisation.StatusDate.ToShortDateString()});
 
-            //Load view model
-            model.ContactFirstName = userOrg.User.ContactFirstName;
-            model.ContactLastName = userOrg.User.ContactLastName;
-            model.ContactJobTitle = userOrg.User.ContactJobTitle;
-            model.ContactOrganisation = userOrg.User.ContactOrganisation;
-            model.ContactEmailAddress = userOrg.User.ContactEmailAddress;
-            model.ContactPhoneNumber = userOrg.User.ContactPhoneNumber;
-
-            model.Name = userOrg.Organisation.OrganisationName;
-            model.SectorType = userOrg.Organisation.SectorType;
-
-            model.Address1 = address.Address1;
-            model.Address2 = address.Address2;
-            model.Address3 = address.Address3;
-            model.Country = address.Country;
-            model.PostCode = address.PostCode;
-            model.PoBox = address.PoBox;
-
             //Tell reviewer how many other open regitrations for same organisation
             var requestCount = DataRepository.GetAll<UserOrganisation>().Count(uo => uo.UserId != userOrg.UserId && uo.OrganisationId == userOrg.OrganisationId && uo.Organisation.Status==OrganisationStatuses.Pending);
             if (requestCount > 0) AddModelError(3018, parameters: new { requestCount });
 
+            this.StashModel(model);
             return View("ReviewRequest", model);
         }
 
-        private ActionResult UnwrapRegistrationRequest(string code, out UserOrganisation userOrg, out OrganisationAddress address)
+        private ActionResult UnwrapRegistrationRequest(OrganisationViewModel model, out UserOrganisation userOrg, out OrganisationAddress address)
         {
             userOrg = null;
             address = null;
@@ -1119,7 +1129,8 @@ namespace GenderPayGap.WebUI.Controllers
             long orgId=0;
             try
             {
-                code = Encryption.DecryptQuerystring(code);
+                var code = Encryption.DecryptQuerystring(model.ReviewCode);
+                code = HttpUtility.UrlDecode(code);
                 var args = code.SplitI(":");
                 if (args.Length != 3) throw new ArgumentException("Too few parameters in registration review code");
                 userId = args[0].ToLong();
@@ -1160,6 +1171,24 @@ namespace GenderPayGap.WebUI.Controllers
                     throw new ArgumentException($"Invalid organisation address status {address.Status} for address {address.OrganisationAddressId}, user {userId} and organisation {orgId} for reviewing registration request");
             }
 
+            //Load view model
+            model.ContactFirstName = userOrg.User.ContactFirstName;
+            model.ContactLastName = userOrg.User.ContactLastName;
+            model.ContactJobTitle = userOrg.User.ContactJobTitle;
+            model.ContactOrganisation = userOrg.User.ContactOrganisation;
+            model.ContactEmailAddress = userOrg.User.ContactEmailAddress;
+            model.ContactPhoneNumber = userOrg.User.ContactPhoneNumber;
+
+            model.Name = userOrg.Organisation.OrganisationName;
+            model.SectorType = userOrg.Organisation.SectorType;
+
+            model.Address1 = address.Address1;
+            model.Address2 = address.Address2;
+            model.Address3 = address.Address3;
+            model.Country = address.Country;
+            model.PostCode = address.PostCode;
+            model.PoBox = address.PoBox;
+
             return null;
         }
 
@@ -1174,7 +1203,12 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            ActionResult result;
+            //Unwrap code
+            UserOrganisation userOrg;
+            OrganisationAddress address;
+
+            var result = UnwrapRegistrationRequest(model, out userOrg, out address);
+            if (result != null) return result;
 
             if (command.EqualsI("decline"))
             {
@@ -1182,13 +1216,6 @@ namespace GenderPayGap.WebUI.Controllers
             }
             else if (command.EqualsI("approve"))
             {            
-                //Unwrap code
-                UserOrganisation userOrg;
-                OrganisationAddress address;
-
-                result = UnwrapRegistrationRequest(model.ReviewCode, out userOrg, out address);
-                if (result != null) return result;
-
                 //Activate the address for this user and organisation
                 address.SetStatus(AddressStatuses.Active, currentUser.UserId,"Manually registered");
 
@@ -1200,6 +1227,7 @@ namespace GenderPayGap.WebUI.Controllers
 
                 //Send the approved email to the applicant
                 SendRegistrationAccepted(userOrg.User.ContactEmailAddress);
+
                 result = RedirectToAction("RequestAccepted");
             }
             else 
@@ -1220,7 +1248,7 @@ namespace GenderPayGap.WebUI.Controllers
             //Send a verification link to the email address
             try
             {
-                string returnUrl = Url.Action("Step1","Submit");
+                string returnUrl = Url.Action("Step1","Submit",null,"https");
                 if (!GovNotifyAPI.SendRegistrationApproved(returnUrl, emailAddress))
                     throw new Exception("Could not send registration accepted email.");
             }
@@ -1279,22 +1307,28 @@ namespace GenderPayGap.WebUI.Controllers
             UserOrganisation userOrg;
             OrganisationAddress address;
 
-            var result = UnwrapRegistrationRequest(model.ReviewCode, out userOrg, out address);
+            var result = UnwrapRegistrationRequest(model, out userOrg, out address);
             if (result != null) return result;
 
             //Delete address for this user and organisation
             DataRepository.Delete(address);
 
             //Delete the org user
+            var orgId = userOrg.OrganisationId;
+            var emailAddress = userOrg.User.ContactEmailAddress;
             DataRepository.Delete(userOrg);
 
             //Delete the organisation if there are no other registrations pending
-            var requestCount = DataRepository.GetAll<UserOrganisation>().Count(uo => uo.UserId != userOrg.UserId && uo.OrganisationId == userOrg.OrganisationId);
-            if (requestCount == 0)DataRepository.Delete(userOrg.Organisation);
+            var requestCount = DataRepository.GetAll<UserOrganisation>().Count(uo => uo.UserId != userOrg.UserId && uo.OrganisationId == orgId);
+            if (requestCount == 0)
+            {
+                var org=DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == orgId);
+                if (org!=null)DataRepository.Delete(org);
+            }
 
             //Send the declined email to the applicant
-            SendRegistrationDeclined(userOrg.User.ContactEmailAddress,model.CancellationReason);
-
+            SendRegistrationDeclined(emailAddress,model.CancellationReason);
+            
             //Save the changes and redirect
             DataRepository.SaveChanges();
 
@@ -1312,8 +1346,8 @@ namespace GenderPayGap.WebUI.Controllers
             //Send a verification link to the email address
             try
             {
-                string returnUrl = Url.Action("OrganisationType", "Register");
-                if (!GovNotifyAPI.SendRegistrationDeclined(emailAddress, reason))
+                string returnUrl = Url.Action("OrganisationType", "Register",null,"https");
+                if (!GovNotifyAPI.SendRegistrationDeclined(returnUrl,emailAddress))
                     throw new Exception("Could not send registration declined email.");
             }
             catch (Exception ex)

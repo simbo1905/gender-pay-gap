@@ -54,8 +54,6 @@ namespace GenderPayGap.Models.SqlDatabase
         [MaxLength(255)]
         public string StatusDetails { get; set; }
 
-        public virtual User CreatedByUser { get; set; }
-
         [Required]
         public System.DateTime Created { get; set; } = DateTime.Now;
 

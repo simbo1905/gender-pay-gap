@@ -257,7 +257,7 @@ namespace GenderPayGap.WebUI.Classes
                                 type = "email";
                                 break;
                             case "phonenumber":
-                                type = "tel";
+                                type = "phone";
                                 break;
                         }
                         altAttr = $"data-val-{type}-alt";
