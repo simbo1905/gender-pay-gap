@@ -50,7 +50,7 @@ namespace GenderPayGap.Models.SqlDatabase
             get
             {
                 //Get the latest address for the organisation
-                return Organisation.OrganisationAddresses.FirstOrDefault(a => a.OrganisationId == OrganisationId && a.CreatedByUser.UserId == UserId); ;
+                return Organisation.OrganisationAddresses.FirstOrDefault(a => a.OrganisationId == OrganisationId && a.CreatedByUserId == UserId); ;
             }
         }
     }

@@ -15,7 +15,7 @@ namespace GenderPayGap
         static string PINTemplateId = ConfigurationManager.AppSettings["GovNotifyPINTemplateId"];
         static string ConfirmTemplateId = ConfigurationManager.AppSettings["GovNotifyConfirmTemplateId"];
         static string RegistrationRequestTemplateId = ConfigurationManager.AppSettings["GovNotifyRegistrationRequestTemplateId"];
-        static string RegistrationRequestEmailAddress = ConfigurationManager.AppSettings["RegistrationRequestEmailAddress"];
+        public static string RegistrationRequestEmailAddress = ConfigurationManager.AppSettings["RegistrationRequestEmailAddress"];
         static string RegistrationApprovedTemplateId = ConfigurationManager.AppSettings["GovNotifyRegistrationApprovedTemplateId"];
         static string RegistrationDeclinedTemplateId = ConfigurationManager.AppSettings["GovNotifyRegistrationDeclinedTemplateId"];
 
@@ -115,14 +115,14 @@ namespace GenderPayGap
             return result.status.EqualsI("created", "sending", "delivered");
         }
 
-        public static bool SendRegistrationRequest(string reviewUrl, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
+        public static bool SendRegistrationRequest(string emailAddress,string reviewUrl, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
         {
             var personalisation = new Dictionary<string, dynamic> { { "url", reviewUrl }, {"name",contactName}, { "org1", contactOrg }, { "org2", reportingOrg },{ "address", reportingAddress} };
 
             Notification result = null;
             try
             {
-                result = GovNotify.SendEmail(RegistrationRequestEmailAddress, RegistrationRequestTemplateId, personalisation);
+                result = GovNotify.SendEmail(emailAddress, RegistrationRequestTemplateId, personalisation);
             }
             catch (Exception ex)
             {
@@ -136,7 +136,7 @@ namespace GenderPayGap
                         html = html.Replace("((org1))", contactOrg);
                         html = html.Replace("((org2))", reportingOrg);
                         html = html.Replace("((address))", reportingAddress);
-                        Email.QuickSend("Registration Request - Gender pay gap reporting service", RegistrationRequestEmailAddress, html);
+                        Email.QuickSend("Registration Request - Gender pay gap reporting service", emailAddress, html);
                         result = new Notification() { status = "delivered" };
                     }
                     catch (Exception ex1)

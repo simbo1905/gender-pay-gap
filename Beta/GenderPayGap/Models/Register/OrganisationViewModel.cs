@@ -74,7 +74,7 @@ namespace GenderPayGap.WebUI.Models.Register
         public string ContactEmailAddress { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        [DataType(DataType.PhoneNumber)]
+        [Phone]
         public string ContactPhoneNumber { get; set; }
 
         public string FullAddress
