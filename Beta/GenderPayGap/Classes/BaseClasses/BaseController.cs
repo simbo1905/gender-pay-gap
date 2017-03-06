@@ -146,9 +146,13 @@ namespace GenderPayGap
                 return new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden);
 
             //Ensure manual registration pages only allowed by GEO email addresses
-            if (currentUser.IsAdministrator() && !IsAnyAction("Register/ReviewRequest", "Register/ConfirmCancellation", "Register/RequestAccepted", "Register/RequestCancelled"))
+            if (currentUser.IsAdministrator())
+            {
+                if (IsAnyAction("Register/VerifyEmail", "Register/EmailConfirmed", "Register/ReviewRequest",
+                    "Register/ConfirmCancellation", "Register/RequestAccepted", "Register/RequestCancelled"))
+                    return null;
                 return View("CustomError", new ErrorViewModel(1117));
-
+            }
             //Get the current users organisation registration
             var userOrg = DataRepository.GetUserOrg(currentUser);
 
@@ -178,20 +182,27 @@ namespace GenderPayGap
                     }
 
                     //If PIN resends are allowed and currently on PIN send page then allow it to continue
-                    var remainingTime = userOrg.PINSentDate.Value.AddHours(Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
-                    if (remainingTime <= TimeSpan.Zero && IsAnyAction("Register/PINSent","Register/RequestPIN")) return null;
+                    var remainingTime = userOrg.PINSentDate.Value.AddHours(Settings.Default.PinInPostMinRepostDays) -
+                                        DateTime.Now;
+                    if (remainingTime <= TimeSpan.Zero && IsAnyAction("Register/PINSent", "Register/RequestPIN"))
+                        return null;
 
                     //If PIN Not expired redirect to ActivateService where they can either enter the same pin or request a new one 
                     if (IsAnyAction("Register/ActivateService")) return null;
                     return RedirectToAction("ActivateService", "Register");
                 }
             }
+            else if (userOrg.Organisation.Status==OrganisationStatuses.Pending)
+            {
+                if (IsAnyAction("Register/RequestReceived")) return null;
+                return RedirectToAction("RequestReceived", "Register");
+            }
 
             //Ensure user has completed the registration process
             //If user is fully registered then start submit process
             if (this is RegisterController)
             {
-                if (IsAnyAction("Register/Complete")) return null;
+                if (IsAnyAction("Register/Complete","Register/RequestReceived")) return null;
                 return RedirectToAction("Complete", "Register");
             }
 

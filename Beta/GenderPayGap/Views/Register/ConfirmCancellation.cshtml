@@ -10,6 +10,7 @@
         @Html.AntiForgeryToken()
 
         @Html.HiddenFor(m => m.SectorType)
+        @Html.HiddenFor(m => m.ReviewCode)
 
         <div class="grid-row">
             <div class="column-two-thirds">
@@ -25,11 +26,11 @@
                     <label class="form-label" for="textarea-a">
                         Reason for cancellation (optional)
                     </label>
-                    @Html.TextAreaFor(model => model.CancellationReason, new { cols = "10", rows = "4" })
+                    @Html.TextAreaFor(model => model.CancellationReason, new { cols = "10", rows = "4", style="width:315px"})
                 </div>
                 <br>
-                <p><button type="submit" class="button" value="continue">Yes, cancel registration request</button></p>
-                <p><button type="submit" class="link-button" value="cancel">Cancel</button></p>
+                <p><button type="submit" class="button" name="command" value="continue">Yes, cancel registration request</button></p>
+                <p><button type="submit" class="link-button" name="command" value="cancel">Cancel</button></p>
 
             </div>
         </div>
