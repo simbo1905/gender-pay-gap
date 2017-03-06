@@ -46,6 +46,11 @@ namespace GenderPayGap
             return result;
         }
 
+        public string GetSicCodes(string companyNumber)
+        {
+            return "1";
+        }
+
         EmployerRecord ToEmployer(PublicSectorOrg org)
         {
             var employer = new EmployerRecord();

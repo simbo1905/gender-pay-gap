@@ -121,6 +121,10 @@
     <CodeAnalysisRuleSet>MinimumRecommendedRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -147,6 +151,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Transactions" />
@@ -158,6 +163,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="OrganisationSicCode.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="GpgDatabase.cs" />
     <Compile Include="Organisation.cs" />
@@ -167,13 +173,17 @@
     <Compile Include="Return.cs" />
     <Compile Include="AddressStatus.cs" />
     <Compile Include="ReturnStatuses.cs" />
+    <Compile Include="SicCodeInitialiser.cs" />
+    <Compile Include="SicSection.cs" />
+    <Compile Include="SicCode.cs" />
     <Compile Include="User.cs" />
     <Compile Include="UserOrganisation.cs" />
     <Compile Include="UserStatuses.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="App.config" />
     <None Include="packages.config" />
+    <EmbeddedResource Include="App_Data\SicCodes.csv" />
+    <EmbeddedResource Include="App_Data\SicSections.csv" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Extensions\GenderPayGap.Extensions.csproj">

@@ -15,7 +15,7 @@ namespace GenderPayGap.Models.SqlDatabase
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long OrganisationAddressId { get; set; }
+        public long AddressId { get; set; }
         public long CreatedByUserId { get; set; }
 
         [MaxLength(100)]
@@ -87,7 +87,7 @@ namespace GenderPayGap.Models.SqlDatabase
             if (status == Status && details == StatusDetails) return;
             AddressStatuses.Add(new AddressStatus()
             {
-                AddressId = this.OrganisationAddressId,
+                AddressId = this.AddressId,
                 Status = status,
                 StatusDate = DateTime.Now,
                 StatusDetails = details,

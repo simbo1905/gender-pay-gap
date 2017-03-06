@@ -189,6 +189,11 @@ namespace GenderPayGap.Tests
             return result;
         }
 
+        public string GetSicCodes(string companyNumber)
+        {
+            return AllEmployers.FirstOrDefault(c => c.CompanyNumber == companyNumber)?.SicCodes;
+        }
+
         PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize)
         {
             throw new NotImplementedException();
