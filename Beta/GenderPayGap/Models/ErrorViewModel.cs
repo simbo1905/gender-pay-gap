@@ -1,9 +1,11 @@
-﻿using GenderPayGap.WebUI.Classes;
+﻿using System;
+using GenderPayGap.WebUI.Classes;
 using System.Reflection;
 using Extensions;
 
 namespace GenderPayGap.WebUI.Models
 {
+    [Serializable]
     public class ErrorViewModel
     {
         public ErrorViewModel(int errorCode, object parameters=null)
