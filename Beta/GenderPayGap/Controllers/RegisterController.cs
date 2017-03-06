@@ -1080,7 +1080,6 @@ namespace GenderPayGap.WebUI.Controllers
         #endregion
 
         #region ReviewRequest
-        [Auth]
         [HttpGet]
         [Route("review-request")]
         public ActionResult ReviewRequest(string code)
@@ -1193,7 +1192,6 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpPost]
-        [Auth]
         [ValidateAntiForgeryToken]
         [Route("review-request")]
         public ActionResult ReviewRequest(OrganisationViewModel model,string command)
@@ -1217,13 +1215,13 @@ namespace GenderPayGap.WebUI.Controllers
             else if (command.EqualsI("approve"))
             {            
                 //Activate the address for this user and organisation
-                address.SetStatus(AddressStatuses.Active, currentUser.UserId,"Manually registered");
+                address.SetStatus(AddressStatuses.Active, SingleAdmin?.UserId ?? currentUser.UserId, "Manually registered");
 
                 //Activate the org user
                 userOrg.PINConfirmedDate = DateTime.Now;
 
                 //Activate the organisation 
-                userOrg.Organisation.SetStatus(OrganisationStatuses.Active, currentUser.UserId,"Manually registered");
+                userOrg.Organisation.SetStatus(OrganisationStatuses.Active, SingleAdmin?.UserId ?? currentUser.UserId, "Manually registered");
 
                 //Send the approved email to the applicant
                 SendRegistrationAccepted(userOrg.User.ContactEmailAddress);
@@ -1265,7 +1263,6 @@ namespace GenderPayGap.WebUI.Controllers
         /// ask the reviewer for decline reason and confirmation /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Auth]
         [Route("confirm-cancellation")]
         public ActionResult ConfirmCancellation()
         {
@@ -1285,7 +1282,6 @@ namespace GenderPayGap.WebUI.Controllers
         /// On confirmation save the organisation
         /// </summary>
         /// <returns></returns>
-        [Auth]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("confirm-cancellation")]
@@ -1347,7 +1343,7 @@ namespace GenderPayGap.WebUI.Controllers
             try
             {
                 string returnUrl = Url.Action("OrganisationType", "Register",null,"https");
-                if (!GovNotifyAPI.SendRegistrationDeclined(returnUrl,emailAddress))
+                if (!GovNotifyAPI.SendRegistrationDeclined(returnUrl,emailAddress, reason))
                     throw new Exception("Could not send registration declined email.");
             }
             catch (Exception ex)
@@ -1361,7 +1357,6 @@ namespace GenderPayGap.WebUI.Controllers
         /// Show review accepted confirmation
         /// <returns></returns>
         [HttpGet]
-        [Auth]
         [Route("request-accepted")]
         public ActionResult RequestAccepted()
         {
@@ -1383,7 +1378,6 @@ namespace GenderPayGap.WebUI.Controllers
         /// <summary>
         /// Show review cancel confirmation
         /// <returns></returns>
-        [Auth]
         [HttpGet]
         [Route("request-cancelled")]
         public ActionResult RequestCancelled()
@@ -1421,7 +1415,7 @@ namespace GenderPayGap.WebUI.Controllers
                 try
                 {
                     //Generate a new pin
-                    var pin = ConfigurationManager.AppSettings["TestPIN"];
+                    var pin = ConfigurationManager.AppSettings["TESTING-Pin"];
                     if (string.IsNullOrWhiteSpace(pin))pin = Crypto.GeneratePasscode(Properties.Settings.Default.PINChars.ToCharArray(),Properties.Settings.Default.PINLength);
 
                     //Try and send the PIN in post
