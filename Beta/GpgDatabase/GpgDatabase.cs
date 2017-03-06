@@ -6,12 +6,14 @@ namespace GenderPayGap.Models.SqlDatabase
     using System;
     using System.Collections.Generic;
     using System.Data.Entity;
-    using System.Data.Entity.Infrastructure;
     using System.Linq;
-    using System.Threading;
 
     public partial class DbContext : System.Data.Entity.DbContext, IDbContext
     {
+        static DbContext()
+        {
+            Database.SetInitializer(new SicCodeInitialiser());
+        }
         public DbContext()
             : base("GpgDatabase")
         {
@@ -26,10 +28,13 @@ namespace GenderPayGap.Models.SqlDatabase
         public virtual DbSet<User> User { get; set; }
         public virtual DbSet<UserStatus> UserStatuses { get; set; }
         public virtual DbSet<UserOrganisation> UserOrganisations { get; set; }
+        public virtual DbSet<SicCode> SicCodes { get; set; }
+        public virtual DbSet<SicSection> SicSections { get; set; }
+        public virtual DbSet<OrganisationSicCode> OrganisationSicCodes { get; set; }
 
         public static int Truncate(params string[] tables)
         {
-            List<string> target = new List<string>();
+            var target = new List<string>();
             var context=new DbContext();
             if (tables == null || tables.Length == 0)
             {
@@ -40,8 +45,8 @@ namespace GenderPayGap.Models.SqlDatabase
                 target.AddRange(tables);
             }
 
-            int result = 0;
-            for (int i = 0; i < 10; i++)
+            var result = 0;
+            for (var i = 0; i < 10; i++)
             {
                 result = 0;
                 foreach (var table in target)
@@ -143,7 +148,7 @@ namespace GenderPayGap.Models.SqlDatabase
 
         public static List<string> GetTableList(System.Data.Entity.DbContext db)
         {
-            List<string> tableNames = db.Database.SqlQuery<string>("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME NOT LIKE '%Migration%' AND TABLE_NAME NOT LIKE 'AspNet%'").ToList();
+            var tableNames = db.Database.SqlQuery<string>("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME NOT LIKE '%Migration%' AND TABLE_NAME NOT LIKE 'AspNet%'").ToList();
             return tableNames;
             var type = db.GetType();
 

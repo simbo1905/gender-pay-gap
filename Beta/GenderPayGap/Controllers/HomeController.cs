@@ -74,6 +74,11 @@ namespace GenderPayGap.WebUI.Controllers
                     break;
                 case "ClearDatabase":
                     DbContext.Truncate();
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        Session.Abandon();
+                        Request.GetOwinContext().Authentication.SignOut();
+                    }
                     break;
             }
             return RedirectToAction("Index");
