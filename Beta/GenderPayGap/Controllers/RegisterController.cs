@@ -162,7 +162,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
         #endregion
 
-        #region Step2
+        #region PersonResponsible
         //Send the verification code and show confirmation
         public bool ResendVerifyCode(User currentUser)
         {
@@ -197,7 +197,7 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            //Make sure we are coming from step1 or the user is logged in
+            //Make sure we are coming from EnterCalculations or the user is logged in
             var m = this.UnstashModel<RegisterViewModel>();
             if (m == null && currentUser == null) return new HttpUnauthorizedResult();
 
@@ -674,19 +674,9 @@ namespace GenderPayGap.WebUI.Controllers
                 //Check the user email is authorised for public organisation
                 if (model.SectorType == SectorTypes.Public)
                 {
-                    if (string.IsNullOrWhiteSpace(employer.EmailPatterns))
-                    {
-                        model.ManualRegistration = true;
-                        this.StashModel(model);
-                        return RedirectToAction("AddOrganisation");
-                    }
-                
-                    if (!employer.IsAuthorised(currentUser.EmailAddress))
-                    {
-                        AddModelError(3010);
-                        this.CleanModelErrors<OrganisationViewModel>();
-                        return View("ChooseOrganisation", model);
-                    }
+                    model.ManualRegistration = employer!=null && (string.IsNullOrWhiteSpace(employer.EmailPatterns) || !employer.IsAuthorised(currentUser.EmailAddress));
+                    this.StashModel(model);
+                    return RedirectToAction("AddOrganisation");
                 }
                 model.ManualRegistration = false;
 
@@ -703,22 +693,10 @@ namespace GenderPayGap.WebUI.Controllers
 
             //If we havend selected one the reshow same view
             if (model.SelectedEmployerIndex < 0)return View("ChooseOrganisation", model);
-            try
-            {
-                //If public sector add orgtanisation address
-                if (model.SectorType == SectorTypes.Public)
-                {
-                    model.ManualRegistration = false;
-                    return RedirectToAction("AddOrganisation");
-                }
 
-                //If private sector add organisation address
-                return RedirectToAction("ConfirmOrganisation");
-            }
-            finally
-            {
-                this.StashModel(model);
-            }
+            this.StashModel(model);
+            //If private sector add organisation address
+            return RedirectToAction("ConfirmOrganisation");
         }
         #endregion
 
@@ -1112,7 +1090,8 @@ namespace GenderPayGap.WebUI.Controllers
                 if (model == null) return View("CustomError", new ErrorViewModel(1114));
 
             }
-            model.ReviewCode = code;
+            else
+                model.ReviewCode = code;
 
             //Unwrap code
             UserOrganisation userOrg;
@@ -1260,7 +1239,7 @@ namespace GenderPayGap.WebUI.Controllers
             //Send a verification link to the email address
             try
             {
-                string returnUrl = Url.Action("Step1","Submit",null,"https");
+                string returnUrl = Url.Action("","Submit",null,"https");
                 if (!GovNotifyAPI.SendRegistrationApproved(returnUrl, emailAddress))
                     throw new Exception("Could not send registration accepted email.");
             }

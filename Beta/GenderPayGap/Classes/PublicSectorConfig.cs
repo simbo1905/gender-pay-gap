@@ -167,9 +167,9 @@ namespace GenderPayGap.WebUI.Classes
         {
             get
             {
-#if TEST
+#if TEST || DEBUG
                 var emailPatterns = ConfigurationManager.AppSettings["TESTING-PublicSectorEmailPatterns"];
-                if (string.IsNullOrWhiteSpace(emailPatterns)) emailPatterns = (string)base["emailPatterns"]);
+                if (string.IsNullOrWhiteSpace(emailPatterns)) emailPatterns = (string)base["emailPatterns"];
 #else
                 var emailPatterns = (string)base["emailPatterns"];
 #endif
