@@ -1,6 +1,4 @@
-﻿@using System.Security.Claims
-@using Microsoft.AspNet.Identity
-@* @using Web.Identity 
+﻿@* @using Web.Identity 
 @using Web.UI.Helpers *@
 @{
     ViewBag.assetsPath = Url.Content("~/public/govuk_template/assets");
@@ -151,7 +149,7 @@
                          <ul id="proposition-links">
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <li>@Html.ActionLink("Sign out", "Logout", "Home")</li>
+                                <li>@Html.ActionLink("Sign out", "SignOut", "Home")</li>
                             }
                         </ul>
                     </nav>

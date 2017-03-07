@@ -1,0 +1,168 @@
+﻿@{
+    ViewBag.Title = "Confirm your organisation - Gender pay gap reporting service";
+}
+@model GenderPayGap.WebUI.Models.Register.OrganisationViewModel
+
+<main id="content" role="main">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+        @Html.HiddenFor(m => m.SearchText)
+        @Html.HiddenFor(m => m.SelectedEmployerIndex)
+        @Html.HiddenFor(m => m.SectorType)
+        @Html.HiddenFor(model => model.ManualRegistration)
+
+        @Html.HiddenFor(model => model.BackAction)
+        @Html.HiddenFor(model => model.SearchText)
+        @Html.HiddenFor(model => model.SectorType)
+        @Html.HiddenFor(model => model.Name)
+
+        @Html.HiddenFor(model => model.Address1)
+        @Html.HiddenFor(model => model.Address2)
+        @Html.HiddenFor(model => model.Address3)
+        @Html.HiddenFor(model => model.Country)
+        @Html.HiddenFor(model => model.PostCode)
+        @Html.HiddenFor(model => model.PoBox)
+
+        @Html.HiddenFor(model => model.ContactFirstName)
+        @Html.HiddenFor(model => model.ContactLastName)
+        @Html.HiddenFor(model => model.ContactJobTitle)
+        @Html.HiddenFor(model => model.ContactOrganisation)
+        @Html.HiddenFor(model => model.ContactEmailAddress)
+        @Html.HiddenFor(model => model.ContactPhoneNumber)
+
+        <div class="grid-row">
+            <div class="column-two-thirds">
+                <h1 class="heading-large">
+                    Confirm your organisation’s details
+                </h1>
+                <table class="confirm-details">
+                    <thead>
+                        <tr>
+                            <th class="question">
+                            </th>
+                            <th class="answer">
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    @if (Model.ManualRegistration)
+                    {
+                        <tr class="dynamic-content privateManual publicManual" style="display: table-row;">
+                            <td colspan="3">
+                                Organisation you’re reporting for
+                            </td>
+                        </tr>
+                    }
+                    <tr>
+                        <td>
+                            Organisation name
+                        </td>
+
+                        <td>
+                            @Model.Name
+                        </td>
+
+                        <td></td>
+                    </tr>
+                    @if (!Model.ManualRegistration && Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
+                    {
+                        <tr>
+                            <td>
+                                Registered number
+                            </td>
+                            <td>
+                                @(Model.CompanyNumber)
+                            </td>
+                            <td></td>
+
+                        </tr>
+                    }
+                    <tr>
+                        <td>
+                            Registered address
+                        </td>
+                        <td>
+                            @Model.FullAddress
+                        </td>
+                        <td></td>
+                    </tr>
+                    @if (Model.ManualRegistration)
+                    {
+                        <tr class="row dynamic-content publicManual privateManual" style="display: table-row;">
+                            <td>
+                                <br>Your contact details
+                            </td>
+                            <td>
+                                <!-- Default Dynamic Section -->
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr class="row dynamic-content publicManual privateManual" style="display: table-row;">
+                            <td>
+                                Your name
+                            </td>
+                            <td>
+                                <!-- Default Dynamic Section -->
+                                @Model.ContactFirstName @Model.ContactLastName (@Model.ContactJobTitle)
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr class="row dynamic-content publicManual privateManual" style="display: table-row;">
+                            <td>
+                                Your organisation
+                            </td>
+                            <td>
+                                <!-- Default Dynamic Section -->
+                                @Model.ContactOrganisation
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr class="row dynamic-content publicManual ">
+                            <td>
+                                Email
+                            </td>
+                            <td>
+                                <!-- Default Dynamic Section -->
+                                @Model.ContactEmailAddress
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr class="row dynamic-content publicManual privateManual" style="display: table-row;">
+                            <td>
+                                Telephone
+                            </td>
+                            <td>
+                                <!-- Default Dynamic Section -->
+                                @Model.ContactPhoneNumber
+                            </td>
+                            <td></td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+                <fieldset>
+                    <br>
+                    <p><button type="submit" class="button" value="confirm">Confirm &amp; continue</button></p>
+
+                    <p>
+                        @if (Model.ManualRegistration)
+                        {
+                            @Html.ActionLink("Back", "AddContact")
+                        }
+                        else if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
+                        {
+                            @Html.ActionLink("Back", "ChooseOrganisation")
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Back", "AddOrganisation")
+                        }
+                    </p>
+                </fieldset>
+            </div>
+        </div>
+    }
+</main>

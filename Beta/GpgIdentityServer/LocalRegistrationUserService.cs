@@ -31,7 +31,7 @@ namespace GpgIdentityServer
                 var remaining = user.LoginDate==null ? TimeSpan.Zero : user.LoginDate.Value.AddMinutes(Properties.Settings.Default.LockoutMinutes) - DateTime.Now;
                 if (user.LoginAttempts >=Properties.Settings.Default.MaxLoginAttempts && remaining > TimeSpan.Zero)
                 {
-                    context.AuthenticateResult = new AuthenticateResult("You have failed too many login attempts. Please try again in " + remaining.ToFriendly(maxParts:2));
+                    context.AuthenticateResult = new AuthenticateResult("Too many failed sign in attempts. Please try again in " + remaining.ToFriendly(maxParts:2));
                 }
                 else if (user.PasswordHash == context.Password.GetSHA512Checksum())
                 {
@@ -40,14 +40,14 @@ namespace GpgIdentityServer
                 }
                 else
                 {
-                    context.AuthenticateResult = new AuthenticateResult("Invalid username or password.");
+                    context.AuthenticateResult = new AuthenticateResult("Please enter your email address and password again.");
                     user.LoginAttempts++;
                 }
                 user.LoginDate = DateTime.Now;
                 dbContext.SaveChanges();
             }
             else
-                context.AuthenticateResult = new AuthenticateResult("Invalid username or password.");
+                context.AuthenticateResult = new AuthenticateResult("Please enter your email address and password again.");
 
             return Task.FromResult(0);
         }
