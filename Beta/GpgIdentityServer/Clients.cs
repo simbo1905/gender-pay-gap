@@ -13,7 +13,7 @@ namespace GpgIdentityServer
             {
                 new Client 
                 {
-                    ClientName = "Gender Pay Gap (Alpha)",
+                    ClientName = "Gender pay gap reporting service",
                     ClientId = "gpgWeb",
                     Flow = Flows.Implicit,
                     RequireConsent = false,
@@ -32,24 +32,8 @@ namespace GpgIdentityServer
                         "roles",
                         ConfigurationManager.AppSettings["GpgApiScope"]
                     }
-                },
-                new Client
-                {
-                    ClientName = "Gender Pay Gap (Alpha)",   
-                    ClientId = "gpg_portal",
-                    Flow = Flows.ClientCredentials,
-                    RequireConsent = false,
-
-                    ClientSecrets = new List<Secret>
-                    {
-                        new Secret("secret".Sha256())
-                    },
-                    AllowedScopes = new List<string>
-                    {
-                        ConfigurationManager.AppSettings["GpgApiScope"]
-                    }
                 }
-            };
+           };
         }
     }
 }

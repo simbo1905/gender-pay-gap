@@ -1,20 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
 using GenderPayGap.WebUI.Classes;
-using System.Configuration;
 using System.Reflection;
 using Extensions;
 
 namespace GenderPayGap.WebUI.Models
 {
+    [Serializable]
     public class ErrorViewModel
     {
-        public ErrorViewModel(int code, object parameters=null)
+        public ErrorViewModel(int errorCode, object parameters=null)
         {
-            Code = code;
-            var customErrorMessage = CustomErrorMessages.Get(code) ?? CustomErrorMessages.Default;
+            ErrorCode = errorCode;
+            var customErrorMessage = CustomErrorMessages.GetPageError(errorCode) ?? CustomErrorMessages.DefaultPageError;
 
             Title = customErrorMessage.Title;
             Description = customErrorMessage.Description;
@@ -29,14 +26,16 @@ namespace GenderPayGap.WebUI.Models
                     var value = prop.GetValue(parameters, null) as string;
                     if (string.IsNullOrWhiteSpace((prop.Name)) || string.IsNullOrWhiteSpace(value)) continue;
                     Title = customErrorMessage.Title.ReplaceI("{"+prop.Name+"}",value);
+                    Subtitle = customErrorMessage.Subtitle.ReplaceI("{"+prop.Name+"}",value);
                     Description = customErrorMessage.Description.ReplaceI("{" + prop.Name + "}", value);
                     CallToAction = customErrorMessage.CallToAction.ReplaceI("{" + prop.Name + "}", value);
                     ActionUrl = customErrorMessage.ActionUrl.ReplaceI("{" + prop.Name + "}", value);
                     ActionText = customErrorMessage.ActionText.ReplaceI("{" + prop.Name + "}", value);
                 }
         }
-        public int Code { get; private set; }
+        public int ErrorCode { get; private set; }
         public string Title { get; set; }
+        public string Subtitle { get; set; }
         public string Description { get; set; }
         public string CallToAction { get; set; }
         public string ActionText { get; set; } = "Continue";

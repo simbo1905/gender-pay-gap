@@ -1,0 +1,35 @@
+﻿<PublicSectorOrgs>
+  <PublicSectorOrg orgName="Cadence Partnership Ltd"                                      emailPatterns="cadencepartnership.co.uk;coolcorner.com"/>
+  <PublicSectorOrg orgName="2Gether NHS Foundation Trust"                                 emailPatterns="nhs.uk"/>
+  <PublicSectorOrg orgName="5 Boroughs Partnership NHS Foundation Trust"                  emailPatterns=""/>
+  <PublicSectorOrg orgName="Abbots Langley Parish Council"                                emailPatterns="abbotslangley-pc.gov.uk"/>
+  <PublicSectorOrg orgName="Aberdeen City Council"                                        emailPatterns="aberdeencityandshire-sdpa.gov.uk"/>
+  <PublicSectorOrg orgName="Aberdeenshire Council"                                        emailPatterns="aberdeenshire.gov.uk"/>
+  <PublicSectorOrg orgName="Aberford &amp; District Parish Council"                       emailPatterns="aberford-pc.gov.uk"/>
+  <PublicSectorOrg orgName="Abergavenny Town Council"                                     emailPatterns="AbergavennyTownCouncil.gov.uk"/>
+  <PublicSectorOrg orgName="Aberporth Community Council"                                  emailPatterns="aberporthcommunitycouncil.gov.uk"/>
+  <PublicSectorOrg orgName="Abertilly and Llanhilleth Community Council"                  emailPatterns="abertilleryandllanhilleth-wcc.gov.uk"/>
+  <PublicSectorOrg orgName="Aberystwyth Town Council"                                     emailPatterns="aberystwyth.gov.uk"/>
+  
+  <PublicSectorOrg orgName="Abingdon Town Council"                                        emailPatterns="abingdon.gov.uk"/>
+  <PublicSectorOrg orgName="Account NI DFP"                                               emailPatterns="accountni.gov.uk"/>
+  <PublicSectorOrg orgName="Accountant in Bankruptcy"                                     emailPatterns="aib.gov.uk"/>
+  <PublicSectorOrg orgName="Accounts Commission"                                          emailPatterns="accounts-commission.gov.uk"/>
+  <PublicSectorOrg orgName="Ackworth Parish Council"                                      emailPatterns="ackworthparishcouncil.gov.uk"/>
+  <PublicSectorOrg orgName="Acton Community Council"                                      emailPatterns="actoncommunitycouncil.gov.uk"/>
+  <PublicSectorOrg orgName="Addingham Parish Council"                                     emailPatterns="addingham-pc.gov.uk"/>
+  <PublicSectorOrg orgName="Administration of Radioactive Substances Advisory Committee"  emailPatterns="phe.gov.uk"/>
+  <PublicSectorOrg orgName="Adur District Council"                                        emailPatterns="adurdc.gov.uk"/>
+  <PublicSectorOrg orgName="Advisory Committee on Animal Feeding stuffs"                  emailPatterns="foodstandards.gsi.gov.uk"/>
+
+  <PublicSectorOrg orgName="Advisory Committee on Business Appointments"                  emailPatterns="@acoba.gov.uk"/>
+  <PublicSectorOrg orgName="Advisory Committee on Clinical Excellence Awards"             emailPatterns="*@dh.gsi.gov.uk"/>
+  <PublicSectorOrg orgName="Advisory Committee on Conscientious Objectors"                emailPatterns="mod.uk"/>
+  <PublicSectorOrg orgName="Advisory Committee on Justices of the Peace (x44)"            emailPatterns="judiciary.gsi.gov.uk"/>
+  <PublicSectorOrg orgName="Advisory Committee on Novel Foods and Processes"              emailPatterns="foodstandards.gsi.gov.uk"/>
+  <PublicSectorOrg orgName="Advisory Committee on Releases to the Environment"            emailPatterns="defra.gsi.gov.uk"/>
+  <PublicSectorOrg orgName="Advisory Committee on the Microbiological Safety of Food"     emailPatterns="foodstandards.gsi.gov.uk"/>
+  <PublicSectorOrg orgName="Advisory Conciliation and Arbitration Service"                emailPatterns="acas.org.uk"/>
+  <PublicSectorOrg orgName="Advisory Council on National Records and Archives"            emailPatterns="nationalarchives.gsi.gov.uk"/>
+  <PublicSectorOrg orgName="Advisory Council on the Misuse of Drugs (ACMD)"               emailPatterns="homeoffice.gsi.gov.uk"/>
+</PublicSectorOrgs>

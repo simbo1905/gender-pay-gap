@@ -8,15 +8,11 @@ using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens;
 using System.Security.Claims;
-using System.Linq;
 using System.Web.Helpers;
 using IdentityServer3.Core;
 using IdentityModel.Client;
 using System.Threading.Tasks;
 using System.Configuration;
-using Autofac;
-using Extensions;
-using System.Web;
 
 [assembly: OwinStartupAttribute(typeof(GenderPayGap.Startup))]
 namespace GenderPayGap
@@ -63,7 +59,7 @@ namespace GenderPayGap
 
                         var userInfo = await userInfoClient.GetAsync();
 
-                        // keep the id_token for logout
+                        // keep the id_token for signout
                         nid.AddClaim(new Claim("id_token", n.ProtocolMessage.IdToken));
 
                         // add access token for GPG API

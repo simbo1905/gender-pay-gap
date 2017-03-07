@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -8,8 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using Extensions;
-using System.Threading.Tasks;
-using GenderPayGap.WebUI.Models;
 
 namespace GenderPayGap.WebUI.Classes
 {
@@ -58,7 +54,7 @@ namespace GenderPayGap.WebUI.Classes
 
     
         IEnumerable<PublicSectorOrg> _List = null;
-        IEnumerable<PublicSectorOrg> List
+        public IEnumerable<PublicSectorOrg> List
         {
             get
             {
@@ -66,93 +62,8 @@ namespace GenderPayGap.WebUI.Classes
                 return _List;
             }
         }
-        public List<EmployerRecord> SearchOrg(out int totalRecords, string searchText, int page, int pageSize)
-        {
-            totalRecords = 0;
-            List<PublicSectorOrg> returnList = null;
-            List<EmployerRecord> tempEmployeeRecord = null;
 
-            try
-            {
-                //original 
-                //var results = List.Where(o =>  o.OrgName.ContainsI(searchText)).ToList();
-
-                //using this to select all to fix pagination.
-                var results = List.Where(o => (o.OrgName.ContainsI(searchText))).ToList();
-
-                totalRecords = results.Count;
-
-                if(totalRecords < 0 || page < 0 || pageSize < 0)
-                {
-                    throw new ArgumentOutOfRangeException("page, pageSize or totalRecords argument","argument value is less that zero!");
-                }
-
-                //set page to start from 0 for now zero based index.although ste said it should be 1
-                page = 0;
-                if (totalRecords >= 0)
-                {
-                    pageSize = totalRecords;
-                }
-
-                //fix the pagination bit after everything else
-                ////set page to start from 0 for now zero based index.although ste said it should be 1
-                //page = 0;
-                ////if total records returned is greater than 0 and it is greater than page size
-                //if (totalRecords >= 0 && totalRecords > pageSize)
-                //{
-                //    //then split the records by the required page size we want (which is 10) do this by deviding total records by page size
-                //    //so we can get the number of pages to split the record into.
-                //    var numberOfPages = totalRecords / pageSize;
-
-                //    //TODO:FIX this line******
-                //    //pageSize = totalRecords;
-                //    //pageSize = totalRecords / pageSize;
-
-                //    //if the split is done without any remainders then we have the required number of records per page
-                //    var remainder = totalRecords % pageSize;
-
-                //    //but if the split is done with remainders, this means we need an additional page to add the remaining records
-                //    //which did not fit in the set of pages with 10 records each.
-                //    if (remainder != 0 || remainder > 0)
-                //    {
-                //        pageSize = pageSize + 1;
-                //    }
-                //}
-
-                var pageResult = results.GetRange(page, pageSize);
-                //var pageResult = results.GetRange(0, 3);
-
-                //var orgs = new List<PublicSectorOrg>();
-
-                //foreach (var item in pageResult)
-                //{
-                //    var org = new PublicSectorOrg();
-
-                //    org.OrgName = item.OrgName;
-                //    org.EmailPatterns = item.EmailPatterns;
-
-                //    orgs.Add(org);
-                //}
-
-                //returnList = orgs;
-
-                tempEmployeeRecord =  new List<EmployerRecord>();
-
-                foreach (var item in pageResult)
-                {
-                   tempEmployeeRecord.Add( new EmployerRecord() { OrgName = item.OrgName, EmailPatterns = item.EmailPatterns });
-                }
-            }
-            catch(Exception e)
-            {
-                string Msg = "e.Message:" + e.Message  + "  " +   "e.InnerException: " + e.InnerException.ToString();
-            }
-
-            return tempEmployeeRecord;
-        }
-
-
-        public PublicSectorOrg this[string orgName]
+        public new PublicSectorOrg this[string orgName]
         {
             get
             {
@@ -164,18 +75,6 @@ namespace GenderPayGap.WebUI.Classes
                 return null;
             }
         }
-
-        //internal PublicSectorOrg Default
-        //{
-        //    get
-        //    {
-        //        foreach (PublicSectorOrg setting in this)
-        //        {
-        //            if (setting.Default == true) return setting;
-        //        }
-        //        return null;
-        //    }
-        //}
 
         protected override ConfigurationElement CreateNewElement()
         {
@@ -263,12 +162,17 @@ namespace GenderPayGap.WebUI.Classes
             }
         }
 
-        [ConfigurationProperty("emailPatterns", IsRequired = true)]
+        [ConfigurationProperty("emailPatterns", IsRequired = false)]
         public string EmailPatterns
         {
             get
             {
-                var emailPatterns=(string)base["emailPatterns"];
+#if TEST || DEBUG
+                var emailPatterns = ConfigurationManager.AppSettings["TESTING-PublicSectorEmailPatterns"];
+                if (string.IsNullOrWhiteSpace(emailPatterns)) emailPatterns = (string)base["emailPatterns"];
+#else
+                var emailPatterns = (string)base["emailPatterns"];
+#endif
                 emailPatterns = emailPatterns.SplitI(";").Select(ep => ep.ContainsI("*@") ? ep : ep.Contains('@') ? "*"+ep : "*@"+ep).ToDelimitedString(";");
                 return emailPatterns;
             }
