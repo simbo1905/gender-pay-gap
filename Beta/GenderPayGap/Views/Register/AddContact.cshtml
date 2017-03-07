@@ -24,8 +24,9 @@
             @Html.HiddenFor(model => model.PoBox)
 
             <div class="grid-row">
-                @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
                 <div class="column-two-thirds">
+                    @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
+
 
                     <h1 class="heading-large">
                         Your contact details

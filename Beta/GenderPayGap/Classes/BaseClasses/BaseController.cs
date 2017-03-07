@@ -193,7 +193,7 @@ namespace GenderPayGap
             {
                 if (userOrg.PINConfirmedDate.EqualsI(null, DateTime.MinValue))
                 {
-                    //If pin never sent restart step3
+                    //If pin never sent restart EmployerWebsite
                     if (userOrg.PINSentDate.EqualsI(null, DateTime.MinValue))
                     {
                         if (IsAnyAction("Register/PINSent", "Register/RequestPIN")) return null;
@@ -246,7 +246,7 @@ namespace GenderPayGap
         public bool WasAction(string actionName, string controllerName = null, object routeValues=null)
         {
             if (string.IsNullOrWhiteSpace(controllerName)) controllerName = ControllerName;
-            return Request.UrlReferrer==null ? false : Request.UrlReferrer.PathAndQuery.EqualsI(Url.Action("Step4", controllerName, routeValues));
+            return Request.UrlReferrer==null ? false : Request.UrlReferrer.PathAndQuery.EqualsI(Url.Action("CheckData", controllerName, routeValues));
         }
 
         public bool IsAction(string actionName, string controllerName=null)

@@ -6,7 +6,6 @@
 <main id="content" role="main">
     @using (Html.BeginForm())
     {
-        @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
         @Html.AntiForgeryToken()
 
         @Html.HiddenFor(m => m.SectorType)
@@ -14,6 +13,7 @@
 
         <div class="grid-row">
             <div class="column-two-thirds">
+                @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
                 <h1 class="heading-large">Cancel registration request</h1>
                 <p class="bold-small">
                     You’re about to cancel a registration request by:
@@ -30,7 +30,7 @@
                 </div>
                 <br>
                 <p><button type="submit" class="button" name="command" value="continue">Yes, cancel registration request</button></p>
-                <p><button type="submit" class="link-button" name="command" value="cancel">Cancel</button></p>
+                <p><button type="submit" class="link-button" name="command" value="cancel">Back</button></p>
 
             </div>
         </div>
