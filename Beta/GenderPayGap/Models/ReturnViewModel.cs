@@ -130,7 +130,10 @@ namespace GenderPayGap.WebUI.Models
         public string LastName { get; set; }
 
         [Url]
-        [Display(Name = "Link to your gender pay gap information")]
+        //[GenderPayGap.WebUI.Classes.Attribute.Url]
+        //Validates url without "http://", "https://" or "www"
+        // [RegularExpression(@"((www\.|(http|https|ftp|news|file|)+\:\/\/)?[&#95;.a-z0-9-]+\.[a-z0-9\/&#95;:@=.+?,##%&~-]*[^.|\'|\# |!|\(|?|,| |>|<|;|\)])", ErrorMessage = "Please check the url")]
+        //[Display(Name = "Link to your gender pay gap information")]
         public string CompanyLinkToGPGInfo { get; set; }
         public bool ReturnToStep4 { get; internal set; }
     }

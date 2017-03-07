@@ -572,8 +572,8 @@ namespace GenderPayGap.Tests
             routeData.Values.Add("Controller", "Register"); ;
 
             //Stash an object to pass in for this.ClearStash()
-            var model = new RegisterViewModel();
-            var controller = TestHelper.GetController<RegisterController>(0, routeData, user = null, model);
+            //var model = new RegisterViewModel();
+            var controller = TestHelper.GetController<RegisterController>(0, routeData, user = null/*, model*/);
             //controller.StashModel(model);
 
             //ACT:
@@ -618,14 +618,16 @@ namespace GenderPayGap.Tests
             //model.ConfirmPassword = "P@ssword1!";
 
             //1.Arrange the test setup variables
-            var model = new RegisterViewModel();
-            model.EmailAddress = "magnuski@hotmail.com";
-            model.ConfirmEmailAddress = "magnuski@hotmail.com";
-            model.FirstName = "Kingsley";
-            model.LastName = "Eweka";
-            model.JobTitle = "Dev";
-            model.Password = "K1ngsl3y3w3ka";
-            model.ConfirmPassword = "K1ngsl3y3w3ka";
+            var model = new RegisterViewModel()
+                            {
+                                EmailAddress         = "magnuski@hotmail.com",
+                                ConfirmEmailAddress  = "magnuski@hotmail.com",
+                                FirstName            = "Kingsley",
+                                LastName             = "Eweka",
+                                JobTitle             = "Dev",
+                                Password             = "K1ngsl3y3w3ka",
+                                ConfirmPassword      = "K1ngsl3y3w3ka"
+                            };
 
             var controller = TestHelper.GetController<RegisterController>();
             controller.Bind(model);
@@ -634,11 +636,12 @@ namespace GenderPayGap.Tests
             //2.Run and get the result of the test
             var result = controller.Step1(model) as RedirectToRouteResult;
 
+            //ASSERT:
             //3.Check that the result is not null
             Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step2", "");
+            Assert.That(result.RouteValues["action"].ToString() == "Step2", "Expected a RedirectToRouteResult to Step2");
 
             //5.If the redirection successfull retrieve the model stash sent with the redirect.
             var unStashedmodel = controller.UnstashModel<RegisterViewModel>();
@@ -646,7 +649,6 @@ namespace GenderPayGap.Tests
             //6.Check that the unstashed model is not null
             Assert.NotNull(model as RegisterViewModel, "Expected RegisterViewModel");
 
-            //ASSERT:
             //7.Verify the values from the result that was stashed matches that of the Arrange values here
             Assert.Multiple(() =>
             {
