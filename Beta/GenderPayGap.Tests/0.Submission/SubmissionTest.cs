@@ -513,17 +513,24 @@ namespace GenderPayGap.Tests.Submission
             var @return = new Return() { ReturnId = 1, OrganisationId = 1, CompanyLinkToGPGInfo = "https://www.test.com" };
 
             var routeData = new RouteData();
-            routeData.Values.Add("action", "Step1");
-            routeData.Values.Add("controller", "Register");
+            routeData.Values.Add("Action", "Step1");
+            routeData.Values.Add("Controller", "Register");
+
+            string returnurl = null;
+
+            //Stash an object to unStash()
+            var model = new ReturnViewModel();
 
             var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation, @return);
 
-            //Act
-            //var result = (ViewResult)controller.Step1(@return);
-            //var returnModel = result.Model as Return;
+            controller.StashModel(model);
+
+            //ACT:
+            var result = controller.Step1(returnurl) as ViewResult;
+            var returnModel = result.Model as ReturnViewModel;
 
             //Assert
-            //Assert.That(returnModel, Is.EqualTo(@return), "Error Message");
+            Assert.NotNull(result, "Expected ViewResult");
         }
 
 
@@ -548,7 +555,7 @@ namespace GenderPayGap.Tests.Submission
 
             string returnurl = null;
 
-            //Stash an object to pass in for this.ClearStash()
+            //Stash an object to unStash()
             var model = new ReturnViewModel();
 
             var controller = TestHelper.GetController<SubmitController>(user.UserId, routeData, user, organisation, userOrganisation);
