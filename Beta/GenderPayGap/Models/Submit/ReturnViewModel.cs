@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using GenderPayGap.Models.SqlDatabase;
 
 namespace GenderPayGap.WebUI.Models.Submit
 {
@@ -111,6 +112,7 @@ namespace GenderPayGap.WebUI.Models.Submit
 
         public long ReturnId { get; set; }
         public long OrganisationId { get; set; }
+        public SectorTypes SectorType { get; set; }
 
         public DateTime AccountingDate { get; set; }
         public string CurrentStatus { get; set; }

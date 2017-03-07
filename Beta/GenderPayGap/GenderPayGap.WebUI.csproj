@@ -451,11 +451,11 @@
     <Content Include="Views\Register\PINSent.cshtml" />
     <Content Include="Views\Register\ActivateService.cshtml" />
     <Content Include="Views\Home\TimedOut.cshtml" />
-    <Content Include="Views\Submit\Step1.cshtml" />
-    <Content Include="Views\Submit\Step2.cshtml" />
-    <Content Include="Views\Submit\Step3.cshtml" />
-    <Content Include="Views\Submit\Step4.cshtml" />
-    <Content Include="Views\Submit\Step5.cshtml" />
+    <Content Include="Views\Submit\EnterCalculations.cshtml" />
+    <Content Include="Views\Submit\PersonResponsible.cshtml" />
+    <Content Include="Views\Submit\EmployerWebsite.cshtml" />
+    <Content Include="Views\Submit\CheckData.cshtml" />
+    <Content Include="Views\Submit\SubmissionComplete.cshtml" />
     <Content Include="Views\Submit\Complete.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Register\OrganisationSearch.cshtml" />

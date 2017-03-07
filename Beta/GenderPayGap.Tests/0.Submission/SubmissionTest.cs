@@ -78,7 +78,7 @@ namespace GenderPayGap.Tests.Submission
            // controller.bind();
 
             //Act:
-            var result = (ViewResult)controller.Step1();
+            var result = (ViewResult)controller.EnterCalculations();
             var resultModel = result.Model as ReturnViewModel;
 
             //Assert:
@@ -107,7 +107,7 @@ namespace GenderPayGap.Tests.Submission
 
 
             //Act:
-            var result = (ViewResult)controller.Step1();
+            var result = (ViewResult)controller.EnterCalculations();
             var resultModel = result.Model as ReturnViewModel;
 
             //Assert:
@@ -136,7 +136,7 @@ namespace GenderPayGap.Tests.Submission
 
 
             //Act:
-            var result = (ViewResult)controller.Step1();
+            var result = (ViewResult)controller.EnterCalculations();
             var resultModel = result.Model as ReturnViewModel;
 
             //Assert:
@@ -166,7 +166,7 @@ namespace GenderPayGap.Tests.Submission
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.EnterCalculations(model) as ViewResult;
 
             // Assert
             Assert.Multiple(() =>
@@ -235,7 +235,7 @@ namespace GenderPayGap.Tests.Submission
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.EnterCalculations(model) as ViewResult;
 
             // Assert
             Assert.Multiple(() =>
@@ -298,7 +298,7 @@ namespace GenderPayGap.Tests.Submission
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.EnterCalculations(model) as ViewResult;
             
             // Assert
             // Assert
@@ -368,7 +368,7 @@ namespace GenderPayGap.Tests.Submission
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.EnterCalculations(model) as ViewResult;
 
             // Assert
             Assert.Multiple(() =>
@@ -437,7 +437,7 @@ namespace GenderPayGap.Tests.Submission
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.EnterCalculations(model) as ViewResult;
 
             // Assert
             Assert.Multiple(() =>
@@ -497,7 +497,7 @@ namespace GenderPayGap.Tests.Submission
             //controller.bind();
 
             //Act:
-            var result = controller.Step2(model, command) as ViewResult; ;
+            var result = controller.PersonResponsible(model, command) as ViewResult; ;
 
             //Assert
             Assert.Multiple(() =>
@@ -543,7 +543,7 @@ namespace GenderPayGap.Tests.Submission
             //controller.bind();
 
             //Act:
-            var result = controller.Step2(model, command) as ViewResult; ;
+            var result = controller.PersonResponsible(model, command) as ViewResult; ;
 
             //Assert
             Assert.Multiple(() =>
@@ -586,7 +586,7 @@ namespace GenderPayGap.Tests.Submission
             //controller.bind();
 
             //Act:
-            var result = controller.Step2(model, command) as ViewResult; ;
+            var result = controller.PersonResponsible(model, command) as ViewResult; ;
 
             //Assert
             Assert.Multiple(() =>
@@ -632,7 +632,7 @@ namespace GenderPayGap.Tests.Submission
             };
            
             //Act
-            var result = (ViewResult)controller.Step3(model /*, string.Empty*/);
+            var result = (ViewResult)controller.EmployerWebsite(model /*, string.Empty*/);
             var returnModel = result.Model as Return;
 
             //Assert
@@ -661,7 +661,7 @@ namespace GenderPayGap.Tests.Submission
             var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
 
             //Act
-            var result = (ViewResult)controller.Step3(model /*, string.Empty*/) as ViewResult;
+            var result = (ViewResult)controller.EmployerWebsite(model /*, string.Empty*/) as ViewResult;
             //controller.Bind(model);
             var returnModel = result.Model as Return;
 
@@ -693,7 +693,7 @@ namespace GenderPayGap.Tests.Submission
 
             var controller = TestHelper.GetController<SubmitController>(1, routeData ,user, organisation, userOrganisation);
             //Act
-            var result = (ViewResult)controller.Step1();
+            var result = (ViewResult)controller.EnterCalculations();
             var model = result.Model as ReturnViewModel;
 
             // Assert
