@@ -1,6 +1,7 @@
 ﻿using IdentityServer3.Core.Models;
 using System.Collections.Generic;
 using System.Configuration;
+using Extensions;
 
 namespace GpgIdentityServer
 {
@@ -12,17 +13,17 @@ namespace GpgIdentityServer
             {
                 new Client 
                 {
-                    ClientName = "Gender Pay Gap (Alpha)",
+                    ClientName = "Gender pay gap reporting service",
                     ClientId = "gpgWeb",
                     Flow = Flows.Implicit,
-
+                    RequireConsent = false,
                     RedirectUris = new List<string>
                     {
-                        ConfigurationManager.AppSettings["GpgWebServer"]
+                        ConfigurationManager.AppSettings["GpgWebServer"].TrimI("/")+"/"
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        ConfigurationManager.AppSettings["GpgWebServer"]
+                        ConfigurationManager.AppSettings["GpgWebServer"].TrimI("/")+"/"
                     },
                     AllowedScopes = new List<string>
                     {
@@ -31,23 +32,8 @@ namespace GpgIdentityServer
                         "roles",
                         ConfigurationManager.AppSettings["GpgApiScope"]
                     }
-                },
-                new Client
-                {
-                    ClientName = "Gender Pay Gap (Alpha)",   
-                    ClientId = "gpg_portal",
-                    Flow = Flows.ClientCredentials,
-
-                    ClientSecrets = new List<Secret>
-                    {
-                        new Secret("secret".Sha256())
-                    },
-                    AllowedScopes = new List<string>
-                    {
-                        ConfigurationManager.AppSettings["GpgApiScope"]
-                    }
                 }
-            };
+           };
         }
     }
 }

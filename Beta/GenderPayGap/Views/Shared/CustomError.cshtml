@@ -9,7 +9,13 @@
                 <h1 class="bold-large">@Model.Title</h1>
             </div>
             @if (!string.IsNullOrWhiteSpace(Model.Description))
-            {<p class="bold-small">@Html.Raw(Model.Description)</p> }
+            {
+                <div class="bold-small">
+                    @Model.Subtitle
+                </div>
+            }
+            @if (!string.IsNullOrWhiteSpace(Model.Description))
+            {<p>@Html.Raw(Model.Description)</p> }
 
             @if (!string.IsNullOrWhiteSpace(Model.CallToAction))
             {

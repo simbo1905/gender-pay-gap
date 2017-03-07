@@ -193,10 +193,188 @@ if not check for a new view
 
 
 Goals for the weekend:
-Make sure the submission is running
-add more unit tests for all pages submission
-acceptance test from alan
-merge projects together and make sure all our pages work together correctly
+Make sure the submission is running - > done
+add more unit tests for all pages submission ->
+ask acceptance test from alan - > asked via email -> work through and check our TDD
+merge projects together and make sure all our pages work together correctly - > done 
 cleanse every page for static to dynamic values 
-replace TempData with BaseController.StashModel() and UnStashModel
-change returnController to SubmitController
+replace TempData with BaseController.StashModel() and UnStashModel -- > 
+change ReturnController to SubmitController  ->  Done
+Work out AccountingDate
+if (unstashmodel  == null)
+RedirecttoAction("Step1")
+
+
+
+1.1. I have renamed Return controller to Submit controller everywhere for consistency. Done on Sunday.
+2. Steps aren’t using the Stash/Unshash I showed you on Friday. Done on Sunday
+3. Whenever returning a view you must specify the title otherwise you cant check for correct view being returned in unit tests. Done
+4. Also note instead of RouteConfig I am now using [Route] attributes on actions/controller – its easier to work with and change this way. O.k ? how doi spwcify url Config 
+
+5. Back buttons don’t work/appear on all steps - Add a back link to all steps using command button which does a redirecttoaction like I am doing in register controller. The previous GET step should then Unshash model and hidden values preserved in hidden fields on page ready for next button click .
+
+6. Get rid of the Backy button on the bottom. done
+7. Change column-twothirds to column-full class otherwise inline errors wrap around next to textboxes - CHECK ALL PAGES!
+8. fields aren’t validating correctly when entering decimal places make sure min is -200.9 and max I +200.9 --> Done
+9. If we are only allowing 1 decimal place why are we showing 0.00? CHANGE FORMATTING.
+10. Whenever somone goes to a Step direct and skips previous steps user should be shown an error message with a redirect link to initial step like I am doing with CheckUserRegisteredOK. You should be able to do this by checking the model exists in stash and HttpContext.Request.UrlReferrer - done, WILL RECHECK AND VERIFY
+11. All the views still have fixed years – they should be dynamic based on Return.AccountYear - done!
+12. Step4 Push was returning View(“Step4”) when complete – it should eventually redirect to the govuk page. For testing purposes we should get the HTML from tarik/Chris and place on Confirm(Step5) action for now until we are integrated on gov.uk as the user will need some kind of confirmation – for now just use step 5 content but with dynamic dates and remove link to view data. -> done
+13. Step 1 is not reloading previously saved data -> done
+14. You should also check the current user has permission to submit any loaded returns -> done
+15. Step 1 is not loading new return when year passes accounting date threshold ->  FIXED GET START DATE SO NOW RECHECK
+16. Step1 is not loading the link info - Done.
+17. Step1 should also double-check the loaded return has an accounting date for the current year before showing --> CHECK
+18. Step 1 should also check the current status of existing returns is “Active” CHECK
+19. Step4 is not saving the correct accounting date for the return
+20. Step4 is not setting the status of the return to “Active”
+21. Step4 is not setting the status of the previous return to “Retired”
+22. You are not checking for the correct view/redirect being returned in all unit tests
+23. There are no unit tests for Step4
+24. Virtually all your unit tests are failing
+25. You need unit tests for all the conditions in the code
+
+
+PrivateAccountingDate: 4/5/2017
+PublicAccountingDate:   3/31/2017
+
+
+
+
+Private Beta outcome and comments:
+1. Get a list of councils we can add to the DB (companies report on behalf)
+
+*******************************************************************Sprint4 Tasks:******************************************************************
+Merge Dev Repo into GpgBeta Repo:
+	best way to merge 2 repos together and fix bugs github
+	
+
+TDD Submission Journey: (3 Days)
+	going through the journey with Tarik 
+	Adding inital data for the journey
+	Required classes and creating them in the DB
+	Creating the TDD
+	Creating the viewresult methods
+	Creating the controllers maybe using Area ? and have seperate MVC for both
+	Creating the views
+
+****************************************************************************************************************************************************	
+	
+	Design:
+	Go through Tariks design changes and match them,
+
+	Step1 changes:
+	Change 'back' button to 'cancel' and only show it if refferal is from reivew page 
+
+
+	think of the journey from review
+	
+	notes: use the request.urlrefferer.tostring to know where redirection came from to 
+	logic:
+	
+	In review:
+	if you click edit on data points
+	you are redirected to the datapoints step1 page
+	
+	step 1, 
+	then use make changes in the page... and click continue
+	in the step 1 action method 
+	if(request.urlreferer == "review page (step4)")
+	{
+		unhide the cancel button and redirect to review page
+		make sure the new change is carried across to the review page  
+	}
+
+	in the step 2 and 3 action method 
+	if(request.urlreferer == "review page (step4)")
+	{
+		 change link name 'back' to 'cancel' button and redirect to review page
+		 make sure the new change is carried across to the review page  
+	}
+
+	refactor and then create a method()
+
+
+	call this instead in the actions method to handle back link behaviour
+	public void UnhideOrChangeLinkName( ViewName _viewName, string nameToAssign)
+	{
+		if(step2 or step3)
+			change the 'back' link button name to 'cancel' (nameToAssign)
+
+		if(step1)
+			unhide the cancel button 
+
+	}
+
+
+
+	if current step is review 
+		change the back button name from 'back' to 'cancel' and the url of 'cancel' to go to review
+		
+
+	public registration Journey:
+	methodology on how to create the registeration journey -> use if org.private or if org.public
+*************************************************************************************************************************************************
+
+TODAY:
+		merge between alpha and beta is now done
+		create a new working branch  from task work item in vso
+		work on tariks design changes on submission and registration half done
+
+		edit journeys now work retest and clean up code in the morning
+		Bug:
+		also when cancel is clicked if you edit a field the cancel should ignore the edit, but it still persists
+		so i have to save the original data in a TempData["temp"] and if cancel is clicked then push that back into the stash model as this is should be the data before any edit
+		Do all the text and UI changes in the morning
+****************************************************************************************************************************************************
+
+Public Sectors Tasks:
+1.Create the XML File and input dummy Data in for at least 31 records for pagination purposes -> Done.
+
+2.Make sure navigation for public sector works without breaking private sector registration navigation, backwards and forwards -> Done needs Test.
+
+3.make sure that the search textfield works -> Done
+3a.and also with pagination, -> in progress
+3b.re-test registration journey both private and public sector against this point.
+
+4.Do Validation for email pattern, if the email registered with does not match with the organisation one they click on from the search in select your organisation then, dont let them pass 
+do modelState validation and add it to the page to throw the error -> Done
+
+5.Add your organisation in the form and make sure that they can save their organisation address details to the database
+ 
+6.Show this on the next form step
+
+7.confirm and complete Saves the details in the database
+
+
+
+
+New Steps for Public Sector Journey:
+Step3: select public sectors
+Step4: Search and select your organisation
+Step4A: Add your organisation
+Step5: Confirm your organisations details -> Show this on the next form step
+
+Notes:
+Fix pagination.
+check why 'page' argument should be 1 instead of 0 in SearchOrg() method -> for start page of pages with results of pageSize
+
+Bugs:
+ confirm your email address, resend button does not work!
+ 
+ task clean up sub,ission jouney
+
+ assign
+	setup route
+	setup db
+	setup model
+
+ACT
+	call the action
+
+
+ check ReturnResult
+			Viewresult
+			RouteReditectResult
+check the model,
+check db

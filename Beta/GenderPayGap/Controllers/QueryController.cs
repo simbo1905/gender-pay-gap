@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using GenderPayGap.Models.SqlDatabase;
-using GenderPayGap.WebUI.Models;
-using Extensions;
 using Autofac;
-
-using GenderPayGap;
+using GenderPayGap.WebUI.Classes;
+using GenderPayGap.WebUI.Models.Search;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -28,7 +23,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (!string.IsNullOrWhiteSpace(query))
             {
                 //model.Results = GpgDatabase.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(query.ToLower())).ToArray();
-                model.Results = Repository.GetAll<Organisation>().Where(o => o.OrganisationName.ToLower().Contains(query.ToLower())).ToArray();
+                model.Results = DataRepository.GetAll<Organisation>().Where(o => o.OrganisationName.ToLower().Contains(query.ToLower())).ToArray();
 
                 //var x = model.Search;
                 //model.Results = GpgDatabase.Default.Organisation.Where(o => o.OrganisationName.ToLower().Contains(model.Search.ToLower())).ToArray();
@@ -45,6 +40,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Search(SearchViewModel model)
         {
             if (ModelState.IsValid && !string.IsNullOrWhiteSpace(model.Search))
@@ -53,9 +49,10 @@ namespace GenderPayGap.WebUI.Controllers
             }
             else if (ModelState.IsValid && string.IsNullOrWhiteSpace(model.Search))
             {
-                model.Results = Repository.GetAll<Organisation>().Select(o => o).ToArray();
+                model.Results = DataRepository.GetAll<Organisation>().Select(o => o).ToArray();
             }
 
+            this.CleanModelErrors<SearchViewModel>();
             return View(model);
         }
          
@@ -74,22 +71,23 @@ namespace GenderPayGap.WebUI.Controllers
         // GET: Query
         public ActionResult Index()
         {
-            return View();
+            return View("Search");
         }
 
         // GET: Query/Details/5
         public ActionResult Details(int id)
         {
-            return View();
+            return View("Search");
         }
 
         // GET: Query/Create
         public ActionResult Create()
         {
-            return View();
+            return View("Search");
         }
 
         // POST: Query/Create
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
@@ -101,17 +99,18 @@ namespace GenderPayGap.WebUI.Controllers
             }
             catch
             {
-                return View();
+                return View("Search");
             }
         }
 
         // GET: Query/Edit/5
         public ActionResult Edit(int id)
         {
-            return View();
+            return View("Search");
         }
 
         // POST: Query/Edit/5
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
@@ -123,17 +122,18 @@ namespace GenderPayGap.WebUI.Controllers
             }
             catch
             {
-                return View();
+                return View("Search");
             }
         }
 
         // GET: Query/Delete/5
         public ActionResult Delete(int id)
         {
-            return View();
+            return View("Search");
         }
 
         // POST: Query/Delete/5
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
@@ -145,7 +145,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
             catch
             {
-                return View();
+                return View("Search");
             }
         }
     }

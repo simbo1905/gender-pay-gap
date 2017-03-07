@@ -15,8 +15,10 @@ namespace GenderPayGap.Models.SqlDatabase
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public long OrganisationAddressId { get; set; }
+        public long AddressId { get; set; }
+        public long CreatedByUserId { get; set; }
 
+        [MaxLength(100)]
         public string Address1 { get; set; }
 
         [MaxLength(100)]
@@ -34,7 +36,10 @@ namespace GenderPayGap.Models.SqlDatabase
         [MaxLength(100)]
         public string Country { get; set; }
 
-        [MaxLength(100)]
+        [MaxLength(30)]
+        public string PoBox { get; set; }
+
+        [MaxLength(20)]
         public string PostCode { get; set; }
 
         [Required]
@@ -73,6 +78,7 @@ namespace GenderPayGap.Models.SqlDatabase
             list.Add(County);
             list.Add(Country);
             list.Add(PostCode);
+            list.Add(PoBox);
             return list.ToDelimitedString(delimiter);
         }
 
@@ -81,7 +87,7 @@ namespace GenderPayGap.Models.SqlDatabase
             if (status == Status && details == StatusDetails) return;
             AddressStatuses.Add(new AddressStatus()
             {
-                AddressId = this.OrganisationAddressId,
+                AddressId = this.AddressId,
                 Status = status,
                 StatusDate = DateTime.Now,
                 StatusDetails = details,

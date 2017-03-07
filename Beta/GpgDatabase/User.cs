@@ -1,14 +1,10 @@
 namespace GenderPayGap.Models.SqlDatabase
 {
     using Extensions;
-    using IdentityServer3.Core;
     using System;
     using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
-    using System.Linq;
-    using System.Security.Claims;
-    using System.Security.Principal;
 
     public partial class User
     {
@@ -38,12 +34,33 @@ namespace GenderPayGap.Models.SqlDatabase
         [Index]
         public string EmailAddress { get; set; }
 
+        [MaxLength(50)]
+        public string ContactJobTitle { get; set; }
+
+        [MaxLength(50)]
+        public string ContactFirstName { get; set; }
+
+        [MaxLength(50)]
+        public string ContactLastName { get; set; }
+
+        [MaxLength(100)]
+        public string ContactOrganisation { get; set; }
+
+        [MaxLength(255)]
+        [Index]
+        public string ContactEmailAddress { get; set; }
+
+        [MaxLength(20)]
+        [Index]
+        public string ContactPhoneNumber { get; set; }
+
+
         [Required(AllowEmptyStrings = false)]
         [MaxLength(250),MinLength(64)]
         public string PasswordHash { get; set; }
 
-        [MaxLength(255)]
-        public string EmailVerifyCode { get; set; }
+        [MaxLength(250), MinLength(64)]
+        public string EmailVerifyHash { get; set; }
 
         public Nullable<System.DateTime> EmailVerifySendDate { get; set; }
 

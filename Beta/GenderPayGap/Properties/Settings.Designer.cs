@@ -98,7 +98,7 @@ namespace GenderPayGap.WebUI.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("1")]
+        [global::System.Configuration.DefaultSettingValueAttribute("3")]
         public int MaxEmailVerifyAttempts {
             get {
                 return ((int)(this["MaxEmailVerifyAttempts"]));
@@ -111,6 +111,69 @@ namespace GenderPayGap.WebUI.Properties {
         public int LockoutMinutes {
             get {
                 return ((int)(this["LockoutMinutes"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2017-04-04")]
+        public global::System.DateTime PrivateAccountingDate {
+            get {
+                return ((global::System.DateTime)(this["PrivateAccountingDate"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("2017-04-01")]
+        public global::System.DateTime PublicAccountingDate {
+            get {
+                return ((global::System.DateTime)(this["PublicAccountingDate"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("123456789ABCDEF")]
+        public string PINChars {
+            get {
+                return ((string)(this["PINChars"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("6")]
+        public int PINLength {
+            get {
+                return ((int)(this["PINLength"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("^[A-Za-z0-9]{6}$")]
+        public string PinRegex {
+            get {
+                return ((string)(this["PinRegex"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("PIN code must contain 6 alpha or numeric characters")]
+        public string PinRegexError {
+            get {
+                return ((string)(this["PinRegexError"]));
+            }
+        }
+        
+        [global::System.Configuration.ApplicationScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("10")]
+        public int EmployerPageSize {
+            get {
+                return ((int)(this["EmployerPageSize"]));
             }
         }
     }

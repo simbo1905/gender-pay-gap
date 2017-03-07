@@ -337,6 +337,11 @@ namespace Extensions
             return trimChars == null || trimChars.Length == 0 ? source.Trim() : source.Trim(trimChars);
         }
 
+        public static string TrimSuffix(this string source, string suffix)
+        {
+            if (source.EndsWith(suffix,StringComparison.CurrentCultureIgnoreCase))source = source.Remove(source.Length - suffix.Length);
+            return source;
+        }
         public static string TrimEndI(this string source, string trimChars)
         {
             if (string.IsNullOrEmpty(source) || string.IsNullOrEmpty(trimChars)) return source;
@@ -500,13 +505,13 @@ namespace Extensions
         /// <summary>
         /// Returns all characters before the first occurence of a string
         /// </summary>
-        public static string BeforeFirst(this string text, string seperator, StringComparison comparisionType = StringComparison.OrdinalIgnoreCase, bool inclusive = false)
+        public static string BeforeFirst(this string text, string seperator, StringComparison comparisionType = StringComparison.OrdinalIgnoreCase, bool inclusive = false, bool includeWhenNoSeperator = true)
         {
             if (string.IsNullOrWhiteSpace(text)) return text;
 
             var i = text.IndexOf(seperator, 0, comparisionType);
             if (i > -1) return text.Substring(0, inclusive ? i+1 : i);
-            return text;
+            return includeWhenNoSeperator ? text : null;
         }
 
         /// <summary>
@@ -528,13 +533,13 @@ namespace Extensions
         /// <summary>
         /// Returns all characters before the last occurence of a string
         /// </summary>
-        public static string BeforeLast(this string text, string seperator, StringComparison comparisionType = StringComparison.OrdinalIgnoreCase, bool inclusive=false)
+        public static string BeforeLast(this string text, string seperator, StringComparison comparisionType = StringComparison.OrdinalIgnoreCase, bool inclusive=false, bool includeWhenNoSeperator = true)
         {
             if (string.IsNullOrWhiteSpace(text)) return text;
 
             var i = text.LastIndexOf(seperator, text.Length - 1, comparisionType);
             if (i > -1) return text.Substring(0, inclusive ? i + 1 : i);
-            return text;
+            return includeWhenNoSeperator ? text : null;
         }
 
         /// <summary>
@@ -1016,7 +1021,7 @@ namespace Extensions
             pattern = pattern.ToLower();
             if (input == pattern) return true;
             var expression = "^" + Regex.Escape(pattern).Replace("\\*", ".*").Replace("\\?", ".").Replace("+", "\\+") + "$";
-            return Regex.IsMatch(input,pattern);
+            return Regex.IsMatch(input, expression);
         }
 
         public static bool IsEscaped(this Match match, string originalText, string escapePrefix=@"\",string unescapePrefix=@"\\", bool ignoreCase=true)

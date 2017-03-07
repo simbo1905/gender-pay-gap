@@ -1,6 +1,7 @@
 ﻿using Autofac;
 using GenderPayGap.Core.Interfaces;
 using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.WebUI.Models;
 using IdentityServer3.Core;
 using Moq;
 using System;
@@ -16,25 +17,36 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.Mvc;
 using System.Web.Routing;
+using GenderPayGap.Core.Classes;
+using Extensions;
+using GenderPayGap.WebUI.Classes;
+using GenderPayGap.WebUI.Models.Register;
+using Notify.Models;
 
 namespace GenderPayGap.Tests
 {
     public static class TestHelper
     {
         private const string Url = "https://genderpaygap.azurewebsites.net";
-        public static T GetController<T>(long userId=0, params object[] dbObjects) where T : Controller
+
+    
+
+        public static T GetController<T>(long userId = 0, RouteData routeData = null, params object[] dbObjects) where T : Controller
         {
             var builder = BuildContainerIoC(dbObjects);
+
+            //Initialise static classes with IoC container
+            GovNotifyAPI.Initialise(builder);
 
             //Mock UserId as claim
             var claims = new List<Claim>();
 
-            if (userId>0)claims.Add(new Claim(Constants.ClaimTypes.Subject, userId.ToString()));
-            
+            if (userId > 0) claims.Add(new Claim(Constants.ClaimTypes.Subject, userId.ToString()));
+
             var mockPrincipal = new Mock<ClaimsPrincipal>();
             mockPrincipal.Setup(m => m.Claims).Returns(claims);
             mockPrincipal.Setup(m => m.Identity.IsAuthenticated).Returns(userId > 0);
-            if (userId>0)mockPrincipal.Setup(m => m.Identity.Name).Returns(userId.ToString());
+            if (userId > 0) mockPrincipal.Setup(m => m.Identity.Name).Returns(userId.ToString());
 
             //Mock HttpRequest
             var requestMock = new Mock<HttpRequestBase>();
@@ -46,26 +58,44 @@ namespace GenderPayGap.Tests
             var responseMock = new Mock<HttpResponseBase>();
             responseMock.Setup(x => x.ApplyAppPathModifier(It.IsAny<string>())).Returns((string url) => url);
 
+            //Mock session
+            var sessionMock = new MockHttpSession();
+
             //Mock HttpContext
             var contextMock = new Mock<HttpContextBase>();
             contextMock.Setup(ctx => ctx.User).Returns(mockPrincipal.Object);
-            contextMock.SetupGet(x => x.Request).Returns(requestMock.Object);
-            contextMock.SetupGet(x => x.Response).Returns(responseMock.Object);
-
-            var routes = new RouteCollection();
-            RouteConfig.RegisterRoutes(routes);
+            contextMock.SetupGet(ctx => ctx.Request).Returns(requestMock.Object);
+            contextMock.SetupGet(ctx => ctx.Response).Returns(responseMock.Object);
+            contextMock.Setup(ctx => ctx.Session).Returns(sessionMock);
 
             //Mock the httpcontext to the controllercontext
             var controllerContextMock = new Mock<ControllerContext>();
             controllerContextMock.Setup(con => con.HttpContext).Returns(contextMock.Object);
-
+            controllerContextMock.Setup(con => con.RouteData).Returns(routeData);
+            if (routeData == null) routeData = new RouteData();
             T controller = (T)Activator.CreateInstance(typeof(T), builder);
+            var routes = new RouteCollection();
+            RouteConfig.RegisterRoutes(routes);
             controller.ControllerContext = controllerContextMock.Object;
-            controller.Url = new UrlHelper(
-                new RequestContext(contextMock.Object, new RouteData()),
-                routes
-            );
+            controller.Url = new UrlHelper(new RequestContext(contextMock.Object, routeData),routes);
             return controller;
+        }
+
+        public class MockHttpSession : HttpSessionStateBase
+        {
+            Dictionary<string, object> m_SessionStorage = new Dictionary<string, object>();
+
+            public override object this[string name]
+            {
+                get { return m_SessionStorage[name]; }
+                set { m_SessionStorage[name] = value; }
+            }
+
+
+            public override void Remove(string name)
+            {
+                m_SessionStorage.Remove(name);
+            }
         }
 
         public static IContainer BuildContainerIoC(params object[] dbObjects)
@@ -77,7 +107,9 @@ namespace GenderPayGap.Tests
 
             //Create the mock repository
             builder.Register(c => new MockRepository(dbObjects)).As<IRepository>();
-
+            builder.RegisterType<MockEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Private");
+            builder.RegisterType<MockEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Public");
+            builder.Register(g => new MockGovNotify()).As<IGovNotify>();
 
             return builder.Build();
         }
@@ -96,15 +128,15 @@ namespace GenderPayGap.Tests
 
     public class MockRepository : IRepository
     {
-        private readonly List<object> context=new List<object>();
+        private readonly List<object> context = new List<object>();
 
         public MockRepository()
         {
-            
+
         }
         public MockRepository(IEnumerable<object> context)
         {
-            if (context != null)this.context = context.ToList();
+            if (context != null) this.context = context.ToList();
         }
 
         public IQueryable<TEntity> GetAll<TEntity>() where TEntity : class
@@ -131,4 +163,75 @@ namespace GenderPayGap.Tests
         {
         }
     }
+
+    public class MockEmployerRepository : IPagedRepository<EmployerRecord>
+    {
+        public List<EmployerRecord> AllEmployers = new List<EmployerRecord>();
+
+        public void Delete(EmployerRecord employer)
+        {
+            AllEmployers.Remove(employer);
+        }
+
+        public void Insert(EmployerRecord employer)
+        {
+            AllEmployers.Add(employer);
+        }
+
+        public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize)
+        {
+            var result = new PagedResult<EmployerRecord>();
+            result.Results = AllEmployers.Where(e => e.Name.ContainsI(searchText)).Page(page, pageSize).ToList();
+            result.RowCount = result.Results.Count;
+            result.CurrentPage = page;
+            result.PageSize = pageSize;
+            result.PageCount = (int)Math.Ceiling((double)result.RowCount / pageSize);
+            return result;
+        }
+
+        public string GetSicCodes(string companyNumber)
+        {
+            return AllEmployers.FirstOrDefault(c => c.CompanyNumber == companyNumber)?.SicCodes;
+        }
+
+        PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public class MockGovNotify : IGovNotify
+    {
+        string _Status = "delivered";
+
+        public Notification SendEmail(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation)
+        {
+            return new Notification()
+            {
+                status = _Status
+            };
+        }
+
+        public Notification SendSms(string mobileNumber, string templateId, Dictionary<string, dynamic> personalisation)
+        {
+            return new Notification()
+            {
+                status = _Status
+            };
+        }
+
+        public Notification SendPost(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation)
+        {
+            return new Notification()
+            {
+                status = _Status
+            };
+        }
+
+        public void SetStatus(string status)
+        {
+            _Status = status;
+        }
+    }
+
 }

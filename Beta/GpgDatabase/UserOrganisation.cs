@@ -1,7 +1,8 @@
+using System.Linq;
+
 namespace GenderPayGap.Models.SqlDatabase
 {
     using System;
-    using System.Collections.Generic;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -17,8 +18,8 @@ namespace GenderPayGap.Models.SqlDatabase
         [Key, Column(Order = 1)]
         public long OrganisationId { get; set; }
 
-        [MaxLength(20)]
-        public string PINCode { get; set; }
+        [MaxLength(250), MinLength(64)]
+        public string PINHash { get; set; }
 
         public Nullable<System.DateTime> PINSentDate { get; set; }
 
@@ -39,5 +40,17 @@ namespace GenderPayGap.Models.SqlDatabase
 
         [ForeignKey("UserId")]
         public virtual User User { get; set; }
+
+        /// <summary>
+        /// Latest ACTIVE address
+        /// </summary>
+        public OrganisationAddress Address
+        {
+            get
+            {
+                //Get the latest address for the organisation
+                return Organisation.OrganisationAddresses.FirstOrDefault(a => a.OrganisationId == OrganisationId && a.CreatedByUserId == UserId); ;
+            }
+        }
     }
 }

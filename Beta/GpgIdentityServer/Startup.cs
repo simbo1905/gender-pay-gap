@@ -6,9 +6,12 @@ using Microsoft.Owin.Security.Google;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using IdentityServer3.Core.Logging;
 using Microsoft.Owin.Security.Twitter;
 using IdentityServer3.Core.Services;
 using Microsoft.Owin.Security.Facebook;
+using Serilog;
+using IdentityServer3.Core.Services.Default;
 
 [assembly: OwinStartup(typeof(GpgIdentityServer.Startup))]
 
@@ -16,14 +19,26 @@ namespace GpgIdentityServer
 {
     public class Startup
     {
+        static CustomLogProvider Logger=new CustomLogProvider();
         public void Configuration(IAppBuilder app)
         {
-            app.Map("/identity", coreApp =>
+            LogProvider.SetCurrentLogProvider(new CustomLogProvider());
+
+            app.Map("/login", coreApp =>
             {
+                
                 var factory = new IdentityServerServiceFactory()
                     .UseInMemoryClients(Clients.Get())
                     //.UseInMemoryUsers(Users.Get())
                     .UseInMemoryScopes(Scopes.Get());
+
+                //Set the options for the default view service
+                var viewOptions = new DefaultViewServiceOptions();
+#if DEBUG
+                //Dont cache the views when we are testing
+                viewOptions.CacheViews = false;
+#endif
+                factory.ConfigureDefaultViewService(viewOptions);
 
                 // different examples of custom user services
                 //var userService = new RegisterFirstExternalRegistrationUserService();
@@ -34,34 +49,42 @@ namespace GpgIdentityServer
                 // note: for the sample this registration is a singletone (not what you want in production probably)
                 factory.UserService = new Registration<IUserService>(resolver => userService);
 
+                //Required for GPG custom interface
+                //factory.ViewService = new Registration<IViewService, CustomViewService>();
+
+                factory.EventService = new Registration<IEventService, AuditEventService>();
+
                 var options = new IdentityServerOptions
                 {
                     SiteName = "GPG IdentityServer",
                     SigningCertificate = LoadCertificate(),
-
                     Factory = factory,
 
                     AuthenticationOptions = new AuthenticationOptions
                     {
-                        EnablePostSignOutAutoRedirect = true,
+                        EnablePostSignOutAutoRedirect = false,
                         IdentityProviders = ConfigureIdentityProviders,
+                        
+                        EnableSignOutPrompt = false,
+                        InvalidSignInRedirectUrl = ConfigurationManager.AppSettings["GpgWebServer"],
+                        
                         LoginPageLinks = new List<LoginPageLink>()
                         {
                            new LoginPageLink()
                            {
-                               Href = ConfigurationManager.AppSettings["GpgWebServerReminder"],
-                               Text = "Forgotten Password?",
+                               Href = ConfigurationManager.AppSettings["GpgWebServerPasswordLink"],
+                               Text = "Reset your password",
                                Type = "resetPassword"
                            },
                            new LoginPageLink()
                            {
-                               Href = ConfigurationManager.AppSettings["GpgWebServerRegister"],
-                               Text = "Create New Account",
+                               Href = ConfigurationManager.AppSettings["GpgWebServerRegisterLink"],
+                               Text = "Register",
                                Type = "localRegistration"
                            }
                         }
                     },
-
+                    
                     EventsOptions = new EventsOptions
                     {
                         RaiseSuccessEvents = true,
@@ -74,7 +97,7 @@ namespace GpgIdentityServer
                 coreApp.UseIdentityServer(options);
             });
 
-            //app.Map("/identity", idsrvApp =>
+            //app.Map("/login", idsrvApp =>
             //{
             //    idsrvApp.UseIdentityServer(new IdentityServerOptions
             //    {

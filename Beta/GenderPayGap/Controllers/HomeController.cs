@@ -1,21 +1,38 @@
 ﻿using GenderPayGap.Models.SqlDatabase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.Owin.Security;
+using Autofac;
+using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap.WebUI.Controllers
 {
     [RoutePrefix("Home")]
     [Route("{action}")]
-    public class HomeController : Controller
+    public class HomeController : BaseController
     {
+        #region Initialisation
+        public HomeController() : base() { }
+        public HomeController(IContainer container) : base(container) { }
+
+
+        /// <summary>
+        /// This action is only used to warm up this controller on initialisation
+        /// </summary>
+        /// <returns></returns>
+        [Route("Init")]
+        public ActionResult Init()
+        {
+#if DEBUG
+            MvcApplication.Log.WriteLine("Home Controller Initialised");
+#endif
+            return new EmptyResult();
+        }
+        #endregion
         [Route("~/")]
         public ActionResult Redirect()
         {
-            return RedirectToAction("Step1","Submit");
+            return RedirectToAction("EnterCalculations","Submit");
         }
 
         [HttpGet]
@@ -26,26 +43,62 @@ namespace GenderPayGap.WebUI.Controllers
             return View();
         }
 
-        [HttpPost]
-        [Route("Delete")]
-        public ActionResult Delete()
+        [HttpGet]
+        [Route("Execute")]
+        public ActionResult Execute()
         {
-            DbContext.Truncate();
             return RedirectToAction("Index");
         }
 
-        [Route("LogOut")]
-        public ActionResult Logout()
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+
+        [Route("Execute")]
+        public ActionResult Execute(string command)
         {
+            var userId = User.GetUserId();
+            switch (command)
+            {
+                case "SignIn":
+                    return new HttpUnauthorizedResult();
+                case "DeleteOrganisations":
+                    DbContext.DeleteOrganisations(userId);
+                    break;
+                case "DeleteReturns":
+                    DbContext.DeleteReturns(userId);
+                    break;
+                case "DeleteAccount":
+                    DbContext.DeleteAccount(userId);
+                    Session.Abandon();
+                    Request.GetOwinContext().Authentication.SignOut();
+                    break;
+                case "ClearDatabase":
+                    DbContext.Truncate();
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        Session.Abandon();
+                        Request.GetOwinContext().Authentication.SignOut();
+                    }
+                    break;
+            }
+            return RedirectToAction("Index");
+        }
+
+        [Route("SignOut")]
+        public ActionResult SignOut()
+        {
+            Session.Abandon();
             Request.GetOwinContext().Authentication.SignOut();
-            return Redirect("/");
+            return RedirectToAction("EnterCalculations","Submit");
         }
 
         [Route("TimeOut")]
         public ActionResult TimeOut()
         {
-            Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("Step1","Submit") });
+            Session.Abandon();
+            Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("EnterCalculations","Submit") });
             return null;
         }
+
     }
 }

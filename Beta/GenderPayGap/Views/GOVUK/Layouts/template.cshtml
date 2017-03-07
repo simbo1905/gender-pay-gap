@@ -1,6 +1,4 @@
-﻿@using System.Security.Claims
-@using Microsoft.AspNet.Identity
-@* @using Web.Identity 
+﻿@* @using Web.Identity 
 @using Web.UI.Helpers *@
 @{
     ViewBag.assetsPath = Url.Content("~/public/govuk_template/assets");
@@ -146,10 +144,12 @@
                         }*@
                        @*<b>@Html.Partial("_LoginPartial")</b>*@
 
-                        <ul id="proposition-links">
+                        <span style="white-space:nowrap" class="header__menu__proposition-name"> Gender pay gap reporting </span>
+                       
+                         <ul id="proposition-links">
                             @if (User.Identity.IsAuthenticated)
                             {
-                                <li>@Html.ActionLink("Logout", "Logout", "Home")</li>
+                                <li>@Html.ActionLink("Sign out", "SignOut", "Home")</li>
                             }
                         </ul>
                     </nav>
