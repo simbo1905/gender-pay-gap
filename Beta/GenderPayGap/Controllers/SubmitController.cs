@@ -115,7 +115,7 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("Step1")]
-        public ActionResult Step1/*Create*/(ReturnViewModel model,string returnUrl=null)
+        public ActionResult Step1 (ReturnViewModel model,string returnUrl=null)
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -167,7 +167,7 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            if (!ModelState.IsValid) return View(model);
+            if (!ModelState.IsValid) return View("Step2", model);
 
             this.StashModel(model);
             
@@ -194,8 +194,7 @@ namespace GenderPayGap.WebUI.Controllers
             //If redirected from step 4 then save to session and return to view
             model.ReturnToStep4 = returnUrl.EqualsI("Step4");
 
-            var result = View("Step3", model);
-            return result;
+              return View("Step3", model);
         }
 
         [HttpPost]
@@ -229,7 +228,7 @@ namespace GenderPayGap.WebUI.Controllers
                 return RedirectToAction("Step1");
             }
 
-            return View(model);
+            return View("Step4", model);
         }
 
         [HttpPost]

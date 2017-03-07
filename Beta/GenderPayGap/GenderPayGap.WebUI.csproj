@@ -255,6 +255,7 @@
   <ItemGroup>
     <Compile Include="Classes\API\CompaniesHouseAPI.cs" />
     <Compile Include="Classes\Attributes\AuthAttribute.cs" />
+    <Compile Include="Classes\Attributes\MyUrlAttribute.cs" />
     <Compile Include="Classes\Attributes\UrlAttribute.cs" />
     <Compile Include="Classes\Attributes\EmailAttribute.cs" />
     <Compile Include="Classes\Attributes\PinAttribute.cs" />
@@ -294,6 +295,7 @@
   <ItemGroup>
     <Content Include="App_Data\PublicSectorOrgs.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </Content>
     <None Include="bundleconfig.json" />
     <None Include="compilerconfig.json" />
