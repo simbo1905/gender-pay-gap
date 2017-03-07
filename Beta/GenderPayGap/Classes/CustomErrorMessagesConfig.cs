@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
@@ -8,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Xml;
 using Extensions;
-using System.Threading.Tasks;
 
 namespace GenderPayGap.WebUI.Classes
 {
@@ -235,13 +232,23 @@ namespace GenderPayGap.WebUI.Classes
             }
         }
 
-        [ConfigurationProperty("title", IsRequired = true)]
+        [ConfigurationProperty("title", IsRequired = false)]
         public string Title
         {
             get { return (string)base["title"]; }
             set
             {
                 base["description"] = value;
+            }
+        }
+
+        [ConfigurationProperty("subtitle", IsRequired = false)]
+        public string Subtitle
+        {
+            get { return (string)base["subtitle"]; }
+            set
+            {
+                base["subtitle"] = value;
             }
         }
 

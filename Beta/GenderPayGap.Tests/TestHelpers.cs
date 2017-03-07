@@ -20,6 +20,7 @@ using System.Web.Routing;
 using GenderPayGap.Core.Classes;
 using Extensions;
 using GenderPayGap.WebUI.Classes;
+using GenderPayGap.WebUI.Models.Register;
 using Notify.Models;
 
 namespace GenderPayGap.Tests
@@ -88,6 +89,12 @@ namespace GenderPayGap.Tests
             {
                 get { return m_SessionStorage[name]; }
                 set { m_SessionStorage[name] = value; }
+            }
+
+
+            public override void Remove(string name)
+            {
+                m_SessionStorage.Remove(name);
             }
         }
 
@@ -180,6 +187,11 @@ namespace GenderPayGap.Tests
             result.PageSize = pageSize;
             result.PageCount = (int)Math.Ceiling((double)result.RowCount / pageSize);
             return result;
+        }
+
+        public string GetSicCodes(string companyNumber)
+        {
+            return AllEmployers.FirstOrDefault(c => c.CompanyNumber == companyNumber)?.SicCodes;
         }
 
         PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize)
