@@ -282,9 +282,13 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ErrorViewModel.cs" />
-    <Compile Include="Models\RegisterViewModels.cs" />
-    <Compile Include="Models\ReturnViewModel.cs" />
-    <Compile Include="Models\SearchViewModel.cs" />
+    <Compile Include="Classes\EmployerRecord.cs" />
+    <Compile Include="Models\Register\CompleteViewModel.cs" />
+    <Compile Include="Models\Register\OrganisationViewModel.cs" />
+    <Compile Include="Models\Register\VerifyViewModel.cs" />
+    <Compile Include="Models\Register\RegisterViewModels.cs" />
+    <Compile Include="Models\Submit\ReturnViewModel.cs" />
+    <Compile Include="Models\Search\SearchViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -308,6 +312,13 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="App_Data\Pin.txt" />
+    <Content Include="App_Data\RegistrationAccepted.txt" />
+    <Content Include="App_Data\RegistrationApproved.html" />
+    <Content Include="App_Data\RegistrationDeclined.html" />
+    <Content Include="App_Data\RegistrationDeclined.txt" />
+    <Content Include="App_Data\RegistrationRequest.html" />
+    <Content Include="App_Data\RegistrationRequest.txt" />
+    <Content Include="App_Data\Verify.html" />
     <Content Include="App_Data\Verify.txt" />
     <None Include="Content\application.css.New" />
     <Content Include="Content\application.css" />
@@ -425,8 +436,8 @@
     <Content Include="Views\GOVUK\Partials\phase\beta.cshtml" />
     <Content Include="Views\Home\_Index.cshtml" />
     <Content Include="Views\Home\Index.cshtml" />
-    <Content Include="Views\Register\Step1.cshtml" />
-    <Content Include="Views\Register\Step3.cshtml" />
+    <Content Include="Views\Register\AboutYou.cshtml" />
+    <Content Include="Views\Register\OrganisationType.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Query\Download.cshtml" />
     <Content Include="Views\Query\Search.cshtml" />
@@ -434,22 +445,32 @@
     <Content Include="Views\Query\Start.cshtml" />
     <Content Include="Views\Register\Complete.cshtml" />
     <Content Include="Views\Shared\CustomError.cshtml" />
-    <Content Include="Views\Register\Step2.cshtml" />
-    <Content Include="Views\Register\Step5.cshtml" />
-    <Content Include="Views\Register\ConfirmEmployer.cshtml" />
-    <Content Include="Views\Register\SendPIN.cshtml" />
-    <Content Include="Views\Register\ConfirmPIN.cshtml" />
+    <Content Include="Views\Register\VerifyEmail.cshtml" />
+    <Content Include="Views\Register\ChooseOrganisation.cshtml" />
+    <Content Include="Views\Register\ConfirmOrganisation.cshtml" />
+    <Content Include="Views\Register\PINSent.cshtml" />
+    <Content Include="Views\Register\ActivateService.cshtml" />
     <Content Include="Views\Home\TimedOut.cshtml" />
-    <Content Include="Views\Submit\Step1.cshtml" />
-    <Content Include="Views\Submit\Step2.cshtml" />
-    <Content Include="Views\Submit\Step3.cshtml" />
-    <Content Include="Views\Submit\Step4.cshtml" />
-    <Content Include="Views\Submit\Step5.cshtml" />
+    <Content Include="Views\Submit\EnterCalculations.cshtml" />
+    <Content Include="Views\Submit\PersonResponsible.cshtml" />
+    <Content Include="Views\Submit\EmployerWebsite.cshtml" />
+    <Content Include="Views\Submit\CheckData.cshtml" />
+    <Content Include="Views\Submit\SubmissionComplete.cshtml" />
     <Content Include="Views\Submit\Complete.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
-    <Content Include="Views\Register\AddAddress.cshtml" />
-    <Content Include="Views\Register\Step4.cshtml" />
+    <Content Include="Views\Register\OrganisationSearch.cshtml" />
     <Content Include="Views\Shared\_ValidationSummary.cshtml" />
+    <Content Include="Views\Register\AddContact.cshtml" />
+    <Content Include="Views\Register\EmailConfirmed.cshtml" />
+    <Content Include="Views\Register\AddOrganisation.cshtml" />
+    <Content Include="Views\Register\RequestReceived.cshtml" />
+    <Content Include="Views\Shared\CustomError - Copy.cshtml" />
+    <Content Include="Views\Register\ReviewRequest.cshtml" />
+    <Content Include="Views\Register\RequestAccepted.cshtml" />
+    <Content Include="Views\Register\RequestCancelled.cshtml" />
+    <Content Include="Views\Register\RequestApproved.cshtml" />
+    <Content Include="Views\Register\ConfirmCancellation.cshtml" />
+    <Content Include="Views\Register\RequestPIN.cshtml" />
     <None Include="Web.DEV.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -543,7 +564,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'TEST.Release|x86'">
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;TEST</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -561,7 +582,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PROD.Release|x86'">
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;PROD</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>
@@ -579,7 +600,7 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'PREPROD|x86'">
     <OutputPath>bin\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;PROD</DefineConstants>
     <Optimize>true</Optimize>
     <DebugType>pdbonly</DebugType>
     <PlatformTarget>x86</PlatformTarget>

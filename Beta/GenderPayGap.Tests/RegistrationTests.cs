@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using GenderPayGap.WebUI.Classes;
 using System.Web.Routing;
 using Extensions;
+using GenderPayGap.WebUI.Models.Register;
 
 namespace GenderPayGap.Tests
 {
@@ -29,7 +30,7 @@ namespace GenderPayGap.Tests
             // Act
 
             // Assert
-            Assert.Throws<IdentityNotMappedException>(() => controller.Step1(), "Expected IdentityNotMappedException");
+            Assert.Throws<IdentityNotMappedException>(() => controller.AboutYou(), "Expected IdentityNotMappedException");
         }
 
         [Test]
@@ -66,7 +67,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -93,7 +94,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -120,7 +121,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -148,7 +149,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -177,7 +178,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user, userOrg);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -205,7 +206,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user, userOrg);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -233,7 +234,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user, userOrg);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -261,7 +262,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user, userOrg);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -283,7 +284,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>();
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as RegisterViewModel;
 
             // Assert
@@ -313,9 +314,9 @@ namespace GenderPayGap.Tests
 
             var controller = TestHelper.GetController<RegisterController>();
             controller.Bind(model);
-
+            
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.AboutYou(model) as ViewResult;
             // Assert
             Assert.Multiple(() =>
             {
@@ -351,7 +352,7 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //Get the result of the test
-            var result = controller.Step1(model) as RedirectToRouteResult;
+            var result = controller.AboutYou(model) as RedirectToRouteResult;
 
             //check that the result is not null
             Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
@@ -399,7 +400,7 @@ namespace GenderPayGap.Tests
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.AboutYou(model) as ViewResult;
 
             // Assert
             Assert.That(!result.ViewData.ModelState.IsValid, "Email compare should have failed");
@@ -423,7 +424,7 @@ namespace GenderPayGap.Tests
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.AboutYou(model) as ViewResult;
 
             // Assert
             Assert.That(!result.ViewData.ModelState.IsValid, "Password compare should have failed");
@@ -447,7 +448,7 @@ namespace GenderPayGap.Tests
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.AboutYou(model) as ViewResult;
 
             // Assert
             Assert.That(!result.ViewData.ModelState.IsValid, "Short password compare should have failed");
@@ -471,7 +472,7 @@ namespace GenderPayGap.Tests
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.AboutYou(model) as ViewResult;
 
             // Assert
             Assert.That(!result.ViewData.ModelState.IsValid, "Password containing 'password' should have failed");
@@ -495,7 +496,7 @@ namespace GenderPayGap.Tests
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.AboutYou(model) as ViewResult;
 
             // Assert
             Assert.That(!result.ViewData.ModelState.IsValid, "Password expression should have failed");
@@ -526,7 +527,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user, organisation, userOrganisation);
 
             //ACT:
-            var result = controller.Step1() as RedirectToRouteResult;
+            var result = controller.AboutYou() as RedirectToRouteResult;
 
             //ASSERT:
             Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
@@ -552,7 +553,7 @@ namespace GenderPayGap.Tests
             //controller.Bind(model);
 
             //ACT:
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
 
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
@@ -593,7 +594,7 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step1(model) as RedirectToRouteResult;
+            var result = controller.AboutYou(model) as RedirectToRouteResult;
 
             //3.Check that the result is not null
             Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
@@ -647,7 +648,7 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step2(string.Empty) as RedirectToRouteResult;
+            var result = controller.VerifyEmail(string.Empty) as RedirectToRouteResult;
 
             //ASSERT:
             //Check the user is return the confirmation view
@@ -682,7 +683,7 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step2(Encryption.EncryptQuerystring(code)) as ViewResult;
+            var result = controller.VerifyEmail(Encryption.EncryptQuerystring(code)) as ViewResult;
 
             //ASSERT:
             //Ensure confimation view is returned
@@ -712,14 +713,13 @@ namespace GenderPayGap.Tests
             //1.Arrange the test setup variables
             var model = new VerifyViewModel();
             model.EmailAddress = "test@hotmail.com";
-            model.Expired = false;
             model.Resend = false;
             model.Retry = false;
             //Set model as if email
 
             // model.Sent = true;
             model.UserId = 1;
-            model.Verified = true;
+            
             // model.WrongCode = false;
 
             //var controller = TestHelper.GetController<RegisterController>();
@@ -728,7 +728,7 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step2(model) as RedirectToRouteResult;
+            var result = controller.VerifyEmail(model) as RedirectToRouteResult;
 
             //3.Check that the result is not null
             Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
@@ -781,7 +781,7 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step3(model) as RedirectToRouteResult;
+            var result = controller.OrganisationType(model) as RedirectToRouteResult;
 
             //3.Check that the result is not null
             Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
@@ -835,7 +835,7 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step1(model) as RedirectToRouteResult;
+            var result = controller.AboutYou(model) as RedirectToRouteResult;
 
             //3.Check that the result is not null
             Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
@@ -887,7 +887,7 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step1(model) as RedirectToRouteResult;
+            var result = controller.AboutYou(model) as RedirectToRouteResult;
 
             //3.Check that the result is not null
             Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
@@ -940,7 +940,7 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step1(model) as RedirectToRouteResult;
+            var result = controller.AboutYou(model) as RedirectToRouteResult;
 
             //3.Check that the result is not null
             Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
@@ -993,7 +993,7 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step1(model) as RedirectToRouteResult;
+            var result = controller.AboutYou(model) as RedirectToRouteResult;
 
             //3.Check that the result is not null
             Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");

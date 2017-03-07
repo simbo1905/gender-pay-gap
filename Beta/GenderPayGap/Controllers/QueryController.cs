@@ -1,14 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using System.Linq;
 using System.Web.Mvc;
 using GenderPayGap.Models.SqlDatabase;
-using GenderPayGap.WebUI.Models;
-using Extensions;
 using Autofac;
-
-using GenderPayGap;
+using GenderPayGap.WebUI.Classes;
+using GenderPayGap.WebUI.Models.Search;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -45,6 +40,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public ActionResult Search(SearchViewModel model)
         {
             if (ModelState.IsValid && !string.IsNullOrWhiteSpace(model.Search))
@@ -56,6 +52,7 @@ namespace GenderPayGap.WebUI.Controllers
                 model.Results = DataRepository.GetAll<Organisation>().Select(o => o).ToArray();
             }
 
+            this.CleanModelErrors<SearchViewModel>();
             return View(model);
         }
          
@@ -90,6 +87,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         // POST: Query/Create
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Create(FormCollection collection)
         {
@@ -112,6 +110,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         // POST: Query/Edit/5
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Edit(int id, FormCollection collection)
         {
@@ -134,6 +133,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         // POST: Query/Delete/5
+        [ValidateAntiForgeryToken]
         [HttpPost]
         public ActionResult Delete(int id, FormCollection collection)
         {
