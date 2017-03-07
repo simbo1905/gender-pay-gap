@@ -99,15 +99,12 @@ namespace GenderPayGap.Models.SqlDatabase
         [Required]
         public System.DateTime Modified { get; set; } = DateTime.Now;
 
-        [Required(AllowEmptyStrings = false)]
         [MaxLength(100)]
         public string JobTitle { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
         [MaxLength(50)]
         public string FirstName { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
         [MaxLength(50)]
         public string LastName { get; set; }
 

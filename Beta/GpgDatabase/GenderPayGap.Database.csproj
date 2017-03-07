@@ -181,9 +181,9 @@
     <Compile Include="UserStatuses.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="App_Data\SicSections.csv" />
     <None Include="packages.config" />
     <EmbeddedResource Include="App_Data\SicCodes.csv" />
-    <EmbeddedResource Include="App_Data\SicSections.csv" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Extensions\GenderPayGap.Extensions.csproj">

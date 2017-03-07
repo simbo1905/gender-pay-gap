@@ -1,9 +1,10 @@
 ﻿@model GenderPayGap.WebUI.Models.Submit.ReturnViewModel
 
+@using GenderPayGap.Models.SqlDatabase
 @using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
-    @using (Html.BeginForm(/*"Step2", "Submit", FormMethod.Post*/))
+    @using (Html.BeginForm(/*"PersonResponsible", "Submit", FormMethod.Post*/))
     {
         @Html.AntiForgeryToken()
         @Html.HiddenFor(model => model.ReturnId)
@@ -12,6 +13,7 @@
         @Html.HiddenFor(model => model.JobTitle)
         @Html.HiddenFor(model => model.LastName)
         @Html.HiddenFor(model => Model.AccountingDate)
+        @Html.HiddenFor(model => Model.SectorType)
         @Html.HiddenFor(model => model.CompanyLinkToGPGInfo)
 
         @*@Html.HiddenFor(model => model.AccountingDate.Year)*@
@@ -19,7 +21,7 @@
         <div class="grid-row">
             <div class="column-two-thirds">
                 <h1 class="heading-large">
-                    <span class="heading-secondary">Step 1 of 4</span>
+                    <span class="heading-secondary">Step @(Model.SectorType == SectorTypes.Public ? "1 of 3" : " 1 of 4")</span>
                     Submit your gender pay gap data for @(Model.AccountingDate.Year)  to @(Model.AccountingDate.AddYears(1).Year )
                 </h1>
 
@@ -177,7 +179,7 @@
                 <p>
                     @if (Model.ReturnToStep4)
                     {
-                        @Html.ActionLink("Cancel", "Step4")
+                        @Html.ActionLink("Cancel", "CheckData")
                     }
                 </p>
                 @*<a href="gpg-overview">Cancel</a>*@

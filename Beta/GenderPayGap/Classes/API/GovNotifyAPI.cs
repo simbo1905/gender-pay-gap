@@ -34,9 +34,13 @@ namespace GenderPayGap
             try
             {
                 result = GovNotify.SendEmail(emailAddress, VerifyTemplateId, personalisation);
+                if (!result.status.EqualsI("created", "sending", "delivered"))throw new Exception($"Unexpected status '{result.status}' returned");
+                return true;
             }
             catch (Exception ex)
             {
+                MvcApplication.Log.WriteLine($"Cant send verification email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
+
                 if (ex.Message.ContainsI("This Email Address is not registered with Gov Notify.", "Can’t send to this recipient", "invalid token"))
                 {
                     try
@@ -52,7 +56,7 @@ namespace GenderPayGap
                     }
                 }
             }
-            return result.status.EqualsI("created", "sending", "delivered");
+            return false;
         }
 
         public static bool SendConfirmEmail(string confirmUrl,string emailAddress)
@@ -63,9 +67,13 @@ namespace GenderPayGap
             try
             {
                 result = GovNotify.SendEmail(emailAddress, ConfirmTemplateId, personalisation);
+                if (!result.status.EqualsI("created", "sending", "delivered")) throw new Exception($"Unexpected status '{result.status}' returned");
+                return true;
             }
             catch (Exception ex)
             {
+                MvcApplication.Log.WriteLine($"Cant send PIN confirmation email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
+
                 if (ex.Message.ContainsI("This Email Address is not registered with Gov Notify.", "Can’t send to this recipient", "invalid token"))
                 {
                     try
@@ -82,7 +90,7 @@ namespace GenderPayGap
                 }
             }
 
-            return result.status.EqualsI("created", "sending", "delivered");
+            return false;
         }
 
         public static bool SendPinInPost(string returnUrl,string name, string address, string pin)
@@ -93,9 +101,13 @@ namespace GenderPayGap
             try
             {
                 result= GovNotify.SendPost(address, PINTemplateId, personalisation);
+                if (!result.status.EqualsI("created", "sending", "delivered")) throw new Exception($"Unexpected status '{result.status}' returned");
+                return true;
             }
             catch (Exception ex)
             {
+                MvcApplication.Log.WriteLine($"Cant send Pin In POST to Gov Notify for {address} due to following error:{ex.Message}");
+
                 if (ex.Message.ContainsI("This Email Address is not registered with Gov Notify.", "Can’t send to this recipient", "invalid token"))
                 {
                     try
@@ -112,7 +124,7 @@ namespace GenderPayGap
                 }
             }
 
-            return result.status.EqualsI("created", "sending", "delivered");
+            return false;
         }
 
         public static bool SendRegistrationRequest(string emailAddress,string reviewUrl, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
@@ -123,9 +135,13 @@ namespace GenderPayGap
             try
             {
                 result = GovNotify.SendEmail(emailAddress, RegistrationRequestTemplateId, personalisation);
+                if (!result.status.EqualsI("created", "sending", "delivered")) throw new Exception($"Unexpected status '{result.status}' returned");
+                return true;
             }
             catch (Exception ex)
             {
+                MvcApplication.Log.WriteLine($"Cant send registration request email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
+
                 if (ex.Message.ContainsI("This Email Address is not registered with Gov Notify.", "Can’t send to this recipient", "invalid token"))
                 {
                     try
@@ -145,7 +161,7 @@ namespace GenderPayGap
                     }
                 }
             }
-            return result.status.EqualsI("created", "sending", "delivered");
+            return false;
         }
 
         public static bool SendRegistrationApproved(string returnUrl, string emailAddress)
@@ -156,9 +172,13 @@ namespace GenderPayGap
             try
             {
                 result = GovNotify.SendEmail(emailAddress, RegistrationApprovedTemplateId, personalisation);
+                if (!result.status.EqualsI("created", "sending", "delivered")) throw new Exception($"Unexpected status '{result.status}' returned");
+                return true;
             }
             catch (Exception ex)
             {
+                MvcApplication.Log.WriteLine($"Cant send registration approved email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
+
                 if (ex.Message.ContainsI("This Email Address is not registered with Gov Notify.", "Can’t send to this recipient", "invalid token"))
                 {
                     try
@@ -174,20 +194,24 @@ namespace GenderPayGap
                     }
                 }
             }
-            return result.status.EqualsI("created", "sending", "delivered");
+            return false;
         }
 
         public static bool SendRegistrationDeclined(string returnUrl, string emailAddress, string reason)
         {
-            var personalisation = new Dictionary<string, dynamic> { { "url", returnUrl }, { "reason", reason} };
+            var personalisation = new Dictionary<string, dynamic> {{ "reason", reason} };
 
             Notification result = null;
             try
             {
                 result = GovNotify.SendEmail(emailAddress, RegistrationDeclinedTemplateId, personalisation);
+                if (!result.status.EqualsI("created", "sending", "delivered")) throw new Exception($"Unexpected status '{result.status}' returned");
+                return true;
             }
             catch (Exception ex)
             {
+                MvcApplication.Log.WriteLine($"Cant send registration declined email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
+
                 if (ex.Message.ContainsI("This Email Address is not registered with Gov Notify.", "Can’t send to this recipient", "invalid token"))
                 {
                     try
@@ -204,7 +228,7 @@ namespace GenderPayGap
                     }
                 }
             }
-            return result.status.EqualsI("created", "sending", "delivered");
+            return false;
         }
     }
 }
