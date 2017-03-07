@@ -1,15 +1,7 @@
-﻿using Microsoft.IdentityModel.Protocols;
-using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Configuration;
-using System.Diagnostics;
 using System.Linq;
-using System.Net.Http;
-using System.Threading.Tasks;
-using System.Web;
 using Extensions;
-using GenderPayGap.WebUI.Models;
 using GenderPayGap.Core.Interfaces;
 using GenderPayGap.Core.Classes;
 using GenderPayGap.WebUI.Classes;
@@ -52,6 +44,11 @@ namespace GenderPayGap
             result.PageCount = (int)Math.Ceiling(pageCount);
             result.Results = searchResults.Page(pageSize, page).Select(e=>ToEmployer(e)).ToList();
             return result;
+        }
+
+        public string GetSicCodes(string companyNumber)
+        {
+            return "1";
         }
 
         EmployerRecord ToEmployer(PublicSectorOrg org)
