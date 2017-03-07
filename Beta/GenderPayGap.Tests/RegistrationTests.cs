@@ -593,29 +593,6 @@ namespace GenderPayGap.Tests
         [Description("Ensure the Step1 succeeds when all fields are good")]
         public void Step1_Post_Success()
         {
-            /************************************FOR POST_SUCCESS MAINLY REDIRECTTOROUTRESULT************************************/
-            //ARRANGE:
-            //1.Arrange the test setup variables
-            //ACT:
-            //2.Run and get the result of the test
-            //3.Check that the result is not null
-            //4.Check that the redirection went to the right url step.
-            //5.If the redirection successfull retreive, the model stash sent with the redirect.
-            //6.Check that the unstashed model is not null
-            //ASSERT:
-            //7.Verify the values from the result that was stashed matches that of the Arrange values here
-            /****************************************************************************************************************/
-
-            //ARRANGE:
-            ////1.Arrange the test setup variables
-            //var model = new RegisterViewModel();
-            //model.EmailAddress = "test@hotmail.com"; 
-            //model.ConfirmEmailAddress = "test@hotmail.com";
-            //model.FirstName = "TestFirstName";
-            //model.LastName = "TestLastName";
-            //model.JobTitle = "TestJobTitle";
-            //model.Password = "P@ssword1!";
-            //model.ConfirmPassword = "P@ssword1!";
 
             //1.Arrange the test setup variables
             var model = new RegisterViewModel()
@@ -748,7 +725,7 @@ namespace GenderPayGap.Tests
             //Check the user verifcation is now marked as sent
             //Check a verification has been set against user 
             Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
-            Assert.That(result.RouteValues["action"].ToString() == "Complete", "");
+            Assert.That(result.RouteValues["action"].ToString() == "Complete", "Registration is not complete!");
             
         }
        
@@ -791,6 +768,7 @@ namespace GenderPayGap.Tests
             //2.Run and get the result of the test
             var result = controller.Step2(model) as RedirectToRouteResult;
 
+            //ASSERT:
             //3.Check that the result is not null
             Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
 
@@ -803,20 +781,6 @@ namespace GenderPayGap.Tests
 
             //6.Check that the unstashed model is not null
             Assert.NotNull(model as VerifyViewModel, "Expected RegisterViewModel");
-
-            //ASSERT:
-            //7.Verify the values from the result that was stashed matches that of the Arrange values here
-            Assert.Multiple(() =>
-            {
-                //Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
-                //Assert.AreEqual(model.EmailAddress == unStashedmodel.EmailAddress, true, "Expected email success");
-                //Assert.AreEqual(model.ConfirmEmailAddress == model.ConfirmEmailAddress, true, "Expected confirm email success");
-                //Assert.AreEqual(model.FirstName == model.FirstName, true, "Expected first name success");
-                //Assert.AreEqual(model.LastName == model.LastName, true, "Expected last name success");
-                //Assert.AreEqual(model.JobTitle == model.JobTitle, true, "Expected jobtitle success");
-                //Assert.AreEqual(model.Password == model.Password, true, "Expected password success");
-                //Assert.AreEqual(model.ConfirmPassword == model.ConfirmPassword, true, "Expected confirm password success");
-            });
         }
 
 
@@ -894,17 +858,6 @@ namespace GenderPayGap.Tests
             
             //8.verify that it was private sector was selected
             Assert.AreEqual(model.SectorType == SectorTypes.Private, true, "Expected equal object entities success");
-
-            //Assert.Multiple(() =>
-            //{
-            //    //Assert.AreEqual(model.EmailAddress == unStashedmodel.EmailAddress, true, "Expected email success");
-            //    //Assert.AreEqual(model.ConfirmEmailAddress == model.ConfirmEmailAddress, true, "Expected confirm email success");
-            //    //Assert.AreEqual(model.FirstName == model.FirstName, true, "Expected first name success");
-            //    //Assert.AreEqual(model.LastName == model.LastName, true, "Expected last name success");
-            //    //Assert.AreEqual(model.JobTitle == model.JobTitle, true, "Expected jobtitle success");
-            //    //Assert.AreEqual(model.Password == model.Password, true, "Expected password success");
-            //    //Assert.AreEqual(model.ConfirmPassword == model.ConfirmPassword, true, "Expected confirm password success");
-            //});
         }
 
         [Test]
@@ -953,17 +906,6 @@ namespace GenderPayGap.Tests
 
             //8.verify that it was private sector was selected
             Assert.AreEqual(model.SectorType == SectorTypes.Public, true, "Expected equal object entities success");
-
-            //Assert.Multiple(() =>
-            //{
-            //    //Assert.AreEqual(model.EmailAddress == unStashedmodel.EmailAddress, true, "Expected email success");
-            //    //Assert.AreEqual(model.ConfirmEmailAddress == model.ConfirmEmailAddress, true, "Expected confirm email success");
-            //    //Assert.AreEqual(model.FirstName == model.FirstName, true, "Expected first name success");
-            //    //Assert.AreEqual(model.LastName == model.LastName, true, "Expected last name success");
-            //    //Assert.AreEqual(model.JobTitle == model.JobTitle, true, "Expected jobtitle success");
-            //    //Assert.AreEqual(model.Password == model.Password, true, "Expected password success");
-            //    //Assert.AreEqual(model.ConfirmPassword == model.ConfirmPassword, true, "Expected confirm password success");
-            //});
         }
 
 
@@ -1021,7 +963,7 @@ namespace GenderPayGap.Tests
                                Employers = new Core.Classes.PagedResult<EmployerRecord>() {}, 
                                SearchText = "smith",
                                SectorType = SectorTypes.Private
-                             };
+                            };
 
 
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
@@ -1254,18 +1196,6 @@ namespace GenderPayGap.Tests
             Assert.AreEqual(unStashedmodel.SectorType == SectorTypes.Private, true, "Expected equal object entities success");
           
             //7.Verify the values from the result that was stashed matches that of the Arrange values here
-
-            //Assert.Multiple(() =>
-            //{
-            //    Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
-            //    Assert.AreEqual(model.EmailAddress == unStashedmodel.EmailAddress, true, "Expected email success");
-            //    Assert.AreEqual(model.ConfirmEmailAddress == model.ConfirmEmailAddress, true, "Expected confirm email success");
-            //    Assert.AreEqual(model.FirstName == model.FirstName, true, "Expected first name success");
-            //    Assert.AreEqual(model.LastName == model.LastName, true, "Expected last name success");
-            //    Assert.AreEqual(model.JobTitle == model.JobTitle, true, "Expected jobtitle success");
-            //    Assert.AreEqual(model.Password == model.Password, true, "Expected password success");
-            //    Assert.AreEqual(model.ConfirmPassword == model.ConfirmPassword, true, "Expected confirm password success");
-            //});
         }
 
         [Test]
@@ -1383,17 +1313,7 @@ namespace GenderPayGap.Tests
 
             //7.Verify the values from the result that was stashed matches that of the Arrange values here
 
-            //Assert.Multiple(() =>
-            //{
-            //    Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
-            //    Assert.AreEqual(model.EmailAddress == unStashedmodel.EmailAddress, true, "Expected email success");
-            //    Assert.AreEqual(model.ConfirmEmailAddress == model.ConfirmEmailAddress, true, "Expected confirm email success");
-            //    Assert.AreEqual(model.FirstName == model.FirstName, true, "Expected first name success");
-            //    Assert.AreEqual(model.LastName == model.LastName, true, "Expected last name success");
-            //    Assert.AreEqual(model.JobTitle == model.JobTitle, true, "Expected jobtitle success");
-            //    Assert.AreEqual(model.Password == model.Password, true, "Expected password success");
-            //    Assert.AreEqual(model.ConfirmPassword == model.ConfirmPassword, true, "Expected confirm password success");
-            //});
+           
         }
 
 
@@ -1570,18 +1490,6 @@ namespace GenderPayGap.Tests
 
             //8.verify that it was private sector was selected
             Assert.AreEqual(unStashedmodel.SectorType == SectorTypes.Private, true, "Expected equal object entities success");
-            
-            //Assert.Multiple(() =>
-            //{
-            //    Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
-            //    Assert.AreEqual(model.EmailAddress == unStashedmodel.EmailAddress, true, "Expected email success");
-            //    Assert.AreEqual(model.ConfirmEmailAddress == model.ConfirmEmailAddress, true, "Expected confirm email success");
-            //    Assert.AreEqual(model.FirstName == model.FirstName, true, "Expected first name success");
-            //    Assert.AreEqual(model.LastName == model.LastName, true, "Expected last name success");
-            //    Assert.AreEqual(model.JobTitle == model.JobTitle, true, "Expected jobtitle success");
-            //    Assert.AreEqual(model.Password == model.Password, true, "Expected password success");
-            //    Assert.AreEqual(model.ConfirmPassword == model.ConfirmPassword, true, "Expected confirm password success");
-            //});
         }
 
         [Test]
@@ -1695,17 +1603,6 @@ namespace GenderPayGap.Tests
             //8.verify that it was private sector was selected
             Assert.AreEqual(unStashedmodel.SectorType == SectorTypes.Public, true, "Expected equal object entities success");
 
-            //Assert.Multiple(() =>
-            //{
-            //    Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
-            //    Assert.AreEqual(model.EmailAddress == unStashedmodel.EmailAddress, true, "Expected email success");
-            //    Assert.AreEqual(model.ConfirmEmailAddress == model.ConfirmEmailAddress, true, "Expected confirm email success");
-            //    Assert.AreEqual(model.FirstName == model.FirstName, true, "Expected first name success");
-            //    Assert.AreEqual(model.LastName == model.LastName, true, "Expected last name success");
-            //    Assert.AreEqual(model.JobTitle == model.JobTitle, true, "Expected jobtitle success");
-            //    Assert.AreEqual(model.Password == model.Password, true, "Expected password success");
-            //    Assert.AreEqual(model.ConfirmPassword == model.ConfirmPassword, true, "Expected confirm password success");
-            //});
         }
 
 
@@ -1840,17 +1737,6 @@ namespace GenderPayGap.Tests
 
             //8.verify that it was private sector was selected
             Assert.AreEqual(model.SectorType == SectorTypes.Private, true, "Expected equal object entities success");
-
-            //Assert.Multiple(() =>
-            //{
-            //    //Assert.AreEqual(model.EmailAddress == unStashedmodel.EmailAddress, true, "Expected email success");
-            //    //Assert.AreEqual(model.ConfirmEmailAddress == model.ConfirmEmailAddress, true, "Expected confirm email success");
-            //    //Assert.AreEqual(model.FirstName == model.FirstName, true, "Expected first name success");
-            //    //Assert.AreEqual(model.LastName == model.LastName, true, "Expected last name success");
-            //    //Assert.AreEqual(model.JobTitle == model.JobTitle, true, "Expected jobtitle success");
-            //    //Assert.AreEqual(model.Password == model.Password, true, "Expected password success");
-            //    //Assert.AreEqual(model.ConfirmPassword == model.ConfirmPassword, true, "Expected confirm password success");
-            //});
         }
 
     }
