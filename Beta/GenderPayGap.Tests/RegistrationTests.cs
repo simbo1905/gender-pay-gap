@@ -1103,49 +1103,49 @@ namespace GenderPayGap.Tests
             {
                 Results = new List<EmployerRecord>()
                             {
-                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() { Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
                             }
             };
@@ -1217,49 +1217,49 @@ namespace GenderPayGap.Tests
             {
                 Results = new List<EmployerRecord>()
                             {
-                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq", EmailPatterns = "test@gov.uk" },
 
-                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq", EmailPatterns = "test@test.uk"  },
 
-                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
                             }
             };
@@ -1405,49 +1405,49 @@ namespace GenderPayGap.Tests
             {
                 Results = new List<EmployerRecord>()
                             {
-                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
                             }
             };
@@ -1511,49 +1511,49 @@ namespace GenderPayGap.Tests
             {
                 Results = new List<EmployerRecord>()
                             {
-                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
                             }
             };
@@ -1656,49 +1656,49 @@ namespace GenderPayGap.Tests
             {
                 Results = new List<EmployerRecord>()
                             {
-                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
                             }
             };
