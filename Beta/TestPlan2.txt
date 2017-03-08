@@ -362,9 +362,10 @@ check why 'page' argument should be 1 instead of 0 in SearchOrg() method -> for 
 Bugs:
  confirm your email address, resend button does not work!
  
- task clean up sub,ission jouney
+ task clean up submission jouney
 
- assign
+
+ARRANGE:
 	setup route
 	setup db
 	setup model
@@ -372,9 +373,22 @@ Bugs:
 ACT
 	call the action
 
-
+ASSERT:
  check ReturnResult
-			Viewresult
-			RouteReditectResult
-check the model,
+			:Viewresult
+				:Is not null
+				:Check Type
+				:Check name
+				
+			:RouteReditectResult
+				:Is not null
+				:Check Type
+				:Check name
+				
+
+check the model
+			:Is not null
+			:Check Type
+			:Check ModelState
 check db
+	  :get item from mock repository
