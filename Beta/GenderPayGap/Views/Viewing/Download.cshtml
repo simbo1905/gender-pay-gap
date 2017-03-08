@@ -6,14 +6,12 @@
     <div class="grid-row">
         <div class="column-full">
             <h1 class="heading-large">
-                Gender pay gap
+                Gender pay gap data
             </h1>
             <div class="tabs">
                 <div class="tabs-nav">
                     <ul class="tabs-list">
-                        <li><a href="search">Search for employers</a></li>
-                        <li><a href="sectors">View employers by sector</a></li>
-
+                        <li>@Html.ActionLink("Find employers","SearchResults")</li>
                         <li><a href="download" class="selected">Download data</a></li>
                     </ul>
                 </div>
@@ -33,7 +31,7 @@
 
                                     <tr>
                                         <td><a href="#">2016 to 2017 </a><span class="info"> (CSV, 2.3MB)</span></td>
-                                        <td> 400 </td>
+                                        <td> 500 </td>
                                     </tr>
                                 </tbody>
                             </table>

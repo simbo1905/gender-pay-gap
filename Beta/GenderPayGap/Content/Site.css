@@ -84,3 +84,15 @@
     display: none;
 }
 
+.filter label {
+    font-size: 16px;
+    display: inline-block;
+    margin-left: 20px;
+}
+.filter li {
+    list-style: none;
+}
+
+.tabs-list li {
+    list-style: none;
+}

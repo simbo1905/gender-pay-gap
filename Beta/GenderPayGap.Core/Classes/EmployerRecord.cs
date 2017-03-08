@@ -1,16 +1,17 @@
-﻿using System;
+﻿using Extensions;
+using System;
 using System.Collections.Generic;
-using Extensions;
 
-namespace GenderPayGap.WebUI.Classes
+namespace GenderPayGap.Core.Classes
 {
 
     [Serializable]
     public class EmployerRecord
     {
+        public long Id { get; set; }
         public string CompanyNumber { get; set; }
         public string CompanyStatus { get; set; }
-        public string Name { get; internal set; }
+        public string Name { get; set; }
         public string Address1 { get; set; }
         public string Address2 { get; set; }
         public string Address3 { get; set; }
@@ -44,6 +45,8 @@ namespace GenderPayGap.WebUI.Classes
                 return list.ToDelimitedString(", ");
             }
         }
+
+        public string SicSectors { get; set; }
 
         public bool IsAuthorised(string emailAddress)
         {
