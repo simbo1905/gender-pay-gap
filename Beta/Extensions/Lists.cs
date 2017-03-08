@@ -213,8 +213,10 @@ namespace Extensions
             return false;
         }
 
-        public static bool Equals(this List<string> sourceList, List<string> targetList, bool ignoreCase=false)
+        public static bool EqualsI(this List<string> sourceList, List<string> targetList, bool ignoreCase=false)
         {
+            if (targetList!=null && sourceList==null) return false;
+            if (targetList==null && sourceList!=null) return false;
             if (targetList.Count != sourceList.Count) return false;
 
             sourceList.Sort();

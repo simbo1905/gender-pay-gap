@@ -6,6 +6,7 @@ using System.Diagnostics;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Extensions;
+using GenderPayGap.Core.Classes;
 using GenderPayGap.WebUI.Classes;
 using Microsoft.Owin.Security.Provider;
 

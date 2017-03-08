@@ -267,38 +267,29 @@ namespace GenderPayGap
         }
 
         //Current account Year method
-        public DateTime GetCurrentAccountYearStartDate(Organisation org)
+        public DateTime GetAccountYearStartDate(SectorTypes sectorType, int year=0)
         {
             var tempDay = 0;
             var tempMonth = 0;
 
-            var Now = DateTime.Now;
-            DateTime currAccountYearStartDate = DateTime.MinValue;
+            var now = DateTime.Now;
 
-            if ((org.SectorType == SectorTypes.Private))
+            switch (sectorType)
             {
-                tempDay = Settings.Default.PrivateAccountingDate.Day;
-                tempMonth = Settings.Default.PrivateAccountingDate.Month;
-
-                DateTime TempDate = new DateTime(Now.Year, tempMonth, tempDay);
-
-                currAccountYearStartDate = Now > TempDate ? TempDate : TempDate.AddYears(-1);
+                case SectorTypes.Private:
+                    tempDay = Settings.Default.PrivateAccountingDate.Day;
+                    tempMonth = Settings.Default.PrivateAccountingDate.Month;
+                    break;
+                case SectorTypes.Public:
+                    tempDay = Settings.Default.PublicAccountingDate.Day;
+                    tempMonth = Settings.Default.PublicAccountingDate.Month;
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(sectorType),sectorType,"Cannot calculate accounting date for this sector type");
             }
 
-            if ((org.SectorType == SectorTypes.Public))
-            { 
-                tempDay = Settings.Default.PublicAccountingDate.Day;
-                tempMonth = Settings.Default.PublicAccountingDate.Month;
-
-                DateTime TempDate = new DateTime(Now.Year, tempMonth, tempDay);
-
-                if (Now > TempDate)
-                    currAccountYearStartDate = TempDate;
-                else
-                    currAccountYearStartDate = TempDate.AddYears(-1);
-            }
-            
-            return currAccountYearStartDate;
+            var tempDate = new DateTime(year==0 ? DateTime.Now.Year : year, tempMonth, tempDay);
+            return now > tempDate ? tempDate : tempDate.AddYears(-1);
         }
     }
 }
