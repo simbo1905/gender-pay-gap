@@ -1,4 +1,6 @@
-﻿using System.Data.Entity.Validation;
+﻿using System.Data;
+using System.Data.Common;
+using System.Data.Entity.Validation;
 
 namespace GenderPayGap.Models.SqlDatabase
 {
@@ -178,10 +180,21 @@ namespace GenderPayGap.Models.SqlDatabase
             }
         }
 
+        public Database GetDatabase()
+        {
+            return Database;
+        }
+
         public new IDbSet<TEntity> Set<TEntity>() where TEntity : class
         {
             return base.Set<TEntity>();
 
+        }
+
+        public DbTransaction BeginTransaction(IsolationLevel isolationLevel)
+        {
+            if (Database.Connection.State != ConnectionState.Open)Database.Connection.Open();
+            return Database.Connection.BeginTransaction(isolationLevel);
         }
     }
 }

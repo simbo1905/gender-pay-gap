@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
 
@@ -19,6 +21,9 @@ namespace GenderPayGap.Core.Interfaces
         IQueryable<TEntity> GetAll<TEntity>() where TEntity : class;
         void Insert<TEntity>(TEntity entity) where TEntity : class;
         void SaveChanges();
+
+        DbTransaction BeginTransaction(IsolationLevel isolationLevel);
+
     }
 
 }

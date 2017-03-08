@@ -11,11 +11,16 @@ using GenderPayGap.WebUI.Classes;
 namespace GenderPayGap.WebUI.Models.Search
 {
     [Serializable]
-    public class SearchViewModel
+    public class DownloadViewModel
     {
-        public SearchViewModel()
+        public DownloadViewModel()
         {
 
+        }
+
+        public class Download
+        {
+            
         }
 
         [Required]

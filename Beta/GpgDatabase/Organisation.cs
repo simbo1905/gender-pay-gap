@@ -1,4 +1,6 @@
 using System.Linq;
+using Extensions;
+using GenderPayGap.Core.Classes;
 
 namespace GenderPayGap.Models.SqlDatabase
 {
@@ -87,6 +89,25 @@ namespace GenderPayGap.Models.SqlDatabase
                 //Get the latest address for the organisation
                 return OrganisationAddresses.OrderByDescending(oa => oa.Modified).FirstOrDefault(oa => oa.OrganisationId == OrganisationId && oa.Status==AddressStatuses.Active);
             }
+        }
+
+        public EmployerRecord ToEmployerRecord()
+        {
+            var address = Address;
+            return new EmployerRecord()
+            {
+                Id= OrganisationId,
+                Name = OrganisationName,
+                CompanyNumber = PrivateSectorReference,
+                SicSectors = OrganisationSicCodes.Select(s=>s.SicCode.SicSection.Description).ToDelimitedString(", "),
+                SicCodes = OrganisationSicCodes.ToDelimitedString(),
+                Address1 = address.Address1,
+                Address2 = address.Address2,
+                Address3 = address.Address3,
+                Country = address.Country,
+                PostCode = address.PostCode,
+                PoBox = address.PoBox
+            };
         }
     }
 }

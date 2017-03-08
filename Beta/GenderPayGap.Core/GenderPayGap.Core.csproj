@@ -132,12 +132,14 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Core" />
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Transactions" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\PagedResult.cs" />
     <Compile Include="Classes\SqlRepository.cs" />
     <Compile Include="Classes\UnitOfWork.cs" />
+    <Compile Include="Classes\EmployerRecord.cs" />
     <Compile Include="Interfaces\IDbContext.cs" />
     <Compile Include="Interfaces\IPagedRepository.cs" />
     <Compile Include="Interfaces\IRepository.cs" />
@@ -147,6 +149,12 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Extensions\GenderPayGap.Extensions.csproj">
+      <Project>{50D3DD00-E740-410B-87F6-C4F5FBD0657C}</Project>
+      <Name>GenderPayGap.Extensions</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
