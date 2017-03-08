@@ -160,9 +160,16 @@ namespace GenderPayGap.WebUI.Models
     [Serializable]
     public class EmployerRecord
     {
+        private int count = 0;
+        public EmployerRecord()
+        {
+            Name = "Test Organisation Name " + ++count;
+        }
+        
+
         public string CompanyNumber { get; set; }
         public string CompanyStatus { get; set; }
-        public string Name { get; /*internal*/ set; }
+        public string Name { get; internal set; } //=  "Test Organisation Name " + count;
         [Required(AllowEmptyStrings = false)]
         [MaxLength(100)]
         public string Address1 { get; set; }
