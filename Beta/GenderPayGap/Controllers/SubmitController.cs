@@ -235,7 +235,7 @@ namespace GenderPayGap.WebUI.Controllers
                 return RedirectToAction("EnterCalculations");
             }
 
-            return View(model);
+            return View("Step4", model);
         }
 
         [HttpPost]
