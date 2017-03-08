@@ -172,6 +172,11 @@ namespace GenderPayGap.Tests
             AllEmployers.Remove(employer);
         }
 
+        public string GetSicCodes(string companyNumber)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Insert(EmployerRecord employer)
         {
             AllEmployers.Add(employer);
