@@ -12,6 +12,7 @@ using System.Web.Mvc;
 using GenderPayGap.WebUI.Classes;
 using System.Web.Routing;
 using Extensions;
+using GenderPayGap.Core.Classes;
 using GenderPayGap.WebUI.Models.Register;
 
 namespace GenderPayGap.Tests

@@ -62,6 +62,10 @@
       <HintPath>..\packages\Castle.Core.3.3.3\lib\net45\Castle.Core.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="CsvHelper, Version=2.0.0.0, Culture=neutral, PublicKeyToken=8c4959082be5c823, processorArchitecture=MSIL">
+      <HintPath>..\packages\CsvHelper.2.16.3.0\lib\net45\CsvHelper.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.1.3\lib\net45\EntityFramework.dll</HintPath>
       <Private>True</Private>
@@ -182,6 +186,7 @@
     </Reference>
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Security" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -266,6 +271,7 @@
     <Compile Include="App_Start\BundleConfig.cs" />
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
+    <Compile Include="Classes\Extensions\HtmlHelpers.cs" />
     <Compile Include="Classes\PublicSectorRepository.cs" />
     <Compile Include="Classes\PrivateSectorRepository.cs" />
     <Compile Include="Classes\PublicSectorConfig.cs" />
@@ -274,7 +280,7 @@
     <Compile Include="Classes\Attributes\PasswordAttribute.cs" />
     <Compile Include="Classes\Attributes\SpamProtectionAttribute.cs" />
     <Compile Include="Controllers\ErrorController.cs" />
-    <Compile Include="Controllers\QueryController.cs" />
+    <Compile Include="Controllers\ViewingController.cs" />
     <Compile Include="Controllers\RegisterController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\SubmitController.cs" />
@@ -282,11 +288,11 @@
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\ErrorViewModel.cs" />
-    <Compile Include="Classes\EmployerRecord.cs" />
     <Compile Include="Models\Register\CompleteViewModel.cs" />
     <Compile Include="Models\Register\OrganisationViewModel.cs" />
     <Compile Include="Models\Register\VerifyViewModel.cs" />
     <Compile Include="Models\Register\RegisterViewModels.cs" />
+    <Compile Include="Models\Search\DownloadViewModel.cs" />
     <Compile Include="Models\Submit\ReturnViewModel.cs" />
     <Compile Include="Models\Search\SearchViewModel.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -427,7 +433,6 @@
     <Content Include="Views\_ViewStart.cshtml" />
     <Content Include="Views\Home\About.cshtml" />
     <Content Include="Views\Home\Contact.cshtml" />
-    <Content Include="Views\Submit\Index.cshtml" />
     <Content Include="Views\DfE\Layouts\template.cshtml" />
     <Content Include="Views\GOVUK\Layouts\template.cshtml" />
     <Content Include="Views\GOVUK\Partials\footer-support-links.cshtml" />
@@ -439,10 +444,10 @@
     <Content Include="Views\Register\AboutYou.cshtml" />
     <Content Include="Views\Register\OrganisationType.cshtml" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <Content Include="Views\Query\Download.cshtml" />
-    <Content Include="Views\Query\Search.cshtml" />
-    <Content Include="Views\Query\Sectors.cshtml" />
-    <Content Include="Views\Query\Start.cshtml" />
+    <Content Include="Views\Viewing\Download.cshtml" />
+    <Content Include="Views\Viewing\SearchResults.cshtml" />
+    <Content Include="Views\Viewing\Sectors.cshtml" />
+    <Content Include="Views\Viewing\Start.cshtml" />
     <Content Include="Views\Register\Complete.cshtml" />
     <Content Include="Views\Shared\CustomError.cshtml" />
     <Content Include="Views\Register\VerifyEmail.cshtml" />

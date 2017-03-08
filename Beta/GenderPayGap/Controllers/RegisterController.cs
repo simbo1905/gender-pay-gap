@@ -10,6 +10,7 @@ using GenderPayGap.WebUI.Classes;
 using System.Configuration;
 using System.Net;
 using System.Web;
+using GenderPayGap.Core.Classes;
 using GenderPayGap.WebUI.Properties;
 using GenderPayGap.Core.Interfaces;
 using GenderPayGap.WebUI.Models.Register;

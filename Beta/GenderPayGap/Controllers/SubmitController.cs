@@ -51,9 +51,9 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
-            var Org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == userOrg.OrganisationId);
+            var org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == userOrg.OrganisationId);
 
-            var expectStartDate = GetCurrentAccountYearStartDate(Org);
+            var expectStartDate = GetAccountYearStartDate(org.SectorType);
 
             var @return = DataRepository.GetAll<Return>().OrderByDescending
                 (r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId && r.AccountingDate == expectStartDate && r.Status==ReturnStatuses.Submitted);
@@ -63,12 +63,12 @@ namespace GenderPayGap.WebUI.Controllers
             if (model == null)
             {
                 model = new ReturnViewModel();
-                model.SectorType = Org.SectorType;
+                model.SectorType = org.SectorType;
 
                 if (@return == null)
                 {
                     model.AccountingDate = expectStartDate;
-                    model.OrganisationId = Org.OrganisationId;
+                    model.OrganisationId = org.OrganisationId;
                 }
                 else
                 {

@@ -8,6 +8,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
+using System.Data;
+using System.Data.Common;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
@@ -157,6 +159,11 @@ namespace GenderPayGap.Tests
 
         public void SaveChanges()
         {
+        }
+
+        public DbTransaction BeginTransaction(IsolationLevel isolationLevel)
+        {
+            throw new NotImplementedException();
         }
 
         public void Dispose()

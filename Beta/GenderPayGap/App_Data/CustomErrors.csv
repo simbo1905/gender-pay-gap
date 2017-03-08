@@ -360,3 +360,23 @@ OrganisationViewModel.Name:MinLength,,Organisation name
 OrganisationViewModel.Name:MinLength,,Organisation name
 OrganisationViewModel.Name:MinLength,,Organisation name
 OrganisationViewModel.Name:MinLength,,Organisation name
+SearchViewModel.SearchText:Required,,SearchText
+SearchViewModel.SearchText:StringLength,You must enter an employers name between 3 and 100 characters in length,SearchText
+SearchViewModel.SearchText:Required,,SearchText
+SearchViewModel.SearchText:StringLength,You must enter an employers name between 3 and 100 characters in length,SearchText
+SearchViewModel.SearchText:Required,,SearchText
+SearchViewModel.SearchText:StringLength,You must enter an employers name between 3 and 100 characters in length,SearchText
+SearchViewModel.SearchText:Required,,SearchText
+SearchViewModel.SearchText:StringLength,You must enter an employers name between 3 and 100 characters in length,SearchText
+SearchViewModel.SearchText:Required,,SearchText
+SearchViewModel.SearchText:StringLength,You must enter an employers name between 3 and 100 characters in length,SearchText
+SearchViewModel.SearchText:Required,,SearchText
+SearchViewModel.SearchText:StringLength,You must enter an employers name between 3 and 100 characters in length,SearchText
+SearchViewModel.SearchText:Required,,SearchText
+SearchViewModel.SearchText:StringLength,You must enter an employers name between 3 and 100 characters in length,SearchText
+SearchViewModel.SearchText:Required,,SearchText
+SearchViewModel.SearchText:StringLength,You must enter an employers name between 3 and 100 characters in length,SearchText
+SearchViewModel.SearchText:Required,,SearchText
+SearchViewModel.SearchText:StringLength,You must enter an employers name between 3 and 100 characters in length,SearchText
+SearchViewModel.SearchText:Required,,SearchText
+SearchViewModel.SearchText:StringLength,You must enter an employers name between 3 and 100 characters in length,SearchText
