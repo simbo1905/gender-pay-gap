@@ -699,7 +699,7 @@ namespace GenderPayGap.Tests
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-             var code = "abcdefg";
+            var code = "abcdefg";
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now, EmailVerifyHash = code.GetSHA512Checksum() };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
