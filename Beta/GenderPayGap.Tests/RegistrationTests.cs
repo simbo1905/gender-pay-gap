@@ -511,9 +511,10 @@ namespace GenderPayGap.Tests
         #endregion
 
 
-        //[Test]
-        [Description("Ensure the Step1 fails when a user does not exist in the db")]
-        public void Step1_Get_unAuthUser_Fail()
+        //Happy Path - Registration GET and POST Actions
+        [Test]
+        [Description("Ensure the Step1 succeeds and gets a new registration form for newly authorized users to register")]
+        public void Step1_Get_NewRegistrationView_Success()
         {
             //ARRANGE:
             //create a user who does not exist in the db
@@ -521,43 +522,42 @@ namespace GenderPayGap.Tests
 
             var routeData = new RouteData();
             routeData.Values.Add("action", "Step1");
-            routeData.Values.Add("controller", "register");
+            routeData.Values.Add("Controller", "register");
 
-            var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
+            //Stash an object to pass in for  this.ClearStash()
+            var controller = TestHelper.GetController<RegisterController>(0, routeData, user);
 
             //ACT:
-            var result = controller.Step1();
+            var result = controller.Step1() as ViewResult;
+            var resultModel = result.Model as RegisterViewModel;
+
+            //resultModel.ConfirmEmailAddress
+
+            var modelMetaData = result.ViewData.ModelMetadata;
+
 
             //ASSERT:
-            Assert.Null(result as ActionResult, "Expected Null value");
-           
+            Assert.NotNull(result, "Expected ViewResult");
+            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
+            Assert.That(result.ViewName == "Step1", "Incorrect view returned");
+            Assert.NotNull(result.Model as RegisterViewModel, "Expected RegisterViewModel");
+            Assert.That(result.Model.GetType() == typeof(RegisterViewModel), "Incorrect resultType returned");
+            Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
+
+            Assert.That(string.IsNullOrWhiteSpace(resultModel.FirstName), "Expected null or empty field");
+            Assert.That(result.ViewData.ModelState.IsValidField("ConfirmEmailAddress"), "");
+            Assert.That(result.ViewData.ModelState.IsValidField("ConfirmPassword"), "");
+            Assert.That(result.ViewData.ModelState.IsValidField("EmailAddress"), "");
+            Assert.That(result.ViewData.ModelState.IsValidField("FirstName"), "");
+            Assert.That(result.ViewData.ModelState.IsValidField("IdentityProvider"), "");
+            Assert.That(result.ViewData.ModelState.IsValidField("JobTitle"), "");
+            Assert.That(result.ViewData.ModelState.IsValidField("LastName"), "");
+            Assert.That(result.ViewData.ModelState.IsValidField("Password"), "");
+            Assert.That(result.ViewData.ModelState.IsValidField("VerifyUrl"), "");
+
         }
 
 
-
-        //Happy Path - Registration GET and POST Actions
-        //[Test]
-        //[Description("Ensure the Step1 succeeds and gets a new registration form for newly authorized users to register")]
-        //public void Step1_Get_RegistrationComplete_Success()
-        //{
-        //    //ARRANGE:
-        //    //create a user who does not exist in the db
-        //    var user = new User() { UserId = 0};
-
-        //    var routeData = new RouteData();
-        //    routeData.Values.Add("action", "Step1");
-        //    routeData.Values.Add("Controller", "register");
-
-        //    //Stash an object to pass in for  this.ClearStash()
-        //    var controller = TestHelper.GetController<RegisterController>(0, routeData, user = null);
-
-        //    //ACT:
-        //    var result = controller.Step1() as RedirectToRouteResult;
-
-        //    //ASSERT:
-        //    Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
-        //    Assert.That(result.RouteValues["action"].ToString() == "Complete", "Expected User registration to be complete");
-        //}
 
         [Test]
         [Description("Ensure the Step1 succeeds and gets a new registration form for newly authorized users to register")]
@@ -573,7 +573,7 @@ namespace GenderPayGap.Tests
 
             //Stash an object to pass in for this.ClearStash()
             //var model = new RegisterViewModel();
-            var controller = TestHelper.GetController<RegisterController>(0, routeData, user = null/*, model*/);
+            var controller = TestHelper.GetController<RegisterController>(0, routeData, user /*, model*/);
             //controller.StashModel(model);
 
             //ACT:
@@ -710,9 +710,8 @@ namespace GenderPayGap.Tests
             routeData.Values.Add("Action", "Step2");
             routeData.Values.Add("Controller", "Register");
 
-            var model = new VerifyViewModel();
+            //var model = new VerifyViewModel();
 
-            //var controller = TestHelper.GetController<RegisterController>();
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user, organisation, userOrganisation);
             //controller.Bind(model);
 
@@ -722,7 +721,7 @@ namespace GenderPayGap.Tests
 
             //ASSERT:
             //Check the user is return the confirmation view
-            //Check the user verifcation is now marked as sent
+            //Check the user verification is now marked as sent
             //Check a verification has been set against user 
             Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
             Assert.That(result.RouteValues["action"].ToString() == "Complete", "Registration is not complete!");
