@@ -2,7 +2,6 @@ namespace GenderPayGap.Models.SqlDatabase
 {
     using System;
     using System.Collections.Generic;
-    using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
@@ -100,15 +99,12 @@ namespace GenderPayGap.Models.SqlDatabase
         [Required]
         public System.DateTime Modified { get; set; } = DateTime.Now;
 
-        [Required(AllowEmptyStrings = false)]
         [MaxLength(100)]
         public string JobTitle { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
         [MaxLength(50)]
         public string FirstName { get; set; }
 
-        [Required(AllowEmptyStrings = false)]
         [MaxLength(50)]
         public string LastName { get; set; }
 

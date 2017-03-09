@@ -20,6 +20,7 @@ using System.Text.RegularExpressions;
 using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Classes;
 using System.Configuration;
+using GenderPayGap.WebUI.Models.Submit;
 
 namespace GenderPayGap.Tests.Submission
 {
@@ -34,7 +35,7 @@ namespace GenderPayGap.Tests.Submission
 
         //[Test]
         [Description("")]
-        public void Step1_UserNotLoggedIn_RedirectToLoginPage()
+        public void EnterCalculations_UserNotLoggedIn_RedirectToLoginPage()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -46,7 +47,7 @@ namespace GenderPayGap.Tests.Submission
 
             //Act
             //var result = controller.xyz() as RedirectToRouteResult;
-            var result = controller.Step1() as RedirectToRouteResult;
+            var result = controller.EnterCalculations() as RedirectToRouteResult;
 
             //Assert
             Assert.Null(result, "Should have redirected");
@@ -56,7 +57,7 @@ namespace GenderPayGap.Tests.Submission
 
      // [Test]
         [Description("If a user has a return in the database load that return and verify its existence")]
-        public void Step1_UserHasReturn_ShowExistingReturn()
+        public void EnterCalculations_UserHasReturn_ShowExistingReturn()
         {
             // Arrange:
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -67,7 +68,7 @@ namespace GenderPayGap.Tests.Submission
 
             //set mock routeData
             var routeData = new RouteData();
-            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("action", "EnterCalculations");
             routeData.Values.Add("controller", "submit");
 
             //Add a return to the mock repo to simulate one in the database
@@ -75,7 +76,7 @@ namespace GenderPayGap.Tests.Submission
            // controller.bind();
 
             //Act:
-            var result = (ViewResult)controller.Step1();
+            var result = (ViewResult)controller.EnterCalculations();
             var resultModel = result.Model as ReturnViewModel;
 
             //Assert:
@@ -86,7 +87,7 @@ namespace GenderPayGap.Tests.Submission
 
        // [Test]
         [Description("If a user does not have a return existing in the database, a new one should be created and verified with default values")]
-        public void Step1_UserHasNoReturn_ShowNewPrivateSectorReturn()
+        public void EnterCalculations_UserHasNoReturn_ShowNewPrivateSectorReturn()
         {
             // Arrange:
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -95,7 +96,7 @@ namespace GenderPayGap.Tests.Submission
 
             //set mock routeData
             var routeData = new RouteData();
-            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("action", "EnterCalculations");
             routeData.Values.Add("controller", "submit");
 
             var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
@@ -104,7 +105,7 @@ namespace GenderPayGap.Tests.Submission
 
 
             //Act:
-            var result = (ViewResult)controller.Step1();
+            var result = (ViewResult)controller.EnterCalculations();
             var resultModel = result.Model as ReturnViewModel;
 
             //Assert:
@@ -115,7 +116,7 @@ namespace GenderPayGap.Tests.Submission
 
        // [Test]
         [Description("If a user does not have a return existing in the database, a new one should be created and verified with default values")]
-        public void Step1_UserHasNoReturn_ShowNewPublicSectorReturn()
+        public void EnterCalculations_UserHasNoReturn_ShowNewPublicSectorReturn()
         {
             // Arrange:
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -124,7 +125,7 @@ namespace GenderPayGap.Tests.Submission
 
             //set mock routeData
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step1");
+            routeData.Values.Add("Action", "EnterCalculations");
             routeData.Values.Add("Controller", "Submit");
 
             var PublicAccountingDate = new DateTime(2017, 3, 31);
@@ -141,7 +142,7 @@ namespace GenderPayGap.Tests.Submission
             controller.StashModel(model);
 
             //Act:
-            var result = controller.Step1() as ViewResult;
+            var result = controller.EnterCalculations() as ViewResult;
             // controller.Bind(model);
             var resultModel = result.Model as ReturnViewModel;
 
@@ -152,8 +153,8 @@ namespace GenderPayGap.Tests.Submission
         }
 
         [Test]
-        [Description("Step1 should fail when any field is empty")]
-        public void Step1_EmptyFields_ShowAllErrors()
+        [Description("EnterCalculations should fail when any field is empty")]
+        public void EnterCalculations_EmptyFields_ShowAllErrors()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -162,7 +163,7 @@ namespace GenderPayGap.Tests.Submission
 
             //set mock routeData
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step1");
+            routeData.Values.Add("Action", "EnterCalculations");
             routeData.Values.Add("Controller", "Submit");
 
             //empty model without values
@@ -172,13 +173,13 @@ namespace GenderPayGap.Tests.Submission
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.EnterCalculations(model) as ViewResult;
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.NotNull(result, "Expected ViewResult");
-                Assert.That(result.ViewName == "Step1", "Incorrect view returned");
+                Assert.That(result.ViewName == "EnterCalculations", "Incorrect view returned");
 
                 Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
 
@@ -203,8 +204,8 @@ namespace GenderPayGap.Tests.Submission
         }
 
      //   [Test]
-        [Description("Ensure that Step1 passes when all zero values are entered in all/any of the fields as zero is a valid value")]
-        public void Step1_ZeroValidValueInFields_NoError()
+        [Description("Ensure that EnterCalculations passes when all zero values are entered in all/any of the fields as zero is a valid value")]
+        public void EnterCalculations_ZeroValidValueInFields_NoError()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -213,7 +214,7 @@ namespace GenderPayGap.Tests.Submission
 
             //set mock routeData
             var routeData = new RouteData();
-            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("action", "EnterCalculations");
             routeData.Values.Add("controller", "submit");
 
             decimal zero = 0;
@@ -241,13 +242,13 @@ namespace GenderPayGap.Tests.Submission
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.EnterCalculations(model) as ViewResult;
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.NotNull(result, "Expected ViewResult");
-                Assert.That(result.ViewName == "Step1", "Incorrect view returned");
+                Assert.That(result.ViewName == "EnterCalculations", "Incorrect view returned");
 
                 Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
 
@@ -271,8 +272,8 @@ namespace GenderPayGap.Tests.Submission
         }
 
       //  [Test]
-        [Description("Step1 should succeed when all fields have valid values")]
-        public void Step1_ValidValueInFields_NoError()
+        [Description("EnterCalculations should succeed when all fields have valid values")]
+        public void EnterCalculations_ValidValueInFields_NoError()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -304,14 +305,14 @@ namespace GenderPayGap.Tests.Submission
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.EnterCalculations(model) as ViewResult;
             
             // Assert
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.NotNull(result, "Expected ViewResult");
-                Assert.That(result.ViewName == "Step1", "Incorrect view returned");
+                Assert.That(result.ViewName == "EnterCalculations", "Incorrect view returned");
 
                 Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
 
@@ -336,8 +337,8 @@ namespace GenderPayGap.Tests.Submission
         }
 
         [Test]
-        [Description("Step1 should fail when any field is outside of the minimum allowed range of valid values")]
-        public void Step1_MinInValidValues_ShowAllErrors()
+        [Description("EnterCalculations should fail when any field is outside of the minimum allowed range of valid values")]
+        public void EnterCalculations_MinInValidValues_ShowAllErrors()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -346,10 +347,10 @@ namespace GenderPayGap.Tests.Submission
 
             //set mock routeData
             var routeData = new RouteData();
-            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("action", "EnterCalculations");
             routeData.Values.Add("controller", "submit");
 
-            decimal minOutOfRangeValue = -201M;
+            decimal minOutOfRangeValue = -201;
 
             var model = new ReturnViewModel()
             {
@@ -374,13 +375,13 @@ namespace GenderPayGap.Tests.Submission
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.EnterCalculations(model) as ViewResult;
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.NotNull(result, "Expected ViewResult");
-                Assert.That(result.ViewName == "Step1", "Incorrect view returned");
+                Assert.That(result.ViewName == "EnterCalculations", "Incorrect view returned");
 
                 Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
 
@@ -401,12 +402,14 @@ namespace GenderPayGap.Tests.Submission
                 Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleUpperPayBand"),            false, "Expected MaleUpperPayBand  failure");
                 Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleUpperQuartilePayBand"),    false, "Expected MaleUpperQuartilePayBand  failure");
 
+
+                //TODO instead of checking ModelState.Isvalid we should now be checking for exact error message on each field is than this in ErrorConfig - this can be done later but we must start doing this from now on
             });
         }
 
         [Test]
-        [Description("Step1 should fail when any field is outside of the maximum allowed range of valid values")]
-        public void Step1_MaxInValidValues_ShowAllErrors()
+        [Description("EnterCalculations should fail when any field is outside of the maximum allowed range of valid values")]
+        public void EnterCalculations_MaxInValidValues_ShowAllErrors()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -415,7 +418,7 @@ namespace GenderPayGap.Tests.Submission
 
             //set mock routeData
             var routeData = new RouteData();
-            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("action", "EnterCalculations");
             routeData.Values.Add("controller", "register");
 
             decimal maxOutOfRangeValue = 201M;
@@ -443,13 +446,13 @@ namespace GenderPayGap.Tests.Submission
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.EnterCalculations(model) as ViewResult;
 
             // Assert
             Assert.Multiple(() =>
             {
                 Assert.NotNull(result, "Expected ViewResult");
-                Assert.That(result.ViewName == "Step1", "Incorrect view returned");
+                Assert.That(result.ViewName == "EnterCalculations", "Incorrect view returned");
 
                 Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
 
@@ -471,12 +474,15 @@ namespace GenderPayGap.Tests.Submission
                 Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleUpperQuartilePayBand"),    false, "Expected MaleUpperQuartilePayBand  failure");
 
             });
+
+            //TODO again we need to check for exact error messages from config
         }
 
+        //TODO Test needed for fields are now using regex to ensure only 1 decimal place
 
         [Test]
         [Description("Create action result should load the return model view")]
-        public void Step1_VerifyActionReturns_ValidReturnModel()
+        public void EnterCalculations_VerifyActionReturns_ValidReturnModel()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -485,7 +491,7 @@ namespace GenderPayGap.Tests.Submission
             //var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step1");
+            routeData.Values.Add("Action", "EnterCalculations");
             routeData.Values.Add("Controller", "Submit");
 
             var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
@@ -494,16 +500,18 @@ namespace GenderPayGap.Tests.Submission
             controller.StashModel(model);
 
             //Act
-            var result = (ViewResult)controller.Step1();
+            var result = (ViewResult)controller.EnterCalculations();
 
             // Assert
             Assert.IsNotNull(result.Model, "Error Message");
-            Assert.That(result.Model.GetType() == typeof(ReturnViewModel), "Error Message");
+            Assert.That(result.Model is ReturnViewModel, "Error Message");
+
+            //TODO you should be checking here that returned model values match those expected
         }
 
         [Test]
         [Description("Create action result should load the return model view")]
-        public void Step1_VerifyActionReturns_AnExistingReturn()
+        public void EnterCalculations_VerifyActionReturns_AnExistingReturn()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -513,7 +521,7 @@ namespace GenderPayGap.Tests.Submission
             var @return = new Return() { ReturnId = 1, OrganisationId = 1, CompanyLinkToGPGInfo = "https://www.test.com" };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step1");
+            routeData.Values.Add("Action", "EnterCalculations");
             routeData.Values.Add("Controller", "Register");
 
             string returnurl = null;
@@ -526,23 +534,19 @@ namespace GenderPayGap.Tests.Submission
             controller.StashModel(model);
 
             //ACT:
-            var result = controller.Step1(returnurl) as ViewResult;
+            var result = controller.EnterCalculations(returnurl) as ViewResult;
             var returnModel = result.Model as ReturnViewModel;
 
             //Assert
             Assert.NotNull(result, "Expected ViewResult");
+            //TODO you arent checking the returned model at all
+            //TODO again you should be checking the returned model has correct values and is for the correct user and org and userorg
         }
-
-
-
-
-
-
 
         //Happy Path for Sumission Journey
         [Test]
-        [Description("Step1 should fail when any field is empty")]
-        public void Step1_Get_Success()
+        [Description("EnterCalculations should fail when any field is empty")]
+        public void EnterCalculations_Get_Success()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now /*, EmailVerifyHash = code.GetSHA512Checksum()*/ };
@@ -550,7 +554,7 @@ namespace GenderPayGap.Tests.Submission
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "1" };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step1");
+            routeData.Values.Add("Action", "EnterCalculations");
             routeData.Values.Add("Controller", "Submit");
 
             string returnurl = null;
@@ -563,21 +567,23 @@ namespace GenderPayGap.Tests.Submission
             controller.StashModel(model);
 
             //ACT:
-            var result = controller.Step1(returnurl) as ViewResult;
+            var result = controller.EnterCalculations(returnurl) as ViewResult;
 
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
-            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
-            Assert.That(result.ViewName == "Step1", "Incorrect view returned");
+            Assert.That(result is ViewResult, "Incorrect resultType returned"); //TODO this is redundant as previous line doe this same check
+            Assert.That(result.ViewName == "EnterCalculations", "Incorrect view returned");
             Assert.NotNull(result.Model as ReturnViewModel, "Expected RegisterViewModel");
-            Assert.That(result.Model.GetType() == typeof(ReturnViewModel), "Incorrect resultType returned");
+            Assert.That(result.Model is ReturnViewModel, "Incorrect resultType returned"); //TODO again this is redundant due to previous line
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
+
+            //TODO you should be checking the returned model is empty
         }
 
 
         [Test]
-        [Description("Step1 should fail when any field is empty")]
-        public void Step1_Post_Success()
+        [Description("EnterCalculations should fail when any field is empty")]
+        public void EnterCalculations_Post_Success()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -586,7 +592,7 @@ namespace GenderPayGap.Tests.Submission
 
             //set mock routeData
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step1");
+            routeData.Values.Add("Action", "EnterCalculations");
             routeData.Values.Add("Controller", "Submit");
 
             string returnurl = "";
@@ -622,6 +628,8 @@ namespace GenderPayGap.Tests.Submission
                 ReturnId = 0,
             };
 
+            //TODO line above is wrong as you should be setting the fields to null not zero
+
             var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
             controller.Bind(model);
 
@@ -629,24 +637,29 @@ namespace GenderPayGap.Tests.Submission
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step1(model, returnurl) as RedirectToRouteResult;
+            var result = controller.EnterCalculations(model, returnurl) as RedirectToRouteResult;
+
+            //TODO this test is completely wrong you should be cheking the all the fields are invalid in the modelstate
 
             // ASSERT:
             //3.Check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
+            //TODO This line is wrong as we should be returning as View since the modelstate was invalid
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step2", "Expected a RedirectToRouteResult to Step2");
+            Assert.That(result.RouteValues["action"].ToString() == "PersonResponsible", "Expected a RedirectToRouteResult to PersonResponsible");
+            //TODO This line is wrong as we should be returning the same view since model state was invalid
+            //TODO Also note public sector orgs skip person responsible step and instead go to companylink step but then only on succcess
 
             // See if there are anymore asserts that can be done for a redirect here.
 
-            // Assert.That(result.ViewName == "Step4" || result.ViewName == "Step2", "Incorrect view returned");
+            // Assert.That(result.ViewName == "CheckData" || result.ViewName == "PersonResponsible", "Incorrect view returned");
             // Assert.That(result.ViewName == returnurl, "Expected ViewResult");
 
             //Assert.Multiple(() =>
             //{
             //    Assert.NotNull(result, "Expected ViewResult");
-            //    Assert.That(result.ViewName == "Step1", "Incorrect view returned");
+            //    Assert.That(result.ViewName == "EnterCalculations", "Incorrect view returned");
 
             //    Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
 
@@ -675,8 +688,8 @@ namespace GenderPayGap.Tests.Submission
         #region Person Responsible
 
         [Test]
-        [Description("Step1 should fail when any field is empty")]
-        public void Step2_Get_Success()
+        [Description("EnterCalculations should fail when any field is empty")]
+        public void PersonResponsible_Get_Success()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -684,7 +697,7 @@ namespace GenderPayGap.Tests.Submission
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "1" };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step2");
+            routeData.Values.Add("Action", "PersonResponsible");
             routeData.Values.Add("Controller", "Submit");
 
             string returnurl = null;
@@ -697,21 +710,23 @@ namespace GenderPayGap.Tests.Submission
             controller.StashModel(model);
 
             //ACT:
-            var result = controller.Step2(returnurl) as ViewResult;
+            var result = controller.PersonResponsible(returnurl) as ViewResult;
 
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
-            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
-            Assert.That(result.ViewName == "Step2", "Incorrect view returned");
+            Assert.That(result is ViewResult, "Incorrect resultType returned");//TODO redundant due to previous line
+            Assert.That(result.ViewName == "PersonResponsible", "Incorrect view returned");
             Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
-            Assert.That(result.Model.GetType() == typeof(ReturnViewModel), "Incorrect resultType returned");
-            Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
+            Assert.That(result.Model  is ReturnViewModel, "Incorrect resultType returned"); //TODO again redundant due to previous step
+            Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");//TODO wrong should be checking its invalid
+
+            //TODO should be checking each field for exact error message in modelstate
         }
 
 
         [Test]
-        [Description("Step1 should fail when any field is empty")]
-        public void Step2_Post_Success()
+        [Description("EnterCalculations should fail when any field is empty")]
+        public void PersonResponsible_Post_Success()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -720,7 +735,7 @@ namespace GenderPayGap.Tests.Submission
 
             //set mock routeData
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step2");
+            routeData.Values.Add("Action", "PersonResponsible");
             routeData.Values.Add("Controller", "Submit");
 
             string returnurl = "";
@@ -752,6 +767,8 @@ namespace GenderPayGap.Tests.Submission
                 ReturnId = 0,
             };
 
+            //TODO again above line is wrong as you should be setting nulllable field values to null
+
             var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
             controller.Bind(model);
 
@@ -759,24 +776,24 @@ namespace GenderPayGap.Tests.Submission
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step2(model, returnurl) as RedirectToRouteResult;
+            var result = controller.PersonResponsible(model, returnurl) as RedirectToRouteResult;
 
             // ASSERT:
             //3.Check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step3", "Expected a RedirectToRouteResult to Step3");
+            Assert.That(result.RouteValues["action"].ToString() == "EmployerWebsite", "Expected a RedirectToRouteResult to EmployerWebsite");
 
             // See if there are anymore asserts that can be done for a redirect here.
-           
+           //TODO you are not checking here for model state is invalid
+           //TODO you should be checking only the exact failed fields show and error message
+           //TODO you should be checking each error message is exact as per confilg file
         }
 
-
-
        // [Test]
-        [Description("Ensure the Step2 fails when any field is empty")]
-        public void Step2_EmptyFields_ShowAllErrors()
+        [Description("Ensure the PersonResponsible fails when any field is empty")]
+        public void PersonResponsible_EmptyFields_ShowAllErrors()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -784,7 +801,7 @@ namespace GenderPayGap.Tests.Submission
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "1" };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step2");
+            routeData.Values.Add("Action", "PersonResponsible");
             routeData.Values.Add("Controller", "Submit");
 
             string emptyString = string.Empty;
@@ -802,25 +819,27 @@ namespace GenderPayGap.Tests.Submission
             //controller.bind();
 
             //Act:
-            var result = controller.Step2(model, command) as ViewResult; ;
+            var result = controller.PersonResponsible(model, command) as ViewResult; ;
 
             //Assert
             Assert.Multiple(() =>
            {
                Assert.NotNull(result, "Expected ViewResult");
-               Assert.That(result.ViewName == "Step2", "Incorrect view returned");
+               Assert.That(result.ViewName == "PersonResponsible", "Incorrect view returned");
                Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
 
                Assert.AreEqual(result.ViewData.ModelState.IsValidField("JobTitle"), false, "Expected JobTitle value other than empty strings failure");
                Assert.AreEqual(result.ViewData.ModelState.IsValidField("FirstName"), false, "Expected FirstName value other than empty strings  failure");
                Assert.AreEqual(result.ViewData.ModelState.IsValidField("LasttName"), false, "Expected LasttName value other than empty strings  failure");
+
+               //TODO you should also be checking modelstate has no other errors to ensure other fields are being retained after postback and not causing errors
            });
 
         }
 
      //   [Test]
-        [Description("Ensure the Step2 fails when any field is null")]
-        public void Step2_NullFields_ShowAllErrors()
+        [Description("Ensure the PersonResponsible fails when any field is null")]
+        public void PersonResponsible_NullFields_ShowAllErrors()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -828,7 +847,7 @@ namespace GenderPayGap.Tests.Submission
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "1" };
 
             var routeData = new RouteData();
-            routeData.Values.Add("action", "step2");
+            routeData.Values.Add("action", "PersonResponsible");
             routeData.Values.Add("controller", "submit");
 
 
@@ -848,25 +867,26 @@ namespace GenderPayGap.Tests.Submission
             //controller.bind();
 
             //Act:
-            var result = controller.Step2(model, command) as ViewResult; ;
+            var result = controller.PersonResponsible(model, command) as ViewResult; ;
 
             //Assert
             Assert.Multiple(() =>
             {
                 Assert.NotNull(result, "Expected ViewResult");
-                Assert.That(result.ViewName == "Step2", "Incorrect view returned");
+                Assert.That(result.ViewName == "PersonResponsible", "Incorrect view returned");
                 Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
 
                 Assert.AreEqual(result.ViewData.ModelState.IsValidField("JobTitle"), false, "Expected JobTitle  value other than null failure");
                 Assert.AreEqual(result.ViewData.ModelState.IsValidField("FirstName"), false, "Expected FirstName value other than null  failure");
                 Assert.AreEqual(result.ViewData.ModelState.IsValidField("LasttName"), false, "Expected LasttName value other than null  failure");
             });
+            //TODO you should also be checking modelstate has no other errors to ensure other fields are being retained after postback and not causing errors
 
         }
 
-     //   [Test]
-        [Description("Ensure the Step2 succeeds when all fields are filled in with valid values")]
-        public void Step2_ValidFields_NoErrors()
+        //   [Test]
+        [Description("Ensure the PersonResponsible succeeds when all fields are filled in with valid values")]
+        public void PersonResponsible_ValidFields_NoErrors()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -875,7 +895,7 @@ namespace GenderPayGap.Tests.Submission
 
 
             var routeData = new RouteData();
-            routeData.Values.Add("action", "step1");
+            routeData.Values.Add("action", "EnterCalculations");
             routeData.Values.Add("controller", "register");
 
             var model = new ReturnViewModel()
@@ -891,19 +911,20 @@ namespace GenderPayGap.Tests.Submission
             //controller.bind();
 
             //Act:
-            var result = controller.Step2(model, command) as ViewResult; ;
+            var result = controller.PersonResponsible(model, command) as ViewResult; ;
 
             //Assert
             Assert.Multiple(() =>
             {
                 Assert.NotNull(result, "Expected ViewResult");
-                Assert.That(result.ViewName == "Step2", "Incorrect view returned");
+                Assert.That(result.ViewName == "PersonResponsible", "Incorrect view returned");
                 Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
 
                 Assert.AreEqual(result.ViewData.ModelState.IsValidField("JobTitle"), true, "Expected JobTitle value other than empty strings success");
                 Assert.AreEqual(result.ViewData.ModelState.IsValidField("FirstName"), true, "Expected FirstName value other than empty strings  success");
                 Assert.AreEqual(result.ViewData.ModelState.IsValidField("LasttName"), true, "Expected LasttName value other than empty strings  success");
             });
+            //TODO you should also be checking modelstate has no other errors to ensure other fields are being retained after postback and not causing errors
 
         }
         #endregion
@@ -911,8 +932,8 @@ namespace GenderPayGap.Tests.Submission
 
         #region CompanyLinkToGPGInfo
         [Test]
-        [Description("Step3 should succeed when view is requested")]
-        public void Step3_Get_Success()
+        [Description("EmployerWebsite should succeed when view is requested")]
+        public void EmployerWebsite_Get_Success()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -920,7 +941,7 @@ namespace GenderPayGap.Tests.Submission
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "1" };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step3");
+            routeData.Values.Add("Action", "EmployerWebsite");
             routeData.Values.Add("Controller", "Submit");
 
             string returnurl = null;
@@ -933,20 +954,22 @@ namespace GenderPayGap.Tests.Submission
             controller.StashModel(model);
 
             //ACT:
-            var result = controller.Step3(returnurl) as ViewResult;
+            var result = controller.EmployerWebsite(returnurl) as ViewResult;
 
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
-            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
-            Assert.That(result.ViewName == "Step3", "Incorrect view returned");
+            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");//TODO redundate due to previous line
+            Assert.That(result.ViewName == "EmployerWebsite", "Incorrect view returned");
             Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
             Assert.That(result.Model.GetType() == typeof(ReturnViewModel), "Incorrect resultType returned");
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
+
+            //TODO you shouold be checking all model fields are correct too
         }
 
         [Test]
-        [Description("Step3 should succeed its field is empty or null on View Post")]
-        public void Step3_Post_Without_CompanyLinkToGPGInfoValue_Success()
+        [Description("EmployerWebsite should succeed its field is empty or null on View Post")]
+        public void EmployerWebsite_Post_Without_CompanyLinkToGPGInfoValue_Success()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -955,7 +978,7 @@ namespace GenderPayGap.Tests.Submission
 
             //set mock routeData
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step3");
+            routeData.Values.Add("Action", "EmployerWebsite");
             routeData.Values.Add("Controller", "Submit");
 
             var PrivateAccountingDate = new DateTime(2017, 4, 4);
@@ -992,22 +1015,23 @@ namespace GenderPayGap.Tests.Submission
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step3(model) as RedirectToRouteResult;
+            var result = controller.EmployerWebsite(model) as RedirectToRouteResult;
 
             // ASSERT:
             //3.Check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step4", "Expected a RedirectToRouteResult to Step3");
+            Assert.That(result.RouteValues["action"].ToString() == "CheckData", "Expected a RedirectToRouteResult to CheckData");
 
             // See if there are anymore asserts that can be done for a redirect here.
+            //TODO you should be checking modelstate.isvalid and also that all other fields dont fail in modelstate
 
         }
 
         [Test]
-        [Description("Step3 should succeed its field has value on View Post, no need to check validity of the value here, (due to client-side validation)")]
-        public void Step3_Post_With_CompanyLinkToGPGInfoValue_Success()
+        [Description("EmployerWebsite should succeed its field has value on View Post, no need to check validity of the value here, (due to client-side validation)")]
+        public void EmployerWebsite_Post_With_CompanyLinkToGPGInfoValue_Success()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -1016,7 +1040,7 @@ namespace GenderPayGap.Tests.Submission
 
             //set mock routeData
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step3");
+            routeData.Values.Add("Action", "EmployerWebsite");
             routeData.Values.Add("Controller", "Submit");
 
             var PrivateAccountingDate = new DateTime(2017, 4, 4);
@@ -1053,17 +1077,17 @@ namespace GenderPayGap.Tests.Submission
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step3(model) as RedirectToRouteResult;
+            var result = controller.EmployerWebsite(model) as RedirectToRouteResult;
 
             // ASSERT:
             //3.Check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step4", "Expected a RedirectToRouteResult to Step3");
+            Assert.That(result.RouteValues["action"].ToString() == "CheckData", "Expected a RedirectToRouteResult to CheckData");
 
             // See if there are anymore asserts that can be done for a redirect here.
-
+            //TODO you should be checking all fields here are in facts valid as well as modelstate.isvalid
         }
 
 
@@ -1071,7 +1095,7 @@ namespace GenderPayGap.Tests.Submission
 
         [Test]
         [Description("Verify that a good url link with the proper web protocol prefix is validated and allowed")]
-        public void Step3_VerifyGPGInfoLink_GoodURL_Link()
+        public void EmployerWebsite_VerifyGPGInfoLink_GoodURL_Link()
         {
             //Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -1080,7 +1104,7 @@ namespace GenderPayGap.Tests.Submission
            // var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step3");
+            routeData.Values.Add("Action", "EmployerWebsite");
             routeData.Values.Add("Controller", "Submit");
 
             var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
@@ -1093,7 +1117,7 @@ namespace GenderPayGap.Tests.Submission
             };
            
             //Act
-            var result = controller.Step3(model) as RedirectToRouteResult;
+            var result = controller.EmployerWebsite(model) as RedirectToRouteResult;
             var resultModel = controller.UnstashModel<ReturnViewModel>();
 
             //Assert
@@ -1101,12 +1125,16 @@ namespace GenderPayGap.Tests.Submission
                         resultModel.CompanyLinkToGPGInfo.StartsWith("https://") || 
                         resultModel.CompanyLinkToGPGInfo.StartsWith("ftp://"), 
                         "Expected CompanyLinkToGPGInfoLink should have one of the neccesary URL Prefix:'http://', 'https://' or 'ftp://' ");
+
+            //TODO why are you checking for ftp http when you set it to https
+            //TODO this is exaclty the same test as previous
+            //TODO you should be checking modelstate.isvalid and each modelstate error
         }
 
         //I dont think this test is neccesary as the above does the same thing this just does the same but in opposite
         [Test]
         [Description("Verify that a bad url link with the improper web protocol prefix is not validated or allowed")]
-        public void Step3_VerifyGPGInfoLink_BadURL_Link()
+        public void EmployerWebsite_VerifyGPGInfoLink_BadURL_Link()
         {
             //Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -1115,7 +1143,7 @@ namespace GenderPayGap.Tests.Submission
            // var @return = new Return() { ReturnId = 1, OrganisationId = 1 };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step3");
+            routeData.Values.Add("Action", "EmployerWebsite");
             routeData.Values.Add("Controller", "Submit");
 
             var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
@@ -1128,7 +1156,7 @@ namespace GenderPayGap.Tests.Submission
             };
 
             //Act
-            var result = controller.Step3(model) as RedirectToRouteResult;
+            var result = controller.EmployerWebsite(model) as RedirectToRouteResult;
             var resultModel = controller.UnstashModel<ReturnViewModel>();
 
             //Assert
@@ -1136,11 +1164,13 @@ namespace GenderPayGap.Tests.Submission
                         (!resultModel.CompanyLinkToGPGInfo.StartsWith("https://")) ||
                         (!resultModel.CompanyLinkToGPGInfo.StartsWith("ftp://")),
                         "Expected CompanyLinkToGPGInfoLink should have one of the neccesary URL Prefix:'http://', 'https://' or 'ftp://' ");
+
+            //TODO again this is the wrong assert - you should be just checking that modelstate.isvalid and no other modelstate errors except for exact weblink field
         }
 
         [Test]
         [Description("Verify an existing GPGInfo Link is what is returned")]
-        public void Step3_VerifyGPGInfoLink_WhatYouPutIn_IsWhatYouGetOut()
+        public void EmployerWebsite_VerifyGPGInfoLink_WhatYouPutIn_IsWhatYouGetOut()
         {
             //ARRANGE:
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -1151,10 +1181,10 @@ namespace GenderPayGap.Tests.Submission
             var @return = new Return() { ReturnId = 1, OrganisationId = 1, CompanyLinkToGPGInfo = "http://www.test.com" };
 
             var routeData = new RouteData();
-            routeData.Values.Add("action", "step3");
+            routeData.Values.Add("action", "EmployerWebsite");
             routeData.Values.Add("controller", "submit");
 
-            //mock entered return CompanyLinkToGPGInfo in the CompanyLinkToGPGInfo step3 view
+            //mock entered return CompanyLinkToGPGInfo in the CompanyLinkToGPGInfo EmployerWebsite view
             var model = new ReturnViewModel()
                             {
                                 CompanyLinkToGPGInfo = "http://www.test.com"
@@ -1164,11 +1194,14 @@ namespace GenderPayGap.Tests.Submission
             var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation, @return);
 
             //ACT:
-            var result = controller.Step3(model) as RedirectToRouteResult;
+            var result = controller.EmployerWebsite(model) as RedirectToRouteResult;
             var resultModel = controller.UnstashModel<ReturnViewModel>();
 
             //ASSERT:
             Assert.That(resultModel.CompanyLinkToGPGInfo == model.CompanyLinkToGPGInfo, "CompanyLinkToGPGInfoLink that was input by the user is not what is returned");
+
+            //TODO not really a valid test as there is no code which changes this - you should maybe just be checking there are no modelstate errors but then its a repeat test of one you did earlier
+            //TODO also your not checking for the correct redirectresult and the rest of the model the correct model - why just test one field remains unchanged?
         }
 
         #endregion
@@ -1176,8 +1209,8 @@ namespace GenderPayGap.Tests.Submission
 
         #region Review
         [Test]
-        [Description("Step4 should fail when any field is empty")]
-        public void Step4_Get_Success()
+        [Description("CheckData should fail when any field is empty")]
+        public void CheckData_Get_Success()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -1185,7 +1218,7 @@ namespace GenderPayGap.Tests.Submission
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "1" };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step4");
+            routeData.Values.Add("Action", "CheckData");
             routeData.Values.Add("Controller", "Submit");
 
             //Stash an object to pass in for this.ClearStash()
@@ -1196,20 +1229,24 @@ namespace GenderPayGap.Tests.Submission
             controller.StashModel(model);
 
             //ACT:
-            var result = controller.Step4() as ViewResult;
+            var result = controller.EnterCalculations() as ViewResult;
 
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
-            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
-            Assert.That(result.ViewName == "Step4", "Incorrect view returned");
+            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");//TODO redundant again due to previous line
+            Assert.That(result.ViewName == "CheckData", "Incorrect view returned");
             Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
-            Assert.That(result.Model.GetType() == typeof(ReturnViewModel), "Incorrect resultType returned");
+            Assert.That(result.Model.GetType() == typeof(ReturnViewModel), "Incorrect resultType returned");//TODO redundant due to previous line
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
+
+            //TODO shouldnt you be checking that all the model fields are returned correctly
+
+            //TODO remember when checking modelstate.isvalid=true there should be no need to check individual modelstate erorrs but when checking  checking modelstate.isvalid=valid you should be checking all the errors are exactly right with no more and no less errors than expected
         }
 
         [Test]
-        [Description("Step4 should fail when any field is empty")]
-        public void Step4_Post_Success()
+        [Description("CheckData should fail when any field is empty")]
+        public void CheckData_Post_Success()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
@@ -1221,12 +1258,12 @@ namespace GenderPayGap.Tests.Submission
 
             //set mock routeData
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step4");
+            routeData.Values.Add("Action", "CheckData");
             routeData.Values.Add("Controller", "Submit");
 
             var PrivateAccountingDate = new DateTime(2017, 4, 4);
 
-            //mock entered return at review step4 view
+            //mock entered return at review CheckData view
             var model = new ReturnViewModel()
             {
                 AccountingDate = PrivateAccountingDate,
@@ -1259,22 +1296,25 @@ namespace GenderPayGap.Tests.Submission
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step4(model) as ViewResult;
+            var result = controller.CheckData(model) as ViewResult;
             var resultModel = result.Model as ReturnViewModel;
 
-            var resultDB = (controller.DataRepository.GetAll<Return>().FirstOrDefault( r => r.CompanyLinkToGPGInfo == "http://www.gov.uk"));
+            var resultDB = (controller.DataRepository.GetAll<Return>().FirstOrDefault( r => r.CompanyLinkToGPGInfo == "http://www.gov.uk"));//TODO this should just return the correct record with returnid=1
 
             // ASSERT:
             //3.Check that the result is not null
             Assert.NotNull(result, "Expected ViewResult");
-            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
-            Assert.That(result.ViewName == "Step5", "Incorrect view returned");
+            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");//TODO redundant due to previous line
+            Assert.That(result.ViewName == "SubmissionComplete", "Incorrect view returned");
             Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
-            Assert.That(result.Model.GetType() == typeof(ReturnViewModel), "Incorrect resultType returned");
+            Assert.That(result.Model.GetType() == typeof(ReturnViewModel), "Incorrect resultType returned");//Again redundant
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
 
             // get the data from te mock database and assert it is there
             Assert.That(model.CompanyLinkToGPGInfo == resultModel.CompanyLinkToGPGInfo, "expected entered companyLinkToGPGInfo is what is saved in db");
+            //TODO this is wrong - you should be checking the model values you passed in have been saved exactly in resultDB in a new record and not in the old one since it has changed
+            //TODO you should also do a test that if no changes saved no new record is recreated
+
         }
         #endregion
 

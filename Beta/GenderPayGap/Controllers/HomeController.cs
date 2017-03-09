@@ -1,7 +1,4 @@
 ﻿using GenderPayGap.Models.SqlDatabase;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.Owin.Security;
@@ -35,7 +32,7 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("~/")]
         public ActionResult Redirect()
         {
-            return RedirectToAction("Step1","Submit");
+            return RedirectToAction("EnterCalculations","Submit");
         }
 
         [HttpGet]
@@ -54,6 +51,8 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
+
         [Route("Execute")]
         public ActionResult Execute(string command)
         {
@@ -75,24 +74,29 @@ namespace GenderPayGap.WebUI.Controllers
                     break;
                 case "ClearDatabase":
                     DbContext.Truncate();
+                    if (User.Identity.IsAuthenticated)
+                    {
+                        Session.Abandon();
+                        Request.GetOwinContext().Authentication.SignOut();
+                    }
                     break;
             }
             return RedirectToAction("Index");
         }
 
-        [Route("LogOut")]
-        public ActionResult Logout()
+        [Route("SignOut")]
+        public ActionResult SignOut()
         {
             Session.Abandon();
             Request.GetOwinContext().Authentication.SignOut();
-            return RedirectToAction("Step1","Submit");
+            return RedirectToAction("EnterCalculations","Submit");
         }
 
         [Route("TimeOut")]
         public ActionResult TimeOut()
         {
             Session.Abandon();
-            Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("Step1","Submit") });
+            Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("EnterCalculations","Submit") });
             return null;
         }
 

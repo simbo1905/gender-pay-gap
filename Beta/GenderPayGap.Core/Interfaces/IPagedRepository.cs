@@ -1,4 +1,5 @@
-﻿using GenderPayGap.Core.Classes;
+﻿using System.Security.Cryptography.X509Certificates;
+using GenderPayGap.Core.Classes;
 
 namespace GenderPayGap.Core.Interfaces
 {
@@ -8,5 +9,7 @@ namespace GenderPayGap.Core.Interfaces
         void Delete(T entity);
 
         PagedResult<T> Search(string searchText, int page, int pageSize);
+
+        string GetSicCodes(string companyNumber);
     }
 }

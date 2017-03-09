@@ -1,14 +1,10 @@
 ﻿using Extensions;
-using GenderPayGap.WebUI.Models;
 using GenderPayGap.Models.SqlDatabase;
-using System;
-using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
-using System.Web;
 using System.Web.Mvc;
 using Autofac;
 using GenderPayGap.WebUI.Classes;
+using GenderPayGap.WebUI.Models.Submit;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -41,13 +37,13 @@ namespace GenderPayGap.WebUI.Controllers
         [Route]
         public ActionResult Redirect()
         {
-            return RedirectToAction("Step1");
+            return RedirectToAction("EnterCalculations");
         }
         #endregion
 
-        [Route("Step1")]
+        [Route("enter-calculations")]
         [HttpGet]
-        public ActionResult Step1(string returnUrl = null)
+        public ActionResult EnterCalculations(string returnUrl = null)
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -67,6 +63,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (model == null)
             {
                 model = new ReturnViewModel();
+                model.SectorType = Org.SectorType;
 
                 if (@return == null)
                 {
@@ -104,18 +101,18 @@ namespace GenderPayGap.WebUI.Controllers
             if (TempData.ContainsKey("ErrorMessage")) ModelState.AddModelError("", TempData["ErrorMessage"].ToString());
 
             //If redirected from step 4 then save to session and return to view
-            model.ReturnToStep4 = returnUrl.EqualsI("Step4");
+            model.ReturnToStep4 = returnUrl.EqualsI("CheckData");
 
             this.StashModel(model);
 
-            var result = View("Step1", model);
+            var result = View("EnterCalculations", model);
             return result;
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Step1")]
-        public ActionResult Step1 (ReturnViewModel model,string returnUrl=null)
+        [Route("enter-calculations")]
+        public ActionResult EnterCalculations/*Create*/(ReturnViewModel model,string returnUrl=null)
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -126,16 +123,20 @@ namespace GenderPayGap.WebUI.Controllers
             ModelState.Remove("LastName");
             ModelState.Remove("JobTitle");
 
-            if (!ModelState.IsValid) return View("Step1", model);
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<ReturnViewModel>();
+                return View(model);
+            }
 
             this.StashModel(model);
 
-            return RedirectToAction(returnUrl.EqualsI("Step4") ? "Step4" : "Step2");
+            return RedirectToAction(returnUrl.EqualsI("CheckData") ? "CheckData" : model.SectorType== SectorTypes.Public ? "EmployerWebsite" : "PersonResponsible");
         }
 
         [HttpGet]
-        [Route("Step2")]
-        public ActionResult Step2(string returnUrl = null)
+        [Route("person-responsible")]
+        public ActionResult PersonResponsible(string returnUrl = null)
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -147,36 +148,41 @@ namespace GenderPayGap.WebUI.Controllers
             if (model == null)
             {
                 TempData["ErrorMessage"] = "You session has timed out and you need to restart";
-                return RedirectToAction("Step1");
+                return RedirectToAction("EnterCalculations");
             }
 
             //If redirected from step 4 then save to session and return to view
-            model.ReturnToStep4 = returnUrl.EqualsI("Step4");
+            model.ReturnToStep4 = returnUrl.EqualsI("CheckData");
 
-            var result = View("Step2", model);
+            var result = View("PersonResponsible", model);
             return result;
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Step2")]
-        public ActionResult Step2(ReturnViewModel model, string returnUrl = null)
+        [Route("person-responsible")]
+        public ActionResult PersonResponsible(ReturnViewModel model, string returnUrl = null)
         {
             //Ensure user has completed the registration process
             User currentUser;
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            if (!ModelState.IsValid) return View("Step2", model);
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<ReturnViewModel>();
+                return View(model);
+            }
+
 
             this.StashModel(model);
             
-            return RedirectToAction(returnUrl.EqualsI("Step4") ? "Step4" : "Step3");
+            return RedirectToAction(returnUrl.EqualsI("CheckData") ? "CheckData" : "EmployerWebsite");
         }
 
         [HttpGet]
-        [Route("Step3")]
-        public ActionResult Step3(string returnUrl=null)
+        [Route("employer-website")]
+        public ActionResult EmployerWebsite(string returnUrl=null)
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -188,19 +194,20 @@ namespace GenderPayGap.WebUI.Controllers
             if (model == null)
             {
                 TempData["ErrorMessage"] = "You session has timed out and you need to restart";
-                return RedirectToAction("Step1");
+                return RedirectToAction("EnterCalculations");
             }
 
             //If redirected from step 4 then save to session and return to view
-            model.ReturnToStep4 = returnUrl.EqualsI("Step4");
+            model.ReturnToStep4 = returnUrl.EqualsI("CheckData");
 
-              return View("Step3", model);
+            var result = View("EmployerWebsite", model);
+            return result;
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Step3")]
-        public ActionResult Step3 /*GPGInfoLink*/(ReturnViewModel model)
+        [Route("employer-website")]
+        public ActionResult EmployerWebsite /*GPGInfoLink*/(ReturnViewModel model)
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -209,12 +216,12 @@ namespace GenderPayGap.WebUI.Controllers
 
             this.StashModel(model);
 
-            return RedirectToAction("Step4");
+            return RedirectToAction("CheckData");
         }
 
         [HttpGet]
-        [Route("Step4")]
-        public ActionResult Step4  /*Confirm*/()
+        [Route("check-data")]
+        public ActionResult CheckData  /*Confirm*/()
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -225,7 +232,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (model == null)
             {
                 TempData["ErrorMessage"] = "You session has timed out and you need to restart";
-                return RedirectToAction("Step1");
+                return RedirectToAction("EnterCalculations");
             }
 
             return View("Step4", model);
@@ -233,15 +240,26 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        [Route("Step4")]
-        public ActionResult Step4  /*Confirm*/(ReturnViewModel model)
+        [Route("check-data")]
+        public ActionResult CheckData  /*Confirm*/(ReturnViewModel model)
         {
             //Ensure user has completed the registration process
             User currentUser;
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            if (!ModelState.IsValid) return View(model);
+            if (model.SectorType == SectorTypes.Public)
+            {
+                ModelState.Remove("FirstName");
+                ModelState.Remove("LastName");
+                ModelState.Remove("JobTitle");
+            }
+
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<ReturnViewModel>();
+                return View(model);
+            }
 
             var oldReturn = DataRepository.GetAll<Return>().FirstOrDefault(r => r.ReturnId == model.ReturnId);
 
@@ -283,15 +301,15 @@ namespace GenderPayGap.WebUI.Controllers
             newReturn.SetStatus(ReturnStatuses.Submitted, currentUser.UserId);
             DataRepository.SaveChanges();
 
-            return View("Step5", model);
+            return View("SubmissionComplete", model);
         }
 
-        //Step4: Should have edits to take user to pages for editing
-        //Step5 will be cut off from the original steps as this page will not be provided by us
+        //CheckData: Should have edits to take user to pages for editing
+        //SubmissionComplete will be cut off from the original steps as this page will not be provided by us
 
         [HttpGet]
-        [Route("Step5")]
-        public ActionResult Step5(/*long id = 1*/ )
+        [Route("submission-complete")]
+        public ActionResult SubmissionComplete(/*long id = 1*/ )
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -302,7 +320,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (model == null)
             {
                 TempData["ErrorMessage"] = "You session has timed out and you need to restart";
-                return RedirectToAction("Step1");
+                return RedirectToAction("EnterCalculations");
             }
 
             return View(model);
