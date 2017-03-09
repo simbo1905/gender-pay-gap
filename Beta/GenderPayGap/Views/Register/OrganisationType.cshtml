@@ -1,0 +1,47 @@
+﻿@{
+    ViewBag.Title = "Your organisation type - Gender pay gap reporting service";
+}
+@using GenderPayGap.WebUI.Classes
+@model GenderPayGap.WebUI.Models.Register.OrganisationViewModel
+
+<main id="content" role="main">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.SearchText)
+
+        <div class="grid-row">
+            <div class="column-full">
+                @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
+                <h1 class="heading-large">
+                    Your type of organisation
+                </h1>
+                <p>Please select the type of organisation you’re registering. </p>
+
+                <div class="form-section">
+                    <!-- "Chunky" Radio buttons, stacked -->
+                    <h2 class="heading-small">Organisation type</h2>
+                    @Html.ValidationMessageFor(model => model.SectorType, null, new { @class = "error-danger" })
+                    <div class="form-group">
+                        <fieldset>
+                            <label class="block-label selection-button-radio" for="radio-1">
+                                @Html.CustomRadioButtonFor(m=>m.SectorType, GenderPayGap.Models.SqlDatabase.SectorTypes.Private, new { @type = "radio", @class = "styled", @name = "radio-group", @id = "radio-1" })
+                                Private limited company,<br/>
+                                Limited liability partnership,<br />
+                                Charity,<br />
+                                Public limited company
+                            </label>
+                            <label class="block-label selection-button-radio " for="radio-2">
+                                @Html.CustomRadioButtonFor(m => m.SectorType, GenderPayGap.Models.SqlDatabase.SectorTypes.Public, new { @type = "radio", @class = "styled", @name = "radio-group", @id = "radio-2" })
+                                Public sector organisation
+                            </label>
+                        </fieldset>
+                    </div>
+                    <br>
+
+                    <input type="submit" class="button" value="Confirm" />
+                </div>
+            </div>
+        </div>
+    }
+</main>

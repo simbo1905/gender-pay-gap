@@ -13,9 +13,9 @@ namespace GenderPayGap.Models.SqlDatabase
         {
             this.OrganisationAddresses = new HashSet<OrganisationAddress>();
             this.OrganisationStatuses = new HashSet<OrganisationStatus>();
+            this.OrganisationSicCodes = new HashSet<OrganisationSicCode>();
             this.Returns = new HashSet<Return>();
         }
-
 
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
@@ -57,6 +57,8 @@ namespace GenderPayGap.Models.SqlDatabase
 
         public virtual ICollection<OrganisationStatus> OrganisationStatuses { get; set; }
 
+        public virtual ICollection<OrganisationSicCode> OrganisationSicCodes { get; set; }
+
         public virtual ICollection<Return> Returns { get; set; }
 
         public void SetStatus(OrganisationStatuses status, long byUserId, string details = null)
@@ -75,12 +77,15 @@ namespace GenderPayGap.Models.SqlDatabase
             StatusDetails = details;
         }
 
+        /// <summary>
+        /// Latest ACTIVE address
+        /// </summary>
         public OrganisationAddress Address
         {
             get
             {
                 //Get the latest address for the organisation
-                return OrganisationAddresses.OrderByDescending(oa => oa.Modified).FirstOrDefault(oa => oa.OrganisationId == OrganisationId);
+                return OrganisationAddresses.OrderByDescending(oa => oa.Modified).FirstOrDefault(oa => oa.OrganisationId == OrganisationId && oa.Status==AddressStatuses.Active);
             }
         }
     }

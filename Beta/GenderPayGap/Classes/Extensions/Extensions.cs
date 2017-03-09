@@ -12,10 +12,9 @@ using System.Web.Mvc;
 using GenderPayGap.WebUI.Controllers;
 using System.Web.Mvc.Html;
 using System.Linq.Expressions;
-using System.Xml.Linq;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.IO;
-using System.Reflection;
 
 namespace GenderPayGap.WebUI.Classes
 {
@@ -41,6 +40,14 @@ namespace GenderPayGap.WebUI.Classes
         #endregion
 
         #region User Entity
+
+        public static bool IsAdministrator(this User user)
+        {
+            if (!user.EmailAddress.IsEmailAddress()) throw new ArgumentException("Bad email address");
+            if (string.IsNullOrWhiteSpace(MvcApplication.AdminEmails)) throw new ArgumentException("Missing AdminEmails from web.config");
+            return user.EmailAddress.LikeAny(MvcApplication.AdminEmails.SplitI(";"));
+        }
+
         public static UserOrganisation GetUserOrg(this IRepository repository, User user)
         {
             return repository.GetAll<UserOrganisation>().FirstOrDefault(uo=>uo.UserId==user.UserId);
@@ -91,12 +98,12 @@ namespace GenderPayGap.WebUI.Classes
 
         public static bool SendVerifyEmail(this RegisterController controller, string emailAddress, string verifyCode)
         {
-            var verifyUrl=controller.Url.Action("Step2", "Register", new {code= verifyCode },"https");
+            var verifyUrl=controller.Url.Action("VerifyEmail", "Register", new {code= verifyCode },"https");
             return GovNotifyAPI.SendVerifyEmail(verifyUrl,emailAddress, verifyCode);
         }
         public static bool SendConfirmEmail(this RegisterController controller, string emailAddress)
         {
-            var confirmUrl = controller.Url.Action("ConfirmPIN", "Register", null,"https");
+            var confirmUrl = controller.Url.Action("ActivateService", "Register", null,"https");
             return GovNotifyAPI.SendConfirmEmail(confirmUrl, emailAddress);
         }
 
@@ -104,10 +111,9 @@ namespace GenderPayGap.WebUI.Classes
         {
             var name = user.Fullname + " (" + user.JobTitle + ")";
             var address = organisation.Address.GetAddress();
-            var returnUrl = controller.Url.Action("ConfirmPIN", "Register",null,"https");
+            var returnUrl = controller.Url.Action("ActivateService", "Register",null,"https");
             return GovNotifyAPI.SendPinInPost(returnUrl, name, user.EmailAddress, pin);
         }
-
         #endregion
 
         #region AntiSpam
@@ -166,6 +172,20 @@ namespace GenderPayGap.WebUI.Classes
         #region Helpers
         public static MvcHtmlString CustomEditorFor<TModel, TProperty>(this HtmlHelper<TModel> helper, Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null)
         {
+            var htmlAttr = CustomAttributesFor(expression, htmlAttributes);
+
+            return helper.EditorFor(expression, null, new { htmlAttributes = htmlAttr });
+        }
+
+        public static MvcHtmlString CustomRadioButtonFor<TModel, TProperty>(this HtmlHelper<TModel> helper, Expression<Func<TModel, TProperty>> expression, object value, object htmlAttributes = null)
+        {
+            var htmlAttr = CustomAttributesFor(expression, htmlAttributes);
+
+            return helper.RadioButtonFor(expression, value, htmlAttr );
+        }
+
+        private static Dictionary<string, object> CustomAttributesFor<TModel, TProperty>(Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null)
+        {
             var containerType = typeof(TModel);
 
             string propertyName = ExpressionHelper.GetExpressionText(expression);
@@ -207,7 +227,7 @@ namespace GenderPayGap.WebUI.Classes
                     //Set the display name
                     if (!string.IsNullOrWhiteSpace(customError.DisplayName) && customError.DisplayName != displayName)
                     {
-                        Misc.SetPropertyValue(displayAttribute, "Name", customError.DisplayName);
+                        if (displayAttribute != null) Misc.SetPropertyValue(displayAttribute, "Name", customError.DisplayName);
                         displayName = customError.DisplayName;
                     }
 
@@ -234,6 +254,9 @@ namespace GenderPayGap.WebUI.Classes
                             case "emailaddress":
                                 type = "email";
                                 break;
+                            case "phonenumber":
+                                type = "phone";
+                                break;
                         }
                         altAttr = $"data-val-{type}-alt";
                     }
@@ -258,7 +281,101 @@ namespace GenderPayGap.WebUI.Classes
                     htmlAttr[altAttr] = string.Format(errorMessageString, displayName, par1, par2); ;
                 }
 
-            return helper.EditorFor(expression, null, new { htmlAttributes = htmlAttr });
+            return htmlAttr;
+        }
+
+
+        public static void CleanModelErrors<TModel>(this Controller controller)
+        {
+            var containerType = typeof(TModel);
+            var oldModelState = new ModelStateDictionary();
+            foreach (var modelState in controller.ModelState)
+            {
+                oldModelState.Add(modelState.Key, modelState.Value);
+            }
+
+            controller.ModelState.Clear();
+
+            foreach (var modelState in oldModelState)
+            {
+                //Get the property name
+                var propertyName = modelState.Key;
+
+                var propertyInfo = string.IsNullOrWhiteSpace(propertyName) ? null : containerType.GetPropertyInfo(propertyName);
+                var attributes = propertyInfo == null ? null : propertyInfo.GetCustomAttributes(typeof(ValidationAttribute), false).ToList<ValidationAttribute>();
+
+                var displayAttribute = propertyInfo==null ? null : propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
+                var displayName = displayAttribute == null ? propertyName : displayAttribute.Name;
+
+
+                foreach (var error in modelState.Value.Errors)
+                { 
+                    var title = error.ErrorMessage;
+                    var description = error.ErrorMessage;
+
+                    if (error.ErrorMessage.Like("The value * is not valid for *."))
+                    {
+                        title = "There is a problem with your values.";
+                        description = "The value here is invalid.";
+                    }
+
+                    if (attributes == null || attributes.Count() == 0) goto addModelError;
+
+                    var attribute = attributes.FirstOrDefault(a => a.FormatError(a.GetErrorString(),displayName) == error.ErrorMessage);
+                    if (attribute == null) goto addModelError;
+                    var validatorKey = $"{containerType.Name}.{propertyName}:{attribute.GetType().Name.TrimSuffix("Attribute")}";
+                    var customError = CustomErrorMessages.GetValidationError(validatorKey);
+                    if (customError == null) goto addModelError;
+
+                    title = attribute.FormatError(customError.Title, displayName);
+                    description = attribute.FormatError(customError.Description, displayName);
+
+                addModelError:
+
+                    //add the summary message if it doesnt already exist
+                    if (!string.IsNullOrWhiteSpace(title) && !controller.ModelState.Any(m => m.Key == "" && m.Value.Errors.Any(e => e.ErrorMessage == title)))
+                        controller.ModelState.AddModelError("", title);
+
+                    //add the inline message if it doesnt already exist
+                    if (!string.IsNullOrWhiteSpace(description) && !string.IsNullOrWhiteSpace(propertyName) && !controller.ModelState.Any(m => m.Key.EqualsI(propertyName) && m.Value.Errors.Any(e => e.ErrorMessage == description)))
+                        controller.ModelState.AddModelError(propertyName, description);
+                }
+            }
+        }
+
+        public static string GetErrorString(this ValidationAttribute attribute)
+        {
+            string errorString = Misc.GetPropertyValue(attribute, "ErrorMessageString") as string;
+            if (string.IsNullOrWhiteSpace(errorString)) errorString = attribute.ErrorMessage;
+            return errorString;
+        }
+
+        public static string FormatError(this ValidationAttribute attribute, string error, string displayName)
+        {
+            if (string.IsNullOrWhiteSpace(error)) return error;
+
+            string par1 = null;
+            string par2 = null;
+
+            if (attribute is RangeAttribute)
+            {
+                par1 = ((RangeAttribute)attribute).Minimum.ToString();
+                par2 = ((RangeAttribute)attribute).Maximum.ToString();
+            }
+            else if (attribute is MinLengthAttribute)
+            {
+                par1 = ((MinLengthAttribute)attribute).Length.ToString();
+            }
+            else if (attribute is MaxLengthAttribute)
+            {
+                par1 = ((MaxLengthAttribute)attribute).Length.ToString();
+            }
+            else if (attribute is StringLengthAttribute)
+            {
+                par1 = ((StringLengthAttribute)attribute).MinimumLength.ToString();
+                par2 = ((StringLengthAttribute)attribute).MaximumLength.ToString();
+            }
+            return string.Format(error, displayName, par1, par2);
         }
 
         public static void AddModelError(this BaseController controller, string errorContext,string propertyName=null, object parameters=null)
@@ -274,19 +391,43 @@ namespace GenderPayGap.WebUI.Classes
 
             //Bind the parameters
             if (parameters != null)
-                foreach (var prop in parameters.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
-                {
-                    var value = prop.GetValue(parameters, null) as string;
-                    if (string.IsNullOrWhiteSpace((prop.Name)) || string.IsNullOrWhiteSpace(value)) continue;
-                    title = title.ReplaceI("{" + prop.Name + "}", value);
-                    description = description.ReplaceI("{" + prop.Name + "}", value);
-                }
+            {
+                title = parameters.Format(title);
+                description = parameters.Format(description);
+            }
 
-            if (!string.IsNullOrWhiteSpace(title)) controller.ModelState.AddModelError("", title);
-            if (!string.IsNullOrWhiteSpace(description)) controller.ModelState.AddModelError(propertyName, description);
+            //add the summary message if it doesnt already exist
+            if (!string.IsNullOrWhiteSpace(title) && !controller.ModelState.Any(m=>m.Key=="" && m.Value.Errors.Any(e=>e.ErrorMessage==title)))
+                controller.ModelState.AddModelError("", title);
+            
+            //add the inline message if it doesnt already exist
+            if (!string.IsNullOrWhiteSpace(description) && !controller.ModelState.Any(m => m.Key.EqualsI(propertyName) && m.Value.Errors.Any(e => e.ErrorMessage == description)))
+                controller.ModelState.AddModelError(propertyName, description);
         }
 
-        public static void AddModelError(this BaseController controller, int errorCode, object parameters = null)
+        //Removes all but the specified properties from the model state
+        public static void Include(this ModelStateDictionary modelState, params string[] properties)
+        {
+            foreach (var key in modelState.Keys.ToList())
+            {
+                if (string.IsNullOrWhiteSpace(key)) continue;
+                if (properties.ContainsI(key)) continue;
+                modelState.Remove(key);
+            }
+        }
+
+        //Removes all the specified properties from the model state
+        public static void Exclude(this ModelStateDictionary modelState, params string[] properties)
+        {
+            foreach (var key in modelState.Keys.ToList())
+            {
+                if (string.IsNullOrWhiteSpace(key)) continue;
+                if (!properties.ContainsI(key)) continue;
+                modelState.Remove(key);
+            }
+        }
+
+        public static void AddModelError(this ModelStateDictionary modelState, int errorCode, string propertyName=null,object parameters = null)
         {
             //Try and get the custom error
             var customError = CustomErrorMessages.GetError(errorCode);
@@ -296,19 +437,30 @@ namespace GenderPayGap.WebUI.Classes
             var title = customError.Title;
             var description = customError.Description;
 
-            //Bind the parameters
+            //Resolve the parameters
             if (parameters != null)
-                foreach (var prop in parameters.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+            {
+                title = parameters.Format(title);
+                description = parameters.Format(description);
+            }
+
+            //add the summary message if it doesnt already exist
+            if (!string.IsNullOrWhiteSpace(title) && !modelState.Any(m => m.Key == "" && m.Value.Errors.Any(e => e.ErrorMessage == title)))
+                modelState.AddModelError("", title);
+
+            if (!string.IsNullOrWhiteSpace(description))
+            {
+                //If no property then add description as second line of summary
+                if (string.IsNullOrWhiteSpace(propertyName))
                 {
-                    var value = prop.GetValue(parameters, null) as string;
-                    if (string.IsNullOrWhiteSpace((prop.Name)) || string.IsNullOrWhiteSpace(value)) continue;
-                    title = title.ReplaceI("{" + prop.Name + "}", value);
-                    description = description.ReplaceI("{" + prop.Name + "}", value);
+                    if (!string.IsNullOrWhiteSpace(title) && !modelState.Any(m => m.Key == "" && m.Value.Errors.Any(e => e.ErrorMessage == title)))
+                        modelState.AddModelError("", title);
                 }
 
-            var error = title;
-            if (!string.IsNullOrWhiteSpace(description)) error += " " + description;
-            if (!string.IsNullOrWhiteSpace(title)) controller.ModelState.AddModelError("", error);
+                //add the inline message if it doesnt already exist
+                else if (!modelState.Any(m => m.Key.EqualsI(propertyName) && m.Value.Errors.Any(e => e.ErrorMessage == description)))
+                    modelState.AddModelError(propertyName, description);
+            }
         }
 
         #endregion

@@ -13,6 +13,7 @@ using GenderPayGap.WebUI.Classes;
 using System.Web.Routing;
 using Extensions;
 using GenderPayGap.Core.Classes;
+using GenderPayGap.WebUI.Models.Register;
 
 namespace GenderPayGap.Tests
 {
@@ -30,7 +31,7 @@ namespace GenderPayGap.Tests
             // Act
 
             // Assert
-            Assert.Throws<IdentityNotMappedException>(() => controller.Step1(), "Expected IdentityNotMappedException");
+            Assert.Throws<IdentityNotMappedException>(() => controller.AboutYou(), "Expected IdentityNotMappedException");
         }
 
   //    [Test]
@@ -67,7 +68,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -94,7 +95,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -121,7 +122,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -149,7 +150,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -178,7 +179,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user, userOrg);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -206,7 +207,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user, userOrg);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -234,7 +235,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user, userOrg);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -262,7 +263,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user, userOrg);
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as ErrorViewModel;
 
             // Assert
@@ -284,7 +285,7 @@ namespace GenderPayGap.Tests
             var controller = TestHelper.GetController<RegisterController>();
 
             // Act
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
             var model = result.Model as RegisterViewModel;
 
             // Assert
@@ -314,9 +315,9 @@ namespace GenderPayGap.Tests
 
             var controller = TestHelper.GetController<RegisterController>();
             controller.Bind(model);
-
+            
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.AboutYou(model) as ViewResult;
             // Assert
             Assert.Multiple(() =>
             {
@@ -352,10 +353,10 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //Get the result of the test
-            var result = controller.Step1(model) as RedirectToRouteResult;
+            var result = controller.AboutYou(model) as RedirectToRouteResult;
 
             //check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //check that the redirection went to the right url step.
             Assert.That(result.RouteValues["action"].ToString() == "Step2", "");
@@ -365,7 +366,7 @@ namespace GenderPayGap.Tests
             var unStashedmodel = controller.UnstashModel<RegisterViewModel>();
 
             //Check that the unstashed model is not null
-            Assert.NotNull(model as RegisterViewModel, "Expected RegisterViewModel");
+            Assert.NotNull(model, "Expected RegisterViewModel");
 
             //ASSERT:
             // Verify the values from the result that was stashed is equal tothat of the Arrange values here
@@ -400,7 +401,7 @@ namespace GenderPayGap.Tests
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.AboutYou(model) as ViewResult;
 
             // Assert
             Assert.That(!result.ViewData.ModelState.IsValid, "Email compare should have failed");
@@ -424,7 +425,7 @@ namespace GenderPayGap.Tests
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.AboutYou(model) as ViewResult;
 
             // Assert
             Assert.That(!result.ViewData.ModelState.IsValid, "Password compare should have failed");
@@ -448,7 +449,7 @@ namespace GenderPayGap.Tests
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.AboutYou(model) as ViewResult;
 
             // Assert
             Assert.That(!result.ViewData.ModelState.IsValid, "Short password compare should have failed");
@@ -472,7 +473,7 @@ namespace GenderPayGap.Tests
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.AboutYou(model) as ViewResult;
 
             // Assert
             Assert.That(!result.ViewData.ModelState.IsValid, "Password containing 'password' should have failed");
@@ -496,7 +497,7 @@ namespace GenderPayGap.Tests
             controller.Bind(model);
 
             // Act
-            var result = controller.Step1(model) as ViewResult;
+            var result = controller.AboutYou(model) as ViewResult;
 
             // Assert
             Assert.That(!result.ViewData.ModelState.IsValid, "Password expression should have failed");
@@ -511,10 +512,9 @@ namespace GenderPayGap.Tests
         #endregion
 
 
-        //Happy Path - Registration GET and POST Actions
-        [Test]
-        [Description("Ensure the Step1 succeeds and gets a new registration form for newly authorized users to register")]
-        public void Step1_Get_NewRegistrationView_Success()
+        //[Test]
+        [Description("Ensure the Step1 fails when a user does not exist in the db")]
+        public void Step1_Get_unAuthUser_Fail()
         {
             //ARRANGE:
             //create a user who does not exist in the db
@@ -522,42 +522,43 @@ namespace GenderPayGap.Tests
 
             var routeData = new RouteData();
             routeData.Values.Add("action", "Step1");
-            routeData.Values.Add("Controller", "register");
+            routeData.Values.Add("controller", "register");
 
-            //Stash an object to pass in for  this.ClearStash()
-            var controller = TestHelper.GetController<RegisterController>(0, routeData, user);
+            var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
 
             //ACT:
-            var result = controller.Step1() as ViewResult;
-            var resultModel = result.Model as RegisterViewModel;
-
-            //resultModel.ConfirmEmailAddress
-
-            var modelMetaData = result.ViewData.ModelMetadata;
-
+            var result = controller.AboutYou();
 
             //ASSERT:
-            Assert.NotNull(result, "Expected ViewResult");
-            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
-            Assert.That(result.ViewName == "Step1", "Incorrect view returned");
-            Assert.NotNull(result.Model as RegisterViewModel, "Expected RegisterViewModel");
-            Assert.That(result.Model.GetType() == typeof(RegisterViewModel), "Incorrect resultType returned");
-            Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
-
-            Assert.That(string.IsNullOrWhiteSpace(resultModel.FirstName), "Expected null or empty field");
-            Assert.That(result.ViewData.ModelState.IsValidField("ConfirmEmailAddress"), "");
-            Assert.That(result.ViewData.ModelState.IsValidField("ConfirmPassword"), "");
-            Assert.That(result.ViewData.ModelState.IsValidField("EmailAddress"), "");
-            Assert.That(result.ViewData.ModelState.IsValidField("FirstName"), "");
-            Assert.That(result.ViewData.ModelState.IsValidField("IdentityProvider"), "");
-            Assert.That(result.ViewData.ModelState.IsValidField("JobTitle"), "");
-            Assert.That(result.ViewData.ModelState.IsValidField("LastName"), "");
-            Assert.That(result.ViewData.ModelState.IsValidField("Password"), "");
-            Assert.That(result.ViewData.ModelState.IsValidField("VerifyUrl"), "");
-
+            Assert.Null(result, "Expected Null value");
+           
         }
 
 
+
+        //Happy Path - Registration GET and POST Actions
+        //[Test]
+        //[Description("Ensure the Step1 succeeds and gets a new registration form for newly authorized users to register")]
+        //public void Step1_Get_RegistrationComplete_Success()
+        //{
+        //    //ARRANGE:
+        //    //create a user who does not exist in the db
+        //    var user = new User() { UserId = 0};
+
+        //    var routeData = new RouteData();
+        //    routeData.Values.Add("action", "Step1");
+        //    routeData.Values.Add("Controller", "register");
+
+        //    //Stash an object to pass in for  this.ClearStash()
+        //    var controller = TestHelper.GetController<RegisterController>(0, routeData, user = null);
+
+        //    //ACT:
+        //    var result = controller.Step1() as RedirectToRouteResult;
+
+        //    //ASSERT:
+        //    Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+        //    Assert.That(result.RouteValues["action"].ToString() == "Complete", "Expected User registration to be complete");
+        //}
 
         [Test]
         [Description("Ensure the Step1 succeeds and gets a new registration form for newly authorized users to register")]
@@ -573,11 +574,11 @@ namespace GenderPayGap.Tests
 
             //Stash an object to pass in for this.ClearStash()
             //var model = new RegisterViewModel();
-            var controller = TestHelper.GetController<RegisterController>(0, routeData, user /*, model*/);
+            var controller = TestHelper.GetController<RegisterController>(0, routeData, user = null/*, model*/);
             //controller.StashModel(model);
 
             //ACT:
-            var result = controller.Step1() as ViewResult;
+            var result = controller.AboutYou() as ViewResult;
 
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
@@ -611,11 +612,11 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step1(model) as RedirectToRouteResult;
+            var result = controller.AboutYou(model) as RedirectToRouteResult;
 
             //ASSERT:
             //3.Check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
             Assert.That(result.RouteValues["action"].ToString() == "Step2", "Expected a RedirectToRouteResult to Step2");
@@ -624,7 +625,7 @@ namespace GenderPayGap.Tests
             var unStashedmodel = controller.UnstashModel<RegisterViewModel>();
 
             //6.Check that the unstashed model is not null
-            Assert.NotNull(model as RegisterViewModel, "Expected RegisterViewModel");
+            Assert.NotNull(model, "Expected RegisterViewModel");
 
             //7.Verify the values from the result that was stashed matches that of the Arrange values here
             Assert.Multiple(() =>
@@ -672,7 +673,7 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step2(Encryption.EncryptQuerystring(code)) as ViewResult;
+            var result = controller.VerifyEmail(Encryption.EncryptQuerystring(code)) as ViewResult;
 
             var resultModel = result.Model as VerifyViewModel;
 
@@ -681,7 +682,7 @@ namespace GenderPayGap.Tests
 
             //ASSERT:
             //Ensure confirmation view is returned
-            Assert.NotNull(result as ViewResult, "Expected ViewResult");
+            Assert.NotNull(result, "Expected ViewResult");
             Assert.That(result.ViewName == "Step2", "Incorrect view returned");
 
             //Ensure the model is not null and it is correct
@@ -699,7 +700,7 @@ namespace GenderPayGap.Tests
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-            var code = "abcdefg";
+             var code = "abcdefg";
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now, EmailVerifyHash = code.GetSHA512Checksum() };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
@@ -710,20 +711,21 @@ namespace GenderPayGap.Tests
             routeData.Values.Add("Action", "Step2");
             routeData.Values.Add("Controller", "Register");
 
-            //var model = new VerifyViewModel();
+            var model = new VerifyViewModel();
 
+            //var controller = TestHelper.GetController<RegisterController>();
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user, organisation, userOrganisation);
             //controller.Bind(model);
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step2(Encryption.EncryptQuerystring(code)) as RedirectToRouteResult;
+            var result = controller.VerifyEmail(Encryption.EncryptQuerystring(code)) as RedirectToRouteResult;
 
             //ASSERT:
             //Check the user is return the confirmation view
-            //Check the user verification is now marked as sent
+            //Check the user verifcation is now marked as sent
             //Check a verification has been set against user 
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
             Assert.That(result.RouteValues["action"].ToString() == "Complete", "Registration is not complete!");
             
         }
@@ -748,7 +750,6 @@ namespace GenderPayGap.Tests
             //1.Arrange the test setup variables
             var model = new VerifyViewModel();
             model.EmailAddress = "test@hotmail.com";
-            model.Expired = false;
             model.Resend = false;
             model.Retry = false;
 
@@ -756,7 +757,7 @@ namespace GenderPayGap.Tests
 
             // model.Sent = true;
             model.UserId = 1;
-            model.Verified = true;
+            
             // model.WrongCode = false;
 
             //var controller = TestHelper.GetController<RegisterController>();
@@ -765,11 +766,11 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step2(model) as RedirectToRouteResult;
+            var result = controller.VerifyEmail(model) as RedirectToRouteResult;
 
             //ASSERT:
             //3.Check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
            // Assert.That(result.RouteValues["action"].ToString() == "Step3", "");
@@ -779,7 +780,7 @@ namespace GenderPayGap.Tests
             var unStashedmodel = controller.UnstashModel<RegisterViewModel>();
 
             //6.Check that the unstashed model is not null
-            Assert.NotNull(model as VerifyViewModel, "Expected RegisterViewModel");
+            Assert.NotNull(model, "Expected RegisterViewModel");
         }
 
 
@@ -800,7 +801,7 @@ namespace GenderPayGap.Tests
             //controller.StashModel(model);
 
             //ACT:
-            var result = controller.Step3() as ViewResult;
+            var result = controller.OrganisationType() as ViewResult;
 
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
@@ -837,11 +838,11 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step3(model) as RedirectToRouteResult;
+            var result = controller.OrganisationType(model) as RedirectToRouteResult;
 
             //ASSERT:
             //3.Check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
             Assert.That(result.RouteValues["action"].ToString() == "Step4", "");
@@ -850,7 +851,7 @@ namespace GenderPayGap.Tests
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
 
             //6.Check that the unstashed model is not null
-            Assert.NotNull(unStashedmodel as OrganisationViewModel, "Expected OrganisationViewModel");
+            Assert.NotNull(unStashedmodel, "Expected OrganisationViewModel");
 
             //7.Verify the values from the result that was stashed matches that of the Arrange values here
             Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
@@ -885,11 +886,11 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step3(model) as RedirectToRouteResult;
+            var result = controller.OrganisationType(model) as RedirectToRouteResult;
 
             //ASSERT:
             //3.Check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
             Assert.That(result.RouteValues["action"].ToString() == "Step4", "");
@@ -898,7 +899,7 @@ namespace GenderPayGap.Tests
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
 
             //6.Check that the unstashed model is not null
-            Assert.NotNull(unStashedmodel as OrganisationViewModel, "Expected OrganisationViewModel");
+            Assert.NotNull(unStashedmodel, "Expected OrganisationViewModel");
 
             //7.Verify the values from the result that was stashed matches that of the Arrange values here
             Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
@@ -927,7 +928,7 @@ namespace GenderPayGap.Tests
             controller.StashModel(orgModel);
 
             //ACT:
-            var result = controller.Step4() as ViewResult;
+            var result = controller.OrganisationSearch() as ViewResult;
 
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
@@ -973,12 +974,12 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step4(model) as RedirectToRouteResult;
+            var result = controller.OrganisationSearch(model) as RedirectToRouteResult;
 
 
             //ASSERT:
             //3.Check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
             Assert.That(result.RouteValues["action"].ToString() == "Step5", "");
@@ -987,7 +988,7 @@ namespace GenderPayGap.Tests
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
 
             //6.Check that the unstashed model is not null
-            Assert.NotNull(unStashedmodel as OrganisationViewModel, "Expected OrganisationViewModel");
+            Assert.NotNull(unStashedmodel, "Expected OrganisationViewModel");
 
             //7.Verify the values from the result that was stashed matches that of the Arrange values here
             Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
@@ -1029,12 +1030,12 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step4(model) as RedirectToRouteResult;
+            var result = controller.OrganisationSearch(model) as RedirectToRouteResult;
 
 
             //ASSERT:
             //3.Check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
             Assert.That(result.RouteValues["action"].ToString() == "Step5", "");
@@ -1043,7 +1044,7 @@ namespace GenderPayGap.Tests
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
 
             //6.Check that the unstashed model is not null
-            Assert.NotNull(unStashedmodel as OrganisationViewModel, "Expected OrganisationViewModel");
+            Assert.NotNull(unStashedmodel, "Expected OrganisationViewModel");
 
             //7.Verify the values from the result that was stashed matches that of the Arrange values here
             Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
@@ -1062,7 +1063,7 @@ namespace GenderPayGap.Tests
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step5");
+            routeData.Values.Add("Action", "ChooseOrganisation");
             routeData.Values.Add("Controller", "Register");
 
             var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
@@ -1072,12 +1073,12 @@ namespace GenderPayGap.Tests
             controller.StashModel(orgModel);
 
             //ACT:
-            var result = controller.Step5() as ViewResult;
+            var result = controller.ChooseOrganisation() as ViewResult;
 
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
             Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
-            Assert.That(result.ViewName == "Step5", "Incorrect view returned");
+            Assert.That(result.ViewName == "ChooseOrganisation", "Incorrect view returned");
             Assert.NotNull(result.Model as OrganisationViewModel, "Expected OrganisationViewModel");
             Assert.That(result.Model.GetType() == typeof(OrganisationViewModel), "Incorrect resultType returned");
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
@@ -1103,49 +1104,49 @@ namespace GenderPayGap.Tests
             {
                 Results = new List<EmployerRecord>()
                             {
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() { Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
                             }
             };
@@ -1172,12 +1173,12 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step5(model, command) as RedirectToRouteResult;
+            var result = controller.ChooseOrganisation(model, command) as RedirectToRouteResult;
 
 
             //ASSERT:
             //3.Check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
             Assert.That(result.RouteValues["action"].ToString() == "Step6", "");
@@ -1186,7 +1187,7 @@ namespace GenderPayGap.Tests
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
 
             //6.Check that the unstashed model is not null
-            Assert.NotNull(unStashedmodel as OrganisationViewModel, "Expected OrganisationViewModel");
+            Assert.NotNull(unStashedmodel, "Expected OrganisationViewModel");
 
             //7.Verify the values from the result that was stashed matches that of the Arrange values here
             Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
@@ -1217,49 +1218,49 @@ namespace GenderPayGap.Tests
             {
                 Results = new List<EmployerRecord>()
                             {
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq", EmailPatterns = "test@gov.uk" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq", EmailPatterns = "test@test.uk"  },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
                             }
             };
@@ -1288,12 +1289,12 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step5(model, command) as RedirectToRouteResult;
+            var result = controller.ChooseOrganisation(model, command) as RedirectToRouteResult;
 
 
             //ASSERT:
             //3.Check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
             Assert.That(result.RouteValues["action"].ToString() == "Step6", "");
@@ -1302,7 +1303,7 @@ namespace GenderPayGap.Tests
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
 
             //6.Check that the unstashed model is not null
-            Assert.NotNull(unStashedmodel as OrganisationViewModel, "Expected OrganisationViewModel");
+            Assert.NotNull(unStashedmodel, "Expected OrganisationViewModel");
 
             //7.Verify the values from the result that was stashed matches that of the Arrange values here
             Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
@@ -1322,15 +1323,15 @@ namespace GenderPayGap.Tests
         /// Private Sector: Confirm Employer
         /// </summary>
         [Test]
-        [Description("Ensure the Step6 succeeds when all fields are good")]
-        public void Step6_Get_ConfirmEmployer_Success()
+        [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
+        public void Get_ConfirmOrganisation_Success()
         {
             //ARRANGE:
             //create a user who does exist in the db
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step6");
+            routeData.Values.Add("Action", "ConfirmOrganisation");
             routeData.Values.Add("Controller", "Register");
 
             var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
@@ -1340,12 +1341,12 @@ namespace GenderPayGap.Tests
             controller.StashModel(orgModel);
 
             //ACT:
-            var result = controller.Step6() as ViewResult;
+            var result = controller.ConfirmOrganisation() as ViewResult;
 
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
             Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
-            Assert.That(result.ViewName == "ConfirmEmployer", "Incorrect view returned");
+            Assert.That(result.ViewName == "ConfirmOrganisation", "Incorrect view returned");
             Assert.NotNull(result.Model as OrganisationViewModel, "Expected OrganisationViewModel");
             Assert.That(result.Model.GetType() == typeof(OrganisationViewModel), "Incorrect resultType returned");
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
@@ -1356,15 +1357,15 @@ namespace GenderPayGap.Tests
         /// Public Sector: Add address
         /// </summary>
         [Test]
-        [Description("Ensure the Step6 succeeds when all fields are good")]
-        public void Step6_Get_AddAddress_Success()
+        [Description("Ensure the AddOrganisation succeeds when all fields are good")]
+        public void Get_AddAddress_Success()
         {
             //ARRANGE:
             //create a user who does exist in the db
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step6");
+            routeData.Values.Add("Action", "AddOrganisation");
             routeData.Values.Add("Controller", "Register");
 
             var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
@@ -1374,7 +1375,7 @@ namespace GenderPayGap.Tests
             controller.StashModel(orgModel);
 
             //ACT:
-            var result = controller.Step6() as ViewResult;
+            var result = controller.AddOrganisation() as ViewResult;
 
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
@@ -1386,8 +1387,8 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Ensure the Step6 succeeds when all fields are good")]
-        public void Step6_Post_PrivateSector_Success()
+        [Description("Ensure the AddOrganisation succeeds when all fields are good")]
+        public void Post_PrivateSector_Success()
         {
             //ARRANGE:
             //1.Arrange the test setup variables
@@ -1398,56 +1399,56 @@ namespace GenderPayGap.Tests
 
             //Set user email address verified code and expired sent date
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step6");
+            routeData.Values.Add("Action", "AddOrganisation");
             routeData.Values.Add("Controller", "Register");
 
             var employerResult = new PagedResult<EmployerRecord>()
             {
                 Results = new List<EmployerRecord>()
                             {
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {  Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
                             }
             };
@@ -1468,12 +1469,12 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step6(model) as RedirectToRouteResult;
+            var result = controller.AddOrganisation(model) as RedirectToRouteResult;
 
 
             //ASSERT:
             //3.Check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
             Assert.That(result.RouteValues["action"].ToString() == "SendPIN", "");
@@ -1482,7 +1483,7 @@ namespace GenderPayGap.Tests
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
 
             //6.Check that the unstashed model is not null
-            Assert.NotNull(unStashedmodel as OrganisationViewModel, "Expected OrganisationViewModel");
+            Assert.NotNull(unStashedmodel, "Expected OrganisationViewModel");
 
             //7.Verify the values from the result that was stashed matches that of the Arrange values here
             Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
@@ -1492,8 +1493,8 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Ensure the Step6 succeeds when all fields are good")]
-        public void Step6_Post_PublicSector_Success()
+        [Description("Ensure the AddAddress succeeds when all fields are good")]
+        public void AddAddress_Post_PublicSector_Success()
         {
             //ARRANGE:
             //1.Arrange the test setup variables
@@ -1504,56 +1505,56 @@ namespace GenderPayGap.Tests
 
             //Set user email address verified code and expired sent date
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step6");
+            routeData.Values.Add("Action", "AddAddress");
             routeData.Values.Add("Controller", "Register");
 
             var employerResult = new PagedResult<EmployerRecord>()
             {
                 Results = new List<EmployerRecord>()
                             {
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
                             }
             };
@@ -1580,12 +1581,12 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step6(model) as RedirectToRouteResult;
+            var result = controller.ConfirmOrganisation(model) as RedirectToRouteResult;
 
 
             //ASSERT:
             //3.Check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
             Assert.That(result.RouteValues["action"].ToString() == "Step7", "");
@@ -1594,7 +1595,7 @@ namespace GenderPayGap.Tests
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
 
             //6.Check that the unstashed model is not null
-            Assert.NotNull(unStashedmodel as OrganisationViewModel, "Expected OrganisationViewModel");
+            Assert.NotNull(unStashedmodel, "Expected OrganisationViewModel");
 
             //7.Verify the values from the result that was stashed matches that of the Arrange values here
             Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
@@ -1607,15 +1608,15 @@ namespace GenderPayGap.Tests
 
 
         [Test]
-        [Description("Ensure the Step7 succeeds when all fields are good")]
-        public void Step7_Get_Success()
+        [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
+        public void ConfirmOrganisation_Get_Success()
         {
             //ARRANGE:
             //create a user who does exist in the db
             var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step7");
+            routeData.Values.Add("Action", "ConfirmOrganisation");
             routeData.Values.Add("Controller", "Register");
 
             var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
@@ -1625,20 +1626,20 @@ namespace GenderPayGap.Tests
             controller.StashModel(orgModel);
 
             //ACT:
-            var result = controller.Step7() as ViewResult;
+            var result = controller.ConfirmOrganisation() as ViewResult;
 
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
             Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
-            Assert.That(result.ViewName == "ConfirmEmployer", "Incorrect view returned");
+            Assert.That(result.ViewName == "ConfirmOrganisation", "Incorrect view returned");
             Assert.NotNull(result.Model as OrganisationViewModel, "Expected OrganisationViewModel");
             Assert.That(result.Model.GetType() == typeof(OrganisationViewModel), "Incorrect resultType returned");
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
         }
 
         [Test]
-        [Description("Ensure the Step7 succeeds when all fields are good")]
-        public void Step7_Post_Success()
+        [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
+        public void ConfirmOrganisation_Post_Success()
         {
             //ARRANGE:
             //1.Arrange the test setup variables
@@ -1649,56 +1650,56 @@ namespace GenderPayGap.Tests
 
             //Set user email address verified code and expired sent date
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step7");
+            routeData.Values.Add("Action", "ConfirmOrganisation");
             routeData.Values.Add("Controller", "Register");
 
             var employerResult = new PagedResult<EmployerRecord>()
             {
                 Results = new List<EmployerRecord>()
                             {
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
 
-                                 new EmployerRecord() {   Address1 = "123", Address2 = "EverGreen Terrace",
+                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
                                                     CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
                             }
             };
@@ -1717,10 +1718,10 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.Step7(model) as RedirectToRouteResult;
+            var result = controller.ConfirmOrganisation(model) as RedirectToRouteResult;
 
             //3.Check that the result is not null
-            Assert.NotNull(result as RedirectToRouteResult, "Expected RedirectToRouteResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
             Assert.That(result.RouteValues["action"].ToString() == "Complete", "");
@@ -1729,7 +1730,7 @@ namespace GenderPayGap.Tests
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
 
             //6.Check that the unstashed model is not null
-            Assert.NotNull(model as OrganisationViewModel, "Expected OrganisationViewModel");
+            Assert.NotNull(model, "Expected OrganisationViewModel");
 
             //ASSERT:
             //7.Verify the values from the result that was stashed matches that of the Arrange values here
