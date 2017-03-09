@@ -4,7 +4,6 @@ using GenderPayGap.Core.Classes;
 using GenderPayGap.Core.Interfaces;
 using GenderPayGap.Models.SqlDatabase;
 using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
@@ -13,7 +12,7 @@ using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using GenderPayGap.WebUI.Properties;
-using GenderPayGap.WebUI.Models;
+using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap
 {
@@ -31,7 +30,20 @@ namespace GenderPayGap
             }
         }
 
-       
+        public static string AdminEmails = ConfigurationManager.AppSettings["AdminEmails"];
+        /// <summary>
+        /// Return true if exactly one concrete admin defined 
+        /// </summary>
+        public static bool SingleAdminMode
+        {
+            get
+            {
+                var args = AdminEmails.SplitI(";");
+                return args.Length == 1 && !string.IsNullOrWhiteSpace(args[0]) && !args[0].ContainsAny('*', '?') &&
+                       args[0].IsEmailAddress();
+            }
+        }
+
 
         protected void Application_Start()
         {
@@ -46,6 +58,9 @@ namespace GenderPayGap
         
             //Create Inversion of Control container
             ContainerIOC = BuildContainerIoC();
+
+            //Initialise static classes with IoC container
+            GovNotifyAPI.Initialise(ContainerIOC);
 
             RouteTable.Routes.MapMvcAttributeRoutes();
 
@@ -79,6 +94,7 @@ namespace GenderPayGap
             builder.Register(c => new SqlRepository(new DbContext())).As<IRepository>();
             builder.RegisterType<PrivateSectorRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Private");
             builder.RegisterType<PublicSectorRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Public");
+            builder.Register(g => new GovNotify()).As<IGovNotify>();
 
             return builder.Build();
         }

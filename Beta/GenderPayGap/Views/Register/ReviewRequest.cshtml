@@ -1,0 +1,112 @@
+﻿@{
+    ViewBag.Title = "Review registration request - Gender pay gap reporting service";
+}
+@model GenderPayGap.WebUI.Models.Register.OrganisationViewModel
+
+<main id="content" role="main">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model=>model.ReviewCode)
+        <div class="grid-row">
+            <div class="column-two-thirds">
+                @Html.ValidationSummary("", new { @class = "error-summary" })
+                <h1 class="heading-large">
+                    Approve employer's application
+                </h1>
+                <table class="confirm-details">
+                    <thead>
+                        <tr>
+                            <th class="question">
+                            </th>
+                            <th class="answer">
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr class="row dynamic-content publicManual privateManual" style="display: table-row;">
+                            <td>
+                                <br>Person registering to report
+                            </td>
+                            <td>
+                                <!-- Default Dynamic Section -->
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr class="row dynamic-content publicManual privateManual" style="display: table-row;">
+                            <td>
+                                Your name
+                            </td>
+                            <td>
+                                <!-- Default Dynamic Section -->
+                                @Model.ContactFirstName @Model.ContactLastName (@Model.ContactJobTitle)
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr class="row dynamic-content publicManual privateManual" style="display: table-row;">
+                            <td>
+                                Organisation
+                            </td>
+                            <td>
+                                <!-- Default Dynamic Section -->
+                                @Model.ContactOrganisation
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr class="row dynamic-content publicManual ">
+                            <td>
+                                Email
+                            </td>
+                            <td>
+                                <!-- Default Dynamic Section -->
+                                @Model.ContactEmailAddress
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr class="row dynamic-content publicManual privateManual" style="display: table-row;">
+                            <td>
+                                Telephone
+                            </td>
+                            <td>
+                                <!-- Default Dynamic Section -->
+                                @Model.ContactPhoneNumber
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr class="dynamic-content privateManual publicManual" style="display: table-row;">
+                            <td colspan="3">
+                                Gender pay gap reporting entity
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Organisation
+                            </td>
+
+                            <td>
+                                @Model.Name
+                            </td>
+
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td>
+                                Correspondence address
+                            </td>
+                            <td>
+                                @Model.FullAddress
+                            </td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <fieldset>
+                    <br>
+                    <p><button type="submit" class="button" name="command" value="approve">Confirm and complete registration</button></p>
+                    <p><button type="submit" class="link-button" name="command" value="decline">Cancel registration</button></p>
+                </fieldset>
+            </div>
+        </div>
+    }
+</main>

@@ -1,15 +1,15 @@
-﻿    $('form').bind('invalid-form.validate', function (e, v) {
+﻿
+    $('form').bind('invalid-form.validate', function (e, v) {
 
         window.setTimeout(function () {
             var list = $(".validation-summary-errors ul");
             if (!list) return;
-            list.empty();
 
             $(v.errorList).each(function (index, error) {
                 //Get the inout element
                 var element$ = $(error.element)[0];
                 if (!element$) return;
-
+                
                 //Get the attribute for this error
                 var attrName = GetErrorAttrName(element$, error.message);
                 if (!attrName) return;
@@ -19,9 +19,13 @@
                 //Get the alternative attribute for this error
                 var alt = $(element$).attr(attrName + "-alt");
                 if (alt && alt != "") summary = alt;
+                
+                var item = GetSummaryItem(list, error.message);
+                if (item) $(item).html(summary);
+            });
 
-                $("<li />").html(summary).appendTo(list);
-            })
+            //Remove duplicates
+            DeDupe(list);
 
         }, 100);
 
@@ -37,7 +41,31 @@
                 result = attr.name;
                 return;
             }
-
         });
         return result;
     }
+
+    function GetSummaryItem(list, error) {
+        var result = null;
+        $(list).children().each(function (i, item) {
+            if ($(item).text()==error) {
+                result = item;
+                return;
+            }
+        });
+        return result;
+    }
+
+    function DeDupe(list) {
+        var seen = {};
+        $(list).children().each(function(i, item) {
+            var txt = $(item).text();
+            if (seen[txt])
+                $(item).remove();
+            else
+                seen[txt] = true;
+        });
+        return false;
+    }
+
+ 

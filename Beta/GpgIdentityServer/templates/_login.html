@@ -1,0 +1,37 @@
+﻿    <div class="grid-row">
+        <div class="column-two-thirds">
+            <div class="error-summary validation-summary-errors" data-valmsg-summary="true" ng-show="model.errorMessage">
+                <span>There’s a problem with your email address or password</span>
+                <ul><li>{{model.errorMessage}}</li></ul>
+            </div>
+            <h1 class="heading-large">
+                Sign in
+            </h1>
+            <p>Enter your email address and password. </p>
+            <p class="dynamic-content manual">Not registered yet? <a href="/Register">Register</a></p>
+            <form name="form" method="post" action="{{model.loginUrl}}">
+                <anti-forgery-token token="model.antiForgery"></anti-forgery-token>
+                    <fieldset>
+                        <legend class="visuallyhidden">Sign in</legend>
+                        <div class="form-group ">
+                            <label class="form-label" for="email">
+                                Email
+                            </label>
+                            <input required type="email" autocomplete="off" name="username" id="username" autofocus class="form-control" ng-model="model.username" maxlength="100" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%;">
+                        </div>
+                        <div class="form-group ">
+                            <label class="form-label" for="password_current">
+                                Password
+                            </label>
+                            <input required id="password" name="password" type="password" class="form-control" ng-model="model.password" maxlength="100" autocomplete="off" focus-if="model.username" style="background-image: url(&quot;data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAASCAYAAABSO15qAAAAAXNSR0IArs4c6QAAAPhJREFUOBHlU70KgzAQPlMhEvoQTg6OPoOjT+JWOnRqkUKHgqWP4OQbOPokTk6OTkVULNSLVc62oJmbIdzd95NcuGjX2/3YVI/Ts+t0WLE2ut5xsQ0O+90F6UxFjAI8qNcEGONia08e6MNONYwCS7EQAizLmtGUDEzTBNd1fxsYhjEBnHPQNG3KKTYV34F8ec/zwHEciOMYyrIE3/ehKAqIoggo9inGXKmFXwbyBkmSQJqmUNe15IRhCG3byphitm1/eUzDM4qR0TTNjEixGdAnSi3keS5vSk2UDKqqgizLqB4YzvassiKhGtZ/jDMtLOnHz7TE+yf8BaDZXA509yeBAAAAAElFTkSuQmCC&quot;); background-repeat: no-repeat; background-attachment: scroll; background-size: 16px 18px; background-position: 98% 50%; cursor: auto;">
+
+                        </div>
+                        <div class="form-group">
+                            <button class="button dynamic-content default-content alert manual">Sign In</button>
+                        </div>
+                        <h3 class="heading-medium">Problems with your password?</h3>
+                        <a id="forgotten-password" href="/Register/ResetPassword">Reset your password</a>
+                    </fieldset>
+                </form>
+        </div>
+    </div>
