@@ -136,6 +136,7 @@
     <Reference Include="System.Transactions" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Classes\SelectedItem.cs" />
     <Compile Include="Classes\PagedResult.cs" />
     <Compile Include="Classes\DownloadRecord.cs" />
     <Compile Include="Classes\SqlRepository.cs" />

@@ -19,6 +19,7 @@ using IsolationLevel = System.Data.IsolationLevel;
 using GenderPayGap.Core.Classes;
 using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Models.Register;
+using GenderPayGap.WebUI.Models.Submit;
 using Microsoft.Ajax.Utilities;
 using Thinktecture.IdentityModel.Extensions;
 
@@ -30,8 +31,8 @@ namespace GenderPayGap.WebUI.Controllers
     {
 
         #region Initialisation
-        public ViewingController():base(){ }
-        public ViewingController(IContainer container): base(container){ }
+        public ViewingController() : base() { }
+        public ViewingController(IContainer container) : base(container) { }
 
         /// <summary>
         /// This action is only used to warm up this controller on initialisation
@@ -56,36 +57,54 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpGet]
         [Route("search-results")]
 
-        public ActionResult SearchResults(string search = null,int year=0, int page=1,string sectors=null)
+        public ActionResult SearchResults(string search = null, int year = 0, int page = 1, string sectors = null)
         {
             var model = this.UnstashModel<SearchViewModel>() ?? new SearchViewModel();
 
             //Make sure we know all the sic sectors
-            if (model.AllSectors == null) model.AllSectors = DataRepository.GetAll<SicSection>().OrderBy(s => s.SicSectionId);
-
-            foreach (var sector in model.AllSectors)
-                sector.Description = sector.Description.BeforeFirst(";");
+            if (model.AllSectors == null)
+            {
+                var list = new List<SearchViewModel.SicSection>();
+                foreach (var sector in DataRepository.GetAll<SicSection>().OrderBy(s => s.SicSectionId))
+                {
+                    list.Add(new SearchViewModel.SicSection()
+                    {
+                        SicSectionId = sector.SicSectionId,
+                        Description = sector.Description = sector.Description.BeforeFirst(";")
+                    });
+                }
+                model.AllSectors = list.AsEnumerable();
+            }
 
             var newSectors = sectors.SplitI(string.Empty).ToList();
 
-            if (search!=model.SearchText || model.Employers==null || model.Employers.RowCount==0 || model.Employers.CurrentPage != page || model.Year != year || !model.OldSectors.EqualsI(newSectors))
+            if (search != model.SearchText || model.Employers == null || model.Employers.RowCount == 0 || model.Employers.CurrentPage != page || model.Year != year || (model.NewSectors==null || !model.NewSectors.EqualsI(newSectors)))
             {
                 model.SearchText = search;
 
                 //Make sure we can load employers from session
                 model.Employers = Search(search, newSectors.EqualsI(model.AllSectors) ? new List<string>() : newSectors, page, Settings.Default.EmployerPageSize, year);
 
-                model.OldSectors = model.NewSectors?.ToList();
                 model.NewSectors = newSectors;
 
-                model.SectorSources=new SelectList(model.AllSectors,nameof(SicSection.SicSectionId),nameof(SicSection.Description));
+                var sources = new List<Core.Classes.SelectedItem>();
+                foreach (var sector in model.AllSectors)
+                {
+                    sources.Add(new SelectedItem()
+                    {
+                         Key = sector.SicSectionId,
+                         Text = sector.Description,
+                         Value=sector.SicSectionId
+                    });
+                }
+                model.SectorSources = sources;
                 this.StashModel(model);
             }
 
             return View("SearchResults", model);
         }
 
-        public PagedResult<EmployerRecord> Search(string searchText, List<string> sectors=null, int page=-1, int pageSize=-1, int year=-1)
+        public PagedResult<EmployerRecord> Search(string searchText, List<string> sectors = null, int page = -1, int pageSize = -1, int year = -1)
         {
 
             //Get the public and private accounting dates for the specified or current year 
@@ -112,7 +131,7 @@ namespace GenderPayGap.WebUI.Controllers
                         .OrderBy(r => r.Organisation.OrganisationName);
                 else if (!string.IsNullOrWhiteSpace(searchText) && !hasSector)
                     searchResults = DataRepository.GetAll<Return>().Where(r =>
-                    ((r.AccountingDate == privateAccountingDate && r.Organisation.SectorType == SectorTypes.Private) || (r.AccountingDate == publicAccountingDate && r.Organisation.SectorType == SectorTypes.Public)) && 
+                    ((r.AccountingDate == privateAccountingDate && r.Organisation.SectorType == SectorTypes.Private) || (r.AccountingDate == publicAccountingDate && r.Organisation.SectorType == SectorTypes.Public)) &&
                     r.Organisation.OrganisationName.ToLower().Contains(pattern))
                     .OrderBy(r => r.Organisation.OrganisationName);
                 else if (string.IsNullOrWhiteSpace(searchText) && hasSector)
@@ -126,7 +145,7 @@ namespace GenderPayGap.WebUI.Controllers
                         .OrderBy(r => r.Organisation.OrganisationName);
 
                 result.RowCount = searchResults.Count();
-                result.Results = searchResults.ToList().Select(r => r.Organisation.ToEmployerRecord()).Page(pageSize,page).ToList();
+                result.Results = searchResults.ToList().Select(r => r.Organisation.ToEmployerRecord()).Page(pageSize, page).ToList();
             }
 
             result.CurrentPage = page;
@@ -145,13 +164,13 @@ namespace GenderPayGap.WebUI.Controllers
             //Make sure we can load employers from session
             var model = this.UnstashModel<SearchViewModel>();
             if (model == null) return View("CustomError", new ErrorViewModel(1118));
-            
+
             var nextPage = model.Employers.CurrentPage;
 
             var oldSearchText = model.SearchText;
             if (command == "search")
             {
-                model.SearchText = m.SearchText.Trim();
+                model.SearchText = m.SearchText.TrimI();
 
                 if (string.IsNullOrWhiteSpace(model.SearchText))
                 {
@@ -201,25 +220,25 @@ namespace GenderPayGap.WebUI.Controllers
             if (oldSearchText != model.SearchText || nextPage != model.Employers.CurrentPage || selectedSectors != model.NewSectors.ToDelimitedString(string.Empty))
             {
                 model.SearchText = oldSearchText;
-                return RedirectToAction("SearchResults", new { search = m.SearchText, page=nextPage, sectors = selectedSectors });
+                return RedirectToAction("SearchResults", new { search = m.SearchText, page = nextPage, sectors = selectedSectors });
             }
 
             //Otherwise show the same results
             return View("SearchResults", model);
         }
-         
+
         [HttpGet]
         [Route("download")]
         public ActionResult Download(string year)
         {
             //Get the latest return accounting date
-            var returnDates = DataRepository.GetAll<Return>().Where(r=>r.Status==ReturnStatuses.Submitted).Select(r=>r.AccountingDate).Distinct().ToList();
+            var returnDates = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted).Select(r => r.AccountingDate).Distinct().ToList();
 
             //Ensure we have a directory
             var downloadsLocation = FileSystem.ExpandLocalPath(Settings.Default.DownloadsLocation);
             if (!Directory.Exists((downloadsLocation))) downloadsLocation.CreateTree();
 
-            var directory =new DirectoryInfo(downloadsLocation);
+            var directory = new DirectoryInfo(downloadsLocation);
             string filePattern;
             foreach (var returnDate in returnDates)
             {
@@ -228,15 +247,15 @@ namespace GenderPayGap.WebUI.Controllers
                 //If another server is already in process of creating a file then skip
                 var tmpfilePattern = $"GPGData_{returnDate.Year}-{returnDate.Year + 1}.tmp";
                 var tempfile = directory.GetFiles(tmpfilePattern).FirstOrDefault();
-                if (tempfile!=null && tempfile.Exists) continue;
+                if (tempfile != null && tempfile.Exists) continue;
 
-                filePattern = $"GPGData_{returnDate.Year}-{returnDate.Year+1}_*.csv";
+                filePattern = $"GPGData_{returnDate.Year}-{returnDate.Year + 1}_*.csv";
                 var file = directory.GetFiles(filePattern).FirstOrDefault();
 
                 //Skip if the file already exists and is newer than 1 hour or older than 1 year
                 if (file != null && (file.LastWriteTime.AddHours(1) >= DateTime.Now || file.LastWriteTime.AddYears(1) <= DateTime.Now))
                     continue;
-                tempfile=new FileInfo(Path.Combine(directory.FullName,tmpfilePattern));
+                tempfile = new FileInfo(Path.Combine(directory.FullName, tmpfilePattern));
                 try
                 {
                     int count = 0;
@@ -253,7 +272,7 @@ namespace GenderPayGap.WebUI.Controllers
                     try
                     {
                         //Delete the old file if it exists
-                        if (file!=null && file.Exists) file.Delete();
+                        if (file != null && file.Exists) file.Delete();
                         //Generate a new file name
                         var newFilePath = Path.Combine(directory.FullName, $"GPGData_{returnDate.Year}-{returnDate.Year + 1}_{count}.csv");
 
@@ -261,7 +280,7 @@ namespace GenderPayGap.WebUI.Controllers
                         if (System.IO.File.Exists(newFilePath)) System.IO.File.Delete(newFilePath);
 
                         //Rename the temp file to the new filename
-                        tempfile.MoveTo(Path.Combine(directory.FullName,newFilePath));
+                        tempfile.MoveTo(Path.Combine(directory.FullName, newFilePath));
                     }
                     catch (Exception ex)
                     {
@@ -269,13 +288,13 @@ namespace GenderPayGap.WebUI.Controllers
                 }
                 finally
                 {
-                    
+
                 }
             }
 
             directory.Refresh();
-            var model=new DownloadViewModel();
-            model.Downloads=new List<DownloadViewModel.Download>();
+            var model = new DownloadViewModel();
+            model.Downloads = new List<DownloadViewModel.Download>();
             filePattern = $"GPGData_????-????_*.csv";
             foreach (var file in directory.GetFiles(filePattern))
             {
@@ -286,15 +305,15 @@ namespace GenderPayGap.WebUI.Controllers
                 download.Title = download.Title.BeforeLast("_");
                 download.Extension = file.Extension.TrimI(".");
                 download.Size = Numeric.FormatFileSize(file.Length);
-                download.Url = Url.Action("DownloadData", new {year = download.Title.BeforeFirst("-")});
+                download.Url = Url.Action("DownloadData", new { year = download.Title.BeforeFirst("-") });
                 model.Downloads.Add(download);
             }
 
             //Sort downloadsby descending year
-            model.Downloads=model.Downloads.OrderByDescending(d=>d.Title).ToList();
+            model.Downloads = model.Downloads.OrderByDescending(d => d.Title).ToList();
 
             //Return the view with the model
-            return View("Download",model);
+            return View("Download", model);
         }
 
         [HttpGet]
@@ -309,7 +328,7 @@ namespace GenderPayGap.WebUI.Controllers
             //Ensure we have a file
             var filePattern = $"GPGData_{year}-{year + 1}_*.csv";
             var file = directory.GetFiles(filePattern).FirstOrDefault();
-            if (file==null || !file.Exists) return new HttpNotFoundResult("Cannot find GPG data file for year: " + year);
+            if (file == null || !file.Exists) return new HttpNotFoundResult("Cannot find GPG data file for year: " + year);
             //Get the public and private accounting dates for the specified year
 
             //TODO log download
@@ -332,9 +351,62 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("employer-details")]
-        public ActionResult EmployerDetails(int index)
+        public ActionResult EmployerDetails(int index, string view=null)
         {
-            return View("EmployerDetails");
+            if (string.IsNullOrWhiteSpace(view))
+                view = "hourly-rate";
+            else
+                view = view.ToLower();
+
+            //Make sure we can load employers from session
+            var m = this.UnstashModel<SearchViewModel>();
+            if (m == null) return View("CustomError", new ErrorViewModel(1118));
+
+            var orgId = m.Employers.Results[index].Id;
+
+            var org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == orgId);
+
+            var expectStartDate = GetAccountYearStartDate(org.SectorType);
+
+            var @return = DataRepository.GetAll<Return>().OrderByDescending
+                (r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == orgId && r.AccountingDate == expectStartDate && r.Status == ReturnStatuses.Submitted);
+
+            var model = new ReturnViewModel();
+            model.SectorType = org.SectorType;
+            model.ReturnId = @return.ReturnId;
+            model.OrganisationId = @return.OrganisationId;
+            model.DiffMeanBonusPercent = @return.DiffMeanBonusPercent;
+            model.DiffMeanHourlyPayPercent = @return.DiffMeanHourlyPayPercent;
+            model.DiffMedianBonusPercent = @return.DiffMedianBonusPercent;
+            model.DiffMedianHourlyPercent = @return.DiffMedianHourlyPercent;
+            model.FemaleLowerPayBand = @return.FemaleLowerPayBand;
+            model.FemaleMedianBonusPayPercent = @return.FemaleMedianBonusPayPercent;
+            model.FemaleMiddlePayBand = @return.FemaleMiddlePayBand;
+            model.FemaleUpperPayBand = @return.FemaleUpperPayBand;
+            model.FemaleUpperQuartilePayBand = @return.FemaleUpperQuartilePayBand;
+            model.MaleLowerPayBand = @return.MaleLowerPayBand;
+            model.MaleMedianBonusPayPercent = @return.MaleMedianBonusPayPercent;
+            model.MaleMiddlePayBand = @return.MaleMiddlePayBand;
+            model.MaleUpperPayBand = @return.MaleUpperPayBand;
+            model.MaleUpperQuartilePayBand = @return.MaleUpperQuartilePayBand;
+            model.JobTitle = @return.JobTitle;
+            model.FirstName = @return.FirstName;
+            model.LastName = @return.LastName;
+            model.CompanyLinkToGPGInfo = @return.CompanyLinkToGPGInfo;
+            model.AccountingDate = @return.AccountingDate;
+            model.Address = m.Employers.Results[index].FullAddress;
+            model.OrganisationName = org.OrganisationName;
+            model.Sector = m.Employers.Results[index].SicSectors;
+
+            switch (view)
+            {
+                default:
+                    return View("HourlyRate", model);
+                case "pay-quartiles":
+                    return View("PayQuartiles", model);
+                case "bonus-pay":
+                    return View("BonusPay", model);
+            }
         }
     }
 }
