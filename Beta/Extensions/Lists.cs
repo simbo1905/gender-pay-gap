@@ -18,14 +18,15 @@ namespace Extensions
         {
             if (!string.IsNullOrWhiteSpace(list))
             {
-                if (string.IsNullOrEmpty(separators)) throw new ArgumentNullException("separators");
-
+                if (separators==null) throw new ArgumentNullException("separators");
+                if (separators == string.Empty) return list.ToCharArray().Select(c => c.ToString()).ToArray();
+                
                 if (maxItems>0)return list.Split(separators.ToCharArray(), maxItems, options);
                 return list.Split(separators.ToCharArray(), options);
             }
             return new string[0];
         }
-
+        
         public static bool ContainsSame<T>(this IEnumerable<T> source, IEnumerable<T> target)
         {
             return !source.Except(target).Any() && !target.Except(source).Any();
@@ -468,7 +469,7 @@ namespace Extensions
                 if (item==null) continue;
                 var text = item.ToString();
                 if (string.IsNullOrWhiteSpace(text)) continue;
-                if (result != null) result += delimiter;
+                if (result != null && !string.IsNullOrWhiteSpace(delimiter)) result += delimiter;
                 result += text + appendage;
             }
             return result;

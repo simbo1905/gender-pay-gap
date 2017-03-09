@@ -1,4 +1,7 @@
-﻿@model GenderPayGap.Models.SqlDatabase.Organisation
+﻿@model GenderPayGap.WebUI.Models.Search.DownloadViewModel
+@{
+    ViewBag.Title = "Gender pay gap";
+}
 
 <main id="content" role="main">
     
@@ -27,12 +30,20 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-
-
-                                    <tr>
-                                        <td><a href="#">2016 to 2017 </a><span class="info"> (CSV, 2.3MB)</span></td>
-                                        <td> 500 </td>
-                                    </tr>
+                                    @if (Model.Downloads.Count < 1)
+                                    {
+                                        <td colspan="2">No downloads found</td>
+                                    }
+                                    else
+                                    {
+                                        foreach (var download in Model.Downloads)
+                                        {
+                                            <tr>
+                                                <td><a href="@download.Url" target="_blank">@download.Title </a><span class="info"> (@download.Extension.ToUpper(), @download.Size)</span></td>
+                                                <td> @download.Count </td>
+                                            </tr>
+                                        }
+                                    }
                                 </tbody>
                             </table>
                         </div>

@@ -9,6 +9,7 @@ using System.Security.Authentication;
 using System.Security.Principal;
 using System.Web;
 using System.Web.Mvc;
+using GenderPayGap.Core.Classes;
 using GenderPayGap.WebUI.Controllers;
 using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Properties;
@@ -39,6 +40,35 @@ namespace GenderPayGap
             {
                 if (_DataRepository==null)_DataRepository = containerIOC.Resolve<IRepository>();
                 return _DataRepository;
+            }
+            set { _DataRepository = null; }
+        }
+
+        IPagedRepository<EmployerRecord> _PrivateSectorRepository = null;
+        public IPagedRepository<EmployerRecord> PrivateSectorRepository
+        {
+            get
+            {
+
+                if (_PrivateSectorRepository == null)
+                {
+                    _PrivateSectorRepository = containerIOC.ResolveKeyed<IPagedRepository<EmployerRecord>>("Private");
+                }
+                return _PrivateSectorRepository;
+            }
+        }
+
+        IPagedRepository<EmployerRecord> _PublicSectorRepository = null;
+        public IPagedRepository<EmployerRecord> PublicSectorRepository
+        {
+            get
+            {
+
+                if (_PublicSectorRepository == null)
+                {
+                    _PublicSectorRepository = containerIOC.ResolveKeyed<IPagedRepository<EmployerRecord>>("Public");
+                }
+                return _PublicSectorRepository;
             }
         }
 

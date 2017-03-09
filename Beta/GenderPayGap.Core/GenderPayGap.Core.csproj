@@ -137,6 +137,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Classes\PagedResult.cs" />
+    <Compile Include="Classes\DownloadRecord.cs" />
     <Compile Include="Classes\SqlRepository.cs" />
     <Compile Include="Classes\UnitOfWork.cs" />
     <Compile Include="Classes\EmployerRecord.cs" />

@@ -1,6 +1,7 @@
 ﻿using System.Data;
 using System.Data.Common;
 using System.Data.Entity.Validation;
+using Extensions;
 
 namespace GenderPayGap.Models.SqlDatabase
 {
@@ -47,12 +48,19 @@ namespace GenderPayGap.Models.SqlDatabase
                 target.AddRange(tables);
             }
 
+            var targetCount = target.Count();
             var result = 0;
             for (var i = 0; i < 10; i++)
             {
                 result = 0;
                 foreach (var table in target)
                 {
+                    //Dont delete the sic codes/sections
+                    if (table.EqualsI("SicCodes", "SicSections"))
+                    {
+                        targetCount--;
+                        continue;
+                    }
                     try
                     {
                         context.Database.ExecuteSqlCommand(string.Format("TRUNCATE TABLE [{0}]", table));
@@ -80,7 +88,7 @@ namespace GenderPayGap.Models.SqlDatabase
                         }
                     }
                 }
-                if (result == target.Count()) break;
+                if (result == targetCount) break;
                 if (result == 10) throw new Exception("Unable to truncate all tables");
             }
             context.SaveChanges();
@@ -157,6 +165,27 @@ namespace GenderPayGap.Models.SqlDatabase
             return db.GetType().GetProperties()
                 .Where(x => x.PropertyType.Name == "DbSet`1")
                 .Select(x => x.Name).ToList();
+        }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            //Turn off cascade on delete
+            //modelBuilder.Entity<UserOrganisation>()
+            //    .HasRequired(f => f.Organisation)
+            //    .WithRequiredDependent()
+            //    .WillCascadeOnDelete(false);
+
+            //modelBuilder.Entity<OrganisationSicCode>()
+            //    .HasRequired(f => f.SicCode)
+            //    .WithRequiredDependent()
+            //    .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<SicCode>()
+           .HasRequired(d => d.SicSection)
+           .WithMany(w => w.SicCodes)
+           .WillCascadeOnDelete(false);
+
+            base.OnModelCreating(modelBuilder);
         }
 
         public override int SaveChanges()
