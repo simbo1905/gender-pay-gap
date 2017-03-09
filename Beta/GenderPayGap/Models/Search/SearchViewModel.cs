@@ -18,6 +18,18 @@ namespace GenderPayGap.WebUI.Models.Search
 
         }
 
+        [Serializable]
+        public partial class SicSection
+        {
+            public SicSection()
+            {
+            }
+
+            public string SicSectionId { get; set; }
+
+            public string Description { get; set; }
+        }
+
         public string SearchText { get; set; }
 
         public int Year { get; set; }
@@ -27,8 +39,8 @@ namespace GenderPayGap.WebUI.Models.Search
 
         // This property contains the selected options
         public IEnumerable<string> NewSectors { get; set; }
-        public List<string> OldSectors { get; set; }
-        public SelectList SectorSources { get; set; }
+        
+        public List<Core.Classes.SelectedItem> SectorSources { get; set; }
 
         public PagedResult<EmployerRecord> Employers { get; set; }
 

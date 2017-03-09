@@ -406,6 +406,7 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
+    <Content Include="Scripts\application.js" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
@@ -476,6 +477,9 @@
     <Content Include="Views\Register\RequestApproved.cshtml" />
     <Content Include="Views\Register\ConfirmCancellation.cshtml" />
     <Content Include="Views\Register\RequestPIN.cshtml" />
+    <Content Include="Views\Viewing\HourlyRate.cshtml" />
+    <Content Include="Views\Viewing\PayQuartiles.cshtml" />
+    <Content Include="Views\Viewing\BonusPay.cshtml" />
     <None Include="Web.DEV.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

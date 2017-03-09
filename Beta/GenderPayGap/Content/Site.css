@@ -96,3 +96,56 @@
 .tabs-list li {
     list-style: none;
 }
+
+.tabs-list li, ul.tabs {
+    border-bottom: 0 none;
+    float: left;
+    margin: 0 0 -1px;
+    padding: 0;
+}
+ul.tabs li.current {
+    border: 1px solid #bfc1c3;
+    border-bottom: 1px solid transparent;
+    margin-top: 0;
+    margin-bottom: 0;
+    padding: .68421em .94737em .73684em;
+    background-color: #fff;
+    color: #0b0c0c;
+    cursor: default;
+    text-decoration: none;
+}
+.tabs-list li a, ul.tabs li {
+    background-color: #dee0e2;
+    border: 0 none;
+    float: left;
+    margin: .26316em .26316em .26316em 0;
+    padding: .47368em 1em;
+    text-align: center;
+    display: block;
+}
+ul.tabs li {
+    cursor: pointer;
+    color: #005ea5;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tabs-content, .tab-content {
+    border-top: 1px solid #bfc1c3;
+    clear: both;
+}
+
+.tab-content.current {
+    display: inherit;
+}
+
+.tab-content {
+    display: none;
+}
+
+.tabs-content, .tab-content {
+    border-top: 1px solid #bfc1c3;
+    clear: both;
+}

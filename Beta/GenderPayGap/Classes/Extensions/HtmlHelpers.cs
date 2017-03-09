@@ -21,7 +21,7 @@ namespace GenderPayGap.WebUI.Classes
         /// <summary>
         /// Returns a checkbox for each of the provided <paramref name="items"/>.
         /// </summary>
-        public static MvcHtmlString CheckBoxListFor<TModel, TValue>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TValue>> expression, IEnumerable<SelectListItem> items, object htmlAttributes = null)
+        public static MvcHtmlString CheckBoxListFor<TModel, TValue>(this HtmlHelper<TModel> htmlHelper, Expression<Func<TModel, TValue>> expression, List<Core.Classes.SelectedItem> items, object htmlAttributes = null)
         {
             var listName = ExpressionHelper.GetExpressionText(expression);
             var metaData = ModelMetadata.FromLambdaExpression(expression, htmlHelper.ViewData);
@@ -30,9 +30,9 @@ namespace GenderPayGap.WebUI.Classes
             return htmlHelper.CheckBoxList(listName, items, htmlAttributes);
         }
 
-        private static IEnumerable<SelectListItem> GetCheckboxListWithDefaultValues(object defaultValues, IEnumerable<SelectListItem> selectList)
+        private static List<Core.Classes.SelectedItem> GetCheckboxListWithDefaultValues(object defaultValues, List<Core.Classes.SelectedItem> selectList)
         {
-            var defaultValuesList = defaultValues as IEnumerable;
+            var defaultValuesList = defaultValues as IList;
 
             if (defaultValuesList == null)
                 return selectList;
@@ -41,7 +41,7 @@ namespace GenderPayGap.WebUI.Classes
                                          select Convert.ToString(value, CultureInfo.CurrentCulture);
 
             var selectedValues = new HashSet<string>(values, StringComparer.OrdinalIgnoreCase);
-            var newSelectList = new List<SelectListItem>();
+            var newSelectList = new List<Core.Classes.SelectedItem>();
 
             selectList.ForEach(item =>
             {
@@ -52,7 +52,7 @@ namespace GenderPayGap.WebUI.Classes
             return newSelectList;
         }
 
-        public static MvcHtmlString CheckBoxList(this HtmlHelper htmlHelper, string listName, IEnumerable<SelectListItem> items, object htmlAttributes = null)
+        public static MvcHtmlString CheckBoxList(this HtmlHelper htmlHelper, string listName, List<Core.Classes.SelectedItem> items, object htmlAttributes = null)
         {
             var container = new TagBuilder("ul");
             int i = 0;
