@@ -1,0 +1,32 @@
+﻿body {
+    margin-top: 0px;
+}
+
+.form-control {
+    border-radius: 0px;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak, .ng-hide:not(.ng-hide-animate) {
+    display: none !important;
+}
+
+.hide {
+    display: none !important;
+}
+
+.show {
+    display: block !important;
+}
+
+.invisible {
+    visibility: hidden;
+}
+
+.hidden {
+    display: none !important;
+    visibility: hidden !important;
+}
+
+[hidden], template {
+    display: none;
+}

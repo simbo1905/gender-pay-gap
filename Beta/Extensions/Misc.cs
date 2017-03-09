@@ -28,6 +28,19 @@ namespace Extensions
             return value.Equals(default(T));
         }
 
+        public static string Format(this object obj,string text)
+        {
+            //Bind the parameters
+            if (obj != null && !string.IsNullOrWhiteSpace(text))
+                foreach (var prop in obj.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
+                {
+                    var value = prop.GetValue(obj, null) as string;
+                    if (string.IsNullOrWhiteSpace((prop.Name)) || string.IsNullOrWhiteSpace(value)) continue;
+                    text = text.ReplaceI("{" + prop.Name + "}", value);
+                }
+            return text;
+        }
+
         public static TConvert ConvertTo<TConvert>(this object entity) where TConvert : new()
         {
             var convertProperties = TypeDescriptor.GetProperties(typeof(TConvert)).Cast<PropertyDescriptor>();

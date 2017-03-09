@@ -20,6 +20,8 @@ using System.Web.Routing;
 using GenderPayGap.Core.Classes;
 using Extensions;
 using GenderPayGap.WebUI.Classes;
+using GenderPayGap.WebUI.Models.Register;
+using Notify.Models;
 
 namespace GenderPayGap.Tests
 {
@@ -31,6 +33,9 @@ namespace GenderPayGap.Tests
         public static T GetController<T>(long userId = 0, RouteData routeData = null, params object[] dbObjects) where T : Controller
         {
             var builder = BuildContainerIoC(dbObjects);
+
+            //Initialise static classes with IoC container
+            GovNotifyAPI.Initialise(builder);
 
             //Mock UserId as claim
             var claims = new List<Claim>();
@@ -85,6 +90,7 @@ namespace GenderPayGap.Tests
                 set { m_SessionStorage[name] = value; }
             }
 
+
             public override void Remove(string name)
             {
                 m_SessionStorage.Remove(name);
@@ -100,9 +106,9 @@ namespace GenderPayGap.Tests
 
             //Create the mock repository
             builder.Register(c => new MockRepository(dbObjects)).As<IRepository>();
-            builder.RegisterType<MockPrivateEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Private");
-            builder.RegisterType<MockPublicEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Public");
-
+            builder.RegisterType<MockEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Private");
+            builder.RegisterType<MockEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Public");
+            builder.Register(g => new MockGovNotify()).As<IGovNotify>();
 
             return builder.Build();
         }
@@ -164,6 +170,11 @@ namespace GenderPayGap.Tests
         public void Delete(EmployerRecord employer)
         {
             AllEmployers.Remove(employer);
+        }
+
+        public string GetSicCodes(string companyNumber)
+        {
+            throw new NotImplementedException();
         }
 
         public void Insert(EmployerRecord employer)
@@ -288,6 +299,11 @@ namespace GenderPayGap.Tests
             return result;
         }
 
+        public string GetSicCodes(string companyNumber)
+        {
+            return AllEmployers.FirstOrDefault(c => c.CompanyNumber == companyNumber)?.SicCodes;
+        }
+
         PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize)
         {
             //throw new NotImplementedException();
@@ -367,6 +383,40 @@ namespace GenderPayGap.Tests
 
         }
 
+    }
+
+    public class MockGovNotify : IGovNotify
+    {
+        string _Status = "delivered";
+
+        public Notification SendEmail(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation)
+        {
+            return new Notification()
+            {
+                status = _Status
+            };
+        }
+
+        public Notification SendSms(string mobileNumber, string templateId, Dictionary<string, dynamic> personalisation)
+        {
+            return new Notification()
+            {
+                status = _Status
+            };
+        }
+
+        public Notification SendPost(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation)
+        {
+            return new Notification()
+            {
+                status = _Status
+            };
+        }
+
+        public void SetStatus(string status)
+        {
+            _Status = status;
+        }
     }
 
 }

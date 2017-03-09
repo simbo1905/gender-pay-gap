@@ -11,6 +11,7 @@ using Microsoft.Owin.Security.Twitter;
 using IdentityServer3.Core.Services;
 using Microsoft.Owin.Security.Facebook;
 using Serilog;
+using IdentityServer3.Core.Services.Default;
 
 [assembly: OwinStartup(typeof(GpgIdentityServer.Startup))]
 
@@ -25,10 +26,19 @@ namespace GpgIdentityServer
 
             app.Map("/login", coreApp =>
             {
+                
                 var factory = new IdentityServerServiceFactory()
                     .UseInMemoryClients(Clients.Get())
                     //.UseInMemoryUsers(Users.Get())
                     .UseInMemoryScopes(Scopes.Get());
+
+                //Set the options for the default view service
+                var viewOptions = new DefaultViewServiceOptions();
+#if DEBUG
+                //Dont cache the views when we are testing
+                viewOptions.CacheViews = false;
+#endif
+                factory.ConfigureDefaultViewService(viewOptions);
 
                 // different examples of custom user services
                 //var userService = new RegisterFirstExternalRegistrationUserService();
@@ -39,6 +49,7 @@ namespace GpgIdentityServer
                 // note: for the sample this registration is a singletone (not what you want in production probably)
                 factory.UserService = new Registration<IUserService>(resolver => userService);
 
+                //Required for GPG custom interface
                 //factory.ViewService = new Registration<IViewService, CustomViewService>();
 
                 factory.EventService = new Registration<IEventService, AuditEventService>();
@@ -47,7 +58,6 @@ namespace GpgIdentityServer
                 {
                     SiteName = "GPG IdentityServer",
                     SigningCertificate = LoadCertificate(),
-
                     Factory = factory,
 
                     AuthenticationOptions = new AuthenticationOptions
