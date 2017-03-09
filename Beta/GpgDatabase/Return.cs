@@ -153,5 +153,41 @@ namespace GenderPayGap.Models.SqlDatabase
             if (OrganisationId != model.OrganisationId) return false;
             return true;
         }
+
+        public DownloadRecord ToDownloadRecord()
+        {
+            var employer = Organisation.ToEmployerRecord();
+            return new DownloadRecord()
+            {
+                EmployerName = employer.Name,
+                CompanyNumber = employer.CompanyNumber,
+                SicCodes = employer.SicCodes,
+                Address1 = employer.Address1,
+                Address2 = employer.Address2,
+                Address3 = employer.Address3,
+                Country = employer.Country,
+                PostCode = employer.PostCode,
+                PoBox = employer.PoBox,
+                AccountingDate = this.AccountingDate,
+                CompanyLinkToGPGInfo = this.CompanyLinkToGPGInfo,
+                DiffMeanBonusPercent = this.DiffMeanBonusPercent,
+                DiffMeanHourlyPayPercent = this.DiffMeanHourlyPayPercent,
+                DiffMedianBonusPercent = this.DiffMedianBonusPercent,
+                DiffMedianHourlyPercent = this.DiffMedianHourlyPercent,
+                FemaleLowerPayBand = this.FemaleLowerPayBand,
+                FemaleMedianBonusPayPercent = this.FemaleMedianBonusPayPercent,
+                FemaleMiddlePayBand = this.FemaleMiddlePayBand,
+                FemaleUpperPayBand = this.FemaleUpperPayBand,
+                FemaleUpperQuartilePayBand = this.FemaleUpperQuartilePayBand,
+                MaleLowerPayBand = this.MaleLowerPayBand,
+                MaleMedianBonusPayPercent = MaleMedianBonusPayPercent,
+                MaleMiddlePayBand = MaleMiddlePayBand,
+                MaleUpperPayBand = MaleUpperPayBand,
+                MaleUpperQuartilePayBand = MaleUpperQuartilePayBand,
+                ResponsiblePerson = $"{FirstName} {LastName} ({JobTitle})",
+                SubmittedDate = this.StatusDate
+            };
+        }
+
     }
 }

@@ -41,33 +41,6 @@ namespace GenderPayGap.WebUI.Controllers
 
         #region IoC Properties
 
-        IPagedRepository<EmployerRecord> _PrivateSectorRepository = null;
-        public IPagedRepository<EmployerRecord> PrivateSectorRepository
-        {
-            get
-            {
-
-                if (_PrivateSectorRepository == null)
-                {
-                    _PrivateSectorRepository = containerIOC.ResolveKeyed<IPagedRepository<EmployerRecord>>("Private");
-                }
-                return _PrivateSectorRepository;
-            }
-        }
-
-        IPagedRepository<EmployerRecord> _PublicSectorRepository = null;
-        public IPagedRepository<EmployerRecord> PublicSectorRepository
-        {
-            get
-            {
-
-                if (_PublicSectorRepository == null)
-                {
-                    _PublicSectorRepository = containerIOC.ResolveKeyed<IPagedRepository<EmployerRecord>>("Public");
-                }
-                return _PublicSectorRepository;
-            }
-        }
         #endregion
 
         #region about-you
@@ -934,10 +907,14 @@ namespace GenderPayGap.WebUI.Controllers
                 var sicCodes = model.SectorType == SectorTypes.Public ? new []{1} : employer.GetSicCodes();
             
                 //Save the sic codes for the organisation
+                var allSicCodes = DataRepository.GetAll<SicCode>();
                 foreach (var code in sicCodes)
                 {
-                    var sicCode = code==0 ? null : DataRepository.GetAll<SicCode>().FirstOrDefault(sic => sic.SicCodeId == code);
-                    if (sicCode != null)org.OrganisationSicCodes.Add(new OrganisationSicCode() {Organisation = org, SicCode = sicCode});
+                    var sicCode = code==0 ? null : allSicCodes.FirstOrDefault(sic => sic.SicCodeId == code);
+                    if (sicCode==null)
+                        MvcApplication.Log.WriteLine($"Invalid SIC code '{code}' received from companies house");
+                    else 
+                        org.OrganisationSicCodes.Add(new OrganisationSicCode() {Organisation = org, SicCode = sicCode});
                 }
 
                 org.SetStatus(model.ManualRegistration ? OrganisationStatuses.Pending : OrganisationStatuses.Active, currentUser.UserId);

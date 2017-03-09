@@ -18,9 +18,6 @@ namespace GenderPayGap.WebUI.Models.Search
 
         }
 
-        [Required]
-        [StringLength(100, ErrorMessage = "You must enter an employers name between 3 and 100 characters in length", MinimumLength = 3)]
-        [DisplayName("Search")]
         public string SearchText { get; set; }
 
         public int Year { get; set; }

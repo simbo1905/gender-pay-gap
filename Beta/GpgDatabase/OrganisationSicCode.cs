@@ -12,14 +12,12 @@ namespace GenderPayGap.Models.SqlDatabase
         {
         }
 
-        [Key]
-        [DatabaseGenerated(DatabaseGeneratedOption.None)]
+        [Key, Column(Order = 0)]
         public int SicCodeId { get; set; }
 
-        [Required]
+        [Key, Column(Order = 1)]
         public long OrganisationId { get; set; }
 
-        [Required]
         public System.DateTime Created { get; set; } = DateTime.Now;
 
         [ForeignKey("SicCodeId")]
