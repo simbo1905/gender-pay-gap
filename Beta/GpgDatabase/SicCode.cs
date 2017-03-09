@@ -4,6 +4,7 @@ namespace GenderPayGap.Models.SqlDatabase
     using System.ComponentModel.DataAnnotations;
     using System.ComponentModel.DataAnnotations.Schema;
 
+    [Serializable]
     public partial class SicCode
     {
         public SicCode()
