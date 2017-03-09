@@ -253,6 +253,22 @@ namespace Extensions
             directory.Refresh();
         }
 
+        public static void CreateTree(this string directoryPath)
+        {
+            if (string.IsNullOrWhiteSpace(directoryPath)) throw new ArgumentNullException("directoryPath");
+            var directory=new DirectoryInfo(directoryPath);
+            directory.Refresh();
+            if (directory.Exists) return;
+            if (directory.Root.FullName == directory.FullName) return;
+            if (directory.Parent != null)
+            {
+                directory.Parent.Refresh();
+                if (!directory.Exists && directory.Parent.FullName != directory.Root.FullName) CreateTree(directory.Parent);
+            }
+            directory.Create();
+            directory.Refresh();
+        }
+
         //Deletes all empty folders under the specified path
         public static void DeleteEmpty(this DirectoryInfo directory, bool recursive=true)
         {

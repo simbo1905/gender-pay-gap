@@ -138,6 +138,19 @@ namespace Extensions
             return (Math.Round(size / 10485.76) / 100).ToString(formatString) + " mb";
         }
 
+        public static string FormatFileSize(int size, string formatString = null, bool roundDown = true)
+        {
+            if (roundDown)
+            {
+                if (size < 1024) return size.ToInt32().ToString(formatString) + " b";
+                if (size < 1048576) return (size / 1024).ToInt32().ToString(formatString) + " kb";
+                return ((size / 10485.76) / 100).ToInt32().ToString(formatString) + " mb";
+            }
+            if (size < 1024) return Math.Round((double)size).ToString(formatString) + " b";
+            if (size < 1048576) return Math.Round((double)size / 1024).ToString(formatString) + " kb";
+            return (Math.Round(size / 10485.76) / 100).ToString(formatString) + " mb";
+        }
+
         public static bool Contains(this int[] numbers, int value)
         {
             if (numbers == null || numbers.Length < 1) return false;
@@ -252,5 +265,7 @@ namespace Extensions
             if (value > maximum) value = maximum;
             return value;
         }
+
+
     }
 }

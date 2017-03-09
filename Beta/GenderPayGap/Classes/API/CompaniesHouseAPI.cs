@@ -49,7 +49,6 @@ namespace GenderPayGap
             }
             catch (AggregateException aex)
             {
-                if (Debugger.IsAttached) Debugger.Break();
                 var httpEx = aex.InnerException as HttpRequestException;
                 if (httpEx != null && httpEx.Message != "Response status code does not indicate success: 404 (Not Found).") throw;
             }
@@ -85,6 +84,7 @@ namespace GenderPayGap
             dynamic company = JsonConvert.DeserializeObject(task.Result);
             if (company==null) return null;
             var codes=new List<string>();
+            if (company.sic_codes!=null)
             foreach (var code in company.sic_codes)
                 codes.Add(code.Value);
 

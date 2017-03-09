@@ -23,7 +23,6 @@ namespace GenderPayGap.Core.Interfaces
         void SaveChanges();
 
         DbTransaction BeginTransaction(IsolationLevel isolationLevel);
-
     }
 
 }
