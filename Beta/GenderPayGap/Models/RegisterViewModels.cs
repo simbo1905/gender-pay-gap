@@ -169,7 +169,7 @@ namespace GenderPayGap.WebUI.Models
 
         public string CompanyNumber { get; set; }
         public string CompanyStatus { get; set; }
-        public string Name { get; internal set; } //=  "Test Organisation Name " + count;
+        public string Name { get; internal set; } 
         [Required(AllowEmptyStrings = false)]
         [MaxLength(100)]
         public string Address1 { get; set; }
