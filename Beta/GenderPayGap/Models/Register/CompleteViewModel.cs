@@ -4,6 +4,7 @@ using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap.WebUI.Models.Register
 {
+    [Serializable]
     public class CompleteViewModel
     {
         public CompleteViewModel()
