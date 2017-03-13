@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Configuration;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -17,6 +18,10 @@ namespace GenderPayGap.WebUI.Classes
 {
     public static class HtmlHelpers
     {
+        public static MvcHtmlString AppSetting(this HtmlHelper htmlHelper,string appSettingKey)
+        {
+            return new MvcHtmlString(ConfigurationManager.AppSettings[appSettingKey]);
+        }
 
 
         public static MvcHtmlString SetErrorClass<TModel, TProperty>(
