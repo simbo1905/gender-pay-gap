@@ -351,7 +351,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("employer-details")]
-        public ActionResult EmployerDetails(int index, string view=null)
+        public ActionResult EmployerDetails(int index=-1, string view=null)
         {
             if (string.IsNullOrWhiteSpace(view))
                 view = "hourly-rate";
@@ -362,14 +362,39 @@ namespace GenderPayGap.WebUI.Controllers
             var m = this.UnstashModel<SearchViewModel>();
             if (m == null) return View("CustomError", new ErrorViewModel(1118));
 
-            var orgId = m.Employers.Results[index].Id;
+            Organisation org=null;
+            if (index < 0 || m.Employers == null || m.Employers.Results == null || m.Employers.Results.Count < 1 || index >= m.Employers.Results.Count)
+            {
+                //TODO Load the current users details
+                if (User.Identity.IsAuthenticated)
+                {
+                    var currentUser = DataRepository.FindUser(User);
+                    if (currentUser != null)
+                    {
+                        var userOrg = DataRepository.GetUserOrg(currentUser);
+                        if (userOrg!=null)org = userOrg.Organisation;
 
-            var org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == orgId);
+                    }
+                }
+            }
+            else
+            {
+                var orgId = m.Employers.Results[index].Id;
+                org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == orgId);
+            }
+
+            if (org==null)return RedirectToAction("SearchResults");
 
             var expectStartDate = GetAccountYearStartDate(org.SectorType);
 
             var @return = DataRepository.GetAll<Return>().OrderByDescending
-                (r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == orgId && r.AccountingDate == expectStartDate && r.Status == ReturnStatuses.Submitted);
+                (r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == org.OrganisationId && r.AccountingDate == expectStartDate && r.Status == ReturnStatuses.Submitted);
+
+            if (@return== null)
+            {
+                //TODO
+                return RedirectToAction("SearchResults");
+            }
 
             var model = new ReturnViewModel();
             model.SectorType = org.SectorType;

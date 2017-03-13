@@ -174,12 +174,20 @@ namespace GenderPayGap.WebUI.Classes
         public static void CleanModelErrors<TModel>(this Controller controller)
         {
             var containerType = typeof(TModel);
+            //Save the old modelstate
             var oldModelState = new ModelStateDictionary();
             foreach (var modelState in controller.ModelState)
             {
-                oldModelState.Add(modelState.Key, modelState.Value);
-            }
+                var propertyName = modelState.Key;
+                foreach (var error in modelState.Value.Errors)
+                {
+                    var exists = oldModelState.Any(m => m.Key == propertyName && m.Value.Errors.Any(e => e.ErrorMessage ==error.ErrorMessage));
 
+                    //add the inline message if it doesnt already exist
+                    if (!exists)oldModelState.AddModelError(propertyName, error.ErrorMessage);
+                }
+            }
+            //Clear the model state ready for refill
             controller.ModelState.Clear();
 
             foreach (var modelState in oldModelState)
@@ -187,17 +195,19 @@ namespace GenderPayGap.WebUI.Classes
                 //Get the property name
                 var propertyName = modelState.Key;
 
+                //Get the validation attributes
                 var propertyInfo = string.IsNullOrWhiteSpace(propertyName) ? null : containerType.GetPropertyInfo(propertyName);
                 var attributes = propertyInfo == null ? null : propertyInfo.GetCustomAttributes(typeof(ValidationAttribute), false).ToList<ValidationAttribute>();
 
+                //Get the display name
                 var displayAttribute = propertyInfo==null ? null : propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
                 var displayName = displayAttribute == null ? propertyName : displayAttribute.Name;
 
 
                 foreach (var error in modelState.Value.Errors)
                 { 
-                    var title = error.ErrorMessage;
-                    var description = error.ErrorMessage;
+                    var title = string.IsNullOrWhiteSpace(propertyName) ? error.ErrorMessage : null;
+                    var description = !string.IsNullOrWhiteSpace(propertyName) ? error.ErrorMessage : null;
 
                     if (error.ErrorMessage.Like("The value * is not valid for *."))
                     {
@@ -205,7 +215,7 @@ namespace GenderPayGap.WebUI.Classes
                         description = "The value here is invalid.";
                     }
 
-                    if (attributes == null || attributes.Count() == 0) goto addModelError;
+                    if (attributes == null || !attributes.Any()) goto addModelError;
 
                     var attribute = attributes.FirstOrDefault(a => a.FormatError(a.GetErrorString(),displayName) == error.ErrorMessage);
                     if (attribute == null) goto addModelError;

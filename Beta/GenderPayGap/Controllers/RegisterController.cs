@@ -867,7 +867,11 @@ namespace GenderPayGap.WebUI.Controllers
             if (model.ManualRegistration)return RedirectToAction("RequestReceived");
 
             //If public sector then we are complete
-            if (model.SectorType==SectorTypes.Public) RedirectToAction("Complete");
+            if (model.SectorType == SectorTypes.Public)
+            {
+                this.StashModel(new CompleteViewModel() { AccountingDate = GetAccountYearStartDate(model.SectorType.Value) });
+                RedirectToAction("Complete");
+            }
 
             //If private sector then send the pin
             return RedirectToAction("PINSent");
@@ -1084,7 +1088,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             //Tell reviewer how many other open regitrations for same organisation
             var requestCount = DataRepository.GetAll<UserOrganisation>().Count(uo => uo.UserId != userOrg.UserId && uo.OrganisationId == userOrg.OrganisationId && uo.Organisation.Status==OrganisationStatuses.Pending);
-            if (requestCount > 0) AddModelError(3018, parameters: new { requestCount });
+            if (requestCount > 0) AddModelError(3018, parameters: new { requestCount=requestCount });
 
             this.StashModel(model);
             return View("ReviewRequest", model);
@@ -1217,7 +1221,7 @@ namespace GenderPayGap.WebUI.Controllers
             //Send a verification link to the email address
             try
             {
-                string returnUrl = Url.Action("","Submit",null,"https");
+                string returnUrl = Url.Action("Redirect","Submit",null,"https");
                 if (!GovNotifyAPI.SendRegistrationApproved(returnUrl, emailAddress))
                     throw new Exception("Could not send registration accepted email.");
             }
@@ -1548,6 +1552,10 @@ namespace GenderPayGap.WebUI.Controllers
 
                 userOrg.ConfirmAttempts = 0;
 
+                model.AccountingDate = GetAccountYearStartDate(userOrg.Organisation.SectorType);
+
+                this.StashModel(model);
+
                 result1 = RedirectToAction("Complete");
             }
             else
@@ -1577,11 +1585,15 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
+            //Load the employers from session
+            var model = this.UnstashModel<CompleteViewModel>();
+            if (model == null) return View("CustomError", new ErrorViewModel(1112));
+
             //Ensure the stash is cleared
             this.ClearStash();
 
             //Show the confirmation view
-            return View("Complete");
+            return View("Complete",model);
         }
         #endregion
     }

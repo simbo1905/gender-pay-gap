@@ -103,15 +103,26 @@
                             <td>Male </td>
                             <td>Female</td>
                         </tr>
+                        <tr>
+                            <td>
+                                Upper quartile
+                            </td>
+                            <td>
+                                @Html.ValueFor(model => model.MaleUpperQuartilePayBand)%
+                            </td>
+                            <td>
+                                @Html.ValueFor(model => model.FemaleUpperQuartilePayBand)%
+                            </td>
+                        </tr>
                         <tr class="row">
                             <td>
-                                Lower quartile
+                                Upper middle quartile
                             </td>
                             <td>
-                                @Html.ValueFor(model => model.MaleLowerPayBand)%
+                                @Html.ValueFor(model => model.MaleUpperPayBand)%
                             </td>
                             <td>
-                                @Html.ValueFor(model => model.FemaleLowerPayBand)%
+                                @Html.ValueFor(model => model.FemaleUpperPayBand)%
                             </td>
                         </tr>
                         <tr class="row">
@@ -127,24 +138,13 @@
                         </tr>
                         <tr class="row">
                             <td>
-                                Upper middle quartile
+                                Lower quartile
                             </td>
                             <td>
-                                @Html.ValueFor(model => model.MaleUpperPayBand)%
+                                @Html.ValueFor(model => model.MaleLowerPayBand)%
                             </td>
                             <td>
-                                @Html.ValueFor(model => model.FemaleUpperPayBand)%
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                Top quartile
-                            </td>
-                            <td>
-                                @Html.ValueFor(model => model.MaleUpperQuartilePayBand)%
-                            </td>
-                            <td>
-                                @Html.ValueFor(model => model.FemaleUpperQuartilePayBand)%
+                                @Html.ValueFor(model => model.FemaleLowerPayBand)%
                             </td>
                         </tr>
                     </tbody>
@@ -200,7 +200,10 @@
 
                     </tbody>
                 </table>
-
+                <div class="subsection panel-indent">
+                    <div class="bold-small">On submission your data will be published on the gender pay gap service.</div>
+                </div>
+                <br/>
                 <p>
                     <input class="button" type="submit" role="button" name="command" value="Confirm and submit" />
                 </p>

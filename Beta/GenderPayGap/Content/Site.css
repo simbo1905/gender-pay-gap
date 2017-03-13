@@ -84,6 +84,16 @@
     display: none;
 }
 
+.customvalidation-summary-valid
+{
+    display: none;
+}
+
+.customvalidation-summary-errors
+{
+    display: block;
+}
+
 .filter label {
     font-size: 16px;
     display: inline-block;
@@ -149,3 +159,24 @@ ul.tabs li {
     border-top: 1px solid #bfc1c3;
     clear: both;
 }
+
+.field-validation-error + input[type=text] {
+    border: 4px solid #b10e1e;
+}
+
+.form-group .error{
+    border-left: 4px solid transparent !important;
+}
+
+.form-group.error textarea{
+    border: 4px solid #b10e1e !important;
+}
+
+.form-group.error input[type=text]{
+    border: 4px solid #b10e1e !important;
+}
+
+.form-group.error input[type=password]{
+    border: 4px solid #b10e1e !important;
+}
+
