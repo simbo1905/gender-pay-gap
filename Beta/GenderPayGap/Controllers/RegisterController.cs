@@ -734,7 +734,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
 
-            //Exclude the cotact details
+            //Exclude the contact details
             ModelState.Exclude("ContactFirstName", "ContactLastName", "ContactJobTitle", "ContactOrganisation", "ContactEmailAddress", "ContactPhoneNumber");
 
             //Check model is valid

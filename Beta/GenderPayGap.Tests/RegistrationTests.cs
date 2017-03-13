@@ -562,15 +562,16 @@ namespace GenderPayGap.Tests
 
         [Test]
         [Description("Ensure the Step1 succeeds and gets a new registration form for newly authorized users to register")]
-        public void Step1_Get_NewRegistration_Success()
+        public void AboutYou_Get_NewRegistration_Success()
         {
             //ARRANGE:
             //create a user who does not exist in the db
             var user = new User() { UserId = 0 };
 
+            //set mock routeData
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step1");
-            routeData.Values.Add("Controller", "Register"); ;
+            routeData.Values.Add("Action", "AboutYou");
+            routeData.Values.Add("Controller", "Register"); 
 
             //Stash an object to pass in for this.ClearStash()
             //var model = new RegisterViewModel();
@@ -583,7 +584,7 @@ namespace GenderPayGap.Tests
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
             Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
-            Assert.That(result.ViewName == "Step1", "Incorrect view returned");
+            Assert.That(result.ViewName == "AboutYou", "Incorrect view returned");
             Assert.NotNull(result.Model as RegisterViewModel, "Expected RegisterViewModel");
             Assert.That(result.Model.GetType() == typeof(RegisterViewModel), "Incorrect resultType returned");
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
@@ -592,14 +593,23 @@ namespace GenderPayGap.Tests
 
         [Test]
         [Description("Ensure the Step1 succeeds when all fields are good")]
-        public void Step1_Post_Success()
+        public void AboutYou_Post_Success()
         {
+            //ARRANGE:
+            //create a user who does not exist in the db
+            //var user = new User() { UserId = 0 };
+
+           //set mock routeData
+           var routeData = new RouteData();
+           routeData.Values.Add("Action", "AboutYou");
+           routeData.Values.Add("Controller", "Register");
+
 
             //1.Arrange the test setup variables
             var model = new RegisterViewModel()
                             {
-                                EmailAddress         = "magnuski@hotmail.com",
-                                ConfirmEmailAddress  = "magnuski@hotmail.com",
+                                EmailAddress         = "test@hotmail.com",
+                                ConfirmEmailAddress  = "test@hotmail.com",
                                 FirstName            = "Kingsley",
                                 LastName             = "Eweka",
                                 JobTitle             = "Dev",
@@ -619,7 +629,7 @@ namespace GenderPayGap.Tests
             Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step2", "Expected a RedirectToRouteResult to Step2");
+            Assert.That(result.RouteValues["action"].ToString() == "VerifyEmail", "Expected a RedirectToRouteResult to VerifyEmail");
 
             //5.If the redirection successfull retrieve the model stash sent with the redirect.
             var unStashedmodel = controller.UnstashModel<RegisterViewModel>();
@@ -645,23 +655,23 @@ namespace GenderPayGap.Tests
 
         [Test]
         [Description("Ensure the Step2 succeeds when is verified and an email is sent")]
-        public void Step2_Get_ViewResult_Success()
+        public void VerifyEmail_Get_ViewResult_Success()
         {
             //ARRANGE:
             //1.Arrange the test setup variables
             var code = "abcdefg";
-            var user = new User() { UserId = 1, EmailAddress = "magnuski@hotmail.com", EmailVerifiedDate = null, EmailVerifySendDate = null, EmailVerifyHash = code.GetSHA512Checksum(), Status = UserStatuses.New, Organisations = null };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = null, EmailVerifySendDate = null, EmailVerifyHash = code.GetSHA512Checksum(), Status = UserStatuses.New, Organisations = null };
           
-            var verifiedModel = new VerifyViewModel() { Verified = true };
+            var verifiedModel = new VerifyViewModel() { Sent = true };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step2");
+            routeData.Values.Add("Action", "VerifyEmail");
             routeData.Values.Add("Controller", "Register");
 
             //simulate a model to stash
             var model = new RegisterViewModel();
-            model.EmailAddress = "magnuski@hotmail.com";
-            model.ConfirmEmailAddress = "magnuski@hotmail.com";
+            model.EmailAddress = "test@hotmail.com";
+            model.ConfirmEmailAddress = "test@hotmail.com";
             model.FirstName = "Kingsley";
             model.LastName = "Eweka";
             model.JobTitle = "Dev";
@@ -678,12 +688,12 @@ namespace GenderPayGap.Tests
             var resultModel = result.Model as VerifyViewModel;
 
             result.ViewData.ModelState.Clear();
-            resultModel.Verified = (controller.DataRepository.GetAll<VerifyViewModel>().FirstOrDefault(v => v.Verified)).Verified;
+            resultModel.Sent = (controller.DataRepository.GetAll<VerifyViewModel>().FirstOrDefault(v => v.Sent)).Sent;
 
             //ASSERT:
             //Ensure confirmation view is returned
             Assert.NotNull(result, "Expected ViewResult");
-            Assert.That(result.ViewName == "Step2", "Incorrect view returned");
+            Assert.That(result.ViewName == "VerifyEmail", "Incorrect view returned");
 
             //Ensure the model is not null and it is correct
             Assert.NotNull(result.Model as VerifyViewModel, "Expected VerifyViewModel");
@@ -691,24 +701,23 @@ namespace GenderPayGap.Tests
             //Assert.AreEqual(result.ViewData.ModelState.IsValidField("EmailAddress"), "Email is not a match or is invalid");
             
             //ensure user is marked as verified
-            Assert.AreEqual(resultModel.Verified, true, "Expected VerifyViewModel");
+            Assert.AreEqual(resultModel.Sent, true, "Expected VerifyViewModel");
         }
 
         [Test]
         [Description("Ensure the Step2 succeeds when all fields are good")]
-        public void Step2_Get_RedirectResult_Success() //Registration complete
+        public void VerifyEmail_Get_RedirectResult_Success() //Registration complete
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-             var code = "abcdefg";
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now, EmailVerifyHash = code.GetSHA512Checksum() };
+            var code = "abcdefg";
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now, EmailVerifyHash = code.GetSHA512Checksum() };
             var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+            var userOrganisation = new UserOrganisation() { OrganisationId = organisation.OrganisationId, Organisation = organisation, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
             //Set the user up as if finished step1 which is email known etc but not sent
-
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step2");
+            routeData.Values.Add("Action", "VerifyEmail");
             routeData.Values.Add("Controller", "Register");
 
             var model = new VerifyViewModel();
@@ -732,18 +741,18 @@ namespace GenderPayGap.Tests
        
         [Test]
         [Description("Ensure the Step2 user verification succeeds")]
-        public void Step2_Post_Success()
+        public void VerifyEmail_Post_Success()
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
 
-            //var organisation = new Organisation() { OrganisationId = 1 };
-            //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+            var organisation = new Organisation() { OrganisationId = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = organisation.OrganisationId, Organisation = organisation, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
             //Set user email address verified code and expired sent date
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step2");
+            routeData.Values.Add("Action", "VerifyEmail");
             routeData.Values.Add("Controller", "Register");
 
             //ARRANGE:
@@ -761,7 +770,7 @@ namespace GenderPayGap.Tests
             // model.WrongCode = false;
 
             //var controller = TestHelper.GetController<RegisterController>();
-            var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
+            var controller = TestHelper.GetController<RegisterController>(1, routeData, user, userOrganisation);
             controller.Bind(model);
 
             //ACT:
@@ -772,29 +781,29 @@ namespace GenderPayGap.Tests
             //3.Check that the result is not null
             Assert.NotNull(result, "Expected RedirectToRouteResult");
 
-            //4.Check that the redirection went to the right url step.
+           //4.Check that the redirection went to the right url step.
            // Assert.That(result.RouteValues["action"].ToString() == "Step3", "");
-            Assert.That(result.RouteValues["action"].ToString() == "Complete", "");
+            Assert.That(result.RouteValues["action"].ToString() == "Complete", "Registration is incomplete");
 
             //5.If the redirection successfull retrieve the model stash sent with the redirect.
-            var unStashedmodel = controller.UnstashModel<RegisterViewModel>();
+          //  var unStashedmodel = controller.UnstashModel<RegisterViewModel>();
 
             //6.Check that the unstashed model is not null
-            Assert.NotNull(model, "Expected RegisterViewModel");
+          //  Assert.NotNull(model, "Expected RegisterViewModel");
         }
 
 
 
         [Test]
         [Description("Ensure the Step3 succeeds when all fields are good")]
-        public void Step3_Get_Success()
+        public void OrganisationType_Get_Success()
         {
             //ARRANGE:
             //create a user who does exist in the db
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var user = new User() { UserId = 1, EmailAddress="test@hotmail.com",  EmailVerifiedDate = DateTime.Now };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step3");
+            routeData.Values.Add("Action", "OrganisationType");
             routeData.Values.Add("Controller", "Register");
 
             var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
@@ -806,7 +815,7 @@ namespace GenderPayGap.Tests
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
             Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
-            Assert.That(result.ViewName == "Step3", "Incorrect view returned");
+            Assert.That(result.ViewName == "OrganisationType", "Incorrect view returned");
             Assert.NotNull(result.Model as OrganisationViewModel, "Expected OrganisationViewModel");
             Assert.That(result.Model.GetType() == typeof(OrganisationViewModel), "Incorrect resultType returned");
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
@@ -814,23 +823,22 @@ namespace GenderPayGap.Tests
 
         [Test]
         [Description("Ensure the Step3 succeeds when all fields are good")]
-        public void Step3_Post_PrivateSector_Success()
+        public void OrganisationType_Post_PrivateSector_Success()
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
-
+            var user = new User() { UserId = 1, EmailAddress="test@hotmail.com", EmailVerifiedDate = DateTime.Now };
             //var organisation = new Organisation() { OrganisationId = 1 };
-            //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+            //var userOrganisation = new UserOrganisation() { OrganisationId = 1, Organisation = organisation, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
             //Set user email address verified code and expired sent date
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step3");
+            routeData.Values.Add("Action", "OrganisationType");
             routeData.Values.Add("Controller", "Register");
 
             var model = new OrganisationViewModel() { SectorType = SectorTypes.Private };
             
-            var controller = TestHelper.GetController<RegisterController>( 1, routeData, user);
+            var controller = TestHelper.GetController<RegisterController>( 1, routeData, user/*, userOrganisation, organisation*/);
             controller.Bind(model);
 
             //Stash the object for the unstash to happen in code
@@ -845,7 +853,7 @@ namespace GenderPayGap.Tests
             Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step4", "");
+            Assert.That(result.RouteValues["action"].ToString() == "OrganisationSearch", "Redirected to the wrong view");
 
             //5.If the redirection successfull retrieve the model stash sent with the redirect.
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
@@ -862,18 +870,18 @@ namespace GenderPayGap.Tests
 
         [Test]
         [Description("Ensure the Step3 succeeds when all fields are good")]
-        public void Step3_Post_PublicSector_Success()
+        public void OrganisationType_Post_PublicSector_Success()
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
 
             //var organisation = new Organisation() { OrganisationId = 1 };
             //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
             //Set user email address verified code and expired sent date
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step3");
+            routeData.Values.Add("Action", "OrganisationType");
             routeData.Values.Add("Controller", "Register");
 
             var model = new OrganisationViewModel() { SectorType = SectorTypes.Public };
@@ -893,7 +901,7 @@ namespace GenderPayGap.Tests
             Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step4", "");
+            Assert.That(result.RouteValues["action"].ToString() == "OrganisationSearch", "Redirected to the wrong view");
 
             //5.If the redirection successfull retrieve the model stash sent with the redirect.
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
@@ -908,17 +916,16 @@ namespace GenderPayGap.Tests
             Assert.AreEqual(model.SectorType == SectorTypes.Public, true, "Expected equal object entities success");
         }
 
-
         [Test]
         [Description("Ensure the Step4 succeeds when all fields are good")]
-        public void Step4_Get_Success()
+        public void OrganisationSearch_Get_Success()
         {
             //ARRANGE:
             //create a user who does exist in the db
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var user = new User() { UserId = 1, EmailAddress="test@hotmail.com", EmailVerifiedDate = DateTime.Now };
 
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step4");
+            routeData.Values.Add("Action", "OrganisationSearch");
             routeData.Values.Add("Controller", "Register");
 
             var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
@@ -933,7 +940,7 @@ namespace GenderPayGap.Tests
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
             Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
-            Assert.That(result.ViewName == "Step4", "Incorrect view returned");
+            Assert.That(result.ViewName == "OrganisationSearch", "Incorrect view returned");
             Assert.NotNull(result.Model as OrganisationViewModel, "Expected OrganisationViewModel");
             Assert.That(result.Model.GetType() == typeof(OrganisationViewModel), "Incorrect resultType returned");
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
@@ -944,23 +951,22 @@ namespace GenderPayGap.Tests
 
         [Test]
         [Description("Ensure the Step4 succeeds when all fields are good")]
-        public void Step4_Post_PrivateSector_Success()
+        public void OrganisationSearch_Post_PrivateSector_Success()
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
-
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
             //var organisation = new Organisation() { OrganisationId = 1 };
             //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
             //Set user email address verified code and expired sent date
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step4");
+            routeData.Values.Add("Action", "OrganisationSearch");
             routeData.Values.Add("Controller", "Register");
 
             var model = new OrganisationViewModel()
                             {
-                               Employers = new Core.Classes.PagedResult<EmployerRecord>() {}, 
+                               Employers = new PagedResult<EmployerRecord>() {}, 
                                SearchText = "smith",
                                SectorType = SectorTypes.Private
                             };
@@ -982,7 +988,7 @@ namespace GenderPayGap.Tests
             Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step5", "");
+            Assert.That(result.RouteValues["action"].ToString() == "ChooseOrganisation", "Redirected to the wrong view");
 
             //5.If the redirection successfull retrieve the model stash sent with the redirect.
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
@@ -1000,18 +1006,18 @@ namespace GenderPayGap.Tests
 
         [Test]
         [Description("Ensure the Step4 succeeds when all fields are good")]
-        public void Step4_Post_PublicSector_Success()
+        public void OrganisationSearch_Post_PublicSector_Success()
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var user = new User() { UserId = 1, EmailAddress="test@hotmail.com", EmailVerifiedDate = DateTime.Now };
 
             //var organisation = new Organisation() { OrganisationId = 1 };
             //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
             //Set user email address verified code and expired sent date
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step4");
+            routeData.Values.Add("Action", "OrganisationSearch");
             routeData.Values.Add("Controller", "Register");
 
             var model = new OrganisationViewModel()
@@ -1038,7 +1044,7 @@ namespace GenderPayGap.Tests
             Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step5", "");
+            Assert.That(result.RouteValues["action"].ToString() == "ChooseOrganisation", "Redirected to the wrong view");
 
             //5.If the redirection successfull retrieve the model stash sent with the redirect.
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
@@ -1056,11 +1062,11 @@ namespace GenderPayGap.Tests
 
         [Test]
         [Description("Ensure the Step5 succeeds when all fields are good")]
-        public void Step5_Get_Success()
+        public void ChooseOrganisation_Get_Success()
         {
             //ARRANGE:
             //create a user who does exist in the db
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
 
             var routeData = new RouteData();
             routeData.Values.Add("Action", "ChooseOrganisation");
@@ -1086,18 +1092,18 @@ namespace GenderPayGap.Tests
 
         [Test]
         [Description("Ensure the Step5 succeeds when all fields are good")]
-        public void Step5_Post_PrivateSector_Success()
+        public void ChooseOrganisation_Post_PrivateSector_Success()
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
 
             //var organisation = new Organisation() { OrganisationId = 1 };
             //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
             //Set user email address verified code and expired sent date
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step5");
+            routeData.Values.Add("Action", "ChooseOrganisation");
             routeData.Values.Add("Controller", "Register");
 
             var employerResult = new PagedResult<EmployerRecord>()
@@ -1181,7 +1187,7 @@ namespace GenderPayGap.Tests
             Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step6", "");
+            Assert.That(result.RouteValues["action"].ToString() == "ConfirmOrganisation", "Redirected to the wrong view");
 
             //5.If the redirection successfull retrieve the model stash sent with the redirect.
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
@@ -1200,18 +1206,18 @@ namespace GenderPayGap.Tests
 
         [Test]
         [Description("Ensure the Step5 succeeds when all fields are good")]
-        public void Step5_Post_PublicSector_Success()
+        public void ChooseOrganisation_Post_PublicSector_Success()
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
 
             //var organisation = new Organisation() { OrganisationId = 1 };
             //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
             //Set user email address verified code and expired sent date
             var routeData = new RouteData();
-            routeData.Values.Add("Action", "Step5");
+            routeData.Values.Add("Action", "ChooseOrganisation");
             routeData.Values.Add("Controller", "Register");
 
             var employerResult = new PagedResult<EmployerRecord>()
@@ -1297,7 +1303,7 @@ namespace GenderPayGap.Tests
             Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step6", "");
+            Assert.That(result.RouteValues["action"].ToString() == "ConfirmOrganisation", "Redirected to the wrong view");
 
             //5.If the redirection successfull retrieve the model stash sent with the redirect.
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
@@ -1328,7 +1334,7 @@ namespace GenderPayGap.Tests
         {
             //ARRANGE:
             //create a user who does exist in the db
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var user = new User() { UserId = 1, EmailAddress="test@hotmail.com", EmailVerifiedDate = DateTime.Now };
 
             var routeData = new RouteData();
             routeData.Values.Add("Action", "ConfirmOrganisation");
@@ -1362,7 +1368,7 @@ namespace GenderPayGap.Tests
         {
             //ARRANGE:
             //create a user who does exist in the db
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
 
             var routeData = new RouteData();
             routeData.Values.Add("Action", "AddOrganisation");
@@ -1380,7 +1386,7 @@ namespace GenderPayGap.Tests
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
             Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
-            Assert.That(result.ViewName == "AddAddress", "Incorrect view returned");
+            Assert.That(result.ViewName == "AddOrganisation", "Incorrect view returned");
             Assert.NotNull(result.Model as OrganisationViewModel, "Expected OrganisationViewModel");
             Assert.That(result.Model.GetType() == typeof(OrganisationViewModel), "Incorrect resultType returned");
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
@@ -1392,10 +1398,9 @@ namespace GenderPayGap.Tests
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
-
-            //var organisation = new Organisation() { OrganisationId = 1 };
-            //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+            var user = new User() { UserId = 1, EmailAddress="test@hotmail.com", EmailVerifiedDate = DateTime.Now };
+            var organisation = new Organisation() { OrganisationId = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = organisation.OrganisationId, Organisation = organisation, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
             //Set user email address verified code and expired sent date
             var routeData = new RouteData();
@@ -1461,7 +1466,7 @@ namespace GenderPayGap.Tests
                 SectorType = SectorTypes.Private
             };
 
-            var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
+            var controller = TestHelper.GetController<RegisterController>(1, routeData, user, userOrganisation, organisation);
             controller.Bind(model);
 
             //Stash the object for the unstash to happen in code
@@ -1477,7 +1482,7 @@ namespace GenderPayGap.Tests
             Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "SendPIN", "");
+            Assert.That(result.RouteValues["action"].ToString() == "SendPIN", "Redirected to the wrong view");
 
             //5.If the redirection successfull retrieve the model stash sent with the redirect.
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
@@ -1498,10 +1503,10 @@ namespace GenderPayGap.Tests
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
 
-            //var organisation = new Organisation() { OrganisationId = 1 };
-            //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+            var organisation = new Organisation() { OrganisationId = 1 };
+            var userOrganisation = new UserOrganisation() { OrganisationId = organisation.OrganisationId, Organisation = organisation, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
             //Set user email address verified code and expired sent date
             var routeData = new RouteData();
@@ -1573,7 +1578,7 @@ namespace GenderPayGap.Tests
                 SectorType = SectorTypes.Public
             };
 
-            var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
+            var controller = TestHelper.GetController<RegisterController>(1, routeData, user, userOrganisation, organisation);
             controller.Bind(model);
 
             //Stash the object for the unstash to happen in code
@@ -1589,7 +1594,7 @@ namespace GenderPayGap.Tests
             Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step7", "");
+            Assert.That(result.RouteValues["action"].ToString() == "Step7", "Redirected to the wrong view");
 
             //5.If the redirection successfull retrieve the model stash sent with the redirect.
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
@@ -1613,7 +1618,7 @@ namespace GenderPayGap.Tests
         {
             //ARRANGE:
             //create a user who does exist in the db
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
 
             var routeData = new RouteData();
             routeData.Values.Add("Action", "ConfirmOrganisation");
@@ -1639,11 +1644,11 @@ namespace GenderPayGap.Tests
 
         [Test]
         [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
-        public void ConfirmOrganisation_Post_Success()
+        public void ConfirmOrganisation_Post_PrivateSector_Success()
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-            var user = new User() { UserId = 1, EmailVerifiedDate = DateTime.Now };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
 
             //var organisation = new Organisation() { OrganisationId = 1 };
             //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
@@ -1707,6 +1712,7 @@ namespace GenderPayGap.Tests
             var model = new OrganisationViewModel()
                             {
                                 Employers = employerResult,
+                                ManualRegistration = false,
                                 SectorType = SectorTypes.Private
                             };
 
@@ -1724,7 +1730,213 @@ namespace GenderPayGap.Tests
             Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Complete", "");
+            Assert.That(result.RouteValues["action"].ToString() == "PINSent", "");
+
+            //5.If the redirection successfull retrieve the model stash sent with the redirect.
+            var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
+
+            //6.Check that the unstashed model is not null
+            Assert.NotNull(model, "Expected OrganisationViewModel");
+
+            //ASSERT:
+            //7.Verify the values from the result that was stashed matches that of the Arrange values here
+
+            //8.verify that it was private sector was selected
+            Assert.AreEqual(model.SectorType == SectorTypes.Private, true, "Expected equal object entities success");
+        }
+
+        [Test]
+        [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
+        public void ConfirmOrganisation_Post_PublicSector_Success()
+        {
+            //ARRANGE:
+            //1.Arrange the test setup variables
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
+
+            //var organisation = new Organisation() { OrganisationId = 1 };
+            //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+
+            //Set user email address verified code and expired sent date
+            var routeData = new RouteData();
+            routeData.Values.Add("Action", "ConfirmOrganisation");
+            routeData.Values.Add("Controller", "Register");
+
+            var employerResult = new PagedResult<EmployerRecord>()
+            {
+                Results = new List<EmployerRecord>()
+                            {
+                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+                            }
+            };
+
+            var model = new OrganisationViewModel()
+            {
+                Employers = employerResult,
+                ManualRegistration = false, //already set from somewhere to true, but where?
+                SectorType = SectorTypes.Public
+            };
+
+            var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
+            controller.Bind(model);
+
+            //Stash the object for the unstash to happen in code
+            controller.StashModel(model);
+
+            //ACT:
+            //2.Run and get the result of the test
+            var result = controller.ConfirmOrganisation(model) as RedirectToRouteResult;
+
+            //3.Check that the result is not null
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
+
+            //4.Check that the redirection went to the right url step.
+            Assert.That(result.RouteValues["action"].ToString() == "Complete", "Redirected to the wrong view");
+
+            //5.If the redirection successfull retrieve the model stash sent with the redirect.
+            var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
+
+            //6.Check that the unstashed model is not null
+            Assert.NotNull(model, "Expected OrganisationViewModel");
+
+            //ASSERT:
+            //7.Verify the values from the result that was stashed matches that of the Arrange values here
+
+            //8.verify that it was private sector was selected
+            Assert.AreEqual(model.SectorType == SectorTypes.Private, true, "Expected equal object entities success");
+        }
+
+        [Test]
+        [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
+        public void ConfirmOrganisation_Post_ManualRegistration_Success()
+        {
+            //ARRANGE:
+            //1.Arrange the test setup variables
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
+
+            //var organisation = new Organisation() { OrganisationId = 1 };
+            //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+
+            //Set user email address verified code and expired sent date
+            var routeData = new RouteData();
+            routeData.Values.Add("Action", "ConfirmOrganisation");
+            routeData.Values.Add("Controller", "Register");
+
+            var employerResult = new PagedResult<EmployerRecord>()
+            {
+                Results = new List<EmployerRecord>()
+                            {
+                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+
+                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
+                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
+                            }
+            };
+
+            var model = new OrganisationViewModel()
+            {
+                Employers = employerResult,
+                ManualRegistration = true, //already set from somewhere to true, but where?
+                SectorType = SectorTypes.Private
+            };
+
+            var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
+            controller.Bind(model);
+
+            //Stash the object for the unstash to happen in code
+            controller.StashModel(model);
+
+            //ACT:
+            //2.Run and get the result of the test
+            var result = controller.ConfirmOrganisation(model) as RedirectToRouteResult;
+
+            //3.Check that the result is not null
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
+
+            //4.Check that the redirection went to the right url step.
+            Assert.That(result.RouteValues["action"].ToString() == "RequestReceived", "Redirected to the wrong view");
 
             //5.If the redirection successfull retrieve the model stash sent with the redirect.
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
