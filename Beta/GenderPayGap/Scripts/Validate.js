@@ -2,7 +2,8 @@
     $('form').bind('invalid-form.validate', function (e, v) {
 
         window.setTimeout(function () {
-            var list = $(".validation-summary-errors ul");
+            var errorsummary=$("[data-valmsg-summary]");
+            var list = $("[data-valmsg-summary] ul");
             if (!list) return;
 
             $(v.errorList).each(function (index, error) {
@@ -21,12 +22,23 @@
                 if (alt && alt != "") summary = alt;
                 
                 var item = GetSummaryItem(list, error.message);
-                if (item) $(item).html(summary);
+                if (item)
+                    $(item).html(summary);
+                else
+                    $(list).append("<li>" + summary + "</li>");
             });
 
             //Remove duplicates
             DeDupe(list);
 
+            //Show/Hide the summary
+            errorsummary.removeClass("customvalidation-summary-errors");
+            errorsummary.removeClass("customvalidation-summary-valid");
+
+            if ($(list).children().length > 0)
+                errorsummary.addClass("customvalidation-summary-errors");
+            else
+                errorsummary.addClass("customvalidation-summary-valid");
         }, 100);
 
        
@@ -48,12 +60,11 @@
     function GetSummaryItem(list, error) {
         var result = null;
         $(list).children().each(function (i, item) {
-            if ($(item).text()==error) {
-                result = item;
-                return;
+            if ($(item).text() == error) {
+                return item;
             }
         });
-        return result;
+        return null;
     }
 
     function DeDupe(list) {

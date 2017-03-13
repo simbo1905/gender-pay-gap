@@ -122,6 +122,22 @@ namespace GenderPayGap.WebUI.Controllers
             ModelState.Remove("FirstName");
             ModelState.Remove("LastName");
             ModelState.Remove("JobTitle");
+            if ((model.MaleUpperQuartilePayBand + model.FemaleUpperQuartilePayBand) != 100)
+            {
+                AddModelError(2052,nameof(model.FemaleUpperQuartilePayBand));
+            }
+            if ((model.MaleUpperPayBand + model.FemaleUpperPayBand) != 100)
+            {
+                AddModelError(2052, nameof(model.FemaleUpperPayBand));
+            }
+            if ((model.MaleMiddlePayBand + model.FemaleMiddlePayBand) != 100)
+            {
+                AddModelError(2052, nameof(model.FemaleMiddlePayBand));
+            }
+            if ((model.MaleLowerPayBand + model.FemaleLowerPayBand) != 100)
+            {
+                AddModelError(2052, nameof(model.FemaleLowerPayBand));
+            }
 
             if (!ModelState.IsValid)
             {
@@ -197,6 +213,14 @@ namespace GenderPayGap.WebUI.Controllers
                 return RedirectToAction("EnterCalculations");
             }
 
+            if (model.SectorType == SectorTypes.Public)
+            {
+                ModelState.Remove(nameof(model.FirstName));
+                ModelState.Remove(nameof(model.LastName));
+                ModelState.Remove(nameof(model.JobTitle));
+            }
+
+
             //If redirected from step 4 then save to session and return to view
             model.ReturnToStep4 = returnUrl.EqualsI("CheckData");
 
@@ -213,6 +237,19 @@ namespace GenderPayGap.WebUI.Controllers
             User currentUser;
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
+
+            if (model.SectorType == SectorTypes.Public)
+            {
+                ModelState.Remove(nameof(model.FirstName));
+                ModelState.Remove(nameof(model.LastName));
+                ModelState.Remove(nameof(model.JobTitle));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<ReturnViewModel>();
+                return View(model);
+            }
 
             this.StashModel(model);
 

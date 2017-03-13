@@ -23,31 +23,40 @@ namespace GpgIdentityServer
 
             var username = context.UserName.ToLower();
 
-            var dbContext = new DbContext();
-            var user = dbContext.User.FirstOrDefault(x => x.EmailAddress == username);
-
-            if (user != null)
+            try
             {
-                var remaining = user.LoginDate==null ? TimeSpan.Zero : user.LoginDate.Value.AddMinutes(Properties.Settings.Default.LockoutMinutes) - DateTime.Now;
-                if (user.LoginAttempts >=Properties.Settings.Default.MaxLoginAttempts && remaining > TimeSpan.Zero)
+                var dbContext = new DbContext();
+                var user = dbContext.User.FirstOrDefault(x => x.EmailAddress == username);
+
+                if (user != null)
                 {
-                    context.AuthenticateResult = new AuthenticateResult("Too many failed sign in attempts. Please try again in " + remaining.ToFriendly(maxParts:2));
-                }
-                else if (user.PasswordHash == context.Password.GetSHA512Checksum())
-                {
-                    context.AuthenticateResult = new AuthenticateResult(user.UserId.ToString(), user.Fullname,new [] {new Claim(Constants.ClaimTypes.Subject, user.UserId.ToString()), });
-                    user.LoginAttempts=0;
+                    var remaining = user.LoginDate == null ? TimeSpan.Zero : user.LoginDate.Value.AddMinutes(Properties.Settings.Default.LockoutMinutes) - DateTime.Now;
+                    if (user.LoginAttempts >= Properties.Settings.Default.MaxLoginAttempts && remaining > TimeSpan.Zero)
+                    {
+                        context.AuthenticateResult = new AuthenticateResult("Too many failed sign in attempts. Please try again in " + remaining.ToFriendly(maxParts: 2));
+                    }
+                    else if (user.PasswordHash == context.Password.GetSHA512Checksum())
+                    {
+                        context.AuthenticateResult = new AuthenticateResult(user.UserId.ToString(), user.Fullname, new[] { new Claim(Constants.ClaimTypes.Subject, user.UserId.ToString()), });
+                        user.LoginAttempts = 0;
+                    }
+                    else
+                    {
+                        context.AuthenticateResult = new AuthenticateResult("Please enter your email address and password again.");
+                        user.LoginAttempts++;
+                    }
+                    user.LoginDate = DateTime.Now;
+                    dbContext.SaveChanges();
                 }
                 else
-                {
                     context.AuthenticateResult = new AuthenticateResult("Please enter your email address and password again.");
-                    user.LoginAttempts++;
-                }
-                user.LoginDate = DateTime.Now;
-                dbContext.SaveChanges();
+
             }
-            else
-                context.AuthenticateResult = new AuthenticateResult("Please enter your email address and password again.");
+            catch (Exception ex)
+            {
+                Global.Logger.WriteLine(ex.Message);
+                throw;
+            }
 
             return Task.FromResult(0);
         }
