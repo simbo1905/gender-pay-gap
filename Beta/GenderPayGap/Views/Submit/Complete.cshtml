@@ -1,4 +1,5 @@
-﻿@model GenderPayGap.WebUI.Models.Submit.ReturnViewModel
+﻿@using GenderPayGap.WebUI.Classes
+@model GenderPayGap.WebUI.Models.Submit.ReturnViewModel
 
 <main id="content" role="main">
 
@@ -9,13 +10,14 @@
     <div class="grid-row">
 
         <div class="column-two-thirds">
-            @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
+            @Html.CustomValidationSummary()
+
             <div class="govuk-box-highlight">
-                <h1 class="bold-large">You have successfully submitted your gender pay gap data for 2016 to 2017</h1>
+                <h1 class="bold-large">You have successfully submitted your gender pay gap data for @Model.AccountingDate.Year to @(Model.AccountingDate.Year+1)</h1>
             </div>
             <!--       <p>We have sent you a confirmation email.</p>
              -->
-            <p>You can view or amend this submission any time before the 5 April 2018 deadline.</p>
+            <p>You can view or amend this submission any time before the @Html.FormatValue(Model.AccountingDate.AddYears(1).AddDays(-1), "d MMM yyyy")) deadline.</p>
             @*<p><a href='@Url.Action("SendConfirmed", new { id= Model})'>See your gender pay gap data</a></p>*@
             <p>@Html.ActionLink("Correct an error on your submission", "EnterCalculations", new { id = Model })</p>
         </div>

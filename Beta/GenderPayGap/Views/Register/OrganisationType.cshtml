@@ -12,7 +12,7 @@
 
         <div class="grid-row">
             <div class="column-full">
-                @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
+                @Html.CustomValidationSummary()
                 <h1 class="heading-large">
                     Your type of organisation
                 </h1>
@@ -22,7 +22,7 @@
                     <!-- "Chunky" Radio buttons, stacked -->
                     <h2 class="heading-small">Organisation type</h2>
                     @Html.ValidationMessageFor(model => model.SectorType, null, new { @class = "error-danger" })
-                    <div class="form-group">
+                    <div class="form-group @Html.SetErrorClass(model => model.SectorType,"error")">
                         <fieldset>
                             <label class="block-label selection-button-radio" for="radio-1">
                                 @Html.CustomRadioButtonFor(m=>m.SectorType, GenderPayGap.Models.SqlDatabase.SectorTypes.Private, new { @type = "radio", @class = "styled", @name = "radio-group", @id = "radio-1" })

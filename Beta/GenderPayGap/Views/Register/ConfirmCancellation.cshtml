@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Confirm registration cancellation - Gender pay gap reporting service";
 }
+@using GenderPayGap.WebUI.Classes
 @model GenderPayGap.WebUI.Models.Register.OrganisationViewModel
 
 <main id="content" role="main">
@@ -13,7 +14,7 @@
 
         <div class="grid-row">
             <div class="column-two-thirds">
-                @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
+                @Html.CustomValidationSummary()
                 <h1 class="heading-large">Cancel registration request</h1>
                 <p class="bold-small">
                     You’re about to cancel a registration request by:
@@ -22,7 +23,7 @@
                 <p> @Model.ContactFirstName @Model.ContactLastName (@Model.ContactJobTitle),<br> @Model.ContactOrganisation</p>
                 <p class="bold-small"> to report gender pay gap data for:</p>
                 <p class="dynamic-content" style="display: block;"> @Model.Name,<br> @Html.Raw(Model.FullAddress.Replace(", ", ",<br/>"))</p>
-                <div class="form-group">
+                <div class="form-group @Html.SetErrorClass(model => model.CancellationReason,"error")">
                     <label class="form-label" for="textarea-a">
                         Reason for cancellation (optional)
                     </label>

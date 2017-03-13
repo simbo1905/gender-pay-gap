@@ -25,7 +25,7 @@
 
             <div class="grid-row">
                 <div class="column-two-thirds">
-                    @Html.ValidationSummary("The following errors were detected", new { @class = "error-summary" })
+                    @Html.CustomValidationSummary()
 
 
                     <h1 class="heading-large">
@@ -35,7 +35,7 @@
                     <div class="dynamic-content default-content">
                         <p>Please enter your contact details. The Government Equalities Office may contact you to confirm your registration.</p>
 
-                        <div class="form-group">
+                        <div class="form-group @Html.SetErrorClass(model => model.ContactFirstName,"error")">
                             @Html.LabelFor(model => model.ContactFirstName, "First name",new {@class = "form-label col-md-2"})
                             @Html.ValidationMessageFor(model => model.ContactFirstName, "", new {@class = "error-danger"})
                             <div class="col-md-10">
@@ -43,7 +43,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group @Html.SetErrorClass(model => model.ContactLastName,"error")">
                             @Html.LabelFor(model => model.ContactLastName, "Last name", new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.ContactLastName, "", new { @class = "error-danger" })
                             <div class="col-md-10">
@@ -51,7 +51,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group">
+                        <div class="form-group @Html.SetErrorClass(model => model.ContactJobTitle,"error")">
                             @Html.LabelFor(model => model.ContactJobTitle, "Job title", new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.ContactJobTitle, "", new { @class = "error-danger" })
                             <div class="col-md-10">
@@ -59,7 +59,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group form-group-compound">
+                        <div class="form-group @Html.SetErrorClass(model => model.ContactOrganisation,"error") form-group-compound">
                             @Html.LabelFor(model => model.ContactOrganisation, "Your organisation",new {@class = "form-label col-md-2"})
                             @Html.ValidationMessageFor(model => model.ContactOrganisation, "", new {@class = "error-danger"})
                             <div class="col-md-10">
@@ -67,7 +67,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group form-group-compound">
+                        <div class="form-group @Html.SetErrorClass(model => model.ContactEmailAddress,"error") form-group-compound">
                             @Html.LabelFor(model => model.ContactEmailAddress, "Email address", new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.ContactEmailAddress, "", new { @class = "error-danger" })
                             <div class="col-md-10">
@@ -75,7 +75,7 @@
                             </div>
                         </div>
 
-                        <div class="form-group form-group-compound">
+                        <div class="form-group @Html.SetErrorClass(model => model.ContactPhoneNumber,"error") form-group-compound">
                             @Html.LabelFor(model => model.ContactPhoneNumber, "Telephone number", new { @class = "form-label col-md-2" })
                             @Html.ValidationMessageFor(model => model.ContactPhoneNumber, "", new { @class = "error-danger" })
                             <div class="col-md-10">

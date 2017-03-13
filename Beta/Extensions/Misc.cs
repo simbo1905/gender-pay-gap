@@ -34,7 +34,7 @@ namespace Extensions
             if (obj != null && !string.IsNullOrWhiteSpace(text))
                 foreach (var prop in obj.GetType().GetProperties(BindingFlags.Instance | BindingFlags.Public))
                 {
-                    var value = prop.GetValue(obj, null) as string;
+                    var value = prop.GetValue(obj, null)?.ToString();
                     if (string.IsNullOrWhiteSpace((prop.Name)) || string.IsNullOrWhiteSpace(value)) continue;
                     text = text.ReplaceI("{" + prop.Name + "}", value);
                 }
