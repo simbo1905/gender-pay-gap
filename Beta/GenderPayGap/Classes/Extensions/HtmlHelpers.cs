@@ -17,6 +17,24 @@ namespace GenderPayGap.WebUI.Classes
 {
     public static class HtmlHelpers
     {
+
+
+        public static MvcHtmlString SetErrorClass<TModel, TProperty>(
+            this HtmlHelper<TModel> htmlHelper,
+            Expression<Func<TModel, TProperty>> expression,
+            string errorClassName, string noErrorClassName=null)
+        {
+            var expressionText = ExpressionHelper.GetExpressionText(expression);
+            var fullHtmlFieldName = htmlHelper.ViewContext.ViewData
+                .TemplateInfo.GetFullHtmlFieldName(expressionText);
+            var state = htmlHelper.ViewData.ModelState[fullHtmlFieldName];
+
+            if (!string.IsNullOrWhiteSpace(noErrorClassName))
+                return state == null || state.Errors.Count == 0 ? new MvcHtmlString(noErrorClassName) : new MvcHtmlString(errorClassName);
+
+            return  state == null || state.Errors.Count == 0 ? MvcHtmlString.Empty : new MvcHtmlString(errorClassName);
+        }
+
         #region Checkbox list
         /// <summary>
         /// Returns a checkbox for each of the provided <paramref name="items"/>.
@@ -82,6 +100,15 @@ namespace GenderPayGap.WebUI.Classes
         #endregion
 
         #region Validation messages
+
+        public static MvcHtmlString CustomValidationSummary(this HtmlHelper helper, bool excludePropertyErrors=true, string validationSummaryMessage = "The following errors were detected", object htmlAttributes = null)
+        {
+            helper.ViewBag.ValidationSummaryMessage = validationSummaryMessage;
+            helper.ViewBag.ExcludePropertyErrors = excludePropertyErrors;
+
+            return helper.Partial("_ValidationSummary");
+        }
+
         private static Dictionary<string, object> CustomAttributesFor<TModel, TProperty>(Expression<Func<TModel, TProperty>> expression, object htmlAttributes = null)
         {
             var containerType = typeof(TModel);

@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Review registration request - Gender pay gap reporting service";
 }
+@using GenderPayGap.WebUI.Classes
 @model GenderPayGap.WebUI.Models.Register.OrganisationViewModel
 
 <main id="content" role="main">
@@ -10,7 +11,7 @@
         @Html.HiddenFor(model=>model.ReviewCode)
         <div class="grid-row">
             <div class="column-two-thirds">
-                @Html.ValidationSummary("", new { @class = "error-summary" })
+                @Html.CustomValidationSummary()
                 <h1 class="heading-large">
                     Approve employer's application
                 </h1>

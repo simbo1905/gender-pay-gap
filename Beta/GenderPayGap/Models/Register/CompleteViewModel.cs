@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap.WebUI.Models.Register
@@ -15,6 +16,8 @@ namespace GenderPayGap.WebUI.Models.Register
         public string PIN { get; set; }
         public bool AllowResend { get; set; }
         public string Remaining { get; set; }
+        public DateTime AccountingDate { get; set; }
+
     }
 
 }

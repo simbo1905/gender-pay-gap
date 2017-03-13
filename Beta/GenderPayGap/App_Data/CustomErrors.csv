@@ -430,3 +430,9 @@ SearchViewModel.SearchText:Required,,SearchText
 SearchViewModel.SearchText:StringLength,You must enter an employers name between 3 and 100 characters in length,SearchText
 SearchViewModel.SearchText:Required,,SearchText
 SearchViewModel.SearchText:StringLength,You must enter an employers name between 3 and 100 characters in length,SearchText
+OrganisationViewModel.Name:MinLength,,Organisation name
+OrganisationViewModel.Name:MinLength,,Organisation name
+RegisterViewModel.EmailAddress:EmailAddress,The {0} field is not a valid e-mail address.,Email address
+RegisterViewModel.EmailAddress:EmailAddress,The {0} field is not a valid e-mail address.,Email address
+RegisterViewModel.EmailAddress:EmailAddress,The {0} field is not a valid e-mail address.,Email address
+RegisterViewModel.EmailAddress:EmailAddress,The {0} field is not a valid e-mail address.,Email address
