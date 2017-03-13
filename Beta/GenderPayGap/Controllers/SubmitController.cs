@@ -112,7 +112,7 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("enter-calculations")]
-        public ActionResult EnterCalculations/*Create*/(ReturnViewModel model,string returnUrl=null)
+        public ActionResult EnterCalculations(ReturnViewModel model,string returnUrl=null)
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -235,7 +235,7 @@ namespace GenderPayGap.WebUI.Controllers
                 return RedirectToAction("EnterCalculations");
             }
 
-            return View("Step4", model);
+            return View("CheckData", model);
         }
 
         [HttpPost]

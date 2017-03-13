@@ -106,8 +106,8 @@ namespace GenderPayGap.Tests
 
             //Create the mock repository
             builder.Register(c => new MockRepository(dbObjects)).As<IRepository>();
-            builder.RegisterType<MockEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Private");
-            builder.RegisterType<MockEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Public");
+            builder.RegisterType<MockPrivateEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Private");
+            builder.RegisterType<MockPublicEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Public");
             builder.Register(g => new MockGovNotify()).As<IGovNotify>();
 
             return builder.Build();
