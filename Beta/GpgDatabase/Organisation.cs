@@ -100,7 +100,7 @@ namespace GenderPayGap.Models.SqlDatabase
                 Id= OrganisationId,
                 Name = OrganisationName,
                 CompanyNumber = PrivateSectorReference,
-                SicSectors = OrganisationSicCodes.Select(s=>s.SicCode.SicSection.Description).ToDelimitedString(",<br/>"),
+                SicSectors = GetSicSectors(",<br/>"),
                 SicCodes = OrganisationSicCodes.Select(sic=>sic.SicCodeId).ToDelimitedString(),
                 Address1 = address.Address1,
                 Address2 = address.Address2,
@@ -109,6 +109,11 @@ namespace GenderPayGap.Models.SqlDatabase
                 PostCode = address.PostCode,
                 PoBox = address.PoBox
             };
+        }
+
+        public string GetSicSectors(string delimiter=", ")
+        {
+            return OrganisationSicCodes.Select(s => s.SicCode.SicSection.Description).ToDelimitedString(delimiter);
         }
     }
 }

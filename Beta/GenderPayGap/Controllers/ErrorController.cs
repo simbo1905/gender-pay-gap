@@ -10,6 +10,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route]
+        [OutputCache(Duration = 86400, VaryByParam = "code")]
         public ActionResult Default(int code=0)
         {
             var model = new ErrorViewModel(code);

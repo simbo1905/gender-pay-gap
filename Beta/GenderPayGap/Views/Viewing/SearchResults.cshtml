@@ -74,7 +74,7 @@
                                                 {
                                                     <tr>
                                                         <td>
-                                                            @Html.ActionLink(Model.Employers.Results[i].Name, "EmployerDetails", new {index = i})<br/>
+                                                            @Html.ActionLink(Model.Employers.Results[i].Name, "EmployerDetails", new {id = Model.Employers.Results[i].GetEncryptedId() })<br/>
                                                             <span>@Model.Employers.Results[i].FullAddress</span>
                                                         </td>
                                                         <td>
