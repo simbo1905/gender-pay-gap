@@ -38,6 +38,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
         #endregion
         [Route("~/")]
+        [OutputCache(Duration = 86400, VaryByParam = "none")]
         public ActionResult Redirect()
         {
             return RedirectToAction("EnterCalculations","Submit");

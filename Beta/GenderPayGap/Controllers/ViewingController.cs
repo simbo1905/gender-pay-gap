@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Transactions;
+using System.Web;
 using System.Web.Mvc;
 using GenderPayGap.Models.SqlDatabase;
 using Autofac;
@@ -49,6 +50,7 @@ namespace GenderPayGap.WebUI.Controllers
         #endregion
 
         [Route]
+        [OutputCache(Duration = 86400, VaryByParam = "none")]
         public ActionResult Redirect()
         {
             return RedirectToAction("SearchResults");
@@ -56,6 +58,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("search-results")]
+        [OutputCache(Duration=3600,VaryByParam = "search;page;sectors")]
 
         public ActionResult SearchResults(string search = null, int year = 0, int page = 1, string sectors = null)
         {
@@ -104,7 +107,7 @@ namespace GenderPayGap.WebUI.Controllers
             return View("SearchResults", model);
         }
 
-        public PagedResult<EmployerRecord> Search(string searchText, List<string> sectors = null, int page = -1, int pageSize = -1, int year = -1)
+        private PagedResult<EmployerRecord> Search(string searchText, List<string> sectors = null, int page = -1, int pageSize = -1, int year = -1)
         {
 
             //Get the public and private accounting dates for the specified or current year 
@@ -229,7 +232,8 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("download")]
-        public ActionResult Download(string year)
+        [OutputCache(Duration = 3600, VaryByParam = "none")]
+        public ActionResult Download()
         {
             //Get the latest return accounting date
             var returnDates = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted).Select(r => r.AccountingDate).Distinct().ToList();
@@ -256,39 +260,33 @@ namespace GenderPayGap.WebUI.Controllers
                 if (file != null && (file.LastWriteTime.AddHours(1) >= DateTime.Now || file.LastWriteTime.AddYears(1) <= DateTime.Now))
                     continue;
                 tempfile = new FileInfo(Path.Combine(directory.FullName, tmpfilePattern));
+
+                int count = 0;
+                using (var textWriter = tempfile.CreateText())
+                {
+                    var downloadData = DataRepository.GetAll<Return>().Where(r => r.AccountingDate.Year == returnDate.Year).OrderBy(r => r.Organisation.OrganisationName).ToList();
+                    var records = downloadData.Select(r => r.ToDownloadRecord());
+                    using (var writer = new CsvWriter(textWriter))
+                    {
+                        writer.WriteRecords(records);
+                    }
+                    count = downloadData.Count();
+                }
                 try
                 {
-                    int count = 0;
-                    using (var textWriter = tempfile.CreateText())
-                    {
-                        var downloadData = DataRepository.GetAll<Return>().Where(r => r.AccountingDate.Year == returnDate.Year).OrderBy(r => r.Organisation.OrganisationName).ToList();
-                        var records = downloadData.Select(r => r.ToDownloadRecord());
-                        using (var writer = new CsvWriter(textWriter))
-                        {
-                            writer.WriteRecords(records);
-                        }
-                        count = downloadData.Count();
-                    }
-                    try
-                    {
-                        //Delete the old file if it exists
-                        if (file != null && file.Exists) file.Delete();
-                        //Generate a new file name
-                        var newFilePath = Path.Combine(directory.FullName, $"GPGData_{returnDate.Year}-{returnDate.Year + 1}_{count}.csv");
+                    //Delete the old file if it exists
+                    if (file != null && file.Exists) file.Delete();
+                    //Generate a new file name
+                    var newFilePath = Path.Combine(directory.FullName, $"GPGData_{returnDate.Year}-{returnDate.Year + 1}_{count}.csv");
 
-                        //If the new file name exists then delete it
-                        if (System.IO.File.Exists(newFilePath)) System.IO.File.Delete(newFilePath);
+                    //If the new file name exists then delete it
+                    if (System.IO.File.Exists(newFilePath)) System.IO.File.Delete(newFilePath);
 
-                        //Rename the temp file to the new filename
-                        tempfile.MoveTo(Path.Combine(directory.FullName, newFilePath));
-                    }
-                    catch (Exception ex)
-                    {
-                    }
+                    //Rename the temp file to the new filename
+                    tempfile.MoveTo(Path.Combine(directory.FullName, newFilePath));
                 }
-                finally
+                catch (Exception ex)
                 {
-
                 }
             }
 
@@ -318,6 +316,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("download-data")]
+        [OutputCache(Duration = 3600, VaryByParam = "year")]
         public ActionResult DownloadData(int year)
         {
             //Ensure we have a directory
@@ -341,6 +340,9 @@ namespace GenderPayGap.WebUI.Controllers
             };
             Response.AppendHeader("Content-Disposition", contentDisposition.ToString());
 
+            //cache old files for 1 day
+            if (file.LastWriteTime.AddMonths(12)<DateTime.Now)Response.Cache.SetExpires(DateTime.Now.AddDays(1));
+
             // Buffer response so that page is sent
             // after processing is complete.
             Response.BufferOutput = true;
@@ -351,36 +353,48 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("employer-details")]
-        public ActionResult EmployerDetails(int index=-1, string view=null)
+        [OutputCache(Duration = 3600, VaryByParam = "id;view")]
+
+        public ActionResult EmployerDetails(string id=null, string view=null)
         {
+            //Make sure we have a view
             if (string.IsNullOrWhiteSpace(view))
                 view = "hourly-rate";
             else
                 view = view.ToLower();
 
-            //Make sure we can load employers from session
-            var m = this.UnstashModel<SearchViewModel>();
-            if (m == null) return View("CustomError", new ErrorViewModel(1118));
-
             Organisation org=null;
-            if (index < 0 || m.Employers == null || m.Employers.Results == null || m.Employers.Results.Count < 1 || index >= m.Employers.Results.Count)
+            if (!string.IsNullOrWhiteSpace(id))
             {
-                //TODO Load the current users details
-                if (User.Identity.IsAuthenticated)
+                try
                 {
-                    var currentUser = DataRepository.FindUser(User);
-                    if (currentUser != null)
-                    {
-                        var userOrg = DataRepository.GetUserOrg(currentUser);
-                        if (userOrg!=null)org = userOrg.Organisation;
-
-                    }
+                    id = Encryption.DecryptQuerystring(id);
                 }
-            }
-            else
-            {
-                var orgId = m.Employers.Results[index].Id;
+                catch (Exception ex)
+                {
+                    MvcApplication.Log.WriteLine("Cannot decrypt organisation id from querystring");
+                    return View("CustomError", new ErrorViewModel(400));
+                }
+
+                var orgId = id.ToInt64();
                 org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == orgId);
+            }
+            else if (User.Identity.IsAuthenticated)
+            {
+                //Do not cache page 
+                Response.Cache.SetExpires(DateTime.UtcNow.AddDays(-1));
+                Response.Cache.SetValidUntilExpires(false);
+                Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
+                Response.Cache.SetCacheability(HttpCacheability.NoCache);
+                Response.Cache.SetNoStore();
+
+                //TODO Load the current users details
+                var currentUser = DataRepository.FindUser(User);
+                if (currentUser != null)
+                {
+                    var userOrg = DataRepository.GetUserOrg(currentUser);
+                    if (userOrg!=null)org = userOrg.Organisation;
+                }
             }
 
             if (org==null)return RedirectToAction("SearchResults");
@@ -419,9 +433,9 @@ namespace GenderPayGap.WebUI.Controllers
             model.LastName = @return.LastName;
             model.CompanyLinkToGPGInfo = @return.CompanyLinkToGPGInfo;
             model.AccountingDate = @return.AccountingDate;
-            model.Address = m.Employers.Results[index].FullAddress;
+            model.Address = org.Address.GetAddress();
             model.OrganisationName = org.OrganisationName;
-            model.Sector = m.Employers.Results[index].SicSectors;
+            model.Sector = org.GetSicSectors(",<br/>");
 
             switch (view)
             {
