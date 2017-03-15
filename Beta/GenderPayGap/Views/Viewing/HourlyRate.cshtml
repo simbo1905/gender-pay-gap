@@ -21,8 +21,8 @@
                 <div class="container">
                     <ul class="tabs">
                         <li class="tab-link current" data-tab="tab-1">Hourly rate</li>
-                        <li class="tab-link" data-tab="tab-2">@Html.ActionLink("Pay quartiles", "EmployerDetails", new { view = "pay-quartiles", index = @Request.QueryString["index"] })</li>
-                        <li class="tab-link" data-tab="tab-3">@Html.ActionLink("Bonus pay", "EmployerDetails", new { view = "bonus-pay", index = @Request.QueryString["index"] })</li>
+                        <li class="tab-link" data-tab="tab-2">@Html.ActionLink("Pay quartiles", "EmployerDetails", new { view = "pay-quartiles", id = Model.GetEncryptedId() })</li>
+                        <li class="tab-link" data-tab="tab-3">@Html.ActionLink("Bonus pay", "EmployerDetails", new { view = "bonus-pay", id = Model.GetEncryptedId() })</li>
                     </ul>
                     <div id="tab-1" class="tab-content current">
                         <div class=" ">

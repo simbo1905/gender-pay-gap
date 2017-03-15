@@ -86,7 +86,13 @@ namespace GenderPayGap.WebUI.Controllers
                 model.SearchText = search;
 
                 //Make sure we can load employers from session
-                model.Employers = Search(search, newSectors.EqualsI(model.AllSectors) ? new List<string>() : newSectors, page, Settings.Default.EmployerPageSize, year);
+                var searchSectors = newSectors.EqualsI(model.AllSectors) ? new List<string>() : newSectors;
+                model.Employers = Search(search, searchSectors, page, Settings.Default.EmployerPageSize, year);
+                model.LastSearch = search;
+                model.LastSectors = searchSectors.ToDelimitedString(string.Empty);
+                model.LastPage = page;
+                model.LastPageSize = Settings.Default.EmployerPageSize;
+                model.LastYear = year;
 
                 model.NewSectors = newSectors;
 
@@ -166,26 +172,34 @@ namespace GenderPayGap.WebUI.Controllers
         {
             //Make sure we can load employers from session
             var model = this.UnstashModel<SearchViewModel>();
-            if (model == null) return View("CustomError", new ErrorViewModel(1118));
+            if (model == null)
+            {
+                model=new SearchViewModel();
+                model.SearchText = m.LastSearch;
+                model.Employers = Search(m.LastSearch, m.LastSectors.SplitI(string.Empty).ToList(), m.LastPage, m.LastPageSize, m.LastYear);
+            }
 
             var nextPage = model.Employers.CurrentPage;
 
             var oldSearchText = model.SearchText;
             if (command == "search")
             {
+                bool clearSearch = !string.IsNullOrWhiteSpace(model.SearchText) && string.IsNullOrWhiteSpace(m.SearchText);
                 model.SearchText = m.SearchText.TrimI();
-
-                if (string.IsNullOrWhiteSpace(model.SearchText))
+                if (!clearSearch)
                 {
-                    AddModelError(3019, "SearchText");
-                    this.CleanModelErrors<SearchViewModel>();
-                    return View("SearchResults", model);
-                }
-                if (model.SearchText.Length < 3 || model.SearchText.Length > 100)
-                {
-                    AddModelError(3007, "SearchText");
-                    this.CleanModelErrors<SearchViewModel>();
-                    return View("SearchResults", model);
+                    if (string.IsNullOrWhiteSpace(model.SearchText))
+                    {
+                        AddModelError(3019, "SearchText");
+                        this.CleanModelErrors<SearchViewModel>();
+                        return View("SearchResults", model);
+                    }
+                    if (model.SearchText.Length < 3 || model.SearchText.Length > 100)
+                    {
+                        AddModelError(3007, "SearchText");
+                        this.CleanModelErrors<SearchViewModel>();
+                        return View("SearchResults", model);
+                    }
                 }
             }
             else if (command == "pageNext")

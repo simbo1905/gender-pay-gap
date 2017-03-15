@@ -20,9 +20,9 @@
                 <p><span class="font-small">Sector:</span> <span id="sector">@Model.Sector</span></p>
                 <div class="container">
                     <ul class="tabs">
-                        <li class="tab-link" data-tab="tab-1">@Html.ActionLink("Hourly rate", "EmployerDetails", new { view = "hourly-rate", index = @Request.QueryString["index"] })</li>
+                        <li class="tab-link" data-tab="tab-1">@Html.ActionLink("Hourly rate", "EmployerDetails", new { view = "hourly-rate", id = Model.GetEncryptedId() })</li>
                         <li class="tab-link current" data-tab="tab-2">Pay quartiles</li>
-                        <li class="tab-link" data-tab="tab-3">@Html.ActionLink("Bonus pay", "EmployerDetails", new { view = "bonus-pay", index = @Request.QueryString["index"] })</li>
+                        <li class="tab-link" data-tab="tab-3">@Html.ActionLink("Bonus pay", "EmployerDetails", new { view = "bonus-pay", id = Model.GetEncryptedId() })</li>
                     </ul>
                     <div id="tab-2" class="tab-content current">
                         <h2 class="heading-medium ">Pay quartiles</h2>
