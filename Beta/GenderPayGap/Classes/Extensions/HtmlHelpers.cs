@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Globalization;
-using System.IO;
+
 using System.Linq;
 using System.Linq.Expressions;
 using System.Web;
@@ -139,14 +139,7 @@ namespace GenderPayGap.WebUI.Classes
                 {
                     var validatorKey = $"{containerType.Name}.{propertyName}:{attribute.GetType().Name.TrimSuffix("Attribute")}";
                     var customError = CustomErrorMessages.GetValidationError(validatorKey);
-                    if (customError == null)
-                    {
-#if DEBUG
-                        var csvFile = FileSystem.ExpandLocalPath("~/App_Data/CustomErrors.csv");
-                        File.AppendAllText(csvFile, $"{validatorKey},{attribute.ErrorMessage},{displayName}\n");
-#endif
-                        continue;
-                    }
+                    if (customError == null)continue;
 
                     //Set the message from the description
                     if (attribute.ErrorMessage != customError.Description)

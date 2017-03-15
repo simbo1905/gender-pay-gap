@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Data;
-using System.IO;
 using System.Linq;
 using GenderPayGap.Models.SqlDatabase;
 using System.Web;
@@ -108,10 +107,7 @@ namespace GenderPayGap.WebUI.Controllers
                 case "ClearDatabase":
                     DbContext.Truncate();
 
-                    var downloadsLocation = FileSystem.ExpandLocalPath(Settings.Default.DownloadsLocation);
-                    if (Directory.Exists((downloadsLocation)))
-                        foreach (var file in Directory.GetFiles(downloadsLocation))
-                            System.IO.File.Delete(file);
+                    MvcApplication.FileRepository.DeleteFiles(Settings.Default.DownloadsLocation);
 
                     //Refresh the repository
                     DataRepository = null;

@@ -14,7 +14,6 @@ using System.Web.Mvc.Html;
 using System.Linq.Expressions;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
-using System.IO;
 
 namespace GenderPayGap.WebUI.Classes
 {
@@ -101,12 +100,7 @@ namespace GenderPayGap.WebUI.Classes
             var verifyUrl=controller.Url.Action("VerifyEmail", "Register", new {code= verifyCode },"https");
             return GovNotifyAPI.SendVerifyEmail(verifyUrl,emailAddress, verifyCode);
         }
-        public static bool SendConfirmEmail(this RegisterController controller, string emailAddress)
-        {
-            var confirmUrl = controller.Url.Action("ActivateService", "Register", null,"https");
-            return GovNotifyAPI.SendConfirmEmail(confirmUrl, emailAddress);
-        }
-
+ 
         public static bool SendPinInPost(this RegisterController controller, User user, Organisation organisation, string pin)
         {
             var name = user.Fullname + " (" + user.JobTitle + ")";

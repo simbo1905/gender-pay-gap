@@ -35,7 +35,7 @@ namespace GpgIdentityServer
 
             if (localLoginDetails != null)
             {
-                Global.Logger.WriteLine($"LOGIN ATTEMPT:{evt.EventType},REMOTEIP:{HttpContext.Current.Request.UserHostAddress}, Username:{localLoginDetails.LoginUserName},Details:{evt.Message},Name:{evt.Name}");
+                Global.Log.WriteLine($"LOGIN ATTEMPT:{evt.EventType},REMOTEIP:{HttpContext.Current.Request.UserHostAddress}, Username:{localLoginDetails.LoginUserName},Details:{evt.Message},Name:{evt.Name}");
             }
             else if (externalLoginDetails!=null)
             {
