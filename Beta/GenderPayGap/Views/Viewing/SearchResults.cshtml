@@ -10,6 +10,12 @@
     {
         @Html.AntiForgeryToken()
 
+        @Html.HiddenFor(model => model.LastSearch)
+        @Html.HiddenFor(model => model.LastSectors)
+        @Html.HiddenFor(model => model.LastPage)
+        @Html.HiddenFor(model => model.LastYear)
+        @Html.HiddenFor(model=>model.LastPageSize)
+
         <div class="grid-row">
             <div class="column-full">
                 @Html.CustomValidationSummary()
@@ -32,12 +38,11 @@
                                 <div class="grid-row">
                                     <div class="column-one-third">
                                         <p class="reducedMargins">Search by:</p>
+                                        @Html.ValidationMessageFor(model => model.SearchText, "", new { @class = "error-danger" })
                                         <div class="search-bar flush2">
                                             <div class="searchfield">
-                                                <form id="singular" action="">
                                                     @Html.CustomEditorFor(model => model.SearchText, htmlAttributes: new {@class = "search-input", @placeholder = "Employer name"})
                                                     <button type="submit" class="search-submit" name="command" value="search">Search</button>
-                                                </form>
                                             </div>
                                         </div>
                                         <p class="reducedMargins">Filter by:</p>
@@ -74,7 +79,7 @@
                                                 {
                                                     <tr>
                                                         <td>
-                                                            @Html.ActionLink(Model.Employers.Results[i].Name, "EmployerDetails", new {id = Model.Employers.Results[i].GetEncryptedId() })<br/>
+                                                            @Html.ActionLink(Model.Employers.Results[i].Name, "EmployerDetails", new { view = "hourly-rate", id = Model.Employers.Results[i].GetEncryptedId() })<br/>
                                                             <span>@Model.Employers.Results[i].FullAddress</span>
                                                         </td>
                                                         <td>

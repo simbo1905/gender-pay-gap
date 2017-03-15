@@ -81,5 +81,11 @@ namespace GenderPayGap.WebUI.Models.Search
                 return PagerStartIndex + 4;
             }
         }
+
+        public string LastSearch { get; set; }
+        public string LastSectors { get; set; }
+        public int LastPage { get; set; }
+        public int LastPageSize { get; set; }
+        public int LastYear { get; set; }
     }
 }

@@ -13,11 +13,17 @@ using System.Web.Mvc.Html;
 using System.Web.Routing;
 using Castle.Core.Internal;
 using Extensions;
+using Microsoft.Ajax.Utilities;
 
 namespace GenderPayGap.WebUI.Classes
 {
     public static class HtmlHelpers
     {
+        public static MvcHtmlString PageIdentifier(this HtmlHelper htmlHelper)
+        {
+            return new MvcHtmlString($"Date:{DateTime.Now}, Version:{typeof(BaseController).Assembly.GetName().Version}, Machine:{Environment.MachineName}, Instance:{Environment.GetEnvironmentVariable("WEBSITE_INSTANCE_ID")}");
+        }
+
         public static MvcHtmlString AppSetting(this HtmlHelper htmlHelper,string appSettingKey)
         {
             return new MvcHtmlString(ConfigurationManager.AppSettings[appSettingKey]);

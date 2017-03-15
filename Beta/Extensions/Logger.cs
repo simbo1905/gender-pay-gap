@@ -56,10 +56,14 @@ namespace Extensions
             }
         }
 
-        public void WriteLine(string appendString, bool timestamp=true)
+        public void WriteLine(string appendString, bool addPrefix=true)
         {
             if (string.IsNullOrWhiteSpace(appendString)) return;
-            if (timestamp) appendString = DateTime.Now.ToLongTimeString() + " ------- " + appendString;
+            var prefix=$"Date:{DateTime.Now},Machine:{Environment.MachineName}";
+            var instance = Environment.GetEnvironmentVariable("WEBSITE_INSTANCE_ID");
+            if (!string.IsNullOrWhiteSpace(instance)) prefix += $",Instance:{ instance}";
+
+            if (addPrefix) appendString = prefix + " -------\n" + appendString;
             AppendToLog(appendString + Environment.NewLine);
         }
     }
