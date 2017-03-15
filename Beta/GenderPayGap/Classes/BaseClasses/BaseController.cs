@@ -21,7 +21,6 @@ namespace GenderPayGap
         #region Constructors
         public BaseController():this(MvcApplication.ContainerIOC)
         {
-
         }
 
         public BaseController(IContainer containerIOC)
@@ -99,7 +98,26 @@ namespace GenderPayGap
 
         public string ControllerName => ControllerContext.RouteData.Values["controller"].ToString();
 
+        public string LastAction
+        {
+            get { return Session["LastAction"] as string; }
+            set { Session["LastAction"] = value; }
+        }
+
+        public string LastController
+        {
+            get { return Session["LastController"] as string; }
+            set { Session["LastController"] = value; }
+        }
+
         #endregion
+
+        protected override void OnActionExecuted(ActionExecutedContext filterContext)
+        {
+            LastAction = ActionName;
+            LastController = ControllerName;
+            base.OnActionExecuted(filterContext);
+        }
 
         #region Exception handling methods
 
@@ -258,8 +276,9 @@ namespace GenderPayGap
             //If user is fully registered then start submit process
             if (this is RegisterController)
             {
-                if (IsAnyAction("Register/Complete","Register/RequestReceived")) return null;
-                return RedirectToAction("Complete", "Register");
+                if (IsAnyAction("Register/RequestReceived")) return null;
+                if (IsAnyAction("Register/Complete") && WasAnyAction("Register/ActivateService","Register/ConfirmOrganisation")) return null;
+                return View("CustomError", new ErrorViewModel(1109));
             }
 
             return null;
@@ -276,7 +295,25 @@ namespace GenderPayGap
         public bool WasAction(string actionName, string controllerName = null, object routeValues=null)
         {
             if (string.IsNullOrWhiteSpace(controllerName)) controllerName = ControllerName;
-            return Request.UrlReferrer==null ? false : Request.UrlReferrer.PathAndQuery.EqualsI(Url.Action("CheckData", controllerName, routeValues));
+            return Request.UrlReferrer==null ? false : Request.UrlReferrer.PathAndQuery.EqualsI(Url.Action(actionName, controllerName, routeValues));
+        }
+
+        public bool WasAnyAction(params string[] actionUrls)
+        {
+            for (var i = 0; i < actionUrls.Length; i++)
+            {
+                var actionUrl = actionUrls[i].TrimI(@" /\");
+                var actionName = actionUrl.AfterFirst("/");
+                var controllerName = actionUrl.BeforeFirst("/", includeWhenNoSeperator: false);
+                if (WasAction(actionName, controllerName)) return true;
+            }
+            return false;
+        }
+
+        public bool WasController(string controllerName)
+        {
+            var referrer = Request.UrlReferrer==null ? Url.Action(LastAction, LastController) : Request.UrlReferrer.PathAndQuery;
+            return !string.IsNullOrWhiteSpace(referrer) && referrer.StartsWithI(Url.Action("/", controllerName));
         }
 
         public bool IsAction(string actionName, string controllerName=null)
