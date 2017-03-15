@@ -39,12 +39,9 @@ namespace GenderPayGap.WebUI.Controllers
         }
         #endregion
 
-        #region IoC Properties
-
-        #endregion
-
         #region about-you
         [Route]
+        [OutputCache(Duration = 86400, VaryByParam = "none")]
         public ActionResult Redirect()
         {
             return RedirectToAction("AboutYou");
@@ -136,7 +133,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
         #endregion
 
-        #region PersonResponsible
+        #region Verify email
         //Send the verification code and show confirmation
         public bool ResendVerifyCode(User currentUser)
         {
