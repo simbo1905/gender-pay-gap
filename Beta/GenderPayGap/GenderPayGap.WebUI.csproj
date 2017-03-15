@@ -318,20 +318,16 @@
     <None Include="compilerconfig.json.defaults">
       <DependentUpon>compilerconfig.json</DependentUpon>
     </None>
-    <Content Include="App_Data\Confirm.txt" />
     <Content Include="App_Data\CustomErrorMessages.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="App_Data\Pin.txt" />
-    <Content Include="App_Data\RegistrationAccepted.txt" />
+    <Content Include="App_Data\Pin.html" />
     <Content Include="App_Data\RegistrationApproved.html" />
     <Content Include="App_Data\RegistrationDeclined.html" />
     <Content Include="App_Data\RegistrationDeclined.txt" />
     <Content Include="App_Data\RegistrationRequest.html" />
-    <Content Include="App_Data\RegistrationRequest.txt" />
     <Content Include="App_Data\Verify.html" />
-    <Content Include="App_Data\Verify.txt" />
     <None Include="Content\application.css.New" />
     <Content Include="Content\application.css" />
     <Content Include="Content\bootstrap.css" />

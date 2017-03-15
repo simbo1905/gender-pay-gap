@@ -6,26 +6,35 @@ using System.Linq;
 using System.Web;
 using System.Web.Security;
 using System.Web.SessionState;
+using Autofac;
 using Extensions;
+using GenderPayGap.Core.Classes;
+using GenderPayGap.Core.Interfaces;
 
 namespace GpgIdentityServer
 {
     public class Global : System.Web.HttpApplication
     {
-        static Extensions.Logger _Logger;
 
-        public static Extensions.Logger Logger
+        public static IContainer ContainerIOC;
+        public static IFileRepository FileRepository;
+
+        private static Logger _Log;
+        public static Logger Log
         {
             get
             {
-                if (_Logger == null) _Logger = new Extensions.Logger(FileSystem.ExpandLocalPath(Path.Combine(ConfigurationManager.AppSettings["LogPath"], "Errors")));
-                return _Logger;
+                if (_Log == null) _Log = new Logger(FileRepository, Path.Combine(ConfigurationManager.AppSettings["LogPath"],"IdentityServer"));
+                return _Log;
             }
         }
 
         protected void Application_Start(object sender, EventArgs e)
         {
 
+            //Create Inversion of Control container
+            ContainerIOC = BuildContainerIoC();
+            FileRepository = ContainerIOC.Resolve<IFileRepository>();
         }
 
         protected void Session_Start(object sender, EventArgs e)
@@ -59,5 +68,22 @@ namespace GpgIdentityServer
         {
 
         }
+
+        public static IContainer BuildContainerIoC()
+        {
+            var builder = new ContainerBuilder();
+
+            var azureStorageConnectionString = ConfigurationManager.AppSettings["AzureStorageConnectionString"];
+            var azureStorageShareName = ConfigurationManager.AppSettings["AzureStorageShareName"];
+            var localStorageRoot = ConfigurationManager.AppSettings["LocalStorageRoot"];
+
+            if (!string.IsNullOrWhiteSpace(azureStorageConnectionString) && !string.IsNullOrWhiteSpace(azureStorageShareName))
+                builder.Register(c => new AzureFileRepository(azureStorageConnectionString, azureStorageShareName)).As<IFileRepository>();
+            else
+                builder.Register(c => new SystemFileRepository(localStorageRoot)).As<IFileRepository>();
+
+            return builder.Build();
+        }
+
     }
 }

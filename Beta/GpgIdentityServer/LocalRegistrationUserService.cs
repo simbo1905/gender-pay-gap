@@ -54,7 +54,7 @@ namespace GpgIdentityServer
             }
             catch (Exception ex)
             {
-                Global.Logger.WriteLine(ex.Message);
+                Global.Log.WriteLine(ex.Message);
                 throw;
             }
 
