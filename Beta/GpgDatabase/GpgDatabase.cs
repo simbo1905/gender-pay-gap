@@ -35,10 +35,72 @@ namespace GenderPayGap.Models.SqlDatabase
         public virtual DbSet<SicSection> SicSections { get; set; }
         public virtual DbSet<OrganisationSicCode> OrganisationSicCodes { get; set; }
 
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            //Turn off cascade on delete
+            //modelBuilder.Entity<UserOrganisation>()
+            //    .HasRequired(f => f.Organisation)
+            //    .WithRequiredDependent()
+            //    .WillCascadeOnDelete(false);
+
+            //modelBuilder.Entity<OrganisationSicCode>()
+            //    .HasRequired(f => f.SicCode)
+            //    .WithRequiredDependent()
+            //    .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<SicCode>()
+           .HasRequired(d => d.SicSection)
+           .WithMany(w => w.SicCodes)
+           .WillCascadeOnDelete(false);
+
+            base.OnModelCreating(modelBuilder);
+        }
+
+        public override int SaveChanges()
+        {
+            try
+            {
+                return base.SaveChanges();
+            }
+            catch (DbEntityValidationException vex)
+            {
+                var innerExceptions=new List<ArgumentException>();
+                
+                foreach (var err in vex.EntityValidationErrors)
+                {
+                    foreach (var err1 in err.ValidationErrors)
+                    {
+                        innerExceptions.Add(new ArgumentException(err1.ErrorMessage,err1.PropertyName));
+                    }
+                }
+                throw new AggregateException(innerExceptions);
+            }
+        }
+
+        public Database GetDatabase()
+        {
+            return Database;
+        }
+
+        public new IDbSet<TEntity> Set<TEntity>() where TEntity : class
+        {
+            return base.Set<TEntity>();
+
+        }
+
+        public DbTransaction BeginTransaction(IsolationLevel isolationLevel)
+        {
+            if (Database.Connection.State != ConnectionState.Open)Database.Connection.Open();
+            return Database.Connection.BeginTransaction(isolationLevel);
+        }
+
+        #region TEST CODE ONLY
+#if DEBUG || TEST
+
         public static int Truncate(params string[] tables)
         {
             var target = new List<string>();
-            var context=new DbContext();
+            var context = new DbContext();
             if (tables == null || tables.Length == 0)
             {
                 target = GetTableList(context);
@@ -95,15 +157,15 @@ namespace GenderPayGap.Models.SqlDatabase
             return result;
         }
 
-        public static void Delete(long userId, bool deleteReturns,bool deleteOrg, bool deleteUser)
+        public static void Delete(long userId, bool deleteReturns, bool deleteOrg, bool deleteUser)
         {
             var context = new DbContext();
-            var user=context.User.FirstOrDefault(u => u.UserId == userId);
+            var user = context.User.FirstOrDefault(u => u.UserId == userId);
             var orgUser = context.UserOrganisations.FirstOrDefault(uo => uo.UserId == userId);
             if (orgUser != null)
             {
                 var org = context.Organisation.FirstOrDefault(o => o.OrganisationId == orgUser.OrganisationId);
-                if (org!=null)
+                if (org != null)
                 {
                     if (deleteOrg || deleteUser)
                     {
@@ -166,64 +228,8 @@ namespace GenderPayGap.Models.SqlDatabase
                 .Where(x => x.PropertyType.Name == "DbSet`1")
                 .Select(x => x.Name).ToList();
         }
+#endif
+        #endregion
 
-        protected override void OnModelCreating(DbModelBuilder modelBuilder)
-        {
-            //Turn off cascade on delete
-            //modelBuilder.Entity<UserOrganisation>()
-            //    .HasRequired(f => f.Organisation)
-            //    .WithRequiredDependent()
-            //    .WillCascadeOnDelete(false);
-
-            //modelBuilder.Entity<OrganisationSicCode>()
-            //    .HasRequired(f => f.SicCode)
-            //    .WithRequiredDependent()
-            //    .WillCascadeOnDelete(false);
-
-            modelBuilder.Entity<SicCode>()
-           .HasRequired(d => d.SicSection)
-           .WithMany(w => w.SicCodes)
-           .WillCascadeOnDelete(false);
-
-            base.OnModelCreating(modelBuilder);
-        }
-
-        public override int SaveChanges()
-        {
-            try
-            {
-                return base.SaveChanges();
-            }
-            catch (DbEntityValidationException vex)
-            {
-                var innerExceptions=new List<ArgumentException>();
-                
-                foreach (var err in vex.EntityValidationErrors)
-                {
-                    foreach (var err1 in err.ValidationErrors)
-                    {
-                        innerExceptions.Add(new ArgumentException(err1.ErrorMessage,err1.PropertyName));
-                    }
-                }
-                throw new AggregateException(innerExceptions);
-            }
-        }
-
-        public Database GetDatabase()
-        {
-            return Database;
-        }
-
-        public new IDbSet<TEntity> Set<TEntity>() where TEntity : class
-        {
-            return base.Set<TEntity>();
-
-        }
-
-        public DbTransaction BeginTransaction(IsolationLevel isolationLevel)
-        {
-            if (Database.Connection.State != ConnectionState.Open)Database.Connection.Open();
-            return Database.Connection.BeginTransaction(isolationLevel);
-        }
     }
 }
