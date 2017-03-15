@@ -211,6 +211,12 @@
   <ItemGroup>
     <None Include="0.Submission\SubmissionTest.cs.old0" />
     <None Include="0.Submission\SubmissionTest.cs.old1" />
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\SolutionVersionInfo.cs">
+      <Link>Properties\SolutionVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="0.Submission\SubmissionTest.cs" />
     <Compile Include="RegistrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

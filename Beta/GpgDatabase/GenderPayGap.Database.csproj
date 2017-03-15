@@ -163,6 +163,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\SolutionVersionInfo.cs">
+      <Link>Properties\SolutionVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="OrganisationSicCode.cs" />
     <Compile Include="Enums.cs" />
     <Compile Include="GpgDatabase.cs" />
