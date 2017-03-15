@@ -45,7 +45,7 @@ namespace GenderPayGap
                 {
                     try
                     {
-                        var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/verify.txt"));
+                        var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/verify.html"));
                         html = html.Replace("((VerifyUrl))", verifyUrl);
                         Email.QuickSend("GPG Registration Verification", emailAddress, html);
                         result = new Notification() { status = "delivered" };
@@ -59,40 +59,7 @@ namespace GenderPayGap
             return false;
         }
 
-        public static bool SendConfirmEmail(string confirmUrl,string emailAddress)
-        {
-            var personalisation = new Dictionary<string, dynamic> { { "url", confirmUrl } };
-
-            Notification result = null;
-            try
-            {
-                result = GovNotify.SendEmail(emailAddress, ConfirmTemplateId, personalisation);
-                if (!result.status.EqualsI("created", "sending", "delivered")) throw new Exception($"Unexpected status '{result.status}' returned");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                MvcApplication.Log.WriteLine($"Cant send PIN confirmation email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
-
-                if (ex.Message.ContainsI("This Email Address is not registered with Gov Notify.", "Can’t send to this recipient", "invalid token"))
-                {
-                    try
-                    {
-                        var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/Confirm.txt"));
-                        html = html.Replace("((ConfirmUrl))", confirmUrl);
-                        Email.QuickSend("GPG Registration Confirmation", emailAddress, html);
-                        result = new Notification() { status = "delivered" };
-                    }
-                    catch (Exception ex1)
-                    {
-
-                    }
-                }
-            }
-
-            return false;
-        }
-
+ 
         public static bool SendPinInPost(string returnUrl,string name, string address, string pin)
         {
             var personalisation = new Dictionary<string, dynamic> { { "PIN", pin } };
@@ -112,7 +79,7 @@ namespace GenderPayGap
                 {
                     try
                     {
-                        var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/Pin.txt"));
+                        var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/Pin.html"));
                         html = html.Replace("((PIN))", pin);
                         Email.QuickSend("GPG Registration Confirmation", address, html);
                         result = new Notification() { status = "delivered" };

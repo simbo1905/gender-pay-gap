@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
-using System.IO;
 using System.Linq;
 using System.Xml;
 using Extensions;
@@ -21,19 +20,6 @@ namespace GenderPayGap.WebUI.Classes
         public override bool IsReadOnly()
         {
             return false;
-        }
-
-        public string Serialize()
-        {
-            return SerializeSection(this, "PublicSectorOrgs", ConfigurationSaveMode.Full);
-        }
-
-        public static PublicSectorOrgsSection Deserialize(string xml)
-        {
-            var PublicSectorOrgsSection = new PublicSectorOrgsSection();
-            var rdr = new XmlTextReader(new StringReader(xml));
-            PublicSectorOrgsSection.DeserializeSection(rdr);
-            return PublicSectorOrgsSection;
         }
     }
 
