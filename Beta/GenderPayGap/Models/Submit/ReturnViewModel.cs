@@ -1,5 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Extensions;
 using GenderPayGap.Models.SqlDatabase;
 
 namespace GenderPayGap.WebUI.Models.Submit
@@ -144,6 +145,12 @@ namespace GenderPayGap.WebUI.Models.Submit
         public string Address { get; set; }
         public string OrganisationName { get; set; }
         public string Sector { get; set; }
+
+        public string GetEncryptedId()
+        {
+            return Encryption.EncryptQuerystring(OrganisationId.ToString());
+        }
+
     }
 }
 
