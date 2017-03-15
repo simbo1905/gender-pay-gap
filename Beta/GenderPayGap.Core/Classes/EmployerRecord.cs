@@ -48,6 +48,11 @@ namespace GenderPayGap.Core.Classes
 
         public string SicSectors { get; set; }
 
+        public string GetEncryptedId()
+        {
+            return Encryption.EncryptQuerystring(Id.ToString());
+        }
+
         public bool IsAuthorised(string emailAddress)
         {
             if (!emailAddress.IsEmailAddress()) throw new ArgumentException("Bad email address");
