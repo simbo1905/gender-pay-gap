@@ -43,6 +43,25 @@ namespace GenderPayGap.WebUI.Controllers
             return RedirectToAction("EnterCalculations","Submit");
         }
 
+        [Route("SignOut")]
+        public ActionResult SignOut()
+        {
+            Session.Abandon();
+            Request.GetOwinContext().Authentication.SignOut();
+            return RedirectToAction("EnterCalculations","Submit");
+        }
+
+        [Route("TimeOut")]
+        public ActionResult TimeOut()
+        {
+            Session.Abandon();
+            Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("EnterCalculations","Submit") });
+            return null;
+        }
+
+        #region TEST CODE ONLY
+#if DEBUG || TEST
+
         [HttpGet]
         [Route]
         [Route("Index")]
@@ -57,6 +76,7 @@ namespace GenderPayGap.WebUI.Controllers
         {
             return RedirectToAction("Index");
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -104,7 +124,7 @@ namespace GenderPayGap.WebUI.Controllers
             return RedirectToAction("Index");
         }
 
-        void CreateTestData(int recordCount=500, int yearCount=3)
+        void CreateTestData(int recordCount = 500, int yearCount = 3)
         {
             var organisations = DataRepository.GetAll<Organisation>();
             var sicCodes = DataRepository.GetAll<SicCode>();
@@ -112,7 +132,7 @@ namespace GenderPayGap.WebUI.Controllers
             {
                 var sector = Numeric.Rand(0, 1) == 0 ? SectorTypes.Private : SectorTypes.Public;
                 string searchText = Text.AlphabetChars[Numeric.Rand(0, 1)].ToString();
-                var organisation=new Organisation();
+                var organisation = new Organisation();
                 PagedResult<EmployerRecord> result;
                 if (sector == SectorTypes.Public)
                 {
@@ -127,11 +147,11 @@ namespace GenderPayGap.WebUI.Controllers
                     if (result == null || result.RowCount == 0 || result.Results == null || result.Results.Count == 0) continue;
                     foreach (var employer in result.Results)
                     {
-                        if (organisations.Any(o => o.OrganisationName==employer.Name)) continue;
-                        organisation=new Organisation();
+                        if (organisations.Any(o => o.OrganisationName == employer.Name)) continue;
+                        organisation = new Organisation();
                         organisation.OrganisationName = employer.Name;
                         organisation.SectorType = sector;
-                        organisation.Status= OrganisationStatuses.Active;
+                        organisation.Status = OrganisationStatuses.Active;
                         organisation.StatusDetails = "TEST DATA";
                         DataRepository.Insert(organisation);
                         DataRepository.SaveChanges();
@@ -166,7 +186,7 @@ namespace GenderPayGap.WebUI.Controllers
                     if (result == null || result.RowCount == 0 || result.Results == null || result.Results.Count == 0) continue;
                     foreach (var employer in result.Results)
                     {
-                        if (organisations.Any(o => o.OrganisationName==employer.Name)) continue;
+                        if (organisations.Any(o => o.OrganisationName == employer.Name)) continue;
                         organisation = new Organisation();
                         organisation.OrganisationName = employer.Name;
                         organisation.SectorType = sector;
@@ -247,22 +267,8 @@ namespace GenderPayGap.WebUI.Controllers
             }
             DataRepository.SaveChanges();
         }
-
-        [Route("SignOut")]
-        public ActionResult SignOut()
-        {
-            Session.Abandon();
-            Request.GetOwinContext().Authentication.SignOut();
-            return RedirectToAction("EnterCalculations","Submit");
-        }
-
-        [Route("TimeOut")]
-        public ActionResult TimeOut()
-        {
-            Session.Abandon();
-            Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("EnterCalculations","Submit") });
-            return null;
-        }
+#endif
+        #endregion
 
     }
 }
