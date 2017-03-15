@@ -19,13 +19,14 @@ namespace GenderPayGap
     public class MvcApplication : System.Web.HttpApplication
     {
         public static IContainer ContainerIOC;
+        public static IFileRepository FileRepository;
 
         private static Logger _Log;
         public static Logger Log
         {
             get
             {
-                if (_Log==null)_Log=new Logger(FileSystem.ExpandLocalPath(Path.Combine(Settings.Default.LogPath, "Errors")));
+                if (_Log == null) _Log = new Logger(FileRepository, Path.Combine(ConfigurationManager.AppSettings["LogPath"], "WebServer"));
                 return _Log;
             }
         }
@@ -58,6 +59,7 @@ namespace GenderPayGap
         
             //Create Inversion of Control container
             ContainerIOC = BuildContainerIoC();
+            FileRepository = ContainerIOC.Resolve<IFileRepository>();
 
             //Initialise static classes with IoC container
             GovNotifyAPI.Initialise(ContainerIOC);
@@ -95,6 +97,15 @@ namespace GenderPayGap
             builder.RegisterType<PrivateSectorRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Private");
             builder.RegisterType<PublicSectorRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Public");
             builder.Register(g => new GovNotify()).As<IGovNotify>();
+
+            var azureStorageConnectionString = ConfigurationManager.AppSettings["AzureStorageConnectionString"];
+            var azureStorageShareName = ConfigurationManager.AppSettings["AzureStorageShareName"];
+            var localStorageRoot = ConfigurationManager.AppSettings["LocalStorageRoot"];
+
+            if (!string.IsNullOrWhiteSpace(azureStorageConnectionString) && !string.IsNullOrWhiteSpace(azureStorageShareName))
+                builder.Register(c => new AzureFileRepository(azureStorageConnectionString, azureStorageShareName)).As<IFileRepository>();
+            else
+                builder.Register(c => new SystemFileRepository(localStorageRoot)).As<IFileRepository>();
 
             return builder.Build();
         }

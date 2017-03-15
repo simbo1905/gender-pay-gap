@@ -1,28 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.Entity.SqlServer;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Transactions;
 using System.Web;
 using System.Web.Mvc;
 using GenderPayGap.Models.SqlDatabase;
 using Autofac;
-using Castle.Components.DictionaryAdapter;
 using CsvHelper;
 using Extensions;
-using GenderPayGap.Core.Interfaces;
 using GenderPayGap.WebUI.Classes;
 using GenderPayGap.WebUI.Models.Search;
 using GenderPayGap.WebUI.Properties;
-using IsolationLevel = System.Data.IsolationLevel;
 using GenderPayGap.Core.Classes;
 using GenderPayGap.WebUI.Models;
-using GenderPayGap.WebUI.Models.Register;
 using GenderPayGap.WebUI.Models.Submit;
-using Microsoft.Ajax.Utilities;
-using Thinktecture.IdentityModel.Extensions;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -250,73 +241,75 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Download()
         {
             //Get the latest return accounting date
-            var returnDates = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted).Select(r => r.AccountingDate).Distinct().ToList();
+            var returnYears = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted).Select(r => r.AccountingDate.Year).Distinct().ToList();
 
             //Ensure we have a directory
-            var downloadsLocation = FileSystem.ExpandLocalPath(Settings.Default.DownloadsLocation);
-            if (!Directory.Exists((downloadsLocation))) downloadsLocation.CreateTree();
+            if (!MvcApplication.FileRepository.GetDirectoryExists(Settings.Default.DownloadsLocation)) MvcApplication.FileRepository.CreateDirectory(Settings.Default.DownloadsLocation);
 
-            var directory = new DirectoryInfo(downloadsLocation);
             string filePattern;
-            foreach (var returnDate in returnDates)
+            foreach (var year in returnYears)
             {
-                directory.Refresh();
-
                 //If another server is already in process of creating a file then skip
-                var tmpfilePattern = $"GPGData_{returnDate.Year}-{returnDate.Year + 1}.tmp";
-                var tempfile = directory.GetFiles(tmpfilePattern).FirstOrDefault();
-                if (tempfile != null && tempfile.Exists) continue;
 
-                filePattern = $"GPGData_{returnDate.Year}-{returnDate.Year + 1}_*.csv";
-                var file = directory.GetFiles(filePattern).FirstOrDefault();
+                filePattern = $"GPGData_{year}-{year + 1}_*.csv";
+                var file = MvcApplication.FileRepository.GetFiles(Settings.Default.DownloadsLocation,filePattern).FirstOrDefault();
 
                 //Skip if the file already exists and is newer than 1 hour or older than 1 year
-                if (file != null && (file.LastWriteTime.AddHours(1) >= DateTime.Now || file.LastWriteTime.AddYears(1) <= DateTime.Now))
-                    continue;
-                tempfile = new FileInfo(Path.Combine(directory.FullName, tmpfilePattern));
-
-                int count = 0;
-                using (var textWriter = tempfile.CreateText())
+                if (file != null)
                 {
-                    var downloadData = DataRepository.GetAll<Return>().Where(r => r.AccountingDate.Year == returnDate.Year).OrderBy(r => r.Organisation.OrganisationName).ToList();
-                    var records = downloadData.Select(r => r.ToDownloadRecord());
-                    using (var writer = new CsvWriter(textWriter))
-                    {
-                        writer.WriteRecords(records);
-                    }
-                    count = downloadData.Count();
+                    var lastWriteTime = MvcApplication.FileRepository.GetLastWriteTime(file);
+                    if (lastWriteTime.AddHours(1) >= DateTime.Now || lastWriteTime.AddYears(1) <= DateTime.Now)
+                        continue;
                 }
+
+                var tempfile = new FileInfo(System.IO.Path.GetTempFileName());
                 try
                 {
-                    //Delete the old file if it exists
-                    if (file != null && file.Exists) file.Delete();
-                    //Generate a new file name
-                    var newFilePath = Path.Combine(directory.FullName, $"GPGData_{returnDate.Year}-{returnDate.Year + 1}_{count}.csv");
+                    var count = 0;
+                    using (var textWriter = tempfile.CreateText())
+                    {
+                        var downloadData = DataRepository.GetAll<Return>().Where(r => r.AccountingDate.Year == year).OrderBy(r => r.Organisation.OrganisationName).ToList();
+                        var records = downloadData.Select(r => r.ToDownloadRecord());
+                        using (var writer = new CsvWriter(textWriter))
+                        {
+                            writer.WriteRecords(records);
+                        }
+                        count = downloadData.Count;
+                    }
 
-                    //If the new file name exists then delete it
-                    if (System.IO.File.Exists(newFilePath)) System.IO.File.Delete(newFilePath);
+                    try
+                    {
+                        //Generate a new file name
+                        var newFilePath = MvcApplication.FileRepository.GetFullPath(Path.Combine(Settings.Default.DownloadsLocation,$"GPGData_{year}-{year + 1}_{count}.csv"));
+                        MvcApplication.FileRepository.Write(newFilePath,tempfile);
 
-                    //Rename the temp file to the new filename
-                    tempfile.MoveTo(Path.Combine(directory.FullName, newFilePath));
+                        //Delete the old file if it exists
+                        if (file != null && MvcApplication.FileRepository.GetFileExists(file) && !file.EqualsI(newFilePath))
+                            MvcApplication.FileRepository.DeleteFile(file);
+                    }
+                    catch (Exception ex)
+                    {
+                        MvcApplication.Log.WriteLine(ex.Message);
+                    }
                 }
-                catch (Exception ex)
+                finally
                 {
+                    System.IO.File.Delete(tempfile.FullName);
                 }
             }
 
-            directory.Refresh();
             var model = new DownloadViewModel();
             model.Downloads = new List<DownloadViewModel.Download>();
             filePattern = $"GPGData_????-????_*.csv";
-            foreach (var file in directory.GetFiles(filePattern))
+            foreach (var file in MvcApplication.FileRepository.GetFiles(Settings.Default.DownloadsLocation,filePattern))
             {
                 var download = new DownloadViewModel.Download();
 
-                download.Title = Path.GetFileNameWithoutExtension(file.Name).AfterFirst("GPGData_");
+                download.Title = Path.GetFileNameWithoutExtension(file).AfterFirst("GPGData_");
                 download.Count = download.Title.AfterLast("_");
                 download.Title = download.Title.BeforeLast("_");
-                download.Extension = file.Extension.TrimI(".");
-                download.Size = Numeric.FormatFileSize(file.Length);
+                download.Extension = Path.GetExtension(file).TrimI(".");
+                download.Size = Numeric.FormatFileSize(MvcApplication.FileRepository.GetFileSize(file));
                 download.Url = Url.Action("DownloadData", new { year = download.Title.BeforeFirst("-") });
                 model.Downloads.Add(download);
             }
@@ -334,14 +327,12 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult DownloadData(int year)
         {
             //Ensure we have a directory
-            var downloadsLocation = FileSystem.ExpandLocalPath(Settings.Default.DownloadsLocation);
-            if (!Directory.Exists((downloadsLocation))) return new HttpNotFoundResult("There are no GPG data files");
-            var directory = new DirectoryInfo(downloadsLocation);
+            if (!MvcApplication.FileRepository.GetDirectoryExists(Settings.Default.DownloadsLocation)) return new HttpNotFoundResult("There are no GPG data files");
 
             //Ensure we have a file
             var filePattern = $"GPGData_{year}-{year + 1}_*.csv";
-            var file = directory.GetFiles(filePattern).FirstOrDefault();
-            if (file == null || !file.Exists) return new HttpNotFoundResult("Cannot find GPG data file for year: " + year);
+            var file = MvcApplication.FileRepository.GetFiles(Settings.Default.DownloadsLocation,filePattern).FirstOrDefault();
+            if (file == null || !MvcApplication.FileRepository.GetFileExists(file)) return new HttpNotFoundResult("Cannot find GPG data file for year: " + year);
             //Get the public and private accounting dates for the specified year
 
             //TODO log download
@@ -355,14 +346,14 @@ namespace GenderPayGap.WebUI.Controllers
             Response.AppendHeader("Content-Disposition", contentDisposition.ToString());
 
             //cache old files for 1 day
-            if (file.LastWriteTime.AddMonths(12)<DateTime.Now)Response.Cache.SetExpires(DateTime.Now.AddDays(1));
+            if (MvcApplication.FileRepository.GetLastWriteTime(file).AddMonths(12)<DateTime.Now)Response.Cache.SetExpires(DateTime.Now.AddDays(1));
 
             // Buffer response so that page is sent
             // after processing is complete.
             Response.BufferOutput = true;
 
             //Return the data
-            return File(file.FullName, "text/csv");
+            return Content(MvcApplication.FileRepository.Read(file), "text/csv");
         }
 
         [HttpGet]

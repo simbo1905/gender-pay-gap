@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
-using System.IO;
 using System.Linq;
 using System.Xml;
 using Extensions;
@@ -24,19 +23,7 @@ namespace GenderPayGap.WebUI.Classes
         {
             return false;
         }
-
-        public string Serialize()
-        {
-            return SerializeSection(this, "CustomErrorMessages", ConfigurationSaveMode.Full);
-        }
-
-        public static CustomErrorMessagesSection Deserialize(string xml)
-        {
-            var CustomErrorMessagesSection = new CustomErrorMessagesSection();
-            var rdr = new XmlTextReader(new StringReader(xml));
-            CustomErrorMessagesSection.DeserializeSection(rdr);
-            return CustomErrorMessagesSection;
-        }
+        
     }
 
     public class CustomErrorMessages : ConfigurationElementCollection
