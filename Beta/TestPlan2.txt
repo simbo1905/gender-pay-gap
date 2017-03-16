@@ -392,3 +392,143 @@ check the model
 			:Check ModelState
 check db
 	  :get item from mock repository
+
+
+
+
+
+******************************************Add Organisations happy Path tests*******************************
+
+Scenarios:
+Private Sector:
+companies house returned not found no matching organisation -- currently doing this. ***this is the same as...
+								ManualRegistration = true,
+								search returned 0 results
+
+								Add organisation name 
+								Add Address
+								Add Contact
+
+
+DONE
+Public Sector:
+emailpattern matching organisation matching:
+
+								    ManualRegistration = false, 
+									Add Address
+									confirm
+
+
+
+
+
+emailpattern not matching organisation matching:
+								ManualRegistration = true,
+								organisation name is pulled in
+								Add Address
+								Add Contact
+
+emailpattern not matching organisation not matching             ***this.
+								ManualRegistration = true,
+								Add organisation name 
+								Add Address
+								Add Contact
+
+
+
+
+
+Private
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Test:
+companies house returned not found no matching organisation (Can't find your organisation? -> Tell us about your organisation)  
+
+Scenario/Criteria:
+search returned 0 results
+	ManualRegistration = true,
+	Sectortype.Private
+
+	Add organisation Name
+	Add Address
+	Add Contact
+	
+Scenario:
+Find your organisation ->
+				Choose organisation -> 
+						GET  ->  AddAddress_Get_Success(Add Organisation)	- Address of the org you're reporing for 
+						POST ->  AddAddress_Get_Success (Add Organisation)	- Address of the org you're reporing for 
+						GET  ->  AddContact	- contact 
+						POST ->  AddContact - contact
+						POST ->  ConfirmOrganisation_Post_PublicSector_Success() - Confirm your organisations details	  
+------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+
+
+
+Public: Done but check and verify their asserts
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Test:
+Emailpattern matching organisation matching:(Normal public Sector journey)
+
+Scenario/Criteria: 
+		ManualRegistration = false,
+		Sectortype.Public
+
+		Add Address
+		Confirm
+
+Implementation:
+Find your organisation ->
+				Choose organisation -> 
+						GET  ->  AddAddress_Get_Success(Add Organisation)		 - Address of the org you're reporing for -> Done
+						POST ->  AddAddress_Get_Success (Add Organisation)		 - Address of the org you're reporing for -> Done
+						POST ->  ConfirmOrganisation_Post_PublicSector_Success() - Confirm your organisations details	  -> Done
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Public
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Test:
+Emailpattern not matching organisation matching: (Can't find your organisation? -> Tell us about your organisation)  
+
+Scenario/Criteria:
+	ManualRegistration = true,
+	Sectortype.Public
+
+	organisation name is pulled in
+	Add Address
+	Add Contact
+
+
+Implementation:
+Find your organisation ->
+				Choose organisation -> 
+						GET  ->  AddAddress_Get_Success(Add Organisation)		 - Address of the org you're reporing for 
+						POST ->  AddAddress_Get_Success (Add Organisation)		 - Address of the org you're reporing for 
+						GET  ->  AddContact	- contact 
+						POST ->  AddContact - contact
+						POST ->  ConfirmOrganisation_Post_PublicSector_Success() - Confirm your organisations details	  
+------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+
+Public
+------------------------------------------------------------------------------------------------------------------------------------------------------------------
+Test:
+Emailpattern not matching organisation not matching: (Can't find your organisation? -> Tell us about your organisation)  
+
+Scenario/Criteria:
+	ManualRegistration = true,
+	Sectortype.Public
+
+	Add organisation Name
+	Add Address
+	Add Contact
+
+
+Implementation:
+Find your organisation ->
+				Choose organisation -> 
+						GET  ->  AddAddress_Get_Success(Add Organisation)		 - Address of the org you're reporing for 
+						POST ->  AddAddress_Get_Success (Add Organisation)		 - Address of the org you're reporing for
+						GET  ->  AddContact	- contact 
+						POST ->  AddContact - contact 
+						POST ->  ConfirmOrganisation_Post_PublicSector_Success() - Confirm your organisations details	  
+------------------------------------------------------------------------------------------------------------------------------------------------------------------ 

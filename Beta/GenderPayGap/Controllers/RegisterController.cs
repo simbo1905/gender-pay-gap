@@ -674,6 +674,9 @@ namespace GenderPayGap.WebUI.Controllers
                 //Check the user email is authorised for public organisation
                 if (model.SectorType == SectorTypes.Public)
                 {
+                    model.Name = model.SelectedEmployer.OrgName;
+
+                    //TODO: what about when employer is null as in no employer found ?
                     model.ManualRegistration = employer!=null && (string.IsNullOrWhiteSpace(employer.EmailPatterns) || !employer.IsAuthorised(currentUser.EmailAddress));
                     this.StashModel(model);
                     return RedirectToAction("AddOrganisation");
@@ -713,7 +716,7 @@ namespace GenderPayGap.WebUI.Controllers
             if (checkResult != null) return checkResult;
 
             //Get the model from the stash
-            var model =this.UnstashModel<OrganisationViewModel>();
+            var model = this.UnstashModel<OrganisationViewModel>();
             if (model == null) return View("CustomError", new ErrorViewModel(1112));
 
             //Prepopulate name if it empty

@@ -136,6 +136,7 @@ namespace GenderPayGap
                 if (currentUser.EmailVerifySendDate.EqualsI(null, DateTime.MinValue))
                 {
                     if (IsAnyAction("Register/VerifyEmail")) return null;
+
                     //Tell them to verify email
                     return View("CustomError", new ErrorViewModel(1100));
                 }
