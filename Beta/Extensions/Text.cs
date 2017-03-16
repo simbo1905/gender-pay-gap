@@ -1019,6 +1019,8 @@ namespace Extensions
             if (string.IsNullOrWhiteSpace(input) || string.IsNullOrEmpty(pattern)) return false;
             input = input.ToLower();
             pattern = pattern.ToLower();
+
+            //TODO: emailPattrn not matching here.
             if (input == pattern) return true;
             var expression = "^" + Regex.Escape(pattern).Replace("\\*", ".*").Replace("\\?", ".").Replace("+", "\\+") + "$";
             return Regex.IsMatch(input, expression);

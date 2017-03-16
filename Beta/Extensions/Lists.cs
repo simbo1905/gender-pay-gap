@@ -874,15 +874,22 @@ namespace Extensions
             }
         }
 
+        //TODO: ste -> will not work for a single record match...
         public static IEnumerable<T> Page<T>(this IEnumerable<T> list, int pageSize, int page)
         {
             var skip = (page - 1) * pageSize;
-            return list.Skip(skip).Take(pageSize);
+            
+            //TODO: ste -> this line is the issue not anything.
+            var taken = list.Skip(skip).Take(pageSize);
+            return taken;
         }
 
+        //TODO: ste -> will not work for a single record match
         public static IQueryable<T> Page<T>(this IQueryable<T> query, int pageSize, int page)
         {
             var skip = (page - 1) * pageSize;
+
+            //TODO: ste -> this line is the issue not anything.
             return query.Skip(skip).Take(pageSize);
         }
 

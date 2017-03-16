@@ -25,9 +25,10 @@ namespace GenderPayGap.WebUI.Classes
             foreach (var sicCode in SicCodes.SplitI())
                 codes.Add(sicCode.ToInt32());
             return codes;
-        } 
+        }
 
         //Public Sector
+        public string OrgName { get; set; }
         public string EmailPatterns { get; set; }
 
         public string FullAddress
