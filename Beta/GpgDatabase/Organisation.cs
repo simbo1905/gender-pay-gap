@@ -83,7 +83,7 @@ namespace GenderPayGap.Models.SqlDatabase
         /// <summary>
         /// Latest ACTIVE address
         /// </summary>
-        public OrganisationAddress Address
+        public OrganisationAddress ActiveAddress
         {
             get
             {
@@ -92,9 +92,21 @@ namespace GenderPayGap.Models.SqlDatabase
             }
         }
 
+        /// <summary>
+        /// Latest ACTIVE address
+        /// </summary>
+        public OrganisationAddress PendingAddress
+        {
+            get
+            {
+                //Get the latest address for the organisation
+                return OrganisationAddresses.OrderByDescending(oa => oa.Modified).FirstOrDefault(oa => oa.OrganisationId == OrganisationId && oa.Status == AddressStatuses.Pending);
+            }
+        }
+
         public EmployerRecord ToEmployerRecord()
         {
-            var address = Address;
+            var address = ActiveAddress;
             return new EmployerRecord()
             {
                 Id= OrganisationId,

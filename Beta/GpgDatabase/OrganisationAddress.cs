@@ -68,18 +68,23 @@ namespace GenderPayGap.Models.SqlDatabase
 
         public virtual ICollection<AddressStatus> AddressStatuses { get; set; }
 
-        public string GetAddress(string delimiter=", ")
+        public List<string> GetList()
         {
             var list = new List<string>();
-            list.Add(Address1);
-            list.Add(Address2);
-            list.Add(Address3);
-            list.Add(TownCity);
-            list.Add(County);
-            list.Add(Country);
-            list.Add(PostCode);
-            list.Add(PoBox);
-            return list.ToDelimitedString(delimiter);
+            if (!string.IsNullOrWhiteSpace(Address1))list.Add(Address1);
+            if (!string.IsNullOrWhiteSpace(Address2)) list.Add(Address2);
+            if (!string.IsNullOrWhiteSpace(Address3)) list.Add(Address3);
+            if (!string.IsNullOrWhiteSpace(TownCity)) list.Add(TownCity);
+            if (!string.IsNullOrWhiteSpace(County)) list.Add(County);
+            if (!string.IsNullOrWhiteSpace(Country)) list.Add(Country);
+            if (!string.IsNullOrWhiteSpace(PostCode)) list.Add(PostCode);
+            if (!string.IsNullOrWhiteSpace(PoBox)) list.Add(PoBox);
+            return list;
+        }
+
+        public string GetAddress(string delimiter=", ")
+        {
+            return GetList().ToDelimitedString(delimiter);
         }
 
         public void SetStatus(AddressStatuses status, long byUserId, string details = null)

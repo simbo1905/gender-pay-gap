@@ -104,9 +104,10 @@ namespace GenderPayGap.WebUI.Classes
         public static bool SendPinInPost(this RegisterController controller, User user, Organisation organisation, string pin)
         {
             var name = user.Fullname + " (" + user.JobTitle + ")";
-            var address = organisation.Address.GetAddress();
             var returnUrl = controller.Url.Action("ActivateService", "Register",null,"https");
-            return GovNotifyAPI.SendPinInPost(returnUrl, name, user.EmailAddress, pin);
+            var address = organisation.ActiveAddress ?? organisation.PendingAddress;
+            if (GovNotifyAPI.ManualPip) return GovNotifyAPI.SendPinInPostManual(returnUrl, name, organisation.OrganisationName, address.GetList(), pin);
+            return GovNotifyAPI.SendPinInPost(returnUrl, name, organisation.OrganisationName, address.GetList(), pin);
         }
         #endregion
 
