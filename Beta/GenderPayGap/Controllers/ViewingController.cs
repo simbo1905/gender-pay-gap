@@ -438,7 +438,7 @@ namespace GenderPayGap.WebUI.Controllers
             model.LastName = @return.LastName;
             model.CompanyLinkToGPGInfo = @return.CompanyLinkToGPGInfo;
             model.AccountingDate = @return.AccountingDate;
-            model.Address = org.Address.GetAddress();
+            model.Address = org.ActiveAddress.GetAddress();
             model.OrganisationName = org.OrganisationName;
             model.Sector = org.GetSicSectors(",<br/>");
 

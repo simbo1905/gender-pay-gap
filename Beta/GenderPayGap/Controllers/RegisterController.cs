@@ -986,7 +986,7 @@ namespace GenderPayGap.WebUI.Controllers
                 DataRepository.SaveChanges();
 
                 //Send request to GEO
-                var adminEmail = GovNotifyAPI.RegistrationRequestEmailAddress;
+                var adminEmail = GovNotifyAPI.GEOGroupEmailAddress;
 #if DEBUG
                 if (string.IsNullOrWhiteSpace(adminEmail)) adminEmail = currentUser.EmailAddress;
 #endif
@@ -1391,8 +1391,7 @@ namespace GenderPayGap.WebUI.Controllers
                     if (string.IsNullOrWhiteSpace(pin))pin = Crypto.GeneratePasscode(Properties.Settings.Default.PINChars.ToCharArray(),Properties.Settings.Default.PINLength);
 
                     //Try and send the PIN in post
-                    var emailPIN = ConfigurationManager.AppSettings["EmailPIN"].ToBoolean(true);
-                    if (emailPIN && !this.SendPinInPost(currentUser, userOrg.Organisation, pin.ToString()))
+                    if (!this.SendPinInPost(currentUser, userOrg.Organisation, pin.ToString()))
                         throw new Exception("Could not send PIN in the POST.");
 
                     //Try and send the confirmation email
@@ -1448,7 +1447,7 @@ namespace GenderPayGap.WebUI.Controllers
             ViewBag.UserFullName = currentUser.Fullname;
             ViewBag.UserJobTitle = currentUser.JobTitle;
             ViewBag.Organisation = userOrg.Organisation.OrganisationName;
-            ViewBag.Address = userOrg.Organisation.Address.GetAddress(",<br/>");
+            ViewBag.Address = userOrg.Organisation.ActiveAddress.GetAddress(",<br/>");
             //Show the PIN textbox and button
             return View("RequestPIN");
         }
