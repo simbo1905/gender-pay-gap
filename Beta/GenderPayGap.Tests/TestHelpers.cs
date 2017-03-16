@@ -30,8 +30,7 @@ namespace GenderPayGap.Tests
     public static class TestHelper
     {
         private const string Url = "https://genderpaygap.azurewebsites.net";
-
-    
+        
 
         public static T GetController<T>(long userId = 0, RouteData routeData = null, params object[] dbObjects) where T : Controller
         {
@@ -85,7 +84,7 @@ namespace GenderPayGap.Tests
 
         public class MockHttpSession : HttpSessionStateBase
         {
-            Dictionary<string, object> m_SessionStorage = new Dictionary<string, object>();
+            Dictionary<string, object> m_SessionStorage = new Dictionary<string, object>(); 
 
             public override object this[string name]
             {
@@ -109,8 +108,8 @@ namespace GenderPayGap.Tests
 
             //Create the mock repository
             builder.Register(c => new MockRepository(dbObjects)).As<IRepository>();
-            builder.RegisterType<MockEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Private");
-            builder.RegisterType<MockEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Public");
+            builder.RegisterType<MockPrivateEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Private");
+            builder.RegisterType<MockPublicEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Public");
             builder.Register(g => new MockGovNotify()).As<IGovNotify>();
 
             return builder.Build();
@@ -171,7 +170,81 @@ namespace GenderPayGap.Tests
         }
     }
 
-    public class MockEmployerRepository : IPagedRepository<EmployerRecord>
+    public class MockPrivateEmployerRepository : IPagedRepository<EmployerRecord>
+    {
+        public List<EmployerRecord> AllEmployers = new List<EmployerRecord>();
+
+        public void Delete(EmployerRecord employer)
+        {
+            AllEmployers.Remove(employer);
+        }
+
+        public string GetSicCodes(string companyNumber)
+        {
+            //throw new NotImplementedException();
+
+            //fakedIt.
+            return "13243546576879";
+        }
+
+        public void Insert(EmployerRecord employer)
+        {
+            AllEmployers.Add(employer);
+        }
+
+        public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize)
+        {
+            var result = new PagedResult<EmployerRecord>();
+            result.Results = AllEmployers.Where(e => e.Name.ContainsI(searchText)).Page(page, pageSize).ToList();
+            result.RowCount = result.Results.Count;
+            result.CurrentPage = page;
+            result.PageSize = pageSize;
+            result.PageCount = (int)Math.Ceiling((double)result.RowCount / pageSize);
+            return result;
+        }
+
+        PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize)
+        {
+          int totalRecords;
+         // var searchResults = CompaniesHouseAPI.SearchEmployers(out totalRecords, searchText, page, pageSize);
+         var result = new PagedResult<EmployerRecord>()
+         {
+          Results = new List<EmployerRecord>()
+          {
+            //new EmployerRecord() { Name = "Acme  Inc", Address1 = "10", Address2 = "EverGreen Terrace", CompanyNumber = "123QA10", CompanyStatus = "Active", Country = "UK", PostCode = "w12  3we" },
+            //new EmployerRecord() { Name = "Beano Inc", Address1 = "11", Address2 = "EverGreen Terrace", CompanyNumber = "123QA11", CompanyStatus = "Active", Country = "UK", PostCode = "n12  4qw" },
+            //new EmployerRecord() { Name = "Smith ltd", Address1 = "12", Address2 = "EverGreen Terrace", CompanyNumber = "123QA12", CompanyStatus = "Active", Country = "UK", PostCode = "nw2  1de" },
+            //new EmployerRecord() { Name = "Trax ltd",  Address1 = "13", Address2 = "EverGreen Terrace", CompanyNumber = "123QA13", CompanyStatus = "Active", Country = "UK", PostCode = "sw2  5gh" },
+            //new EmployerRecord() { Name = "Exant ltd", Address1 = "14", Address2 = "EverGreen Terrace", CompanyNumber = "123QA14", CompanyStatus = "Active", Country = "UK", PostCode = "se2  2bh" },
+            //new EmployerRecord() { Name = "Serif ltd", Address1 = "15", Address2 = "EverGreen Terrace", CompanyNumber = "123QA15", CompanyStatus = "Active", Country = "UK", PostCode = "da2  6cd" },
+            //new EmployerRecord() { Name = "West ltd",  Address1 = "16", Address2 = "EverGreen Terrace", CompanyNumber = "123QA16", CompanyStatus = "Active", Country = "UK", PostCode = "cd2  1cs" },
+            //new EmployerRecord() { Name = "North ltd", Address1 = "17", Address2 = "EverGreen Terrace", CompanyNumber = "123QA17", CompanyStatus = "Active", Country = "UK", PostCode = "e12  7xs" },
+            //new EmployerRecord() { Name = "South ltd", Address1 = "18", Address2 = "EverGreen Terrace", CompanyNumber = "123QA18", CompanyStatus = "Active", Country = "UK", PostCode = "e17  8za" },
+            //new EmployerRecord() { Name = "East ltd",  Address1 = "19", Address2 = "EverGreen Terrace", CompanyNumber = "123QA19", CompanyStatus = "Active", Country = "UK", PostCode = "sw25 9bh" },
+            //new EmployerRecord() { Name = "Dax ltd",   Address1 = "20", Address2 = "EverGreen Terrace", CompanyNumber = "123QA20", CompanyStatus = "Active", Country = "UK", PostCode = "se1  6nh" },
+            //new EmployerRecord() { Name = "Merty ltd", Address1 = "21", Address2 = "EverGreen Terrace", CompanyNumber = "123QA21", CompanyStatus = "Active", Country = "UK", PostCode = "se32 2nj" },
+            //new EmployerRecord() { Name = "Daxam ltd", Address1 = "22", Address2 = "EverGreen Terrace", CompanyNumber = "123QA22", CompanyStatus = "Active", Country = "UK", PostCode = "e1   1nh" },
+            //new EmployerRecord() { Name = "Greta ltd", Address1 = "23", Address2 = "EverGreen Terrace", CompanyNumber = "123QA23", CompanyStatus = "Active", Country = "UK", PostCode = "e19  8vt" },
+            //new EmployerRecord() { Name = "Buxom ltd", Address1 = "24", Address2 = "EverGreen Terrace", CompanyNumber = "123QA24", CompanyStatus = "Active", Country = "UK", PostCode = "sw1  5ml" },
+          }
+         };
+
+            //result.Results = AllEmployers.Where(e => e.Name.ContainsI(searchText)).Page(page, pageSize).ToList();
+            //TODO: ste -> using this until Page function lines 879 and 888  in Lists.cs is fixed.  
+            result.Results = AllEmployers.Where(e => e.Name.ContainsI(searchText)).ToList();
+
+            result.RowCount = totalRecords = result.Results.Count;
+            result.CurrentPage = page;
+            result.PageSize = pageSize;
+            var pageCount = (double)result.RowCount / pageSize;
+            result.PageCount = (int)Math.Ceiling(pageCount);
+            // result.Results = searchResults;
+            return result;
+        }
+
+    }
+
+    public class MockPublicEmployerRepository : IPagedRepository<EmployerRecord>
     {
         public List<EmployerRecord> AllEmployers = new List<EmployerRecord>();
 
@@ -203,8 +276,41 @@ namespace GenderPayGap.Tests
 
         PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize)
         {
-            throw new NotImplementedException();
+            //var searchResults = PublicSectorOrgs.Messages.List.Where(o => o.OrgName.ContainsI(searchText));
+            int totalRecords;
+           
+            var result = new PagedResult<EmployerRecord>()
+            {
+                Results = new List<EmployerRecord>()
+                            {
+                                new EmployerRecord() { OrgName="2Gether NHS Foundation Trust",                EmailPatterns = "nhs.uk" },
+                                new EmployerRecord() { OrgName="5 Boroughs Partnership NHS Foundation Trust", EmailPatterns = "nhs.uk" },
+                                new EmployerRecord() { OrgName="Abbots Langley Parish Council",               EmailPatterns = "abbotslangley-pc.gov.uk" },
+                                new EmployerRecord() { OrgName="Aberdeen City Council",                       EmailPatterns = "aberdeencityandshire-sdpa.gov.uk" },
+                                new EmployerRecord() { OrgName="Aberdeenshire Council",                       EmailPatterns = "aberdeenshire.gov.uk" },
+                                new EmployerRecord() { OrgName="Aberford &amp; District Parish Council",      EmailPatterns = "aberford-pc.gov.uk" },
+                                new EmployerRecord() { OrgName="Abergavenny Town Council",                    EmailPatterns = "AbergavennyTownCouncil.gov.uk" },
+                                new EmployerRecord() { OrgName="Aberporth Community Council",                 EmailPatterns = "aberporthcommunitycouncil.gov.uk" },
+                                new EmployerRecord() { OrgName="Abertilly and Llanhilleth Community Council", EmailPatterns = "abertilleryandllanhilleth-wcc.gov.uk" },
+                                new EmployerRecord() { OrgName="Aberystwyth Town Council",                    EmailPatterns = "aberystwyth.gov.uk" },
+                                new EmployerRecord() { OrgName="Abingdon Town Council",                       EmailPatterns = "abingdon.gov.uk" },
+                                new EmployerRecord() { OrgName="Academies Enterprise Trust",                  EmailPatterns = "" },
+                                new EmployerRecord() { OrgName="Academy Transformation Trust",                EmailPatterns = "" },
+                                new EmployerRecord() { OrgName="Account NI DFP",                              EmailPatterns = "accountni.gov.uk" },
+                                new EmployerRecord() { OrgName="Accountant in Bankruptcy",                    EmailPatterns = "aib.gov.uk" }
+                            }
+            };
+
+            result.Results = AllEmployers.Where(e => e.Name.ContainsI(searchText)).Page(page, pageSize).ToList();
+            result.RowCount = totalRecords = result.Results.Count;
+            result.CurrentPage = page;
+            result.PageSize = pageSize;
+            var pageCount = (double)result.RowCount / pageSize;
+            result.PageCount = (int)Math.Ceiling(pageCount);
+            // result.Results = searchResults;
+            return result;
         }
+
     }
 
     public class MockGovNotify : IGovNotify
