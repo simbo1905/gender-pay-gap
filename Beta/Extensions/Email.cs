@@ -5,6 +5,7 @@ using System.Text.RegularExpressions;
 using System.Text;
 using System.Net.Mail;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 
 namespace Extensions
@@ -166,7 +167,7 @@ namespace Extensions
             return found;
         }
 
-        public static void QuickSend(string subject, string recipient, string html)
+        public static void QuickSend(string subject, string recipient, string html, byte[] attachment=null, string attachmentFilename="attachment.dat")
         {
             SmtpClient mySmtpClient = new SmtpClient("smtp.gmail.com");
             //mySmtpClient.Port = 587;
@@ -193,7 +194,20 @@ namespace Extensions
             // text or html
             myMail.IsBodyHtml = true;
 
-            mySmtpClient.Send(myMail);
+            //Add the attachment
+            if (attachment != null)
+            {
+                using (var stream = new MemoryStream(attachment))
+                {
+                    myMail.Attachments.Add(new Attachment(stream,attachmentFilename));
+                    mySmtpClient.Send(myMail);
+                }
+            }
+            else
+            {
+                mySmtpClient.Send(myMail);
+            }
+
         }
 
     }
