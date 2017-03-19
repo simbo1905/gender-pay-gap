@@ -1,6 +1,7 @@
 ﻿using Extensions;
 using GenderPayGap.Models.SqlDatabase;
 using System.Linq;
+using System.Transactions;
 using System.Web.Mvc;
 using Autofac;
 using GenderPayGap.WebUI.Classes;
@@ -326,19 +327,29 @@ namespace GenderPayGap.WebUI.Controllers
             };
 
             //Retire the old one 
-            if (oldReturn != null && !oldReturn.Equals(newReturn))
-                oldReturn.SetStatus(ReturnStatuses.Retired, currentUser.UserId);
+            if (oldReturn != null)
+            {
+                if (oldReturn.Equals(newReturn))
+                    newReturn = oldReturn;
+                else
+                    oldReturn.SetStatus(ReturnStatuses.Retired, currentUser.UserId);
+            }
 
             //add the new one
             if (oldReturn == null || oldReturn.Status==ReturnStatuses.Retired)
                 DataRepository.Insert(newReturn);
 
-            DataRepository.SaveChanges();
+            using (var scope = new TransactionScope())
+            {
+                DataRepository.SaveChanges();
 
-            newReturn.SetStatus(ReturnStatuses.Submitted, currentUser.UserId);
-            DataRepository.SaveChanges();
+                newReturn.SetStatus(ReturnStatuses.Submitted, currentUser.UserId);
+                DataRepository.SaveChanges();
 
-            return View("SubmissionComplete", model);
+                scope.Complete();
+            }
+
+            return RedirectToAction("SubmissionComplete");
         }
 
         //CheckData: Should have edits to take user to pages for editing
@@ -359,6 +370,8 @@ namespace GenderPayGap.WebUI.Controllers
                 TempData["ErrorMessage"] = "You session has timed out and you need to restart";
                 return RedirectToAction("EnterCalculations");
             }
+            //Make sure the stash is cleared
+            this.ClearStash();
 
             return View(model);
         }
