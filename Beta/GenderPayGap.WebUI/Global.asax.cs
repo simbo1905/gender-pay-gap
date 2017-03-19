@@ -7,7 +7,9 @@ using System;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
@@ -68,6 +70,8 @@ namespace GenderPayGap
 
             RouteTable.Routes.MapMvcAttributeRoutes();
 
+            //Set the machine key
+            SetMachineKey();
         }
 
         protected void Application_Error(Object sender, EventArgs e)
@@ -114,5 +118,24 @@ namespace GenderPayGap
 
         protected void Session_Start() { }
 
+        void SetMachineKey()
+        {
+            var mksType = typeof(MachineKeySection);
+            var mksSection = ConfigurationManager.GetSection("system.web/machineKey") as MachineKeySection;
+            var resetMethod = mksType.GetMethod("Reset", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            var newConfig = new MachineKeySection();
+            newConfig.ApplicationName = mksSection.ApplicationName;
+            newConfig.CompatibilityMode = mksSection.CompatibilityMode;
+            newConfig.DataProtectorType = mksSection.DataProtectorType;
+            newConfig.Validation = mksSection.Validation;
+
+            newConfig.ValidationKey = ConfigurationManager.AppSettings["MK_ValidationKey"];
+            newConfig.DecryptionKey = ConfigurationManager.AppSettings["MK_DecryptionKey"];
+            newConfig.Decryption = ConfigurationManager.AppSettings["MK_Decryption"]; // default: AES
+            newConfig.ValidationAlgorithm = ConfigurationManager.AppSettings["MK_ValidationAlgorithm"]; // default: SHA1
+
+            resetMethod.Invoke(mksSection, new object[] { newConfig });
+        }
     }
 }

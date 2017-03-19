@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Security;
 using System.Web.SessionState;
 using Autofac;
@@ -35,6 +37,9 @@ namespace GpgIdentityServer
             //Create Inversion of Control container
             ContainerIOC = BuildContainerIoC();
             FileRepository = ContainerIOC.Resolve<IFileRepository>();
+
+            //Set the machine key
+            SetMachineKey();
         }
 
         protected void Session_Start(object sender, EventArgs e)
@@ -83,6 +88,26 @@ namespace GpgIdentityServer
                 builder.Register(c => new SystemFileRepository(localStorageRoot)).As<IFileRepository>();
 
             return builder.Build();
+        }
+
+        void SetMachineKey()
+        {
+            var mksType = typeof(MachineKeySection);
+            var mksSection = ConfigurationManager.GetSection("system.web/machineKey") as MachineKeySection;
+            var resetMethod = mksType.GetMethod("Reset", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            var newConfig = new MachineKeySection();
+            newConfig.ApplicationName = mksSection.ApplicationName;
+            newConfig.CompatibilityMode = mksSection.CompatibilityMode;
+            newConfig.DataProtectorType = mksSection.DataProtectorType;
+            newConfig.Validation = mksSection.Validation;
+
+            newConfig.ValidationKey = ConfigurationManager.AppSettings["MK_ValidationKey"];
+            newConfig.DecryptionKey = ConfigurationManager.AppSettings["MK_DecryptionKey"];
+            newConfig.Decryption = ConfigurationManager.AppSettings["MK_Decryption"]; // default: AES
+            newConfig.ValidationAlgorithm = ConfigurationManager.AppSettings["MK_ValidationAlgorithm"]; // default: SHA1
+
+            resetMethod.Invoke(mksSection, new object[] { newConfig });
         }
 
     }

@@ -334,7 +334,6 @@
       <SubType>Designer</SubType>
     </Content>
     <Content Include="AppSettings.Secret.config" />
-    <Content Include="MachineKey.Secret.config" />
     <None Include="bundleconfig.json" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
