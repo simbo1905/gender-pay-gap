@@ -16,5 +16,14 @@ namespace GenderPayGap.WebUI.Controllers
             var model = new ErrorViewModel(code);
             return View("CustomError", model);
         }
+
+        [HttpGet]
+        [Route("service-unavailable")]
+        [OutputCache(Duration = 86400, VaryByParam = "none")]
+        public ActionResult ServiceUnavailable()
+        {
+            var model = new ErrorViewModel(1119);
+            return View("CustomError", model);
+        }
     }
 }
