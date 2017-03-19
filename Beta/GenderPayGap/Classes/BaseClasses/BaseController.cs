@@ -159,7 +159,11 @@ namespace GenderPayGap
         #region Authorisation Methods
         protected ActionResult CheckUserRegisteredOk(out User currentUser)
         {
+
             currentUser = null;
+            if (MvcApplication.MaintenanceMode)
+                return RedirectToAction("ServiceUnavailable", "Error");
+
             //Ensure user is logged in submit or rest of of registration
             if (!User.Identity.IsAuthenticated)
             {
@@ -172,6 +176,9 @@ namespace GenderPayGap
                 //Otherwise ask the user to login
                 return new HttpUnauthorizedResult();
             }
+
+            //Always allow the viewing controller
+            if (this is ViewingController)return null;
 
             //Ensure we get a valid user from the database
             currentUser = DataRepository.FindUser(User);

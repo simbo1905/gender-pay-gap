@@ -32,6 +32,8 @@ namespace GenderPayGap
         }
 
         public static string AdminEmails = ConfigurationManager.AppSettings["AdminEmails"];
+        public static bool MaintenanceMode= ConfigurationManager.AppSettings["MaintenanceMode"].ToBoolean();
+
         /// <summary>
         /// Return true if exactly one concrete admin defined 
         /// </summary>
