@@ -1,5 +1,6 @@
 ﻿@model GenderPayGap.WebUI.Models.Submit.ReturnViewModel
 
+@using Extensions
 @using GenderPayGap.Models.SqlDatabase
 @using GenderPayGap.WebUI.Classes
 
@@ -177,7 +178,7 @@
                     <input class="button" type="submit" role="button" name="command" value="Continue" />
                 </p>
                 <p>
-                    @if (Model.ReturnToStep4)
+                    @if (Model.ReturnUrl.EqualsI("CheckData"))
                     {
                         @Html.ActionLink("Cancel", "CheckData")
                     }

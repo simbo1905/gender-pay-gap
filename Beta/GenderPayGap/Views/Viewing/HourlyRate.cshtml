@@ -3,17 +3,24 @@
     ViewBag.Title = "Gender pay gap";
 }
 
+@using Extensions
 @using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
+    <div class="breadcrumbs dynamic-content default-content" style="display: block;">
+        <ol>
+            <li style="display: block; padding-top: 0.75em; padding-bottom: 0;">&lt; @Html.ActionLink(Model.ReturnUrl.EqualsI("Complete") ? "View more employers" : "Search results", "SearchResults")</li>
+        </ol>
+    </div>
+
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
 
         <div class="grid-row">
             <div class="column-two-thirds gpg-details">
-                <h1 class="heading-large">
-                    <span class="heading-secondary">@Model.AccountingDate.Year to @(Model.AccountingDate.Year+1) gender pay gap data</span>
+                <h1 class="heading-large" style="margin-top: 0.3em;">
+                    <span class="heading-secondary">@Model.AccountingDate.Year to @(Model.AccountingDate.Year + 1) gender pay gap data</span>
                     <span id="companyname">@Model.OrganisationName</span>
                 </h1>
                 <p><span class="font-small">Address:</span> <span id="address">@Model.Address</span></p>
@@ -21,8 +28,8 @@
                 <div class="container">
                     <ul class="tabs">
                         <li class="tab-link current" data-tab="tab-1">Hourly rate</li>
-                        <li class="tab-link" data-tab="tab-2">@Html.ActionLink("Pay quartiles", "EmployerDetails", new { view = "pay-quartiles", id = Model.GetEncryptedId() })</li>
-                        <li class="tab-link" data-tab="tab-3">@Html.ActionLink("Bonus pay", "EmployerDetails", new { view = "bonus-pay", id = Model.GetEncryptedId() })</li>
+                        <li class="tab-link" data-tab="tab-2">@Html.ActionLink("Pay quartiles", "EmployerDetails", new {view = "pay-quartiles", id = Model.GetEncryptedId()})</li>
+                        <li class="tab-link" data-tab="tab-3">@Html.ActionLink("Bonus pay", "EmployerDetails", new {view = "bonus-pay", id = Model.GetEncryptedId()})</li>
                     </ul>
                     <div id="tab-1" class="tab-content current">
                         <div class=" ">
@@ -47,10 +54,7 @@
                         </div>
                     </div>
                 </div><!-- container -->
-                <p>
-                    @Html.ActionLink("Back to results", "SearchResults")
-                </p>
-
+                
             </div>
             <div class="column-third">
                 <aside class="govuk-related-items" role="complementary">

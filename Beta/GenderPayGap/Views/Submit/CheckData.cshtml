@@ -1,4 +1,5 @@
 ﻿@*@model GpgDB.Models.GpgDatabase.Return*@
+@using Extensions
 @using GenderPayGap.Models.SqlDatabase
 @model GenderPayGap.WebUI.Models.Submit.ReturnViewModel
 
@@ -204,12 +205,19 @@
                     <div class="bold-small">On submission your data will be published on the gender pay gap service.</div>
                 </div>
                 <br/>
-                <p>
-                    <input class="button" type="submit" role="button" name="command" value="Confirm and submit" />
-                </p>
-                <p>
-                    @Html.ActionLink("Back", "EmployerWebsite")
-                </p>
+                @if (Model.ReturnUrl.EqualsI("Complete"))
+                {
+                    @Html.ActionLink("Cancel and don't update", "SubmissionComplete")
+                }
+                else
+                {
+                    <p>
+                        <input class="button" type="submit" role="button" name="command" value="Confirm and submit"/>
+                    </p>
+                    <p>
+                        @Html.ActionLink("Back", "EmployerWebsite")
+                    </p>
+                }
             </div>
         </div>
     }

@@ -51,63 +51,67 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
+            var model = GetReturnViewModel(currentUser);
+
+            if (TempData.ContainsKey("ErrorMessage")) ModelState.AddModelError("", TempData["ErrorMessage"].ToString());
+
+            //If redirected from step 4 then save to session and return to view
+            model.ReturnUrl = returnUrl;
+
+            this.StashModel(model);
+
+            var result = View("EnterCalculations", model);
+            return result;
+        }
+
+        ReturnViewModel GetReturnViewModel(User currentUser)
+        {
+            var model = this.UnstashModel<ReturnViewModel>();
+            if (model != null) return model;
+
             var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
             var org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == userOrg.OrganisationId);
 
             var expectStartDate = GetAccountYearStartDate(org.SectorType);
 
             var @return = DataRepository.GetAll<Return>().OrderByDescending
-                (r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId && r.AccountingDate == expectStartDate && r.Status==ReturnStatuses.Submitted);
+                (r => r.AccountingDate).FirstOrDefault(r => r.OrganisationId == userOrg.OrganisationId && r.AccountingDate == expectStartDate && r.Status == ReturnStatuses.Submitted);
 
-            var model = this.UnstashModel<ReturnViewModel>();
+            model = new ReturnViewModel();
+            model.SectorType = org.SectorType;
 
-            if (model == null)
+            if (@return == null)
             {
-                model = new ReturnViewModel();
-                model.SectorType = org.SectorType;
-
-                if (@return == null)
-                {
-                    model.AccountingDate = expectStartDate;
-                    model.OrganisationId = org.OrganisationId;
-                }
-                else
-                {
-                    //create new return viewmode
-                    //populate with return from db
-                    model.ReturnId = @return.ReturnId;
-                    model.OrganisationId = @return.OrganisationId;
-                    model.DiffMeanBonusPercent = @return.DiffMeanBonusPercent;
-                    model.DiffMeanHourlyPayPercent = @return.DiffMeanHourlyPayPercent;
-                    model.DiffMedianBonusPercent = @return.DiffMedianBonusPercent;
-                    model.DiffMedianHourlyPercent = @return.DiffMedianHourlyPercent;
-                    model.FemaleLowerPayBand = @return.FemaleLowerPayBand;
-                    model.FemaleMedianBonusPayPercent = @return.FemaleMedianBonusPayPercent;
-                    model.FemaleMiddlePayBand = @return.FemaleMiddlePayBand;
-                    model.FemaleUpperPayBand = @return.FemaleUpperPayBand;
-                    model.FemaleUpperQuartilePayBand = @return.FemaleUpperQuartilePayBand;
-                    model.MaleLowerPayBand = @return.MaleLowerPayBand;
-                    model.MaleMedianBonusPayPercent = @return.MaleMedianBonusPayPercent;
-                    model.MaleMiddlePayBand = @return.MaleMiddlePayBand;
-                    model.MaleUpperPayBand = @return.MaleUpperPayBand;
-                    model.MaleUpperQuartilePayBand = @return.MaleUpperQuartilePayBand;
-                    model.JobTitle = @return.JobTitle;
-                    model.FirstName = @return.FirstName;
-                    model.LastName = @return.LastName;
-                    model.CompanyLinkToGPGInfo = @return.CompanyLinkToGPGInfo;
-                    model.AccountingDate = @return.AccountingDate;
-                }
+                model.AccountingDate = expectStartDate;
+                model.OrganisationId = org.OrganisationId;
             }
-
-            if (TempData.ContainsKey("ErrorMessage")) ModelState.AddModelError("", TempData["ErrorMessage"].ToString());
-
-            //If redirected from step 4 then save to session and return to view
-            model.ReturnToStep4 = returnUrl.EqualsI("CheckData");
-
-            this.StashModel(model);
-
-            var result = View("EnterCalculations", model);
-            return result;
+            else
+            {
+                //create new return viewmode
+                //populate with return from db
+                model.ReturnId = @return.ReturnId;
+                model.OrganisationId = @return.OrganisationId;
+                model.DiffMeanBonusPercent = @return.DiffMeanBonusPercent;
+                model.DiffMeanHourlyPayPercent = @return.DiffMeanHourlyPayPercent;
+                model.DiffMedianBonusPercent = @return.DiffMedianBonusPercent;
+                model.DiffMedianHourlyPercent = @return.DiffMedianHourlyPercent;
+                model.FemaleLowerPayBand = @return.FemaleLowerPayBand;
+                model.FemaleMedianBonusPayPercent = @return.FemaleMedianBonusPayPercent;
+                model.FemaleMiddlePayBand = @return.FemaleMiddlePayBand;
+                model.FemaleUpperPayBand = @return.FemaleUpperPayBand;
+                model.FemaleUpperQuartilePayBand = @return.FemaleUpperQuartilePayBand;
+                model.MaleLowerPayBand = @return.MaleLowerPayBand;
+                model.MaleMedianBonusPayPercent = @return.MaleMedianBonusPayPercent;
+                model.MaleMiddlePayBand = @return.MaleMiddlePayBand;
+                model.MaleUpperPayBand = @return.MaleUpperPayBand;
+                model.MaleUpperQuartilePayBand = @return.MaleUpperQuartilePayBand;
+                model.JobTitle = @return.JobTitle;
+                model.FirstName = @return.FirstName;
+                model.LastName = @return.LastName;
+                model.CompanyLinkToGPGInfo = @return.CompanyLinkToGPGInfo;
+                model.AccountingDate = @return.AccountingDate;
+            }
+            return model;
         }
 
         [HttpPost]
@@ -169,7 +173,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
 
             //If redirected from step 4 then save to session and return to view
-            model.ReturnToStep4 = returnUrl.EqualsI("CheckData");
+            model.ReturnUrl = returnUrl;
 
             var result = View("PersonResponsible", model);
             return result;
@@ -223,7 +227,7 @@ namespace GenderPayGap.WebUI.Controllers
 
 
             //If redirected from step 4 then save to session and return to view
-            model.ReturnToStep4 = returnUrl.EqualsI("CheckData");
+            model.ReturnUrl = returnUrl;
 
             var result = View("EmployerWebsite", model);
             return result;
@@ -259,7 +263,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("check-data")]
-        public ActionResult CheckData  /*Confirm*/()
+        public ActionResult CheckData  /*Confirm*/(string returnUrl=null)
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -269,9 +273,15 @@ namespace GenderPayGap.WebUI.Controllers
             var model = this.UnstashModel<ReturnViewModel>();
             if (model == null)
             {
-                TempData["ErrorMessage"] = "You session has timed out and you need to restart";
-                return RedirectToAction("EnterCalculations");
+                if (returnUrl.EqualsI("Complete"))model = GetReturnViewModel(currentUser);
+
+                if (model == null)
+                {
+                    TempData["ErrorMessage"] = "You session has timed out and you need to restart";
+                    return RedirectToAction("EnterCalculations");
+                }
             }
+            model.ReturnUrl = returnUrl;
 
             return View(model);
         }
@@ -364,7 +374,7 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
-            var model = this.UnstashModel<ReturnViewModel>();
+            var model = GetReturnViewModel(currentUser);
             if (model == null)
             {
                 TempData["ErrorMessage"] = "You session has timed out and you need to restart";
