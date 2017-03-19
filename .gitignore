@@ -11,6 +11,7 @@
 *.secret.*
 *.pubxml
 *.pubxml.user
+[Pp]ackages/
 
 
 # Ignore application host 
