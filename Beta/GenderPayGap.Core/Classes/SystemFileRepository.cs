@@ -33,6 +33,7 @@ namespace GenderPayGap.Core.Classes
         public void CreateDirectory(string directoryPath)
         {
             if (string.IsNullOrWhiteSpace(directoryPath)) throw new ArgumentNullException(nameof(directoryPath));
+            if (!Path.IsPathRooted(directoryPath)) directoryPath = Path.Combine(_rootDir.FullName, directoryPath);
 
             try
             {

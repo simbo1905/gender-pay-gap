@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using Autofac;
 using Autofac.Core;
+using Extensions;
 using GenderPayGap.Core.Interfaces;
 
 namespace GenderPayGap.Core.Classes
@@ -12,8 +13,8 @@ namespace GenderPayGap.Core.Classes
         public Logger(IFileRepository repository, string filePath, string instanceName=null)
         {
             if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
-
-            _repository = repository;
+            
+             _repository = repository;
 
             if (string.IsNullOrWhiteSpace(Path.GetExtension(filePath)))
                 filePath =Path.ChangeExtension(filePath, ".log");
