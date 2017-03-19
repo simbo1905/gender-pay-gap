@@ -9,6 +9,7 @@ using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Classes;
 using System.Configuration;
 using System.Net;
+using System.Transactions;
 using System.Web;
 using GenderPayGap.Core.Classes;
 using GenderPayGap.WebUI.Properties;
@@ -123,10 +124,16 @@ namespace GenderPayGap.WebUI.Controllers
             currentUser.EmailVerifiedDate = null;
             currentUser.EmailVerifyHash = null;
             //Save the user to ensure UserId>0 for new status
-            DataRepository.Insert(currentUser);
-            DataRepository.SaveChanges();
-            currentUser.SetStatus(UserStatuses.New, currentUser.UserId);
 
+            using (var scope = new TransactionScope())
+            {
+                DataRepository.Insert(currentUser);
+                DataRepository.SaveChanges();
+                currentUser.SetStatus(UserStatuses.New, currentUser.UserId);
+                DataRepository.SaveChanges();
+
+                scope.Complete();
+            }
             //Send the verification code and showconfirmation
             this.StashModel(model);
             return RedirectToAction("VerifyEmail");
@@ -146,6 +153,7 @@ namespace GenderPayGap.WebUI.Controllers
 
                 currentUser.EmailVerifyHash = verifyCode.GetSHA512Checksum();
                 currentUser.EmailVerifySendDate = DateTime.Now;
+
                 DataRepository.SaveChanges();
             }
             catch (Exception ex)
@@ -891,123 +899,129 @@ namespace GenderPayGap.WebUI.Controllers
             else
                 org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.SectorType == SectorTypes.Public && o.OrganisationName.ToLower() == model.Name.ToLower());
 
-            if (org == null)
+            using (var scope = new TransactionScope())
             {
-                var now = DateTime.Now;
-                org = new Organisation();
-                org.SectorType = model.SectorType.Value;
-                org.OrganisationName = model.Name;
-                org.PrivateSectorReference = employer==null ? null : employer.CompanyNumber;
-                org.Created = now;
-                org.Modified = now;
-                org.Status = OrganisationStatuses.New;
-                DataRepository.Insert(org);
-                DataRepository.SaveChanges();
 
-                //Use public sector code or get from employer
-                var sicCodes = model.SectorType == SectorTypes.Public ? new []{1} : employer.GetSicCodes();
-            
-                //Save the sic codes for the organisation
-                var allSicCodes = DataRepository.GetAll<SicCode>();
-                foreach (var code in sicCodes)
+                if (org == null)
                 {
-                    var sicCode = code==0 ? null : allSicCodes.FirstOrDefault(sic => sic.SicCodeId == code);
-                    if (sicCode==null)
-                        MvcApplication.Log.WriteLine($"Invalid SIC code '{code}' received from companies house");
-                    else 
-                        org.OrganisationSicCodes.Add(new OrganisationSicCode() {Organisation = org, SicCode = sicCode});
+                    var now = DateTime.Now;
+                    org = new Organisation();
+                    org.SectorType = model.SectorType.Value;
+                    org.OrganisationName = model.Name;
+                    org.PrivateSectorReference = employer == null ? null : employer.CompanyNumber;
+                    org.Created = now;
+                    org.Modified = now;
+                    org.Status = OrganisationStatuses.New;
+                    DataRepository.Insert(org);
+                    DataRepository.SaveChanges();
+
+                    //Use public sector code or get from employer
+                    var sicCodes = model.SectorType == SectorTypes.Public ? new[] {1} : employer.GetSicCodes();
+
+                    //Save the sic codes for the organisation
+                    var allSicCodes = DataRepository.GetAll<SicCode>();
+                    foreach (var code in sicCodes)
+                    {
+                        var sicCode = code == 0 ? null : allSicCodes.FirstOrDefault(sic => sic.SicCodeId == code);
+                        if (sicCode == null)
+                            MvcApplication.Log.WriteLine($"Invalid SIC code '{code}' received from companies house");
+                        else
+                            org.OrganisationSicCodes.Add(new OrganisationSicCode() {Organisation = org, SicCode = sicCode});
+                    }
+
+                    org.SetStatus(model.ManualRegistration ? OrganisationStatuses.Pending : OrganisationStatuses.Active, currentUser.UserId);
+                    DataRepository.SaveChanges();
                 }
 
-                org.SetStatus(model.ManualRegistration ? OrganisationStatuses.Pending : OrganisationStatuses.Active, currentUser.UserId);
-                DataRepository.SaveChanges();
-            }
-            
-            //Save the new address
-            var address = DataRepository.GetAll<OrganisationAddress>().FirstOrDefault(a => a.OrganisationId == org.OrganisationId && a.CreatedByUserId==currentUser.UserId);
-            if (address == null)
-            {
-                address = new OrganisationAddress();
-                address.OrganisationId = org.OrganisationId;
-                address.Status= AddressStatuses.New;
-                address.CreatedByUserId = currentUser.UserId;
-                DataRepository.Insert(address);
-                DataRepository.SaveChanges();
-            }
-            
-            if (model.ManualRegistration || model.SectorType == SectorTypes.Public)
-            {
-                address.Address1 = model.Address1;
-                address.Address2 = model.Address2;
-                address.Address3 = model.Address3;
-                address.Country = model.Country;
-                address.PostCode = model.PostCode;
-            }
-            else
-            {
-                address.Address1 = employer.Address1;
-                address.Address2 = employer.Address2;
-                address.Address3 = employer.Address3;
-                address.Country = employer.Country;
-                address.PostCode = employer.PostCode;
-            }
-
-            if (model.ManualRegistration || model.SectorType == SectorTypes.Private)
-                address.SetStatus(AddressStatuses.Pending, currentUser.UserId);
-            else
-                address.SetStatus(AddressStatuses.Active, currentUser.UserId);
-
-           
-            DataRepository.SaveChanges();
-
-            var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.OrganisationId == org.OrganisationId && uo.UserId==currentUser.UserId);
-
-            if (userOrg == null)
-            {
-                userOrg = new UserOrganisation()
+                //Save the new address
+                var address = DataRepository.GetAll<OrganisationAddress>().FirstOrDefault(a => a.OrganisationId == org.OrganisationId && a.CreatedByUserId == currentUser.UserId);
+                if (address == null)
                 {
-                    UserId = currentUser.UserId,
-                    OrganisationId = org.OrganisationId,
-                    Created = DateTime.Now
-                };
-                DataRepository.Insert(userOrg);
-            }
-            userOrg.PINHash = null;
-            userOrg.PINSentDate = null;
-            DataRepository.SaveChanges();
+                    address = new OrganisationAddress();
+                    address.OrganisationId = org.OrganisationId;
+                    address.Status = AddressStatuses.New;
+                    address.CreatedByUserId = currentUser.UserId;
+                    DataRepository.Insert(address);
+                    DataRepository.SaveChanges();
+                }
 
-            if (model.ManualRegistration)
-            {
-                currentUser.ContactFirstName = model.ContactFirstName;
-                currentUser.ContactLastName = model.ContactLastName;
-                currentUser.ContactJobTitle = model.ContactJobTitle;
-                currentUser.ContactOrganisation = model.ContactOrganisation;
-                currentUser.ContactEmailAddress = model.ContactEmailAddress;
-                currentUser.ContactPhoneNumber = model.ContactPhoneNumber;
+                if (model.ManualRegistration || model.SectorType == SectorTypes.Public)
+                {
+                    address.Address1 = model.Address1;
+                    address.Address2 = model.Address2;
+                    address.Address3 = model.Address3;
+                    address.Country = model.Country;
+                    address.PostCode = model.PostCode;
+                }
+                else
+                {
+                    address.Address1 = employer.Address1;
+                    address.Address2 = employer.Address2;
+                    address.Address3 = employer.Address3;
+                    address.Country = employer.Country;
+                    address.PostCode = employer.PostCode;
+                }
+
+                if (model.ManualRegistration || model.SectorType == SectorTypes.Private)
+                    address.SetStatus(AddressStatuses.Pending, currentUser.UserId);
+                else
+                    address.SetStatus(AddressStatuses.Active, currentUser.UserId);
+
+
                 DataRepository.SaveChanges();
 
-                //Send request to GEO
-                var adminEmail = GovNotifyAPI.GEOGroupEmailAddress;
+                var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.OrganisationId == org.OrganisationId && uo.UserId == currentUser.UserId);
+
+                if (userOrg == null)
+                {
+                    userOrg = new UserOrganisation()
+                    {
+                        UserId = currentUser.UserId,
+                        OrganisationId = org.OrganisationId,
+                        Created = DateTime.Now
+                    };
+                    DataRepository.Insert(userOrg);
+                }
+                userOrg.PINHash = null;
+                userOrg.PINSentDate = null;
+                DataRepository.SaveChanges();
+
+                if (model.ManualRegistration)
+                {
+                    currentUser.ContactFirstName = model.ContactFirstName;
+                    currentUser.ContactLastName = model.ContactLastName;
+                    currentUser.ContactJobTitle = model.ContactJobTitle;
+                    currentUser.ContactOrganisation = model.ContactOrganisation;
+                    currentUser.ContactEmailAddress = model.ContactEmailAddress;
+                    currentUser.ContactPhoneNumber = model.ContactPhoneNumber;
+                    DataRepository.SaveChanges();
+
+                    //Send request to GEO
+                    var adminEmail = GovNotifyAPI.GEOGroupEmailAddress;
 #if DEBUG
-                if (string.IsNullOrWhiteSpace(adminEmail)) adminEmail = currentUser.EmailAddress;
+                    if (string.IsNullOrWhiteSpace(adminEmail)) adminEmail = currentUser.EmailAddress;
 #endif
-                SendRegistrationRequest(userOrg,adminEmail, $"{model.ContactFirstName} {currentUser.ContactLastName} ({currentUser.JobTitle})", currentUser.ContactOrganisation, org.OrganisationName, address.GetAddress());
-            }
+                    SendRegistrationRequest(userOrg, adminEmail, $"{model.ContactFirstName} {currentUser.ContactLastName} ({currentUser.JobTitle})", currentUser.ContactOrganisation, org.OrganisationName, address.GetAddress());
+                }
 
-            //Set the status to active
-            else if (model.SectorType == SectorTypes.Public)
-            {
-                //Set the user org as confirmed
-                userOrg.PINConfirmedDate = DateTime.Now;
+                //Set the status to active
+                else if (model.SectorType == SectorTypes.Public)
+                {
+                    //Set the user org as confirmed
+                    userOrg.PINConfirmedDate = DateTime.Now;
 
-                //Mark the organisation as active
-                userOrg.Organisation.SetStatus(OrganisationStatuses.Active, currentUser.UserId, "PIN Confirmed");
+                    //Mark the organisation as active
+                    userOrg.Organisation.SetStatus(OrganisationStatuses.Active, currentUser.UserId, "PIN Confirmed");
 
-                //Mark the address as confirmed
-                address.SetStatus(AddressStatuses.Active, currentUser.UserId, "PIN Confirmed");
+                    //Mark the address as confirmed
+                    address.SetStatus(AddressStatuses.Active, currentUser.UserId, "PIN Confirmed");
 
-                userOrg.ConfirmAttempts = 0;
+                    userOrg.ConfirmAttempts = 0;
 
-                DataRepository.SaveChanges();
+                    DataRepository.SaveChanges();
+                }
+
+                scope.Complete();
             }
         }
 
