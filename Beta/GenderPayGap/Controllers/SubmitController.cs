@@ -1,11 +1,14 @@
-﻿using Extensions;
+﻿using System.Configuration;
+using Extensions;
 using GenderPayGap.Models.SqlDatabase;
 using System.Linq;
 using System.Transactions;
+using System.Web;
 using System.Web.Mvc;
 using Autofac;
 using GenderPayGap.WebUI.Classes;
 using GenderPayGap.WebUI.Models.Submit;
+using Microsoft.Owin.Security;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -385,6 +388,16 @@ namespace GenderPayGap.WebUI.Controllers
 
             return View(model);
         }
-        
+
+        [HttpPost]
+        [Route("submission-complete")]
+        public ActionResult SubmissionComplete(string command)
+        {
+            Session.Abandon();
+            var donePage = ConfigurationManager.AppSettings["DoneUrl"];
+            Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = donePage });
+            return Redirect(donePage);
+        }
+
     }
 }
