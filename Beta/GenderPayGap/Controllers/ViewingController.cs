@@ -131,23 +131,23 @@ namespace GenderPayGap.WebUI.Controllers
             {
                 IQueryable<Return> searchResults;
                 if (!string.IsNullOrWhiteSpace(searchText) && hasSector)
-                    searchResults = DataRepository.GetAll<Return>().Where(r =>
+                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status==ReturnStatuses.Submitted &&
                         ((r.AccountingDate == privateAccountingDate && r.Organisation.SectorType == SectorTypes.Private) || (r.AccountingDate == publicAccountingDate && r.Organisation.SectorType == SectorTypes.Public)) &&
                         r.Organisation.OrganisationName.ToLower().Contains(pattern) &&
                         r.Organisation.OrganisationSicCodes.Any(sic => sectors.Contains(sic.SicCode.SicSectionId)))
                         .OrderBy(r => r.Organisation.OrganisationName);
                 else if (!string.IsNullOrWhiteSpace(searchText) && !hasSector)
-                    searchResults = DataRepository.GetAll<Return>().Where(r =>
+                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted &&
                     ((r.AccountingDate == privateAccountingDate && r.Organisation.SectorType == SectorTypes.Private) || (r.AccountingDate == publicAccountingDate && r.Organisation.SectorType == SectorTypes.Public)) &&
                     r.Organisation.OrganisationName.ToLower().Contains(pattern))
                     .OrderBy(r => r.Organisation.OrganisationName);
                 else if (string.IsNullOrWhiteSpace(searchText) && hasSector)
-                    searchResults = DataRepository.GetAll<Return>().Where(r =>
+                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted &&
                         ((r.AccountingDate == privateAccountingDate && r.Organisation.SectorType == SectorTypes.Private) || (r.AccountingDate == publicAccountingDate && r.Organisation.SectorType == SectorTypes.Public)) &&
                         r.Organisation.OrganisationSicCodes.Any(sic => sectors.Contains(sic.SicCode.SicSectionId)))
                         .OrderBy(r => r.Organisation.OrganisationName);
                 else
-                    searchResults = DataRepository.GetAll<Return>().Where(r =>
+                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted &&
                         (r.AccountingDate == privateAccountingDate && r.Organisation.SectorType == SectorTypes.Private) || (r.AccountingDate == publicAccountingDate && r.Organisation.SectorType == SectorTypes.Public))
                         .OrderBy(r => r.Organisation.OrganisationName);
 
@@ -460,7 +460,7 @@ namespace GenderPayGap.WebUI.Controllers
             model.Address = org.ActiveAddress.GetAddress();
             model.OrganisationName = org.OrganisationName;
             model.Sector = org.GetSicSectors(",<br/>");
-
+            model.ReturnUrl = string.IsNullOrWhiteSpace(id) ? "Complete" : null;
             switch (view)
             {
                 default:

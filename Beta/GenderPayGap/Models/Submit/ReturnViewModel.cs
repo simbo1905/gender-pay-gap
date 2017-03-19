@@ -141,7 +141,7 @@ namespace GenderPayGap.WebUI.Models.Submit
         [Url]
         [Display(Name = "Link to your gender pay gap information")]
         public string CompanyLinkToGPGInfo { get; set; }
-        public bool ReturnToStep4 { get; internal set; }
+        public string ReturnUrl { get; set; }
         public string Address { get; set; }
         public string OrganisationName { get; set; }
         public string Sector { get; set; }

@@ -15,15 +15,8 @@
                 <div class="govuk-box-highlight">
                     <h1 class="bold-large">You have successfully submitted your gender pay gap data for @(Model.AccountingDate.Year)  to @(Model.AccountingDate.AddYears(1).Year )</h1>
                 </div>
-                <!--       <p>We have sent you a confirmation email.</p>
-                 -->
-                @*<p>You can view or amend this submission any time before the 5 April @(Model.AccountingDate.Year ) deadline.</p>*@
-                @*<p><a href='@Url.Action("SendConfirmed", new { id= Model})'>See your gender pay gap data</a></p>*@
-                @*<p>@Html.ActionLink("See your gender pay gap data", "Details", new { id = Model })</p>
-                    <p>@Html.ActionLink("Correct an error on your submission", "EnterCalculations", new { id = Model })</p>*@
-
-                <p>@Html.ActionLink("See your gender pay gap data", "", "", new { href = "javascript:void(0)" })</p>
-                <p>@Html.ActionLink("Correct an error on your submission", "", "", new { href = "javascript:void(0)" })</p>
+                <p>@Html.ActionLink("See your dender pay gap data", "EmployerDetails", "Viewing")</p>
+                <p>@Html.ActionLink("Correct an error on your submission", "CheckData", new { returnUrl = "Complete" })</p>
             </div>
 
         </div>

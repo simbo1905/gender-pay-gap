@@ -7,22 +7,28 @@
 @using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
+    <div class="breadcrumbs dynamic-content default-content" style="display: block;">
+        <ol>
+            <li style="display: block; padding-top: 0.75em; padding-bottom: 0;">&lt; @Html.ActionLink(Model.ReturnUrl.EqualsI("Complete") ? "View more employers" : "Search results", "SearchResults")</li>
+        </ol>
+    </div>
+
     @using (Html.BeginForm())
     {
         @Html.AntiForgeryToken()
 
         <div class="grid-row">
             <div class="column-two-thirds gpg-details">
-                <h1 class="heading-large">
-                    <span class="heading-secondary">@Model.AccountingDate.Year to @(Model.AccountingDate.Year+1) gender pay gap data</span>
+                <h1 class="heading-large" style="margin-top: 0.3em;">
+                    <span class="heading-secondary">@Model.AccountingDate.Year to @(Model.AccountingDate.Year + 1) gender pay gap data</span>
                     <span id="companyname">@Model.OrganisationName</span>
                 </h1>
                 <p><span class="font-small">Address:</span> <span id="address">@Model.Address</span></p>
                 <p><span class="font-small">Sector:</span> <span id="sector">@Model.Sector</span></p>
                 <div class="container">
                     <ul class="tabs">
-                        <li class="tab-link" data-tab="tab-1">@Html.ActionLink("Hourly rate", "EmployerDetails", new { view = "hourly-rate", id = Model.GetEncryptedId() })</li>
-                        <li class="tab-link" data-tab="tab-2">@Html.ActionLink("Pay quartiles","EmployerDetails",new {view="pay-quartiles", id = Model.GetEncryptedId() })</li>
+                        <li class="tab-link" data-tab="tab-1">@Html.ActionLink("Hourly rate", "EmployerDetails", new {view = "hourly-rate", id = Model.GetEncryptedId()})</li>
+                        <li class="tab-link" data-tab="tab-2">@Html.ActionLink("Pay quartiles", "EmployerDetails", new {view = "pay-quartiles", id = Model.GetEncryptedId()})</li>
                         <li class="tab-link current" data-tab="tab-3">Bonus pay</li>
                     </ul>
                     <div id="tab-3" class="tab-content current">
@@ -31,14 +37,14 @@
                         <div class="grid-row block">
                             <div class="column-one-half ">
                                 <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}",Model.MaleMedianBonusPayPercent)%</h4>
+                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.MaleMedianBonusPayPercent)%</h4>
                                     <p class="font-small sub ">HIGHER </p>
                                     <p class="type">(mean) </p>
                                 </div>
                             </div>
                             <div class="column-one-half">
                                 <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}",Model.FemaleMedianBonusPayPercent)% </h4>
+                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.FemaleMedianBonusPayPercent)% </h4>
                                     <p class="font-small sub ">HIGHER </p>
                                     <p class="type">(median) </p>
                                 </div>
@@ -48,23 +54,19 @@
                         <div class="grid-row">
                             <div class="column-one-half ">
                                 <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}",Model.DiffMeanBonusPercent)%</h4>
+                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.DiffMeanBonusPercent)%</h4>
                                     <p class="font-small">MEN </p>
                                 </div>
                             </div>
                             <div class="column-one-half">
                                 <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}",Model.DiffMedianBonusPercent)%</h4>
+                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.DiffMedianBonusPercent)%</h4>
                                     <p class="font-small">WOMEN </p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div><!-- container -->
-                <p>
-                    @Html.ActionLink("Back to results", "SearchResults")
-                </p>
-
             </div>
             <div class="column-third">
                 <aside class="govuk-related-items" role="complementary">
