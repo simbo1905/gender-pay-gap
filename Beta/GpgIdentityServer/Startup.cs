@@ -62,7 +62,7 @@ namespace GpgIdentityServer
 
                     AuthenticationOptions = new AuthenticationOptions
                     {
-                        EnablePostSignOutAutoRedirect = false,
+                        EnablePostSignOutAutoRedirect = true,
                         IdentityProviders = ConfigureIdentityProviders,
                         
                         EnableSignOutPrompt = false,
