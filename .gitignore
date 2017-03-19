@@ -9,6 +9,9 @@
 *.sln.docstates
 *.secrets.*
 *.secret.*
+*.pubxml
+*.pubxml.user
+
 
 # Ignore application host 
 applicationhost.config
