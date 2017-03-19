@@ -3,6 +3,7 @@
 }
 
 @model GenderPayGap.WebUI.Models.Register.OrganisationViewModel
+@using GenderPayGap.Models.SqlDatabase
 @using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
@@ -37,7 +38,10 @@
                     else
                     {
                         <br>
-                        <p style="width: 66%">Please choose your organisation and we'll send an activation PIN to its registered address</p>
+                        if (Model.SectorType == SectorTypes.Private)
+                        {
+                            <p style="width: 66%">Please choose your organisation and we'll send an activation PIN to its registered address</p>
+                        }
                         <table class="search search3">
                             <caption class="visuallyhidden">Customer and Business search listing</caption>
                             <thead>

@@ -38,7 +38,7 @@
             <div class="column-two-thirds">
 
                 <h1 class="heading-large">
-                    <span class="heading-secondary">Step @(Model.SectorType == SectorTypes.Public ? "3 of 3" : "3 of 4")</span>
+                    <span class="heading-secondary">Step @(Model.SectorType == SectorTypes.Public ? "3 of 3" : "4 of 4")</span>
                     Review to your gender pay gap data
                 </h1>
 
@@ -103,7 +103,7 @@
                             <td>Male </td>
                             <td>Female</td>
                         </tr>
-                        <tr>
+                        <tr class="row">
                             <td>
                                 Upper quartile
                             </td>
@@ -178,7 +178,7 @@
                     <thead>
                         <tr>
                             <th class="question" colspan="3">
-                                @(Model.SectorType != SectorTypes.Public ? "2" : "3").Link to your gender pay gap information
+                                @(Model.SectorType == SectorTypes.Public ? "2" : "3").Link to your gender pay gap information
                                 <span class="edit">@Html.ActionLink("Edit", "EmployerWebsite", new { returnUrl = "CheckData" })</span>
                             </th>
                         </tr>
