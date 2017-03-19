@@ -13,12 +13,12 @@
                 @Html.CustomValidationSummary()
 
                 <div class="govuk-box-highlight">
-                    <h1 class="bold-large">You have successfully submitted your gender pay gap data for @(Model.AccountingDate.Year)  to @(Model.AccountingDate.AddYears(1).Year )</h1>
+                    <h1 class="bold-large">You've submitted your gender pay gap data for @(Model.AccountingDate.Year)  to @(Model.AccountingDate.AddYears(1).Year )</h1>
                 </div>
                 <p>@Html.ActionLink("See your dender pay gap data", "EmployerDetails", "Viewing")</p>
-                <p>@Html.ActionLink("Correct an error on your submission", "CheckData", new { returnUrl = "Complete" })</p>
+                <p>@Html.ActionLink("Correct an error on your submission", "CheckData", new {returnUrl = "Complete"})</p>
+                <button type="submit" class="button" name="command">Finish and sign out</button>
             </div>
-
         </div>
     }
 </main>

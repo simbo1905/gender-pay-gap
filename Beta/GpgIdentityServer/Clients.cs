@@ -23,7 +23,8 @@ namespace GpgIdentityServer
                     },
                     PostLogoutRedirectUris = new List<string>
                     {
-                        ConfigurationManager.AppSettings["GpgWebServer"].TrimI("/")+"/Submit/enter-calculations"
+                        ConfigurationManager.AppSettings["GpgWebServer"].TrimI("/")+"/Submit/enter-calculations",
+                        ConfigurationManager.AppSettings["DoneUrl"],
                     },
                     AllowedScopes = new List<string>
                     {
