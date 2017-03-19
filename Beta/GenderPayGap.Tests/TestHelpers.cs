@@ -276,28 +276,28 @@ namespace GenderPayGap.Tests
 
         PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize)
         {
-            //var searchResults = PublicSectorOrgs.Messages.List.Where(o => o.OrgName.ContainsI(searchText));
+            //var searchResults = PublicSectorOrgs.Messages.List.Where(o => o.Name.ContainsI(searchText));
             int totalRecords;
            
             var result = new PagedResult<EmployerRecord>()
             {
                 Results = new List<EmployerRecord>()
                             {
-                                new EmployerRecord() { OrgName="2Gether NHS Foundation Trust",                EmailPatterns = "nhs.uk" },
-                                new EmployerRecord() { OrgName="5 Boroughs Partnership NHS Foundation Trust", EmailPatterns = "nhs.uk" },
-                                new EmployerRecord() { OrgName="Abbots Langley Parish Council",               EmailPatterns = "abbotslangley-pc.gov.uk" },
-                                new EmployerRecord() { OrgName="Aberdeen City Council",                       EmailPatterns = "aberdeencityandshire-sdpa.gov.uk" },
-                                new EmployerRecord() { OrgName="Aberdeenshire Council",                       EmailPatterns = "aberdeenshire.gov.uk" },
-                                new EmployerRecord() { OrgName="Aberford &amp; District Parish Council",      EmailPatterns = "aberford-pc.gov.uk" },
-                                new EmployerRecord() { OrgName="Abergavenny Town Council",                    EmailPatterns = "AbergavennyTownCouncil.gov.uk" },
-                                new EmployerRecord() { OrgName="Aberporth Community Council",                 EmailPatterns = "aberporthcommunitycouncil.gov.uk" },
-                                new EmployerRecord() { OrgName="Abertilly and Llanhilleth Community Council", EmailPatterns = "abertilleryandllanhilleth-wcc.gov.uk" },
-                                new EmployerRecord() { OrgName="Aberystwyth Town Council",                    EmailPatterns = "aberystwyth.gov.uk" },
-                                new EmployerRecord() { OrgName="Abingdon Town Council",                       EmailPatterns = "abingdon.gov.uk" },
-                                new EmployerRecord() { OrgName="Academies Enterprise Trust",                  EmailPatterns = "" },
-                                new EmployerRecord() { OrgName="Academy Transformation Trust",                EmailPatterns = "" },
-                                new EmployerRecord() { OrgName="Account NI DFP",                              EmailPatterns = "accountni.gov.uk" },
-                                new EmployerRecord() { OrgName="Accountant in Bankruptcy",                    EmailPatterns = "aib.gov.uk" }
+                                new EmployerRecord() { Name="2Gether NHS Foundation Trust",                EmailPatterns = "nhs.uk" },
+                                new EmployerRecord() { Name="5 Boroughs Partnership NHS Foundation Trust", EmailPatterns = "nhs.uk" },
+                                new EmployerRecord() { Name="Abbots Langley Parish Council",               EmailPatterns = "abbotslangley-pc.gov.uk" },
+                                new EmployerRecord() { Name="Aberdeen City Council",                       EmailPatterns = "aberdeencityandshire-sdpa.gov.uk" },
+                                new EmployerRecord() { Name="Aberdeenshire Council",                       EmailPatterns = "aberdeenshire.gov.uk" },
+                                new EmployerRecord() { Name="Aberford &amp; District Parish Council",      EmailPatterns = "aberford-pc.gov.uk" },
+                                new EmployerRecord() { Name="Abergavenny Town Council",                    EmailPatterns = "AbergavennyTownCouncil.gov.uk" },
+                                new EmployerRecord() { Name="Aberporth Community Council",                 EmailPatterns = "aberporthcommunitycouncil.gov.uk" },
+                                new EmployerRecord() { Name="Abertilly and Llanhilleth Community Council", EmailPatterns = "abertilleryandllanhilleth-wcc.gov.uk" },
+                                new EmployerRecord() { Name="Aberystwyth Town Council",                    EmailPatterns = "aberystwyth.gov.uk" },
+                                new EmployerRecord() { Name="Abingdon Town Council",                       EmailPatterns = "abingdon.gov.uk" },
+                                new EmployerRecord() { Name="Academies Enterprise Trust",                  EmailPatterns = "" },
+                                new EmployerRecord() { Name="Academy Transformation Trust",                EmailPatterns = "" },
+                                new EmployerRecord() { Name="Account NI DFP",                              EmailPatterns = "accountni.gov.uk" },
+                                new EmployerRecord() { Name="Accountant in Bankruptcy",                    EmailPatterns = "aib.gov.uk" }
                             }
             };
 
