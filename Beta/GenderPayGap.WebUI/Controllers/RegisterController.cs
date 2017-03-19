@@ -1309,7 +1309,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
 
             //Send the declined email to the applicant
-            SendRegistrationDeclined(emailAddress,model.CancellationReason);
+            SendRegistrationDeclined(emailAddress,string.IsNullOrWhiteSpace(model.CancellationReason) ? "We haven't been able to verify your employer's identity. So we have declined your application." : model.CancellationReason);
             
             //Save the changes and redirect
             DataRepository.SaveChanges();
