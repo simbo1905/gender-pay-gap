@@ -33,7 +33,7 @@ namespace GenderPayGap.WebUI.Models.Register
         public PagedResult<EmployerRecord> Employers { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        [MaxLength(100), MinLength(5)]
+        [MaxLength(100), MinLength(3)]
         public string Name { get; set; }
         public string CompanyNumber { get; set; }
 

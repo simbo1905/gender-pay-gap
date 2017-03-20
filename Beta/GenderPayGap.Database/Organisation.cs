@@ -31,7 +31,7 @@ namespace GenderPayGap.Models.SqlDatabase
         public string PublicSectorReference { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        [MaxLength(100), MinLength(5)]
+        [MaxLength(100), MinLength(3)]
         [Index]
         public string OrganisationName { get; set; }
 
