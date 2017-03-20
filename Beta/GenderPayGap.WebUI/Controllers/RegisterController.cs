@@ -894,7 +894,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             //Save the new organisation
             Organisation org = null;
-            if (model.SectorType == SectorTypes.Private)
+            if (employer!=null && model.SectorType == SectorTypes.Private)
                 org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.PrivateSectorReference == employer.CompanyNumber);
             else
                 org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.SectorType == SectorTypes.Public && o.OrganisationName.ToLower() == model.Name.ToLower());
@@ -916,7 +916,7 @@ namespace GenderPayGap.WebUI.Controllers
                     DataRepository.SaveChanges();
 
                     //Use public sector code or get from employer
-                    var sicCodes = model.SectorType == SectorTypes.Public ? new[] {1} : employer.GetSicCodes();
+                    var sicCodes = employer==null || model.SectorType == SectorTypes.Public ? new[] {1} : employer.GetSicCodes();
 
                     //Save the sic codes for the organisation
                     var allSicCodes = DataRepository.GetAll<SicCode>();
