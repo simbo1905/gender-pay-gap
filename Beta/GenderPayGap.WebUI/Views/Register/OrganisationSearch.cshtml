@@ -1,0 +1,49 @@
+﻿@{
+    ViewBag.Title = "Search for your organisation - Gender pay gap reporting service";
+}
+
+@model GenderPayGap.WebUI.Models.Register.OrganisationViewModel
+@using GenderPayGap.WebUI.Classes
+
+<main id="content" role="main">
+    @using (Html.BeginForm("OrganisationSearch","Register"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(m => m.SectorType)
+        @Html.HiddenFor(m => m.ManualRegistration)
+
+        <input type="submit" style="display:none" name="command" value="">
+        <div class="grid-row">
+            <div class="column-two-thirds">
+                @Html.CustomValidationSummary()
+                <h1 class="heading-large">
+
+                    <span>Find your organisation</span>
+                </h1>
+                @Html.ValidationMessageFor(model => model.SearchText, null, new { @class = "error-danger" })
+                <div class="search-bar">
+                    <div class="searchfield">
+                        @Html.CustomEditorFor(model => model.SearchText, htmlAttributes: new { @class = "search-input", @placeholder = Model.SectorType==GenderPayGap.Models.SqlDatabase.SectorTypes.Public ? "Enter your organisation's name" :"Enter your organisation's name or company no" })
+
+                        <button type="submit" class="search-submit" name="command" value="search">Search</button>
+                    </div>
+                </div>
+                @if (!string.IsNullOrWhiteSpace(Model.SearchText) && Model.Employers.Results.Count < 1)
+                {
+                    <p>No records found</p>
+                    <br/>
+                    <details role="group">
+                        <summary role="button" aria-controls="details-content-0" aria-expanded="true">Can't find your organisation?</summary>
+                        <div class="panel panel-border-narrow" id="details-content-0" aria-hidden="false">
+                            @Html.ActionLink("Tell us about your organisation", "AddOrganisation")
+                        </div>
+                    </details>
+                }
+                <br>
+                <p>
+                    @Html.ActionLink("Back", "OrganisationType")
+                </p>
+            </div>
+        </div>
+    }
+</main>

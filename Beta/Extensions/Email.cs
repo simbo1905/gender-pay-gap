@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Net.Mail;
 using System.Diagnostics;
+using System.IO;
 using System.Net;
 
 namespace Extensions
@@ -13,6 +15,12 @@ namespace Extensions
     {
         const string MatchEmailPattern = @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$";
+
+        static readonly string SmtpServer = ConfigurationManager.AppSettings["SMTPServer"];
+        static readonly string SmtpPort = ConfigurationManager.AppSettings["SMTPPort"];
+        static readonly string SmtpSenderName = ConfigurationManager.AppSettings["SmtpSenderName"];
+        static readonly string SmtpUsername = ConfigurationManager.AppSettings["SMTPUsername"];
+        static readonly string SmtpPassword = ConfigurationManager.AppSettings["SMTPPassword"];
 
         public static bool IsHostName(this string hostName)
         {
@@ -166,20 +174,20 @@ namespace Extensions
             return found;
         }
 
-        public static void QuickSend(string subject, string recipient, string html)
+        public static void QuickSend(string subject, string recipient, string html, byte[] attachment=null, string attachmentFilename="attachment.dat")
         {
-            SmtpClient mySmtpClient = new SmtpClient("smtp.gmail.com");
-            //mySmtpClient.Port = 587;
+            SmtpClient mySmtpClient = new SmtpClient(SmtpServer);
+            mySmtpClient.Port = SmtpPort.ToInt32(25);
             mySmtpClient.EnableSsl = true;
 
             // set smtp-client with basicAuthentication
             mySmtpClient.UseDefaultCredentials = false;
             System.Net.NetworkCredential basicAuthenticationInfo = new
-                System.Net.NetworkCredential("***REMOVED***", "***REMOVED***");
+                System.Net.NetworkCredential(SmtpUsername, SmtpPassword);
             mySmtpClient.Credentials = basicAuthenticationInfo;
 
             // add from,to mailaddresses
-            MailAddress from = new MailAddress("***REMOVED***", "Gender Pay Gap");
+            MailAddress from = new MailAddress(SmtpUsername, SmtpSenderName);
             MailAddress to = new MailAddress(recipient);
             MailMessage myMail = new System.Net.Mail.MailMessage(from, to);
 
@@ -193,7 +201,20 @@ namespace Extensions
             // text or html
             myMail.IsBodyHtml = true;
 
-            mySmtpClient.Send(myMail);
+            //Add the attachment
+            if (attachment != null)
+            {
+                using (var stream = new MemoryStream(attachment))
+                {
+                    myMail.Attachments.Add(new Attachment(stream,attachmentFilename));
+                    mySmtpClient.Send(myMail);
+                }
+            }
+            else
+            {
+                mySmtpClient.Send(myMail);
+            }
+
         }
 
     }

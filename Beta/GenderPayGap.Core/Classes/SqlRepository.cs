@@ -1,6 +1,8 @@
 ﻿using GenderPayGap.Core.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.Common;
 using System.Data.Entity;
 using System.Linq;
 using System.Text;
@@ -40,6 +42,13 @@ namespace GenderPayGap.Core.Classes
         public void SaveChanges()
         {
             this.context.SaveChanges();
+        }
+
+        public DbTransaction BeginTransaction(IsolationLevel isolationLevel)
+        {
+            var database = context.GetDatabase();
+            if (database.Connection.State != ConnectionState.Open)database.Connection.Open();
+            return database.Connection.BeginTransaction(isolationLevel);
         }
 
         public void Dispose()
