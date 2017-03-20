@@ -1404,8 +1404,9 @@ namespace GenderPayGap.WebUI.Controllers
                     var pin = ConfigurationManager.AppSettings["TESTING-Pin"];
                     if (string.IsNullOrWhiteSpace(pin))pin = Crypto.GeneratePasscode(Properties.Settings.Default.PINChars.ToCharArray(),Properties.Settings.Default.PINLength);
 
+                    var now = DateTime.Now;
                     //Try and send the PIN in post
-                    if (!this.SendPinInPost(currentUser, userOrg.Organisation, pin.ToString()))
+                    if (!this.SendPinInPost(userOrg, pin, now))
                         throw new Exception("Could not send PIN in the POST.");
 
                     //Try and send the confirmation email
@@ -1414,7 +1415,7 @@ namespace GenderPayGap.WebUI.Controllers
 
                     //Save the PIN and confirm code
                     userOrg.PINHash = pin.GetSHA512Checksum();
-                    userOrg.PINSentDate = DateTime.Now;
+                    userOrg.PINSentDate = now;
                     DataRepository.SaveChanges();
                 }
                 catch (Exception ex)
