@@ -1420,8 +1420,7 @@ namespace GenderPayGap.WebUI.Controllers
                 catch (Exception ex)
                 {
                     MvcApplication.Log.WriteLine(ex.Message);
-                    AddModelError(3014);
-                    return View("PINSent");
+                    return View("CustomError", new ErrorViewModel(3014));
                 }
             }
 
