@@ -107,7 +107,6 @@ namespace GenderPayGap.WebUI.Classes
 
             var imagePath = new System.UriBuilder(controller.Request.Url.AbsoluteUri){Path = controller.Url.Content(@"~/Content/img/")}.Uri.ToString();
 
-            if (GovNotifyAPI.ManualPip) return GovNotifyAPI.SendPinInPostManual(imagePath,returnUrl, userOrg.User.Fullname, userOrg.User.JobTitle, userOrg.Organisation.OrganisationName, userOrg.Address.GetList(), pin, sendDate, sendDate.AddDays(Properties.Settings.Default.PinInPostExpiryDays));
             return GovNotifyAPI.SendPinInPost(imagePath,returnUrl, userOrg.User.Fullname, userOrg.User.JobTitle, userOrg.Organisation.OrganisationName, userOrg.Address.GetList(), pin, sendDate, sendDate.AddDays(Properties.Settings.Default.PinInPostExpiryDays));
         }
         #endregion

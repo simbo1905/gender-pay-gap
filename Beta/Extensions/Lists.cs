@@ -214,6 +214,20 @@ namespace Extensions
             return false;
         }
 
+        public static bool ContainsAllEmails(this IEnumerable<string> inputEmails)
+        {
+            var found = false;
+            foreach (var email in inputEmails)
+            {
+                if (string.IsNullOrWhiteSpace(email)) continue;
+                var address = email.GetEmailAddress();
+                if (string.IsNullOrWhiteSpace(address)) return false;
+                if (!address.IsEmailAddress()) return false;
+                found = true;
+            }
+            return found;
+        }
+
         public static bool EqualsI(this List<string> sourceList, List<string> targetList, bool ignoreCase=false)
         {
             if (targetList!=null && sourceList==null) return false;

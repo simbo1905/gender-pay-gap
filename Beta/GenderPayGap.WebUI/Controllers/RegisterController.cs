@@ -997,11 +997,7 @@ namespace GenderPayGap.WebUI.Controllers
                     DataRepository.SaveChanges();
 
                     //Send request to GEO
-                    var adminEmail = GovNotifyAPI.GEOGroupEmailAddress;
-#if DEBUG
-                    if (string.IsNullOrWhiteSpace(adminEmail)) adminEmail = currentUser.EmailAddress;
-#endif
-                    SendRegistrationRequest(userOrg, adminEmail, $"{model.ContactFirstName} {currentUser.ContactLastName} ({currentUser.JobTitle})", currentUser.ContactOrganisation, org.OrganisationName, address.GetAddress());
+                    SendRegistrationRequest(userOrg, $"{model.ContactFirstName} {currentUser.ContactLastName} ({currentUser.JobTitle})", currentUser.ContactOrganisation, org.OrganisationName, address.GetAddress());
                 }
 
                 //Set the status to active
@@ -1026,7 +1022,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         //Send the registration request
-        protected void SendRegistrationRequest(UserOrganisation userOrg, string adminEmail, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
+        protected void SendRegistrationRequest(UserOrganisation userOrg, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
         {
             //Send a verification link to the email address
             try
@@ -1034,7 +1030,7 @@ namespace GenderPayGap.WebUI.Controllers
                 var reviewCode = Encryption.EncryptQuerystring(userOrg.UserId + ":" + userOrg.OrganisationId + ":" + DateTime.Now.ToSmallDateTime());
                 var reviewUrl = Url.Action("ReviewRequest", "Register", new { code = reviewCode }, "https");
 
-                if (!GovNotifyAPI.SendRegistrationRequest(adminEmail,reviewUrl,contactName, contactOrg, reportingOrg, reportingAddress))
+                if (!GovNotifyAPI.SendRegistrationRequest(reviewUrl,contactName, contactOrg, reportingOrg, reportingAddress))
                     throw new Exception("Could not send registration request email. Please try again later.");
             }
             catch (Exception ex)
