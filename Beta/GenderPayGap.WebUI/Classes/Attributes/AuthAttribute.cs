@@ -24,7 +24,7 @@ namespace GenderPayGap.WebUI.Classes
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
-            if (MvcApplication.MaintenanceMode)
+           if (MvcApplication.MaintenanceMode)
                 filterContext.Result=new RedirectResult(@"/Error/service-unavailable");
 
             else if (filterContext.HttpContext.User.Identity.IsAuthenticated)

@@ -103,7 +103,7 @@ namespace GenderPayGap.WebUI.Classes
  
         public static bool SendPinInPost(this RegisterController controller, UserOrganisation userOrg, string pin, DateTime sendDate)
         {
-            var returnUrl = controller.Url.Action("/", "Submit",null,"https");
+            var returnUrl = controller.Url.Action("/", "Register",null,"https");
 
             var imagePath = new System.UriBuilder(controller.Request.Url.AbsoluteUri){Path = controller.Url.Content(@"~/Content/img/")}.Uri.ToString();
 
