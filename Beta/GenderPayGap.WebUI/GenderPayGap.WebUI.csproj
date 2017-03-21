@@ -360,6 +360,7 @@
     <Content Include="Content\govuk-template.css" />
     <Content Include="Content\img\org_crest.png" />
     <Content Include="Content\prism.css" />
+    <Content Include="Error.html" />
     <Content Include="favicon.ico" />
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
@@ -542,6 +543,9 @@
       <Project>{3073df11-5d99-45a7-9cba-836fd758c319}</Project>
       <Name>GenderPayGap.Database</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
