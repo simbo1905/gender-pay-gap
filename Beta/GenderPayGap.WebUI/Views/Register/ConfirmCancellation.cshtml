@@ -15,9 +15,9 @@
         <div class="grid-row">
             <div class="column-two-thirds">
                 @Html.CustomValidationSummary()
-                <h1 class="heading-large">Cancel registration request</h1>
+                <h1 class="heading-large">Reject registration request</h1>
                 <p class="bold-small">
-                    You’re about to cancel a registration request by:
+                    You’re about to reject a registration request by:
                 </p>
 
                 <p> @Model.ContactFirstName @Model.ContactLastName (@Model.ContactJobTitle),<br> @Model.ContactOrganisation</p>
@@ -25,13 +25,13 @@
                 <p class="dynamic-content" style="display: block;"> @Model.Name,<br> @Html.Raw(Model.FullAddress.Replace(", ", ",<br/>"))</p>
                 <div class="form-group @Html.SetErrorClass(model => model.CancellationReason,"error")">
                     <label class="form-label" for="textarea-a">
-                        Reason for cancellation (optional)
+                        Reason for rejection (optional)
                     </label>
                     @Html.TextAreaFor(model => model.CancellationReason, new { cols = "10", rows = "4", style="width:315px"})
                 </div>
                 <br>
-                <p><button type="submit" class="button" name="command" value="continue">Yes, cancel registration request</button></p>
-                <p><button type="submit" class="link-button" name="command" value="cancel">Back</button></p>
+                <p><button type="submit" class="button" name="command" value="continue">Yes, reject registration request</button></p>
+                <p><button type="submit" class="link-button" name="command" value="cancel">Cancel</button></p>
 
             </div>
         </div>
