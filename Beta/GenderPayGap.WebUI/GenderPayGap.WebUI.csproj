@@ -347,7 +347,6 @@
     <Content Include="App_Data\Pin.html" />
     <Content Include="App_Data\RegistrationApproved.html" />
     <Content Include="App_Data\RegistrationDeclined.html" />
-    <Content Include="App_Data\RegistrationDeclined.txt" />
     <Content Include="App_Data\RegistrationRequest.html" />
     <Content Include="App_Data\Verify.html" />
     <None Include="Content\application.css.New" />
@@ -473,8 +472,6 @@
     <Content Include="Scripts\jquery-1.10.2.min.map" />
     <Content Include="Views\Viewing\Download.cshtml" />
     <Content Include="Views\Viewing\SearchResults.cshtml" />
-    <Content Include="Views\Viewing\Sectors.cshtml" />
-    <Content Include="Views\Viewing\Start.cshtml" />
     <Content Include="Views\Register\Complete.cshtml" />
     <Content Include="Views\Shared\CustomError.cshtml" />
     <Content Include="Views\Register\VerifyEmail.cshtml" />
@@ -495,7 +492,6 @@
     <Content Include="Views\Register\EmailConfirmed.cshtml" />
     <Content Include="Views\Register\AddOrganisation.cshtml" />
     <Content Include="Views\Register\RequestReceived.cshtml" />
-    <Content Include="Views\Shared\CustomError - Copy.cshtml" />
     <Content Include="Views\Register\ReviewRequest.cshtml" />
     <Content Include="Views\Register\RequestAccepted.cshtml" />
     <Content Include="Views\Register\RequestCancelled.cshtml" />
@@ -519,13 +515,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Models\GPGDatabase\" />
     <Folder Include="public\govuk_template\assets\javascripts\vendor\goog\" />
     <Folder Include="Views\Shared\EditorTemplates\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
-    <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
