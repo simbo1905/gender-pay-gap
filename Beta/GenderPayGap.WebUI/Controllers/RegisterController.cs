@@ -1392,7 +1392,7 @@ namespace GenderPayGap.WebUI.Controllers
             var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
 
             //If a pin has never been sent or resend button submitted then send one immediately
-            if (string.IsNullOrWhiteSpace(userOrg.PINHash) || userOrg.PINSentDate.EqualsI(null, DateTime.MinValue))
+            if (string.IsNullOrWhiteSpace(userOrg.PINHash) || userOrg.PINSentDate.EqualsI(null, DateTime.MinValue) || userOrg.PINSentDate.Value.AddDays(Settings.Default.PinInPostExpiryDays) < DateTime.Now)
             {
                 try
                 {
@@ -1457,7 +1457,7 @@ namespace GenderPayGap.WebUI.Controllers
             ViewBag.UserFullName = currentUser.Fullname;
             ViewBag.UserJobTitle = currentUser.JobTitle;
             ViewBag.Organisation = userOrg.Organisation.OrganisationName;
-            ViewBag.Address = userOrg.Organisation.ActiveAddress.GetAddress(",<br/>");
+            ViewBag.Address = userOrg.Address.GetAddress(",<br/>");
             //Show the PIN textbox and button
             return View("RequestPIN");
         }

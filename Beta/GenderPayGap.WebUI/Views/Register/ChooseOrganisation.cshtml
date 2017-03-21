@@ -22,7 +22,7 @@
 
                 <div class="search-bar">
                     <div class="searchfield">
-                        @Html.CustomEditorFor(model => model.SearchText, htmlAttributes: new {@class = "search-input", @placeholder = "Enter an employers name or company no"})
+                        @Html.CustomEditorFor(model => model.SearchText, htmlAttributes: new {@class = "search-input", @placeholder = Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Public ? "Organisation name" : "Organisation name or company no"})
 
                         <button type="submit" class="search-submit" name="command" value="search">Search</button>
                     </div>
