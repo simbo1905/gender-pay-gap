@@ -121,10 +121,9 @@
   <ItemGroup>
     <Content Include="Content\Site.css" />
     <Content Include="Global.asax" />
-    <Content Include="idsrv3test.pfx">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="packages.config" />
+    <Content Include="idsrv3test.pfx" />
+    <Content Include="bin\idsrv3test.pfx" />
     <None Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\wa-t1te-gpg - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
