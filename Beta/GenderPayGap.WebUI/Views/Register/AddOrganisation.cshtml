@@ -20,7 +20,10 @@
         @Html.HiddenFor(model => model.ContactOrganisation)
         @Html.HiddenFor(model => model.ContactEmailAddress)
         @Html.HiddenFor(model => model.ContactPhoneNumber)
-
+        if (!Model.ManualRegistration)
+        {
+            @Html.HiddenFor(model => model.Name)
+        }
         <div class="grid-row">
             <div class="column-two-thirds">
                 @Html.CustomValidationSummary()
