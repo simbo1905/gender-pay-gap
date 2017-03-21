@@ -24,8 +24,10 @@ namespace GenderPayGap.WebUI.Classes
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
+            if (MvcApplication.MaintenanceMode)
+                filterContext.Result=new RedirectResult(@"/Error/service-unavailable");
 
-            if (filterContext.HttpContext.User.Identity.IsAuthenticated)
+            else if (filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
                 // 403 we know who you are, but you haven't been granted access
                 filterContext.Result = new HttpStatusCodeResult(System.Net.HttpStatusCode.Forbidden);
