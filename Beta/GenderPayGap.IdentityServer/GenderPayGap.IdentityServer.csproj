@@ -125,6 +125,8 @@
     <Content Include="idsrv3test.pfx" />
     <Content Include="bin\idsrv3test.pfx" />
     <None Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\wa-t1pp-gpg - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\wa-t1pp-gpg - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\wa-t1te-gpg - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -152,6 +154,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy.pubxml.user" />
+    <Content Include="Properties\PublishProfiles\wa-t1pp-gpg - Web Deploy.pubxml.user" />
     <Content Include="Properties\PublishProfiles\wa-t1te-gpg - Web Deploy.pubxml.user" />
     <Content Include="templates\_layout.html" />
     <Content Include="templates\_error.html" />

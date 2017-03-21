@@ -328,6 +328,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Content\img\GEO.jpg" />
     <Content Include="App_Data\PinCover.html" />
     <Content Include="App_Data\PublicSectorOrgs.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -364,6 +365,7 @@
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
     <Content Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy.pubxml.user" />
+    <Content Include="Properties\PublishProfiles\wa-t1pp-gpg - Web Deploy.pubxml.user" />
     <Content Include="Properties\PublishProfiles\wa-t1te-gpg - Web Deploy.pubxml.user" />
     <Content Include="public\assets\images\dfe-small.png" />
     <Content Include="public\assets\images\dfe-xsmall.png" />
@@ -423,6 +425,8 @@
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
     <None Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\wa-t1pp-gpg - Web Deploy %282%29.pubxml" />
+    <None Include="Properties\PublishProfiles\wa-t1pp-gpg - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\wa-t1te-gpg - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

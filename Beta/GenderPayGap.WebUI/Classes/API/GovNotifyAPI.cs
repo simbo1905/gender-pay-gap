@@ -168,8 +168,9 @@ namespace GenderPayGap
         #endregion
 
         #region Postal
-        public static bool SendPinInPost(string returnUrl, string contactName, string organisationName, List<string> address, string pin)
+        public static bool SendPinInPost(string imagePath, string returnUrl, string contactName, string jobtitle, string organisationName, List<string> address, string pin, DateTime sendDate, DateTime expiresDate)
         {
+            throw new NotImplementedException("PIN in Post via Gov Notify has not yet been implemented");
             var personalisation = new Dictionary<string, dynamic> { { "PIN", pin } };
 
             Notification result = null;
@@ -182,11 +183,11 @@ namespace GenderPayGap
             catch (Exception ex)
             {
                 MvcApplication.Log.WriteLine($"Cant send Pin In POST to Gov Notify for {address} due to following error:{ex.Message}");
-                return SendPinInPostManual(returnUrl, contactName, organisationName, address, pin);
+                return SendPinInPostManual(imagePath,returnUrl, contactName, jobtitle, organisationName, address, pin,sendDate,expiresDate);
             }
         }
 
-        public static bool SendPinInPostManual(string returnUrl, string contactName, string organisationName, List<string> address, string pin)
+        public static bool SendPinInPostManual(string imagePath,string returnUrl, string contactName, string jobtitle, string organisationName, List<string> address, string pin, DateTime sendDate, DateTime expiresDate)
         {
             if (string.IsNullOrWhiteSpace(GEOGroupEmailAddress))throw new ArgumentNullException(nameof(GEOGroupEmailAddress));
             if (!GEOGroupEmailAddress.IsEmailAddress())throw new ArgumentException($"{GEOGroupEmailAddress} is not a valid email address",nameof(GEOGroupEmailAddress));
@@ -199,12 +200,17 @@ namespace GenderPayGap
                 coverHtml = coverHtml.Replace("((Address))", address.ToDelimitedString(",<br/>"));
 
                 var pipHtml = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/Pin.html"));
+                pipHtml = pipHtml.Replace("((ImagePath))", imagePath);
                 pipHtml = pipHtml.Replace("((ContactName))", contactName);
                 pipHtml = pipHtml.Replace("((OrganisationName))", organisationName);
+                pipHtml = pipHtml.Replace("((ContactJobTitle))", jobtitle);
                 pipHtml = pipHtml.Replace("((Address))", address.ToDelimitedString(",<br/>"));
+                pipHtml = pipHtml.Replace("((Date))", sendDate.ToString("d MMMM yyyy"));
                 pipHtml = pipHtml.Replace("((PIN))", pin);
+                pipHtml = pipHtml.Replace("((url))", returnUrl);
+                pipHtml = pipHtml.Replace("((ExpiresDate))", expiresDate.ToString("d MMMM yyyy"));
                 var pdf = PDF.HtmlToPDF(pipHtml);
-                Email.QuickSend("GPG Registration Confirmation", GEOGroupEmailAddress, coverHtml, pdf,$"{organisationName.ToProper().Strip(" -_,")}.pdf");
+                Email.QuickSend("GPG PIN-in-Post", GEOGroupEmailAddress,coverHtml, pdf,$"{organisationName.ToProper().Strip(" -_,")}.pdf");
                 return true;
             }
             catch (Exception ex)

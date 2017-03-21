@@ -244,7 +244,12 @@ namespace GenderPayGap
                 return View("CustomError", new ErrorViewModel(1104));
             }
 
-            if (userOrg.Organisation.SectorType == SectorTypes.Private)
+            if (userOrg.Organisation.Status == OrganisationStatuses.Pending)
+            {
+                if (IsAnyAction("Register/RequestReceived")) return null;
+                return RedirectToAction("RequestReceived", "Register");
+            }
+            else if (userOrg.Organisation.SectorType == SectorTypes.Private)
             {
                 if (userOrg.PINConfirmedDate.EqualsI(null, DateTime.MinValue))
                 {
@@ -273,11 +278,7 @@ namespace GenderPayGap
                     return RedirectToAction("ActivateService", "Register");
                 }
             }
-            else if (userOrg.Organisation.Status==OrganisationStatuses.Pending)
-            {
-                if (IsAnyAction("Register/RequestReceived")) return null;
-                return RedirectToAction("RequestReceived", "Register");
-            }
+            
 
             //Ensure user has completed the registration process
             //If user is fully registered then start submit process

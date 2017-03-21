@@ -894,7 +894,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             //Save the new organisation
             Organisation org = null;
-            if (model.SectorType == SectorTypes.Private)
+            if (employer!=null && model.SectorType == SectorTypes.Private)
                 org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.PrivateSectorReference == employer.CompanyNumber);
             else
                 org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.SectorType == SectorTypes.Public && o.OrganisationName.ToLower() == model.Name.ToLower());
@@ -916,7 +916,7 @@ namespace GenderPayGap.WebUI.Controllers
                     DataRepository.SaveChanges();
 
                     //Use public sector code or get from employer
-                    var sicCodes = model.SectorType == SectorTypes.Public ? new[] {1} : employer.GetSicCodes();
+                    var sicCodes = employer==null || model.SectorType == SectorTypes.Public ? new[] {1} : employer.GetSicCodes();
 
                     //Save the sic codes for the organisation
                     var allSicCodes = DataRepository.GetAll<SicCode>();
@@ -1404,8 +1404,9 @@ namespace GenderPayGap.WebUI.Controllers
                     var pin = ConfigurationManager.AppSettings["TESTING-Pin"];
                     if (string.IsNullOrWhiteSpace(pin))pin = Crypto.GeneratePasscode(Properties.Settings.Default.PINChars.ToCharArray(),Properties.Settings.Default.PINLength);
 
+                    var now = DateTime.Now;
                     //Try and send the PIN in post
-                    if (!this.SendPinInPost(currentUser, userOrg.Organisation, pin.ToString()))
+                    if (!this.SendPinInPost(userOrg, pin, now))
                         throw new Exception("Could not send PIN in the POST.");
 
                     //Try and send the confirmation email
@@ -1414,14 +1415,13 @@ namespace GenderPayGap.WebUI.Controllers
 
                     //Save the PIN and confirm code
                     userOrg.PINHash = pin.GetSHA512Checksum();
-                    userOrg.PINSentDate = DateTime.Now;
+                    userOrg.PINSentDate = now;
                     DataRepository.SaveChanges();
                 }
                 catch (Exception ex)
                 {
                     MvcApplication.Log.WriteLine(ex.Message);
-                    AddModelError(3014);
-                    return View("PINSent");
+                    return View("CustomError", new ErrorViewModel(3014));
                 }
             }
 

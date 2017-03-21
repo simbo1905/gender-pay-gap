@@ -101,13 +101,14 @@ namespace GenderPayGap.WebUI.Classes
             return GovNotifyAPI.SendVerifyEmail(verifyUrl,emailAddress, verifyCode);
         }
  
-        public static bool SendPinInPost(this RegisterController controller, User user, Organisation organisation, string pin)
+        public static bool SendPinInPost(this RegisterController controller, UserOrganisation userOrg, string pin, DateTime sendDate)
         {
-            var name = user.Fullname + " (" + user.JobTitle + ")";
-            var returnUrl = controller.Url.Action("ActivateService", "Register",null,"https");
-            var address = organisation.ActiveAddress ?? organisation.PendingAddress;
-            if (GovNotifyAPI.ManualPip) return GovNotifyAPI.SendPinInPostManual(returnUrl, name, organisation.OrganisationName, address.GetList(), pin);
-            return GovNotifyAPI.SendPinInPost(returnUrl, name, organisation.OrganisationName, address.GetList(), pin);
+            var returnUrl = controller.Url.Action("/", "Submit",null,"https");
+
+            var imagePath = new System.UriBuilder(controller.Request.Url.AbsoluteUri){Path = controller.Url.Content(@"~/Content/img/")}.Uri.ToString();
+
+            if (GovNotifyAPI.ManualPip) return GovNotifyAPI.SendPinInPostManual(imagePath,returnUrl, userOrg.User.Fullname, userOrg.User.JobTitle, userOrg.Organisation.OrganisationName, userOrg.Address.GetList(), pin, sendDate, sendDate.AddDays(Properties.Settings.Default.PinInPostExpiryDays));
+            return GovNotifyAPI.SendPinInPost(imagePath,returnUrl, userOrg.User.Fullname, userOrg.User.JobTitle, userOrg.Organisation.OrganisationName, userOrg.Address.GetList(), pin, sendDate, sendDate.AddDays(Properties.Settings.Default.PinInPostExpiryDays));
         }
         #endregion
 
