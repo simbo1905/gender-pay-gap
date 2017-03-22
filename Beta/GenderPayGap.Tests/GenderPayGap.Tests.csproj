@@ -211,6 +211,12 @@
   <ItemGroup>
     <None Include="0.Submission\SubmissionTest.cs.old0" />
     <None Include="0.Submission\SubmissionTest.cs.old1" />
+    <Compile Include="..\SolutionInfo.cs">
+      <Link>Properties\SolutionInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\SolutionVersionInfo.cs">
+      <Link>Properties\SolutionVersionInfo.cs</Link>
+    </Compile>
     <Compile Include="0.Submission\SubmissionTest.cs" />
     <Compile Include="RegistrationTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -228,13 +234,13 @@
       <Project>{1D7F0E3C-97D7-4EF4-BD3B-683249F67802}</Project>
       <Name>GenderPayGap.Core</Name>
     </ProjectReference>
-    <ProjectReference Include="..\GenderPayGap\GenderPayGap.WebUI.csproj">
+    <ProjectReference Include="..\GenderPayGap.Database\GenderPayGap.Database.csproj">
+      <Project>{3073df11-5d99-45a7-9cba-836fd758c319}</Project>
+      <Name>GenderPayGap.Database</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GenderPayGap.WebUI\GenderPayGap.WebUI.csproj">
       <Project>{e1578d37-94cd-4716-a68c-a66980a567d2}</Project>
       <Name>GenderPayGap.WebUI</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\GpgDatabase\GenderPayGap.Database.csproj">
-      <Project>{3073DF11-5D99-45A7-9CBA-836FD758C319}</Project>
-      <Name>GenderPayGap.Database</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

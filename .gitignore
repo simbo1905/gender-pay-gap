@@ -7,6 +7,12 @@
 *.user
 *.userosscache
 *.sln.docstates
+*.secrets.*
+*.secret.*
+*.pubxml
+*.pubxml.user
+[Pp]ackages/
+
 
 # Ignore application host 
 applicationhost.config

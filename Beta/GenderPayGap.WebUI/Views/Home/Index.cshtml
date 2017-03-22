@@ -1,0 +1,33 @@
+﻿@{
+    ViewBag.Title = "Home Page";
+}
+
+<div class="jumbotron">
+    <h1>Gender Pay Gap</h1>
+    <p class="lead">
+        Gender pay gap is a new service for employees to collect and store & track information on the differences wages of Male and Female employees
+        within their company as well as submit this data to the government at the end of the financial year.
+    </p>
+    <p>@Html.ActionLink("Register for GPG Account", "AboutYou", "Register", null, new { @class = "button" })</p>
+    <p>@Html.ActionLink("Submit GPG Return", "EnterCalculations", "Submit", null, new { @class = "button" }) </ p >
+    <p>@Html.ActionLink("Search GPG Returns", "SearchResults", "Viewing", null, new { @class = "button" })</p>
+    <div>
+        @using (Html.BeginForm("Execute", "Home", FormMethod.Post))
+        {
+            @Html.AntiForgeryToken()
+            if (User.Identity.IsAuthenticated)
+            {
+                <p><button type="submit" class="link-button" role="button" name="command" value="DeleteReturns" onclick="if (!confirm('Are you sure you want to delete all your GPG data?')) return false;">Delete my GPG data</button></p>
+                <p><button type="submit" class="link-button" role="button" name="command" value="DeleteOrganisations" onclick="if (!confirm('Are you sure you want to delete all organisations?')) return false;">Delete my organisations</button></p>
+                <p><button type="submit" class="link-button" role="button" name="command" value="DeleteAccount" onclick="if (!confirm('Are you sure you want to delete your account?')) return false;">Delete my account</button>
+                </p>
+            }
+            else
+            {
+                <p><button type="submit" class="link-button" role="button" name="command" value="SignIn">Sign in</button></p>
+            }
+            <p><button type="submit" class="link-button" role="button" name="command" value="CreateTestData" onclick="if (!confirm('Are you sure you want to create some test data?')) return false;">Create test data</button></p>
+            <p><button type="submit" class="link-button" role="button" name="command" value="ClearDatabase" onclick="if (!confirm('Are you sure you want to delete all records in the database?')) return false;">Clear Database</button></p>
+        }
+    </div>
+</div>

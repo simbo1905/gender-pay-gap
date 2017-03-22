@@ -1,0 +1,19 @@
+﻿@model GenderPayGap.WebUI.Models.Register.CompleteViewModel
+@{
+    ViewBag.Title = "Service activated - Gender pay gap reporting service";
+
+}
+<main id="content" role="main">
+    <div class="grid-row">
+        <div class="column-two-thirds">
+            <div class="govuk-box-highlight">
+                <h1 class="bold-large">You're now registered for gender pay gap reporting</h1>
+            </div>
+            <div class="subsection panel-indent">
+                <div class="bold-small">Next step: Submit your gender pay gap data for @Model.AccountingDate.Year to @(Model.AccountingDate.Year+1).</div>
+            </div>
+            <p></p>
+            <a class="button" role="button" href="@Url.Action("EnterCalculations", "Submit")">Continue</a>
+        </div>
+    </div>
+</main>

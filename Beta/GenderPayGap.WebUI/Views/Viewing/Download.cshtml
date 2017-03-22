@@ -1,0 +1,61 @@
+﻿@model GenderPayGap.WebUI.Models.Search.DownloadViewModel
+@{
+    ViewBag.Title = "Gender pay gap";
+}
+
+<main id="content" role="main">
+    
+
+    <div class="grid-row">
+        <div class="column-full">
+            <h1 class="heading-large">
+                Gender pay gap data
+            </h1>
+            <div class="tabs">
+                <div class="tabs-nav">
+                    <ul class="tabs-list">
+                        <li>@Html.ActionLink("Find employers","SearchResults")</li>
+                        <li><a href="download" class="selected">Download data</a></li>
+                    </ul>
+                </div>
+                <div class="tabs-content">
+                    <div class="tabs-panel" id="tab-1">
+                        <div class="tabs-panel-inner text">
+                            <h2 class="heading-medium">Download gender pay gap data </h2>
+                            <table class="download-table">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Year</th>
+                                        <th scope="col">Number of employers</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @if (Model.Downloads.Count < 1)
+                                    {
+                                        <td colspan="2">No downloads found</td>
+                                    }
+                                    else
+                                    {
+                                        foreach (var download in Model.Downloads)
+                                        {
+                                            <tr>
+                                                <td><a href="@download.Url" target="_blank">@download.Title </a><span class="info"> (@download.Extension.ToUpper(), @download.Size)</span></td>
+                                                <td> @download.Count </td>
+                                            </tr>
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</main>
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Styles.Render("~/Content/css")
+}

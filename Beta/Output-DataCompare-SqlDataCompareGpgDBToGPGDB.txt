@@ -1,2 +1,0 @@
-﻿Target database synchronization has started.
-Target database was updated successfully.

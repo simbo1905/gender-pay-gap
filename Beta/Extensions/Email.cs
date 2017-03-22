@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Text.RegularExpressions;
 using System.Text;
 using System.Net.Mail;
 using System.Diagnostics;
+using System.IO;
+using System.Linq;
 using System.Net;
 
 namespace Extensions
@@ -166,34 +169,44 @@ namespace Extensions
             return found;
         }
 
-        public static void QuickSend(string subject, string recipient, string html)
+        public static void QuickSend(string subject, string senderEmailAddress, string senderName, string recipients, string html, string smtpServer, string smtpUsername, string smtpPassword, int smtpPort = 25, byte[] attachment=null, string attachmentFilename="attachment.dat")
         {
-            SmtpClient mySmtpClient = new SmtpClient("smtp.gmail.com");
-            //mySmtpClient.Port = 587;
-            mySmtpClient.EnableSsl = true;
+            var mySmtpClient = new SmtpClient(smtpServer)
+            {
+                Port = smtpPort,
+                EnableSsl = true,
+                UseDefaultCredentials = false
+            };
 
             // set smtp-client with basicAuthentication
-            mySmtpClient.UseDefaultCredentials = false;
-            System.Net.NetworkCredential basicAuthenticationInfo = new
-                System.Net.NetworkCredential("***REMOVED***", "***REMOVED***");
+            var basicAuthenticationInfo = new NetworkCredential(smtpUsername, smtpPassword);
             mySmtpClient.Credentials = basicAuthenticationInfo;
 
-            // add from,to mailaddresses
-            MailAddress from = new MailAddress("***REMOVED***", "Gender Pay Gap");
-            MailAddress to = new MailAddress(recipient);
-            MailMessage myMail = new System.Net.Mail.MailMessage(from, to);
-
-            // set subject and encoding
-            myMail.Subject = subject;
-            myMail.SubjectEncoding = System.Text.Encoding.UTF8;
+            var myMail = new MailMessage
+            {
+                From = new MailAddress(senderEmailAddress,senderName),
+                Subject = subject,
+                SubjectEncoding = Encoding.UTF8,
+                Body = html,
+                BodyEncoding = Encoding.UTF8,
+                IsBodyHtml = true
+            };
 
             // set body-message and encoding
-            myMail.Body = html;
-            myMail.BodyEncoding = System.Text.Encoding.UTF8;
             // text or html
-            myMail.IsBodyHtml = true;
 
-            mySmtpClient.Send(myMail);
+            // add mailaddresses
+            foreach (var recipient in recipients.SplitI(";"))
+                myMail.To.Add(new MailAddress(recipient));
+            
+            //Add the attachment
+            if (attachment == null)
+                mySmtpClient.Send(myMail);
+            else using (var stream = new MemoryStream(attachment))
+            {
+                myMail.Attachments.Add(new Attachment(stream,attachmentFilename));
+                mySmtpClient.Send(myMail);
+            }
         }
 
     }

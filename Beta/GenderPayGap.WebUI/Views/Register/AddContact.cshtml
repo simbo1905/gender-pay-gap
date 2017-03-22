@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "Add your organisation's address - Gender pay gap reporting service";
+}
+
+@model GenderPayGap.WebUI.Models.Register.OrganisationViewModel
+    @using GenderPayGap.WebUI.Classes
+
+    <main id="content" role="main">
+        @using (Html.BeginForm("AddContact", "Register"))
+        {
+            @Html.AntiForgeryToken()
+            @Html.HiddenFor(model => model.SelectedEmployerIndex)
+            @Html.HiddenFor(model => model.ManualRegistration)
+            @Html.HiddenFor(model=>model.BackAction)
+            @Html.HiddenFor(model => model.SearchText)
+            @Html.HiddenFor(model => model.SectorType)
+            @Html.HiddenFor(model => model.Name)
+
+            @Html.HiddenFor(model => model.Address1)
+            @Html.HiddenFor(model => model.Address2)
+            @Html.HiddenFor(model => model.Address3)
+            @Html.HiddenFor(model => model.Country)
+            @Html.HiddenFor(model => model.PostCode)
+            @Html.HiddenFor(model => model.PoBox)
+
+            <div class="grid-row">
+                <div class="column-two-thirds">
+                    @Html.CustomValidationSummary()
+
+
+                    <h1 class="heading-large">
+                        Your contact details
+                    </h1>
+
+                    <div class="dynamic-content default-content">
+                        <p>Please enter your contact details. The Government Equalities Office may contact you to confirm your registration.</p>
+
+                        <div class="form-group @Html.SetErrorClass(model => model.ContactFirstName,"error")">
+                            @Html.LabelFor(model => model.ContactFirstName, "First name",new {@class = "form-label col-md-2"})
+                            @Html.ValidationMessageFor(model => model.ContactFirstName, "", new {@class = "error-danger"})
+                            <div class="col-md-10">
+                                @Html.CustomEditorFor(model => model.ContactFirstName, new {@class = "form-control"})
+                            </div>
+                        </div>
+
+                        <div class="form-group @Html.SetErrorClass(model => model.ContactLastName,"error")">
+                            @Html.LabelFor(model => model.ContactLastName, "Last name", new { @class = "form-label col-md-2" })
+                            @Html.ValidationMessageFor(model => model.ContactLastName, "", new { @class = "error-danger" })
+                            <div class="col-md-10">
+                                @Html.CustomEditorFor(model => model.ContactLastName, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group @Html.SetErrorClass(model => model.ContactJobTitle,"error")">
+                            @Html.LabelFor(model => model.ContactJobTitle, "Job title", new { @class = "form-label col-md-2" })
+                            @Html.ValidationMessageFor(model => model.ContactJobTitle, "", new { @class = "error-danger" })
+                            <div class="col-md-10">
+                                @Html.CustomEditorFor(model => model.ContactJobTitle, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group @Html.SetErrorClass(model => model.ContactOrganisation,"error") form-group-compound">
+                            @Html.LabelFor(model => model.ContactOrganisation, "Your organisation",new {@class = "form-label col-md-2"})
+                            @Html.ValidationMessageFor(model => model.ContactOrganisation, "", new {@class = "error-danger"})
+                            <div class="col-md-10">
+                                @Html.CustomEditorFor(model => model.ContactOrganisation, new {@class = "form-control"})
+                            </div>
+                        </div>
+
+                        <div class="form-group @Html.SetErrorClass(model => model.ContactEmailAddress,"error") form-group-compound">
+                            @Html.LabelFor(model => model.ContactEmailAddress, "Email address", new { @class = "form-label col-md-2" })
+                            @Html.ValidationMessageFor(model => model.ContactEmailAddress, "", new { @class = "error-danger" })
+                            <div class="col-md-10">
+                                @Html.CustomEditorFor(model => model.ContactEmailAddress, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <div class="form-group @Html.SetErrorClass(model => model.ContactPhoneNumber,"error") form-group-compound">
+                            @Html.LabelFor(model => model.ContactPhoneNumber, "Telephone number", new { @class = "form-label col-md-2" })
+                            @Html.ValidationMessageFor(model => model.ContactPhoneNumber, "", new { @class = "error-danger" })
+                            <div class="col-md-10">
+                                @Html.CustomEditorFor(model => model.ContactPhoneNumber, new { @class = "form-control" })
+                            </div>
+                        </div>
+
+                        <br><br>
+
+                        <input class="button" type="submit" role="button" name="command" value="Continue" />
+
+                    </div>
+                    <p>
+                        @Html.ActionLink("Back", "AddOrganisation")
+                    </p>
+                </div>
+            </div>
+        }
+    </main>
