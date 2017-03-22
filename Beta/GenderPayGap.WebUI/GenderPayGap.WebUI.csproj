@@ -334,7 +334,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <SubType>Designer</SubType>
     </Content>
-    <Content Include="AppSettings.Secret.config" />
     <None Include="bundleconfig.json" />
     <None Include="compilerconfig.json" />
     <None Include="compilerconfig.json.defaults">
@@ -364,10 +363,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.svg" />
     <Content Include="Global.asax" />
     <Content Include="Content\Site.css" />
-    <Content Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy.pubxml.user" />
-    <Content Include="Properties\PublishProfiles\wa-t1pr-gpg - Web Deploy.pubxml.user" />
-    <Content Include="Properties\PublishProfiles\wa-t1pp-gpg - Web Deploy.pubxml.user" />
-    <Content Include="Properties\PublishProfiles\wa-t1te-gpg - Web Deploy.pubxml.user" />
     <Content Include="public\assets\images\dfe-small.png" />
     <Content Include="public\assets\images\dfe-xsmall.png" />
     <Content Include="public\assets\images\dfe.png" />
@@ -425,10 +420,6 @@
     <Content Include="fonts\glyphicons-halflings-regular.woff" />
     <Content Include="fonts\glyphicons-halflings-regular.ttf" />
     <Content Include="fonts\glyphicons-halflings-regular.eot" />
-    <None Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\wa-t1pr-gpg - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\wa-t1pp-gpg - Web Deploy.pubxml" />
-    <None Include="Properties\PublishProfiles\wa-t1te-gpg - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
