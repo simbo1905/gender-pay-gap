@@ -414,12 +414,16 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
+            ModelState.Include("SearchText");
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<OrganisationViewModel>();
+                return View("OrganisationSearch", model);
+            }
             //Make sure we can load employers from session
             var m = this.UnstashModel<OrganisationViewModel>();
             if (m == null) return View("CustomError", new ErrorViewModel(1112));
             model.Employers = m.Employers;
-
-            ModelState.Include("SearchText");
 
             model.ManualRegistration = true;
             model.BackAction = "OrganisationSearch";
@@ -537,7 +541,7 @@ namespace GenderPayGap.WebUI.Controllers
             bool doSearch = false;
             if (command == "search")
             {
-                model.SearchText = model.SearchText.Trim();
+                model.SearchText = model.SearchText.TrimI();
 
                 if (string.IsNullOrWhiteSpace(model.SearchText))
                 {

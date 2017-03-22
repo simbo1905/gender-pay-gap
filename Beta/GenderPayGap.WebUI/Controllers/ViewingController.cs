@@ -466,7 +466,7 @@ namespace GenderPayGap.WebUI.Controllers
             model.Address = org.ActiveAddress.GetAddress();
             model.OrganisationName = org.OrganisationName;
             model.Sector = org.GetSicSectors(",<br/>");
-            model.ReturnUrl = LastSearch;
+            model.ReturnUrl = string.IsNullOrWhiteSpace(id) ? null : LastSearch;
             switch (view)
             {
                 default:

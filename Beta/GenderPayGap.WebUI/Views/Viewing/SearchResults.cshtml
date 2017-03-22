@@ -62,12 +62,21 @@
                                         @if (Model.Employers.Results.Count < 1)
                                         {
                                             <div class="zero-results">
-                                                <h2 class="heading-medium">0 employers found that match your search</h2>
-                                                <h2>Please try:</h2>
-                                                <ul class="list list-bullet">
-                                                    <li>searching again using different employer name</li>
-
-                                                </ul>
+                                                @if (string.IsNullOrWhiteSpace(Model.SearchText) && string.IsNullOrWhiteSpace(Model.LastSectors))
+                                                {
+                                                    <h2 class="heading-medium">There is no gender pay gap data available</h2>
+                                                   <ul class="list list-bullet">
+                                                        <li>Please try again later</li>
+                                                    </ul>
+                                                }
+                                                else
+                                                {
+                                                    <h2 class="heading-medium">0 employers found that match your search</h2>
+                                                    <h2>Please try:</h2>
+                                                    <ul class="list list-bullet">
+                                                        <li>searching again using different employer name or sector</li>
+                                                    </ul>
+                                                }
                                             </div>
                                         }
                                         else

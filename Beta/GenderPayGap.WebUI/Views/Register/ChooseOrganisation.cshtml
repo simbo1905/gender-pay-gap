@@ -19,6 +19,7 @@
                 <h1 class="heading-large">
                     <span>Choose your organisation</span>
                 </h1>
+                @Html.ValidationMessageFor(model => model.SearchText, null, new { @class = "error-danger" })
 
                 <div class="search-bar">
                     <div class="searchfield">

@@ -31,12 +31,22 @@
                 <div class="container">
                     <ul class="tabs">
                         <li class="tab-link current" data-tab="tab-1">Hourly rate</li>
-                        <li class="tab-link" data-tab="tab-2">@Html.ActionLink("Pay quartiles", "EmployerDetails", new {view = "pay-quartiles", id = Model.GetEncryptedId()})</li>
-                        <li class="tab-link" data-tab="tab-3">@Html.ActionLink("Bonus pay", "EmployerDetails", new {view = "bonus-pay", id = Model.GetEncryptedId()})</li>
+                        @if (string.IsNullOrWhiteSpace(Request.QueryString["id"]))
+                        {
+                            <li class="tab-link" data-tab="tab-2">@Html.ActionLink("Pay quartiles", "EmployerDetails", new { view = "pay-quartiles"})</li>
+                            <li class="tab-link" data-tab="tab-3">@Html.ActionLink("Bonus pay", "EmployerDetails", new { view = "bonus-pay"})</li>
+
+                        }
+                        else
+                        {
+                            <li class="tab-link" data-tab="tab-2">@Html.ActionLink("Pay quartiles", "EmployerDetails", new { view = "pay-quartiles", id = Model.GetEncryptedId() })</li>
+                            <li class="tab-link" data-tab="tab-3">@Html.ActionLink("Bonus pay", "EmployerDetails", new { view = "bonus-pay", id = Model.GetEncryptedId() })</li>
+                        }
                     </ul>
                     <div id="tab-1" class="tab-content current">
                         <div class=" ">
-                            <h2 class="heading-medium no-sub"><span class="gender">Mens'</span> hourly rate is
+                            <h2 class="heading-medium no-sub">
+                                <span class="gender">Mens'</span> hourly rate is
                             </h2>
                             <div class="grid-row">
                                 <div class="column-one-half ">
@@ -57,7 +67,7 @@
                         </div>
                     </div>
                 </div><!-- container -->
-                
+
             </div>
             <div class="column-third">
                 <aside class="govuk-related-items" role="complementary">
@@ -71,7 +81,8 @@
                         </div>
                         <div class="section flush sign" style="display: block;">
                             <h3 class="heading-small">Person responsible for employer's report </h3>
-                            <p class="font-xsmall">@Model.FirstName @Model.LastName<br>@Model.JobTitle
+                            <p class="font-xsmall">
+                                @Model.FirstName @Model.LastName<br>@Model.JobTitle
                             </p>
                         </div>
                     </nav>

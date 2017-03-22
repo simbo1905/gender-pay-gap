@@ -17,21 +17,23 @@
                 </h1>
                 <p>Enter the PIN sent to your organisation's registered address by post. The PIN will activate the gender pay gap reporting service.</p>
                 <div class="form-group @Html.SetErrorClass(model => model.PIN,"error") ">
-                    @Html.LabelFor(model => model.PIN, "Enter PIN", htmlAttributes: new {@class = "form-label"})
-                    @Html.ValidationMessageFor(model => model.PIN, null, new {@class = "error-danger"})
-                    @Html.CustomEditorFor(model => model.PIN, htmlAttributes: new {@class = "form-control", style = "text-transform: uppercase;"})
+                    @Html.LabelFor(model => model.PIN, "Enter PIN", htmlAttributes: new { @class = "form-label" })
+                    @Html.ValidationMessageFor(model => model.PIN, null, new { @class = "error-danger" })
+                    <div class="col-md-10">
+                        @Html.CustomEditorFor(model => model.PIN, htmlAttributes: new { @class = "form-control", style = "text-transform: uppercase;" })
+                    </div>
                 </div>
-
                 <details>
                     <summary role="button" aria-controls="details-content-0" aria-expanded="true">Problems with your PIN?</summary>
                     <div class="panel panel-border-narrow" id="details-content-0" aria-hidden="false">
-                        <p>If your PIN hasn't arrived after 7 days or has expired, <a href="@Url.Action("RequestPIN")">request a new PIN</a>.
+                        <p>
+                            If your PIN hasn't arrived after 7 days or has expired, <a href="@Url.Action("RequestPIN")">request a new PIN</a>.
                         </p>
 
                     </div>
                 </details> <br>
 
-                <input type="submit" class="button" name="command" value="Activate &amp; continue"/>
+                <input type="submit" class="button" name="command" value="Activate &amp; continue" />
             </div>
         }
     </div>
