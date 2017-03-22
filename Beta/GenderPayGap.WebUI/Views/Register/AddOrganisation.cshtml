@@ -1,0 +1,97 @@
+﻿@{
+    ViewBag.Title = "Add your organisation's address - Gender pay gap reporting service";
+}
+
+@model GenderPayGap.WebUI.Models.Register.OrganisationViewModel
+@using GenderPayGap.WebUI.Classes
+
+<main id="content" role="main">
+    @using (Html.BeginForm("AddOrganisation", "Register"))
+    {
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(model => model.SelectedEmployerIndex)
+        @Html.HiddenFor(model => model.ManualRegistration)
+        @Html.HiddenFor(model => model.BackAction)
+        @Html.HiddenFor(model => model.SearchText)
+        @Html.HiddenFor(model => model.SectorType)
+        @Html.HiddenFor(model => model.ContactFirstName)
+        @Html.HiddenFor(model => model.ContactLastName)
+        @Html.HiddenFor(model => model.ContactJobTitle)
+        @Html.HiddenFor(model => model.ContactOrganisation)
+        @Html.HiddenFor(model => model.ContactEmailAddress)
+        @Html.HiddenFor(model => model.ContactPhoneNumber)
+        if (!Model.ManualRegistration)
+        {
+            @Html.HiddenFor(model => model.Name)
+        }
+        <div class="grid-row">
+            <div class="column-two-thirds">
+                @Html.CustomValidationSummary()
+                <h1 class="heading-large">
+                    Address of the organisation you're reporting for
+                </h1>
+
+                <div class="dynamic-content default-content">
+                    <p>Enter the correspondence address for the organisation whose gender pay gap data you’re reporting.</p>
+                    <h2 class="heading-medium">Employer's name</h2>
+
+                    @if (!Model.ManualRegistration)
+                    {
+                        <p>@Html.ValueFor(model => model.Name)</p>
+                    }
+                    else
+                    {
+                            <div class="form-group @Html.SetErrorClass(model => model.Name,"error")">
+                                @Html.LabelFor(model => model.Name, "Organisation name", new { @class = "form-label col-md-2" })
+                                @Html.ValidationMessageFor(model => model.Name, "", new { @class = "error-danger" })
+                                <div class="col-md-10">
+                                    @Html.CustomEditorFor(model => model.Name, new { @class = "form-control" })
+                                </div>
+                            </div>
+                    }
+                    <h2 class="heading-medium">Organisation address</h2>
+
+                    <div class="form-group @Html.SetErrorClass(model => model.Address1,"error") form-group-compound">
+                        @Html.LabelFor(model => model.Address1, new { @class = "form-label col-md-2" })
+                        @Html.ValidationMessageFor(model => model.Address1, "", new { @class = "error-danger" })
+                        <div class="col-md-10">
+                            @Html.CustomEditorFor(model => model.Address1, new { @class = "form-control" })
+                        </div>
+                    </div>
+                    <div class="form-group @Html.SetErrorClass(model => model.Address2,"error")">
+                        @Html.LabelFor(model => model.Address2, new { @class = "form-label col-md-2 visuallyhidden" })
+                        @Html.ValidationMessageFor(model => model.Address2, "", new { @class = "error-danger" })
+                        <div class="col-md-10">
+                            @Html.CustomEditorFor(model => model.Address2, new { @class = "form-control", placeholder = "optional" })
+                        </div>
+                    </div>
+
+                    <div class="form-group @Html.SetErrorClass(model => model.Address3,"error")">
+                        @Html.LabelFor(model => model.Address3, htmlAttributes: new { @class = "form-label col-md-2" })
+                        @Html.ValidationMessageFor(model => model.Address3, "", new { @class = "error-danger" })
+                        <div class="col-md-10">
+                            @Html.CustomEditorFor(model => model.Address3, new { @class = "form-control form-control-1-4" })
+                        </div>
+                    </div>
+
+
+                    <div class="form-group @Html.SetErrorClass(model => model.PostCode,"error")">
+                        @Html.LabelFor(model => model.PostCode, new { @class = "form-label col-md-2" })
+                        @Html.ValidationMessageFor(model => model.PostCode, "", new { @class = "error-danger" })
+                        <div class="col-md-10">
+                            @Html.CustomEditorFor(model => model.PostCode, new { @class = "form-control form-control-1-8" })
+                        </div>
+                    </div>
+
+                    <br><br>
+
+                    <input class="button" type="submit" role="button" name="command" value="Continue" />
+
+                </div>
+                <p>
+                    @Html.ActionLink("Back", Model.BackAction)
+                </p>
+            </div>
+        </div>
+    }
+</main>
