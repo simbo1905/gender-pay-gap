@@ -55,27 +55,27 @@ namespace GenderPayGap
             return employers;
         }
 
-        public static EmployerRecord GetEmployer(string companyNumber)
-        {
-            var task = Task.Run<string>(async () => await GetCompany(companyNumber));
+        //public static EmployerRecord GetEmployer(string companyNumber)
+        //{
+        //    var task = Task.Run<string>(async () => await GetCompany(companyNumber));
 
-            dynamic company = JsonConvert.DeserializeObject(task.Result);
-            if (string.IsNullOrWhiteSpace(company)) return null;
+        //    dynamic company = JsonConvert.DeserializeObject(task.Result);
+        //    if (string.IsNullOrWhiteSpace(company)) return null;
 
-            var employer = new EmployerRecord
-            {
-                Name = company.company_name,
-                CompanyNumber = company.company_number,
-                Address1 = company.registered_office_address.address_line_1,
-                Address2 = company.registered_office_address.address_line_2,
-                Address3 = company.registered_office_address.locality,
-                Country = company.registered_office_address.country,
-                PostCode = company.registered_office_address.postal_code,
-                PoBox = company.registered_office_address.po_box,
-                SicCodes = company.sic_codes
-            };
-            return employer;
-        }
+        //    var employer = new EmployerRecord
+        //    {
+        //        Name = company.company_name,
+        //        CompanyNumber = company.company_number,
+        //        Address1 = company.registered_office_address.address_line_1,
+        //        Address2 = company.registered_office_address.address_line_2,
+        //        Address3 = company.registered_office_address.locality,
+        //        Country = company.registered_office_address.country,
+        //        PostCode = company.registered_office_address.postal_code,
+        //        PoBox = company.registered_office_address.po_box,
+        //        SicCodes = company.sic_codes
+        //    };
+        //    return employer;
+        //}
 
         public static string GetSicCodes(string companyNumber)
         {

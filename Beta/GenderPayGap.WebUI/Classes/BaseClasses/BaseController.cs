@@ -244,7 +244,12 @@ namespace GenderPayGap
                 return View("CustomError", new ErrorViewModel(1104));
             }
 
-            if (userOrg.Organisation.SectorType == SectorTypes.Private)
+            if (userOrg.Organisation.Status == OrganisationStatuses.Pending)
+            {
+                if (IsAnyAction("Register/RequestReceived")) return null;
+                return RedirectToAction("RequestReceived", "Register");
+            }
+            else if (userOrg.Organisation.SectorType == SectorTypes.Private)
             {
                 if (userOrg.PINConfirmedDate.EqualsI(null, DateTime.MinValue))
                 {
@@ -263,21 +268,18 @@ namespace GenderPayGap
                     }
 
                     //If PIN resends are allowed and currently on PIN send page then allow it to continue
-                    var remainingTime = userOrg.PINSentDate.Value.AddHours(Settings.Default.PinInPostMinRepostDays) -
+                    var remainingTime = userOrg.PINSentDate.Value.AddDays(Settings.Default.PinInPostMinRepostDays) -
                                         DateTime.Now;
                     if (remainingTime <= TimeSpan.Zero && IsAnyAction("Register/PINSent", "Register/RequestPIN"))
                         return null;
 
                     //If PIN Not expired redirect to ActivateService where they can either enter the same pin or request a new one 
+                    if (IsAnyAction("Register/RequestPIN")) return View("CustomError", new ErrorViewModel(1120, new { remainingTime = remainingTime.ToFriendly(maxParts: 2) }));
                     if (IsAnyAction("Register/ActivateService")) return null;
                     return RedirectToAction("ActivateService", "Register");
                 }
             }
-            else if (userOrg.Organisation.Status==OrganisationStatuses.Pending)
-            {
-                if (IsAnyAction("Register/RequestReceived")) return null;
-                return RedirectToAction("RequestReceived", "Register");
-            }
+            
 
             //Ensure user has completed the registration process
             //If user is fully registered then start submit process

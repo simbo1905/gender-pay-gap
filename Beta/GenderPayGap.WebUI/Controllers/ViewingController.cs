@@ -44,6 +44,12 @@ namespace GenderPayGap.WebUI.Controllers
         }
         #endregion
 
+        public string LastSearch
+        {
+            get { return Session["LastSearch"] as string; }
+            set { Session["LastSearch"] = value; }
+        }
+
         [Route]
         [OutputCache(Duration = 86400, VaryByParam = "none")]
         public ActionResult Redirect()
@@ -91,7 +97,7 @@ namespace GenderPayGap.WebUI.Controllers
                 model.LastPage = page;
                 model.LastPageSize = Settings.Default.EmployerPageSize;
                 model.LastYear = year;
-
+                LastSearch = Request.Url.PathAndQuery;
                 model.NewSectors = newSectors;
 
                 var sources = new List<Core.Classes.SelectedItem>();
@@ -460,7 +466,7 @@ namespace GenderPayGap.WebUI.Controllers
             model.Address = org.ActiveAddress.GetAddress();
             model.OrganisationName = org.OrganisationName;
             model.Sector = org.GetSicSectors(",<br/>");
-            model.ReturnUrl = string.IsNullOrWhiteSpace(id) ? "Complete" : null;
+            model.ReturnUrl = string.IsNullOrWhiteSpace(id) ? null : LastSearch;
             switch (view)
             {
                 default:

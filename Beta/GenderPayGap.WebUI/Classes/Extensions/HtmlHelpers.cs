@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Globalization;
@@ -127,8 +128,8 @@ namespace GenderPayGap.WebUI.Classes
             string propertyName = ExpressionHelper.GetExpressionText(expression);
             var propertyInfo = containerType.GetPropertyInfo(propertyName);
 
-            var displayAttribute = propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
-            var displayName = displayAttribute == null ? propertyName : displayAttribute.Name;
+            var displayAttribute = propertyInfo.GetCustomAttributes(typeof(DisplayNameAttribute), false).FirstOrDefault() as DisplayNameAttribute;
+            var displayName = displayAttribute == null ? propertyName : displayAttribute.DisplayName;
 
             string par1 = null;
             string par2 = null;

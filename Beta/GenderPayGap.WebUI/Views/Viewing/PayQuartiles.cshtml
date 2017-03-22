@@ -9,7 +9,10 @@
 <main id="content" role="main">
     <div class="breadcrumbs dynamic-content default-content" style="display: block;">
         <ol>
-            <li style="display: block; padding-top: 0.75em; padding-bottom: 0;">&lt; @Html.ActionLink(Model.ReturnUrl.EqualsI("Complete") ? "View more employers" : "Search results", "SearchResults")</li>
+            <li style="display: block; padding-top: 0.75em; padding-bottom: 0;">
+                &lt;
+                <a href="@(string.IsNullOrWhiteSpace(Model.ReturnUrl) ? @Url.Action("SearchResults") : Model.ReturnUrl)">@(string.IsNullOrWhiteSpace(Model.ReturnUrl) ? "View more employers" : "Search results")</a>
+            </li>
         </ol>
     </div>
 
@@ -21,46 +24,40 @@
         <div class="grid-row">
             <div class="column-two-thirds gpg-details">
                 <h1 class="heading-large" style="margin-top: 0.3em;">
-                    <span class="heading-secondary">@Model.AccountingDate.Year to @(Model.AccountingDate.Year+1) gender pay gap data</span>
+                    <span class="heading-secondary">@Model.AccountingDate.Year to @(Model.AccountingDate.Year + 1) gender pay gap data</span>
                     <span id="companyname">@Model.OrganisationName</span>
                 </h1>
                 <p><span class="font-small">Address:</span> <span id="address">@Model.Address</span></p>
                 <p><span class="font-small">Sector:</span> <span id="sector">@Model.Sector</span></p>
                 <div class="container">
                     <ul class="tabs">
-                        <li class="tab-link" data-tab="tab-1">@Html.ActionLink("Hourly rate", "EmployerDetails", new { view = "hourly-rate", id = Model.GetEncryptedId() })</li>
-                        <li class="tab-link current" data-tab="tab-2">Pay quartiles</li>
-                        <li class="tab-link" data-tab="tab-3">@Html.ActionLink("Bonus pay", "EmployerDetails", new { view = "bonus-pay", id = Model.GetEncryptedId() })</li>
+                        @if (string.IsNullOrWhiteSpace(Request.QueryString["id"]))
+                        {
+                            <li class="tab-link" data-tab="tab-1">@Html.ActionLink("Hourly rate", "EmployerDetails", new { view = "hourly-rate"})</li>
+                            <li class="tab-link current" data-tab="tab-2">Pay quartiles</li>
+                            <li class="tab-link" data-tab="tab-3">@Html.ActionLink("Bonus pay", "EmployerDetails", new { view = "bonus-pay"})</li>
+                        }
+                        else
+                        {
+                            <li class="tab-link" data-tab="tab-1">@Html.ActionLink("Hourly rate", "EmployerDetails", new { view = "hourly-rate", id = Model.GetEncryptedId() })</li>
+                            <li class="tab-link current" data-tab="tab-2">Pay quartiles</li>
+                            <li class="tab-link" data-tab="tab-3">@Html.ActionLink("Bonus pay", "EmployerDetails", new { view = "bonus-pay", id = Model.GetEncryptedId() })</li>
+                        }
                     </ul>
                     <div id="tab-2" class="tab-content current">
                         <h2 class="heading-medium ">Pay quartiles</h2>
                         <p>How many men and women are in each quarter of the employer's payroll.</p>
-                        <p class="header">Lower quartile</p>
-                        <div class="grid-row">
+                        <p class="header">Top quartile </p>
+                        <div class="grid-row ">
                             <div class="column-one-half">
                                 <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}",Model.MaleLowerPayBand)% </h4>
+                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.MaleUpperQuartilePayBand)% </h4>
                                     <p class="font-small">MEN</p>
                                 </div>
                             </div>
                             <div class="column-one-half">
                                 <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}",Model.FemaleLowerPayBand)%</h4>
-                                    <p class="font-small">WOMEN </p>
-                                </div>
-                            </div>
-                        </div>
-                        <p class="header">Lower middle quartile</p>
-                        <div class="grid-row">
-                            <div class="column-one-half">
-                                <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}",Model.MaleMiddlePayBand)% </h4>
-                                    <p class="font-small">MEN</p>
-                                </div>
-                            </div>
-                            <div class="column-one-half">
-                                <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}",Model.FemaleMiddlePayBand)%</h4>
+                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.FemaleUpperQuartilePayBand)%</h4>
                                     <p class="font-small">WOMEN </p>
                                 </div>
                             </div>
@@ -69,28 +66,43 @@
                         <div class="grid-row">
                             <div class="column-one-half">
                                 <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}",Model.MaleUpperPayBand)%</h4>
+                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.MaleUpperPayBand)%</h4>
                                     <p class="font-small">MEN</p>
                                 </div>
                             </div>
                             <div class="column-one-half">
                                 <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}",Model.FemaleUpperPayBand)%</h4>
+                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.FemaleUpperPayBand)%</h4>
                                     <p class="font-small">WOMEN </p>
                                 </div>
                             </div>
                         </div>
-                        <p class="header">Top quartile </p>
-                        <div class="grid-row ">
+                        <p class="header">Lower middle quartile</p>
+                        <div class="grid-row">
                             <div class="column-one-half">
                                 <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}",Model.MaleUpperQuartilePayBand)% </h4>
+                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.MaleMiddlePayBand)% </h4>
                                     <p class="font-small">MEN</p>
                                 </div>
                             </div>
                             <div class="column-one-half">
                                 <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}",Model.FemaleUpperQuartilePayBand)%</h4>
+                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.FemaleMiddlePayBand)%</h4>
+                                    <p class="font-small">WOMEN </p>
+                                </div>
+                            </div>
+                        </div>
+                        <p class="header">Lower quartile</p>
+                        <div class="grid-row">
+                            <div class="column-one-half">
+                                <div class="data">
+                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.MaleLowerPayBand)% </h4>
+                                    <p class="font-small">MEN</p>
+                                </div>
+                            </div>
+                            <div class="column-one-half">
+                                <div class="data">
+                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.FemaleLowerPayBand)%</h4>
                                     <p class="font-small">WOMEN </p>
                                 </div>
                             </div>
@@ -110,7 +122,8 @@
                         </div>
                         <div class="section flush sign" style="display: block;">
                             <h3 class="heading-small">Person responsible for employer's report </h3>
-                            <p class="font-xsmall">@Model.FirstName @Model.LastName<br>@Model.JobTitle
+                            <p class="font-xsmall">
+                                @Model.FirstName @Model.LastName<br>@Model.JobTitle
                             </p>
                         </div>
                     </nav>

@@ -414,12 +414,16 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
+            ModelState.Include("SearchText");
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<OrganisationViewModel>();
+                return View("OrganisationSearch", model);
+            }
             //Make sure we can load employers from session
             var m = this.UnstashModel<OrganisationViewModel>();
             if (m == null) return View("CustomError", new ErrorViewModel(1112));
             model.Employers = m.Employers;
-
-            ModelState.Include("SearchText");
 
             model.ManualRegistration = true;
             model.BackAction = "OrganisationSearch";
@@ -537,7 +541,7 @@ namespace GenderPayGap.WebUI.Controllers
             bool doSearch = false;
             if (command == "search")
             {
-                model.SearchText = model.SearchText.Trim();
+                model.SearchText = model.SearchText.TrimI();
 
                 if (string.IsNullOrWhiteSpace(model.SearchText))
                 {
@@ -894,7 +898,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             //Save the new organisation
             Organisation org = null;
-            if (model.SectorType == SectorTypes.Private)
+            if (employer!=null && model.SectorType == SectorTypes.Private)
                 org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.PrivateSectorReference == employer.CompanyNumber);
             else
                 org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.SectorType == SectorTypes.Public && o.OrganisationName.ToLower() == model.Name.ToLower());
@@ -916,7 +920,7 @@ namespace GenderPayGap.WebUI.Controllers
                     DataRepository.SaveChanges();
 
                     //Use public sector code or get from employer
-                    var sicCodes = model.SectorType == SectorTypes.Public ? new[] {1} : employer.GetSicCodes();
+                    var sicCodes = employer==null || model.SectorType == SectorTypes.Public ? new[] {1} : employer.GetSicCodes();
 
                     //Save the sic codes for the organisation
                     var allSicCodes = DataRepository.GetAll<SicCode>();
@@ -997,11 +1001,7 @@ namespace GenderPayGap.WebUI.Controllers
                     DataRepository.SaveChanges();
 
                     //Send request to GEO
-                    var adminEmail = GovNotifyAPI.GEOGroupEmailAddress;
-#if DEBUG
-                    if (string.IsNullOrWhiteSpace(adminEmail)) adminEmail = currentUser.EmailAddress;
-#endif
-                    SendRegistrationRequest(userOrg, adminEmail, $"{model.ContactFirstName} {currentUser.ContactLastName} ({currentUser.JobTitle})", currentUser.ContactOrganisation, org.OrganisationName, address.GetAddress());
+                    SendRegistrationRequest(userOrg, $"{model.ContactFirstName} {currentUser.ContactLastName} ({currentUser.JobTitle})", currentUser.ContactOrganisation, org.OrganisationName, address.GetAddress());
                 }
 
                 //Set the status to active
@@ -1026,7 +1026,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         //Send the registration request
-        protected void SendRegistrationRequest(UserOrganisation userOrg, string adminEmail, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
+        protected void SendRegistrationRequest(UserOrganisation userOrg, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
         {
             //Send a verification link to the email address
             try
@@ -1034,7 +1034,7 @@ namespace GenderPayGap.WebUI.Controllers
                 var reviewCode = Encryption.EncryptQuerystring(userOrg.UserId + ":" + userOrg.OrganisationId + ":" + DateTime.Now.ToSmallDateTime());
                 var reviewUrl = Url.Action("ReviewRequest", "Register", new { code = reviewCode }, "https");
 
-                if (!GovNotifyAPI.SendRegistrationRequest(adminEmail,reviewUrl,contactName, contactOrg, reportingOrg, reportingAddress))
+                if (!GovNotifyAPI.SendRegistrationRequest(reviewUrl,contactName, contactOrg, reportingOrg, reportingAddress))
                     throw new Exception("Could not send registration request email. Please try again later.");
             }
             catch (Exception ex)
@@ -1396,7 +1396,7 @@ namespace GenderPayGap.WebUI.Controllers
             var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
 
             //If a pin has never been sent or resend button submitted then send one immediately
-            if (string.IsNullOrWhiteSpace(userOrg.PINHash) || userOrg.PINSentDate.EqualsI(null, DateTime.MinValue))
+            if (string.IsNullOrWhiteSpace(userOrg.PINHash) || userOrg.PINSentDate.EqualsI(null, DateTime.MinValue) || userOrg.PINSentDate.Value.AddDays(Settings.Default.PinInPostExpiryDays) < DateTime.Now)
             {
                 try
                 {
@@ -1404,8 +1404,9 @@ namespace GenderPayGap.WebUI.Controllers
                     var pin = ConfigurationManager.AppSettings["TESTING-Pin"];
                     if (string.IsNullOrWhiteSpace(pin))pin = Crypto.GeneratePasscode(Properties.Settings.Default.PINChars.ToCharArray(),Properties.Settings.Default.PINLength);
 
+                    var now = DateTime.Now;
                     //Try and send the PIN in post
-                    if (!this.SendPinInPost(currentUser, userOrg.Organisation, pin.ToString()))
+                    if (!this.SendPinInPost(userOrg, pin, now))
                         throw new Exception("Could not send PIN in the POST.");
 
                     //Try and send the confirmation email
@@ -1414,14 +1415,13 @@ namespace GenderPayGap.WebUI.Controllers
 
                     //Save the PIN and confirm code
                     userOrg.PINHash = pin.GetSHA512Checksum();
-                    userOrg.PINSentDate = DateTime.Now;
+                    userOrg.PINSentDate = now;
                     DataRepository.SaveChanges();
                 }
                 catch (Exception ex)
                 {
                     MvcApplication.Log.WriteLine(ex.Message);
-                    AddModelError(3014);
-                    return View("PINSent");
+                    return View("CustomError", new ErrorViewModel(3014));
                 }
             }
 
@@ -1461,7 +1461,7 @@ namespace GenderPayGap.WebUI.Controllers
             ViewBag.UserFullName = currentUser.Fullname;
             ViewBag.UserJobTitle = currentUser.JobTitle;
             ViewBag.Organisation = userOrg.Organisation.OrganisationName;
-            ViewBag.Address = userOrg.Organisation.ActiveAddress.GetAddress(",<br/>");
+            ViewBag.Address = userOrg.Address.GetAddress(",<br/>");
             //Show the PIN textbox and button
             return View("RequestPIN");
         }

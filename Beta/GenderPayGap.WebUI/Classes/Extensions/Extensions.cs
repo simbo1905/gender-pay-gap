@@ -4,6 +4,7 @@ using GenderPayGap.Models.SqlDatabase;
 using IdentityServer3.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -101,13 +102,13 @@ namespace GenderPayGap.WebUI.Classes
             return GovNotifyAPI.SendVerifyEmail(verifyUrl,emailAddress, verifyCode);
         }
  
-        public static bool SendPinInPost(this RegisterController controller, User user, Organisation organisation, string pin)
+        public static bool SendPinInPost(this RegisterController controller, UserOrganisation userOrg, string pin, DateTime sendDate)
         {
-            var name = user.Fullname + " (" + user.JobTitle + ")";
             var returnUrl = controller.Url.Action("ActivateService", "Register",null,"https");
-            var address = organisation.ActiveAddress ?? organisation.PendingAddress;
-            if (GovNotifyAPI.ManualPip) return GovNotifyAPI.SendPinInPostManual(returnUrl, name, organisation.OrganisationName, address.GetList(), pin);
-            return GovNotifyAPI.SendPinInPost(returnUrl, name, organisation.OrganisationName, address.GetList(), pin);
+
+            var imagePath = new System.UriBuilder(controller.Request.Url.AbsoluteUri){Path = controller.Url.Content(@"~/Content/img/")}.Uri.ToString();
+
+            return GovNotifyAPI.SendPinInPost(imagePath,returnUrl, userOrg.User.Fullname, userOrg.User.JobTitle, userOrg.Organisation.OrganisationName, userOrg.Address.GetList(), pin, sendDate, sendDate.AddDays(Properties.Settings.Default.PinInPostExpiryDays));
         }
         #endregion
 
@@ -195,8 +196,8 @@ namespace GenderPayGap.WebUI.Classes
                 var attributes = propertyInfo == null ? null : propertyInfo.GetCustomAttributes(typeof(ValidationAttribute), false).ToList<ValidationAttribute>();
 
                 //Get the display name
-                var displayAttribute = propertyInfo==null ? null : propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
-                var displayName = displayAttribute == null ? propertyName : displayAttribute.Name;
+                var displayAttribute = propertyInfo==null ? null : propertyInfo.GetCustomAttributes(typeof(DisplayNameAttribute), false).FirstOrDefault() as DisplayNameAttribute;
+                var displayName = displayAttribute == null ? propertyName : displayAttribute.DisplayName;
 
 
                 foreach (var error in modelState.Value.Errors)

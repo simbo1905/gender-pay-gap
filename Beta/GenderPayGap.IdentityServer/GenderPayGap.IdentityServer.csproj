@@ -126,6 +126,8 @@
     </Content>
     <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\wa-t1pr-gpg - Web Deploy.pubxml" />
+    <None Include="Properties\PublishProfiles\wa-t1pp-gpg - Web Deploy.pubxml" />
     <None Include="Properties\PublishProfiles\wa-t1te-gpg - Web Deploy.pubxml" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
@@ -153,6 +155,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Properties\PublishProfiles\wa-t1dv-gpg - Web Deploy.pubxml.user" />
+    <Content Include="Properties\PublishProfiles\wa-t1pr-gpg - Web Deploy.pubxml.user" />
+    <Content Include="Properties\PublishProfiles\wa-t1pp-gpg - Web Deploy.pubxml.user" />
     <Content Include="Properties\PublishProfiles\wa-t1te-gpg - Web Deploy.pubxml.user" />
     <Content Include="templates\_layout.html" />
     <Content Include="templates\_error.html" />

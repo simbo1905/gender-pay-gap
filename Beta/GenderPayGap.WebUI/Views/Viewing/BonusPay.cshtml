@@ -9,7 +9,10 @@
 <main id="content" role="main">
     <div class="breadcrumbs dynamic-content default-content" style="display: block;">
         <ol>
-            <li style="display: block; padding-top: 0.75em; padding-bottom: 0;">&lt; @Html.ActionLink(Model.ReturnUrl.EqualsI("Complete") ? "View more employers" : "Search results", "SearchResults")</li>
+            <li style="display: block; padding-top: 0.75em; padding-bottom: 0;">
+                &lt;
+                <a href="@(string.IsNullOrWhiteSpace(Model.ReturnUrl) ? @Url.Action("SearchResults") : Model.ReturnUrl)">@(string.IsNullOrWhiteSpace(Model.ReturnUrl) ? "View more employers" : "Search results")</a>
+            </li>
         </ol>
     </div>
 
@@ -27,9 +30,18 @@
                 <p><span class="font-small">Sector:</span> <span id="sector">@Model.Sector</span></p>
                 <div class="container">
                     <ul class="tabs">
-                        <li class="tab-link" data-tab="tab-1">@Html.ActionLink("Hourly rate", "EmployerDetails", new {view = "hourly-rate", id = Model.GetEncryptedId()})</li>
-                        <li class="tab-link" data-tab="tab-2">@Html.ActionLink("Pay quartiles", "EmployerDetails", new {view = "pay-quartiles", id = Model.GetEncryptedId()})</li>
-                        <li class="tab-link current" data-tab="tab-3">Bonus pay</li>
+                        @if (string.IsNullOrWhiteSpace(Request.QueryString["id"]))
+                        {
+                            <li class="tab-link" data-tab="tab-1">@Html.ActionLink("Hourly rate", "EmployerDetails", new {view = "hourly-rate"})</li>
+                            <li class="tab-link" data-tab="tab-2">@Html.ActionLink("Pay quartiles", "EmployerDetails", new {view = "pay-quartiles"})</li>
+                            <li class="tab-link current" data-tab="tab-3">Bonus pay</li>
+                        }
+                        else
+                        {
+                            <li class="tab-link" data-tab="tab-1">@Html.ActionLink("Hourly rate", "EmployerDetails", new { view = "hourly-rate", id = Model.GetEncryptedId() })</li>
+                            <li class="tab-link" data-tab="tab-2">@Html.ActionLink("Pay quartiles", "EmployerDetails", new { view = "pay-quartiles", id = Model.GetEncryptedId() })</li>
+                            <li class="tab-link current" data-tab="tab-3">Bonus pay</li>
+                        }
                     </ul>
                     <div id="tab-3" class="tab-content current">
                         <h2 class="heading-medium no-sub"><span class="gender">Mens'</span> bonus pay is

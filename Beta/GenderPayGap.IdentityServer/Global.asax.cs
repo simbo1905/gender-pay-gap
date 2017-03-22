@@ -47,11 +47,15 @@ namespace GpgIdentityServer
 
         }
 
-        protected void Session_Start() { }
+        protected void Session_Start()
+        {
+        }
 
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
-
+            //Redirect to holding mage if in maintenance mode
+            if (ConfigurationManager.AppSettings["MaintenanceMode"].ToBoolean())
+                HttpContext.Current.Response.Redirect(@"/Error/service-unavailable");
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)
