@@ -286,7 +286,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
             model.ReturnUrl = returnUrl;
 
-            return View(model);
+            return View("CheckData", model);
         }
 
         [HttpPost]

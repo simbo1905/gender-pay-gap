@@ -1738,7 +1738,7 @@ namespace GenderPayGap.Tests
                 SectorType = SectorTypes.Private
             };
 
-            var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
+            var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
             controller.Bind(model);
 
             //Stash the object for the unstash to happen in code

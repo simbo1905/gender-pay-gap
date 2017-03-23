@@ -54,6 +54,14 @@ namespace GenderPayGap.Tests
             requestMock.SetupGet(x => x.ApplicationPath).Returns("/");
             requestMock.SetupGet(x => x.Url).Returns(new Uri(Url, UriKind.Absolute));
             requestMock.SetupGet(x => x.ServerVariables).Returns(new NameValueCollection());
+      
+            //Done:Added the queryString Dictionary property for mock object
+            var queryString = new NameValueCollection()
+                {
+                    {"code","abcdefg" }
+                };
+            //queryString.Add("code", "abcdefg");
+            requestMock.SetupGet(x => x.QueryString).Returns(queryString);
 
             //Mock HttpResponse
             var responseMock = new Mock<HttpResponseBase>();
@@ -68,6 +76,7 @@ namespace GenderPayGap.Tests
             contextMock.SetupGet(ctx => ctx.Request).Returns(requestMock.Object);
             contextMock.SetupGet(ctx => ctx.Response).Returns(responseMock.Object);
             contextMock.Setup(ctx => ctx.Session).Returns(sessionMock);
+            MvcApplication.FileRepository = builder.Resolve<IFileRepository>();
 
             //Mock the httpcontext to the controllercontext
             var controllerContextMock = new Mock<ControllerContext>();
@@ -112,6 +121,7 @@ namespace GenderPayGap.Tests
             builder.RegisterType<MockPublicEmployerRepository>().As<IPagedRepository<EmployerRecord>>().Keyed<IPagedRepository<EmployerRecord>>("Public");
             builder.Register(g => new MockGovNotify()).As<IGovNotify>();
 
+            builder.Register(c => new SystemFileRepository()).As<IFileRepository>();
             return builder.Build();
         }
 
@@ -195,6 +205,7 @@ namespace GenderPayGap.Tests
         public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize)
         {
             var result = new PagedResult<EmployerRecord>();
+            //DONE:NastyBug! Page method arguments Page(pageSize, page) where in vice-versa positions as in Page(page, pageSize)! now fixed 
             result.Results = AllEmployers.Where(e => e.Name.ContainsI(searchText)).Page(page, pageSize).ToList();
             result.RowCount = result.Results.Count;
             result.CurrentPage = page;
@@ -233,6 +244,7 @@ namespace GenderPayGap.Tests
             //TODO: ste -> using this until Page function lines 879 and 888  in Lists.cs is fixed.  
             result.Results = AllEmployers.Where(e => e.Name.ContainsI(searchText)).ToList();
 
+            //DONE:NastyBug! Page method arguments Page(pageSize, page) where in vice-versa positions as in Page(page, pageSize)! now fixed 
             result.RowCount = totalRecords = result.Results.Count;
             result.CurrentPage = page;
             result.PageSize = pageSize;
@@ -261,6 +273,7 @@ namespace GenderPayGap.Tests
         public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize)
         {
             var result = new PagedResult<EmployerRecord>();
+            //DONE:NastyBug! Page method arguments Page(pageSize, page) where in vice-versa positions as in Page(page, pageSize)! now fixed 
             result.Results = AllEmployers.Where(e => e.Name.ContainsI(searchText)).Page(page, pageSize).ToList();
             result.RowCount = result.Results.Count;
             result.CurrentPage = page;
@@ -282,23 +295,23 @@ namespace GenderPayGap.Tests
             var result = new PagedResult<EmployerRecord>()
             {
                 Results = new List<EmployerRecord>()
-                            {
-                                new EmployerRecord() { Name="2Gether NHS Foundation Trust",                EmailPatterns = "nhs.uk" },
-                                new EmployerRecord() { Name="5 Boroughs Partnership NHS Foundation Trust", EmailPatterns = "nhs.uk" },
-                                new EmployerRecord() { Name="Abbots Langley Parish Council",               EmailPatterns = "abbotslangley-pc.gov.uk" },
-                                new EmployerRecord() { Name="Aberdeen City Council",                       EmailPatterns = "aberdeencityandshire-sdpa.gov.uk" },
-                                new EmployerRecord() { Name="Aberdeenshire Council",                       EmailPatterns = "aberdeenshire.gov.uk" },
-                                new EmployerRecord() { Name="Aberford &amp; District Parish Council",      EmailPatterns = "aberford-pc.gov.uk" },
-                                new EmployerRecord() { Name="Abergavenny Town Council",                    EmailPatterns = "AbergavennyTownCouncil.gov.uk" },
-                                new EmployerRecord() { Name="Aberporth Community Council",                 EmailPatterns = "aberporthcommunitycouncil.gov.uk" },
-                                new EmployerRecord() { Name="Abertilly and Llanhilleth Community Council", EmailPatterns = "abertilleryandllanhilleth-wcc.gov.uk" },
-                                new EmployerRecord() { Name="Aberystwyth Town Council",                    EmailPatterns = "aberystwyth.gov.uk" },
-                                new EmployerRecord() { Name="Abingdon Town Council",                       EmailPatterns = "abingdon.gov.uk" },
-                                new EmployerRecord() { Name="Academies Enterprise Trust",                  EmailPatterns = "" },
-                                new EmployerRecord() { Name="Academy Transformation Trust",                EmailPatterns = "" },
-                                new EmployerRecord() { Name="Account NI DFP",                              EmailPatterns = "accountni.gov.uk" },
-                                new EmployerRecord() { Name="Accountant in Bankruptcy",                    EmailPatterns = "aib.gov.uk" }
-                            }
+                {
+                    new EmployerRecord() { Name="2Gether NHS Foundation Trust",                EmailPatterns = "nhs.uk" },
+                    new EmployerRecord() { Name="5 Boroughs Partnership NHS Foundation Trust", EmailPatterns = "nhs.uk" },
+                    new EmployerRecord() { Name="Abbots Langley Parish Council",               EmailPatterns = "abbotslangley-pc.gov.uk" },
+                    new EmployerRecord() { Name="Aberdeen City Council",                       EmailPatterns = "aberdeencityandshire-sdpa.gov.uk" },
+                    new EmployerRecord() { Name="Aberdeenshire Council",                       EmailPatterns = "aberdeenshire.gov.uk" },
+                    new EmployerRecord() { Name="Aberford &amp; District Parish Council",      EmailPatterns = "aberford-pc.gov.uk" },
+                    new EmployerRecord() { Name="Abergavenny Town Council",                    EmailPatterns = "AbergavennyTownCouncil.gov.uk" },
+                    new EmployerRecord() { Name="Aberporth Community Council",                 EmailPatterns = "aberporthcommunitycouncil.gov.uk" },
+                    new EmployerRecord() { Name="Abertilly and Llanhilleth Community Council", EmailPatterns = "abertilleryandllanhilleth-wcc.gov.uk" },
+                    new EmployerRecord() { Name="Aberystwyth Town Council",                    EmailPatterns = "aberystwyth.gov.uk" },
+                    new EmployerRecord() { Name="Abingdon Town Council",                       EmailPatterns = "abingdon.gov.uk" },
+                    new EmployerRecord() { Name="Academies Enterprise Trust",                  EmailPatterns = "" },
+                    new EmployerRecord() { Name="Academy Transformation Trust",                EmailPatterns = "" },
+                    new EmployerRecord() { Name="Account NI DFP",                              EmailPatterns = "accountni.gov.uk" },
+                    new EmployerRecord() { Name="Accountant in Bankruptcy",                    EmailPatterns = "aib.gov.uk" }
+                }
             };
 
             result.Results = AllEmployers.Where(e => e.Name.ContainsI(searchText)).Page(page, pageSize).ToList();
@@ -310,7 +323,6 @@ namespace GenderPayGap.Tests
             // result.Results = searchResults;
             return result;
         }
-
     }
 
     public class MockGovNotify : IGovNotify

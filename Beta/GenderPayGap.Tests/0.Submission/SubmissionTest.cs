@@ -1466,7 +1466,6 @@ namespace GenderPayGap.Tests.Submission
         #region Review
 
         #region Positive Tests
-        [Ignore("This test needs fixing")]
         [Test]
         [Description("CheckData should fail when any field is empty")]
         public void CheckData_Get_Success()
@@ -1481,7 +1480,26 @@ namespace GenderPayGap.Tests.Submission
             routeData.Values.Add("Controller", "Submit");
 
             //Stash an object to pass in for this.ClearStash()
-            var model = new ReturnViewModel();
+            var model = new ReturnViewModel()
+                {
+                  DiffMeanBonusPercent = 12,
+                  DiffMeanHourlyPayPercent = 14,
+                  DiffMedianBonusPercent = 12,
+                  DiffMedianHourlyPercent = 43,
+                  FemaleLowerPayBand = 23,
+                  FemaleMedianBonusPayPercent = 21,
+                  FemaleMiddlePayBand = 16,
+                  FemaleUpperPayBand = 17,
+                  FemaleUpperQuartilePayBand = 41,
+                  MaleLowerPayBand = 12,
+                  MaleMedianBonusPayPercent = 11,
+                  MaleMiddlePayBand = 56,
+                  MaleUpperPayBand = 33,
+                  MaleUpperQuartilePayBand = 42,
+                  OrganisationId = 1,
+                  OrganisationName = "test org name",
+                  ReturnId = 1,
+                };
 
             var controller = TestHelper.GetController<SubmitController>(user.UserId, routeData, user, organisation, userOrganisation);
 

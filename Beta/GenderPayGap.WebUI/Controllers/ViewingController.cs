@@ -54,7 +54,6 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpGet]
         [Route("search-results")]
         [OutputCache(Duration=3600,VaryByParam = "search;page;sectors")]
-
         public ActionResult SearchResults(string search = null, int year = 0, int page = 1, string sectors = null)
         {
             //Show the maintenance page
@@ -375,7 +374,6 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpGet]
         [Route("employer-details")]
         [OutputCache(Duration = 3600, VaryByParam = "id;view")]
-
         public ActionResult EmployerDetails(string id=null, string view=null)
         {
             //Show the maintenance page
