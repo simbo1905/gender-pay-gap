@@ -920,17 +920,20 @@ namespace GenderPayGap.WebUI.Controllers
                     DataRepository.SaveChanges();
 
                     //Use public sector code or get from employer
-                    var sicCodes = employer==null || model.SectorType == SectorTypes.Public ? new[] {1} : employer.GetSicCodes();
+                    var sicCodes = employer!=null ? employer.GetSicCodes() : model.SectorType == SectorTypes.Public ? new[] {1} : null;
 
                     //Save the sic codes for the organisation
-                    var allSicCodes = DataRepository.GetAll<SicCode>();
-                    foreach (var code in sicCodes)
+                    if (sicCodes != null)
                     {
-                        var sicCode = code == 0 ? null : allSicCodes.FirstOrDefault(sic => sic.SicCodeId == code);
-                        if (sicCode == null)
-                            MvcApplication.Log.WriteLine($"Invalid SIC code '{code}' received from companies house");
-                        else
-                            org.OrganisationSicCodes.Add(new OrganisationSicCode() {Organisation = org, SicCode = sicCode});
+                        var allSicCodes = DataRepository.GetAll<SicCode>();
+                        foreach (var code in sicCodes)
+                        {
+                            var sicCode = code == 0 ? null : allSicCodes.FirstOrDefault(sic => sic.SicCodeId == code);
+                            if (sicCode == null)
+                                MvcApplication.Log.WriteLine($"Invalid SIC code '{code}' received from companies house");
+                            else
+                                org.OrganisationSicCodes.Add(new OrganisationSicCode() {Organisation = org, SicCode = sicCode});
+                        }
                     }
 
                     org.SetStatus(model.ManualRegistration ? OrganisationStatuses.Pending : OrganisationStatuses.Active, currentUser.UserId);
@@ -1516,6 +1519,7 @@ namespace GenderPayGap.WebUI.Controllers
             model.PIN = null;
             model.AllowResend = remaining <= TimeSpan.Zero;
             model.Remaining = remaining.ToFriendly(maxParts: 2);
+
             //Show the PIN textbox and button
             return View("ActivateService", model);
         }
@@ -1549,7 +1553,7 @@ namespace GenderPayGap.WebUI.Controllers
                 return View("CustomError", new ErrorViewModel(1113, new { remainingTime = remaining.ToFriendly(maxParts: 2) }));
             }
 
-            if (userOrg.PINHash == model.PIN.ToUpper().GetSHA512Checksum())
+            if (userOrg.PINHash == model.PIN.TrimI().ToUpper().GetSHA512Checksum())
             {
                 //Set the user org as confirmed
                 userOrg.PINConfirmedDate = DateTime.Now;
