@@ -113,7 +113,7 @@ namespace GenderPayGap.Models.SqlDatabase
                 Name = OrganisationName,
                 CompanyNumber = PrivateSectorReference,
                 SicSectors = GetSicSectors(",<br/>"),
-                SicCodes = OrganisationSicCodes.Select(sic=>sic.SicCodeId).ToDelimitedString(),
+                SicCodes = OrganisationSicCodes?.Select(sic=>sic.SicCodeId).ToDelimitedString(),
                 Address1 = address.Address1,
                 Address2 = address.Address2,
                 Address3 = address.Address3,
