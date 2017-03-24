@@ -142,6 +142,10 @@ namespace GenderPayGap
                 else
                     filterContext.Result = View("CustomError", new ErrorViewModel(1003));
             }
+
+            //Track the exception with Application Insights if it is available
+            MvcApplication.AppInsightsClient?.TrackException(filterContext.Exception);
+
         }
 
         protected void AddModelError(string propertyName, string errorContext, object parameters = null)

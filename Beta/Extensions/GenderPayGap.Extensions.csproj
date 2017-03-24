@@ -7,8 +7,8 @@
     <ProjectGuid>{50D3DD00-E740-410B-87F6-C4F5FBD0657C}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Extensions</RootNamespace>
-    <AssemblyName>Extensions</AssemblyName>
+    <RootNamespace>GenderPayGap.Extensions</RootNamespace>
+    <AssemblyName>GenderPayGap.Extensions</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

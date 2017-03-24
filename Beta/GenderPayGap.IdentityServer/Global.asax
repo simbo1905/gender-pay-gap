@@ -1,1 +1,1 @@
-﻿<%@ Application Codebehind="Global.asax.cs" Inherits="GpgIdentityServer.Global" Language="C#" %>
+﻿<%@ Application Codebehind="Global.asax.cs" Inherits="GenderPayGap.IdentityServer.Global" Language="C#" %>

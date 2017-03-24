@@ -7,7 +7,7 @@ using Extensions;
 using IdentityServer3.Core.Events;
 using IdentityServer3.Core.Services;
 
-namespace GpgIdentityServer
+namespace GenderPayGap.IdentityServer
 {
     public class AuditEventService : IEventService
     {

@@ -13,9 +13,9 @@ using Microsoft.Owin.Security.Facebook;
 using Serilog;
 using IdentityServer3.Core.Services.Default;
 
-[assembly: OwinStartup(typeof(GpgIdentityServer.Startup))]
+[assembly: OwinStartup(typeof(GenderPayGap.IdentityServer.Startup))]
 
-namespace GpgIdentityServer
+namespace GenderPayGap.IdentityServer
 {
     public class Startup
     {

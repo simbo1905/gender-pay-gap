@@ -13,7 +13,7 @@ using GenderPayGap.Models.SqlDatabase;
 using System.Configuration;
 using Extensions;
 
-namespace GpgIdentityServer
+namespace GenderPayGap.IdentityServer
 {
     public class LocalRegistrationUserService : UserServiceBase
     {

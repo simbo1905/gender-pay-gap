@@ -12,8 +12,10 @@ using Autofac;
 using Extensions;
 using GenderPayGap.Core.Classes;
 using GenderPayGap.Core.Interfaces;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 
-namespace GpgIdentityServer
+namespace GenderPayGap.IdentityServer
 {
     public class Global : System.Web.HttpApplication
     {
@@ -31,6 +33,17 @@ namespace GpgIdentityServer
             }
         }
 
+        private static TelemetryClient _AppInsightsClient;
+        public static TelemetryClient AppInsightsClient
+        {
+            get
+            {
+                if (_AppInsightsClient == null && !string.IsNullOrWhiteSpace(TelemetryConfiguration.Active.InstrumentationKey) && !TelemetryConfiguration.Active.DisableTelemetry)
+                    _AppInsightsClient = new TelemetryClient();
+                return _AppInsightsClient;
+            }
+        }
+
         protected void Application_Start(object sender, EventArgs e)
         {
 
@@ -40,6 +53,9 @@ namespace GpgIdentityServer
 
             //Set the machine key
             SetMachineKey();
+
+            //Set Application Insights instrumentation key
+            Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"];
         }
 
         protected void Session_Start(object sender, EventArgs e)
@@ -65,7 +81,26 @@ namespace GpgIdentityServer
 
         protected void Application_Error(object sender, EventArgs e)
         {
+            // Process exception
+            if (!HttpContext.Current.IsCustomErrorEnabled) return;
+            var raisedException = Server.GetLastError();
+            if (raisedException == null) return;
 
+            //Add to the log
+            Log.WriteLine(raisedException.ToString());
+
+            // Note: A single instance of telemetry client is sufficient to track multiple telemetry items.
+
+            var ai = new TelemetryClient();
+            ai.TrackException(raisedException);
+
+            if (raisedException is HttpException)
+                HttpContext.Current.Response.Redirect("/Error?code=" + ((HttpException)raisedException).GetHttpCode());
+            else
+                HttpContext.Current.Response.Redirect("/Error");
+
+            //Track the exception with Application Insights if it is available
+            AppInsightsClient?.TrackException(raisedException);
         }
 
         protected void Session_End(object sender, EventArgs e)

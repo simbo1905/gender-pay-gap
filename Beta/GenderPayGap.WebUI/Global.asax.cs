@@ -15,6 +15,8 @@ using System.Web.Optimization;
 using System.Web.Routing;
 using GenderPayGap.WebUI.Properties;
 using GenderPayGap.WebUI.Classes;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace GenderPayGap
 {
@@ -30,6 +32,17 @@ namespace GenderPayGap
             {
                 if (_Log == null) _Log = new Logger(FileRepository, Path.Combine(ConfigurationManager.AppSettings["LogPath"], "WebServer"));
                 return _Log;
+            }
+        }
+
+        private static TelemetryClient _AppInsightsClient;
+        public static TelemetryClient AppInsightsClient
+        {
+            get
+            {
+                if (_AppInsightsClient==null && !string.IsNullOrWhiteSpace(TelemetryConfiguration.Active.InstrumentationKey) && !TelemetryConfiguration.Active.DisableTelemetry)
+                    _AppInsightsClient = new TelemetryClient();
+                return _AppInsightsClient;
             }
         }
 
@@ -72,25 +85,33 @@ namespace GenderPayGap
 
             //Set the machine key
             SetMachineKey();
+
+            //Set Application Insights instrumentation key
+            Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"];
         }
 
         protected void Application_Error(Object sender, EventArgs e)
         {
             // Process exception
-            if (HttpContext.Current.IsCustomErrorEnabled)
-            {
-                var raisedException = Server.GetLastError();
-                if (raisedException != null)
-                {
-                    //Add to the log
-                    Log.WriteLine(raisedException.ToString());
+            if (!HttpContext.Current.IsCustomErrorEnabled) return;
+            var raisedException = Server.GetLastError();
+            if (raisedException == null) return;
 
-                    if (raisedException is HttpException)
-                        HttpContext.Current.Response.Redirect("~/Error?code=" + ((HttpException) raisedException).GetHttpCode());
-                    else
-                        HttpContext.Current.Response.Redirect("~/Error");
-                }
-            }
+            //Add to the log
+            Log.WriteLine(raisedException.ToString());
+
+            // Note: A single instance of telemetry client is sufficient to track multiple telemetry items.
+
+            var ai = new TelemetryClient();
+            ai.TrackException(raisedException);
+
+            if (raisedException is HttpException)
+                HttpContext.Current.Response.Redirect("~/Error?code=" + ((HttpException) raisedException).GetHttpCode());
+            else
+                HttpContext.Current.Response.Redirect("~/Error");
+
+            //Track the exception with Application Insights if it is available
+            AppInsightsClient?.TrackException(raisedException);
         }
         
         public static IContainer BuildContainerIoC()
