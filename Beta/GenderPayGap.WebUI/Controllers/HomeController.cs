@@ -107,7 +107,8 @@ namespace GenderPayGap.WebUI.Controllers
                 case "ClearDatabase":
                     DbContext.Truncate();
 
-                    MvcApplication.FileRepository.DeleteFiles(Settings.Default.DownloadsLocation);
+                    if (MvcApplication.FileRepository.GetDirectoryExists(Settings.Default.DownloadsLocation))
+                        MvcApplication.FileRepository.DeleteFiles(Settings.Default.DownloadsLocation);
 
                     //Refresh the repository
                     DataRepository = null;

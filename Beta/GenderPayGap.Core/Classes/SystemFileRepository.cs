@@ -48,7 +48,6 @@ namespace GenderPayGap.Core.Classes
         public void DeleteFiles(string directoryPath)
         {
             if (string.IsNullOrWhiteSpace(directoryPath)) throw new ArgumentNullException(nameof(directoryPath));
-
             foreach (var file in GetFiles(directoryPath))
                 DeleteFile(file);
         }
