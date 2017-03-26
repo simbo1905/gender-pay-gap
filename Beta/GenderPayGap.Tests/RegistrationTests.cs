@@ -1714,7 +1714,7 @@ namespace GenderPayGap.Tests
 
         }
 
-        [Ignore("This test needs fixing")]
+        //[Ignore("This test needs fixing")]
         [Test]
         [Description("Private Manual:   ")]
         public void AddContact_Post_PrivateSector_ManualRegistration_Success()
@@ -1733,10 +1733,32 @@ namespace GenderPayGap.Tests
 
             var model = new OrganisationViewModel()
             {
+                Address1 = "123",
+                Address2 = "evergreen terrace",
+                Address3 = "Westminster",
+                CompanyNumber = "wetrw1234fg",
+                ContactEmailAddress = "test@hotmail.com",
+                ContactFirstName = "test firstName",
+                ContactLastName = "test lastName",
+                ContactJobTitle = "test job title",
+                ContactOrganisation = "test Organisation",
+                ContactPhoneNumber = "79000 000 000",
+                Country = "United Kingdom",
+                Name = "Acme ltd",
+                PINExpired = false,
+                PINSent = false,
+                PoBox = "",
+                PostCode = "W1 5qr",
+                ReviewCode = "",
+                SearchText = "Searchtext",
+                //   SelectedEmployerIndex = -1,
+                BackAction = "",
+                CancellationReason = "",
                 Employers = employerResult,
                 ManualRegistration = true,
                 SectorType = SectorTypes.Private
             };
+
 
             var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
             controller.Bind(model);
@@ -1940,7 +1962,7 @@ namespace GenderPayGap.Tests
 
         }
 
-        [Ignore("This test needs fixing")]
+
         [Test]
         [Description("Public Manual:   ")]
         public void AddContact_Post_PublicSector_ManualRegistration_Success()
@@ -1957,8 +1979,30 @@ namespace GenderPayGap.Tests
             var employerResult = new PagedResult<EmployerRecord>();
             employerResult.Results = new List<EmployerRecord>();
 
+
             var model = new OrganisationViewModel()
             {
+                Address1 = "123",
+                Address2 = "evergreen terrace",
+                Address3 = "Westminster",
+                CompanyNumber = "wetrw1234fg",
+                ContactEmailAddress = "test@hotmail.com",
+                ContactFirstName = "test firstName",
+                ContactLastName = "test lastName",
+                ContactJobTitle = "test job title",
+                ContactOrganisation = "test Organisation",
+                ContactPhoneNumber = "79000 000 000",
+                Country = "United Kingdom",
+                Name = "Acme ltd",
+                PINExpired = false,
+                PINSent = false,
+                PoBox = "",
+                PostCode = "W1 5qr",
+                ReviewCode = "",
+                SearchText = "Searchtext",
+                //   SelectedEmployerIndex = -1,
+                BackAction = "",
+                CancellationReason = "",
                 Employers = employerResult,
                 ManualRegistration = true,
                 SectorType = SectorTypes.Public
@@ -1972,10 +2016,15 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.AddContact(model) as ViewResult;
+            var result = controller.AddContact(model) as RedirectToRouteResult;
 
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
+            //4.Check that the redirection went to the right url step.
+            Assert.That(result.RouteValues["action"].ToString() == "ConfirmOrganisation", "Redirected to the wrong view");
+            var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
+            Assert.NotNull(model, "Expected OrganisationViewModel");
+            Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
         }
 
         #endregion
@@ -2055,7 +2104,7 @@ namespace GenderPayGap.Tests
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
         }
 
-        [Ignore("This test needs fixing")]
+        //[Ignore("This test needs fixing")]
         [Test]
         [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
         public void ConfirmOrganisation_Post_PrivateSector_Success()
@@ -2064,74 +2113,152 @@ namespace GenderPayGap.Tests
             //1.Arrange the test setup variables
             var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
 
-            //var organisation = new Organisation() { OrganisationId = 1 };
+            //var organisation = new Organisation() { OrganisationId = 1, OrganisationSicCodes = OrgSicCodeList };
             //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+
+            ICollection<OrganisationSicCode> OrgSicCodeList = new List<OrganisationSicCode>();
+
+            //this might not be neccesary anymore.
+            do
+            {
+                int count = 0;
+                OrgSicCodeList.Add( 
+                                     new OrganisationSicCode()
+                                    {
+                                        SicCodeId = count++,
+                                        SicCode = new SicCode()
+                                        { SicCodeId = count++,
+                                          Description  = "SicCode description {0} " + count++,
+                                          SicSection = new SicSection()
+                                          {
+                                                Created = DateTime.Now,
+                                                Description = "SicSection description {0}" + count++,
+                                                SicCodes = new List<SicCode>()
+                                                {
+                                                 new SicCode{ SicCodeId = 1, SicSectionId = "SSID1", SicSection = new SicSection(), Description = "" },
+                                                 new SicCode{ SicCodeId = 2, SicSectionId = "SSID2", SicSection = new SicSection(), Description = "" },
+                                                 new SicCode{ SicCodeId = 3, SicSectionId = "SSID3", SicSection = new SicSection(), Description = "" },
+                                                },
+                                                SicSectionId = count++.ToString()
+                                           },
+                                           SicSectionId =  "" + count++ + "",
+                                           Created = DateTime.Now
+                                       }
+                                    }
+                                   );
+            }
+            while (OrgSicCodeList.Count < 14);
 
             //Set user email address verified code and expired sent date
             var routeData = new RouteData();
             routeData.Values.Add("Action", "ConfirmOrganisation");
             routeData.Values.Add("Controller", "Register");
 
+            //this might not be neccesary anymore.
             var employerResult = new PagedResult<EmployerRecord>()
             {
                 Results = new List<EmployerRecord>()
-                            {
-                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-                            }
+                {
+                    new EmployerRecord() { Name = "Acme  Inc", Address1 = "10", Address2 = "EverGreen Terrace", CompanyNumber = "123QA10", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 1).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "w12  3we" },
+                    new EmployerRecord() { Name = "Beano Inc", Address1 = "11", Address2 = "EverGreen Terrace", CompanyNumber = "123QA11", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 2).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "n12  4qw" },
+                    //new EmployerRecord() { Name = "Smith ltd", Address1 = "12", Address2 = "EverGreen Terrace", CompanyNumber = "123QA12", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 3).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "nw2  1de" },
+                    //new EmployerRecord() { Name = "Trax ltd",  Address1 = "13", Address2 = "EverGreen Terrace", CompanyNumber = "123QA13", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 4).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "sw2  5gh" },
+                    //new EmployerRecord() { Name = "Exant ltd", Address1 = "14", Address2 = "EverGreen Terrace", CompanyNumber = "123QA14", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 5).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "se2  2bh" },
+                    //new EmployerRecord() { Name = "Serif ltd", Address1 = "15", Address2 = "EverGreen Terrace", CompanyNumber = "123QA15", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 6).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "da2  6cd" },
+                    //new EmployerRecord() { Name = "West ltd",  Address1 = "16", Address2 = "EverGreen Terrace", CompanyNumber = "123QA16", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 7).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "cd2  1cs" },
+                    //new EmployerRecord() { Name = "North ltd", Address1 = "17", Address2 = "EverGreen Terrace", CompanyNumber = "123QA17", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 8).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "e12  7xs" },
+                    //new EmployerRecord() { Name = "South ltd", Address1 = "18", Address2 = "EverGreen Terrace", CompanyNumber = "123QA18", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 9).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "e17  8za" },
+                    //new EmployerRecord() { Name = "East ltd",  Address1 = "19", Address2 = "EverGreen Terrace", CompanyNumber = "123QA19", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 10).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "sw25 9bh" },
+                    //new EmployerRecord() { Name = "Dax ltd",   Address1 = "20", Address2 = "EverGreen Terrace", CompanyNumber = "123QA20", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 11).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "se1  6nh" },
+                    //new EmployerRecord() { Name = "Merty ltd", Address1 = "21", Address2 = "EverGreen Terrace", CompanyNumber = "123QA21", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 12).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "se32 2nj" },
+                    //new EmployerRecord() { Name = "Daxam ltd", Address1 = "22", Address2 = "EverGreen Terrace", CompanyNumber = "123QA22", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 13).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "e1   1nh" },
+                    //new EmployerRecord() { Name = "Greta ltd", Address1 = "23", Address2 = "EverGreen Terrace", CompanyNumber = "123QA23", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 14).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "e19  8vt" },
+                    //new EmployerRecord() { Name = "Buxom ltd", Address1 = "24", Address2 = "EverGreen Terrace", CompanyNumber = "123QA24", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 15).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "sw1  5ml" }
+                }
             };
 
             var model = new OrganisationViewModel()
             {
                 Employers = employerResult,
                 ManualRegistration = false,
-                SectorType = SectorTypes.Private
+                SelectedEmployerIndex = 1,
+                SectorType = SectorTypes.Private,
             };
 
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
             controller.Bind(model);
+
+            //insert some employee records with sicCodes into the db...
+            controller.PrivateSectorRepository.Insert(new EmployerRecord()
+            {
+                Name = "acme inc",
+                Address1 = "123",
+                Address2 = "EverGreen Terrace",
+                CompanyNumber = "123QA432",
+                CompanyStatus = "Active",
+                Country = "UK",
+                PostCode = "e12 3eq",
+                SicCodes = "41100,41201,41202"
+            }
+                                                     );
+
+            controller.PrivateSectorRepository.Insert(new EmployerRecord()
+            {
+                Name = "smith ltd",
+                Address1 = "45",
+                Address2 = "iverson rd",
+                CompanyNumber = "123QA11",
+                CompanyStatus = "Active",
+                Country = "UK",
+                PostCode = "nw1 5re",
+                SicCodes = "42110,42130,42210"
+            }
+                                                     );
+
+            controller.PrivateSectorRepository.Insert(new EmployerRecord()
+            {
+                Name = "smith & Wes ltd",
+                Address1 = "45",
+                Address2 = "iverson rd",
+                CompanyNumber = "456GT657",
+                CompanyStatus = "Active",
+                Country = "UK",
+                PostCode = "nw1 5re",
+                SicCodes = "42220,42910,42990"
+            }
+                                                    );
+
+            controller.PrivateSectorRepository.Insert(new EmployerRecord()
+            {
+                Name = "smithers and sons ltd",
+                Address1 = "45",
+                Address2 = "iverson rd",
+                CompanyNumber = "956GT237",
+                CompanyStatus = "Active",
+                Country = "UK",
+                PostCode = "nw1 5re",
+                SicCodes = "43110,43120,43130"
+            }
+                                                    );
+
+            controller.PrivateSectorRepository.Insert(new EmployerRecord()
+            {
+                Name = "excetera ltd",
+                Address1 = "123",
+                Address2 = "Venice avenue ",
+                CompanyNumber = "910QA0942",
+                CompanyStatus = "Active",
+                Country = "UK",
+                PostCode = "w1 9eaz",
+                SicCodes = "43210,43220,43290"
+            }
+                                                     );
+
+            //insert some sicCodes into the db for employee records sicCodes to match...
+            // controller.DataRepository.Insert(OrgSicCodeList);
+            controller.DataRepository.Insert(new SicCode { SicCodeId = 42110, SicSectionId = "SSID1", SicSection = new SicSection(), Description = "" } );
+            controller.DataRepository.Insert(new SicCode { SicCodeId = 42130, SicSectionId = "SSID2", SicSection = new SicSection(), Description = "" } );
+            controller.DataRepository.Insert(new SicCode { SicCodeId = 42210, SicSectionId = "SSID3", SicSection = new SicSection(), Description = "" } );
 
             //Stash the object for the unstash to happen in code
             controller.StashModel(model);

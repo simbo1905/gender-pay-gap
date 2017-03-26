@@ -915,11 +915,12 @@ namespace GenderPayGap.WebUI.Controllers
                     DataRepository.Insert(org);
                     DataRepository.SaveChanges();
 
-                    //Use public sector code or get from employer
-                    var sicCodes = employer==null || model.SectorType == SectorTypes.Public ? new[] {1} : employer.GetSicCodes();
-
                     //Save the sic codes for the organisation
                     var allSicCodes = DataRepository.GetAll<SicCode>();
+
+                    //Use public sector code or get from employer
+                    var sicCodes = employer == null || model.SectorType == SectorTypes.Public ? new[] {1} : employer.GetSicCodes();
+
                     foreach (var code in sicCodes)
                     {
                         var sicCode = code == 0 ? null : allSicCodes.FirstOrDefault(sic => sic.SicCodeId == code);

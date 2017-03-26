@@ -192,9 +192,10 @@ namespace GenderPayGap.Tests
         public string GetSicCodes(string companyNumber)
         {
             //throw new NotImplementedException();
+            // return "41100";
 
-            //fakedIt.
-            return "13243546576879";
+            return AllEmployers.FirstOrDefault(c => c.CompanyNumber == companyNumber).SicCodes;
+
         }
 
         public void Insert(EmployerRecord employer)
