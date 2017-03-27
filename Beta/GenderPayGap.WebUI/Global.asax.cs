@@ -10,11 +10,13 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using GenderPayGap.WebUI.Properties;
 using GenderPayGap.WebUI.Classes;
+using IdentityServer3.Core;
 using Microsoft.ApplicationInsights;
 using Microsoft.ApplicationInsights.Extensibility;
 
@@ -68,6 +70,7 @@ namespace GenderPayGap
 
         public static string AdminEmails = ConfigurationManager.AppSettings["AdminEmails"];
         public static bool MaintenanceMode= ConfigurationManager.AppSettings["MaintenanceMode"].ToBoolean();
+        public static bool StickySessions = ConfigurationManager.AppSettings["StickySessions"].ToBoolean(true);
 
         /// <summary>
         /// Return true if exactly one concrete admin defined 
@@ -108,6 +111,17 @@ namespace GenderPayGap
 
             //Set Application Insights instrumentation key
             Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"];
+
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimTypes.Subject;
+        }
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            //Redirect to holding mage if in maintenance mode
+            if (MaintenanceMode && !HttpContext.Current.Request.Url.PathAndQuery.StartsWithI(@"/Error/service-unavailable")) HttpContext.Current.Response.Redirect(@"/Error/service-unavailable",true);
+
+            //Disable sticky sessions
+            if (!StickySessions) Response.Headers.Add("Arr-Disable-Session-Affinity", "True");
         }
 
         protected void Application_Error(Object sender, EventArgs e)

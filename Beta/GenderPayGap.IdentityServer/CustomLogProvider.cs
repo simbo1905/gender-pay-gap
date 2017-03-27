@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Web;
 using Extensions;
-using GenderPayGap;
 using IdentityServer3.Core.Logging;
 using Logger = IdentityServer3.Core.Logging.Logger;
 
@@ -53,7 +49,7 @@ namespace GenderPayGap.IdentityServer
             {
                 result = exception.ToString();
                 //Track the exception with Application Insights if it is available
-                MvcApplication.AppInsightsClient?.TrackException(exception);
+                Global.AppInsightsClient?.TrackException(exception);
 
             }
 

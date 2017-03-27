@@ -345,7 +345,9 @@ namespace GenderPayGap.WebUI.Controllers
                 if (oldReturn.Equals(newReturn))
                     newReturn = oldReturn;
                 else
+                {
                     oldReturn.SetStatus(ReturnStatuses.Retired, currentUser.UserId);
+                }
             }
 
             //add the new one

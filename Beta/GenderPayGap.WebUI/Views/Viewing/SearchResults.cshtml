@@ -8,7 +8,7 @@
 <main id="content" role="main">
     @using (Html.BeginForm())
     {
-        @Html.AntiForgeryToken()
+        <!--@Html.AntiForgeryToken() Removed as this breaks caching -->
 
         @Html.HiddenFor(model => model.LastSearch)
         @Html.HiddenFor(model => model.LastSectors)

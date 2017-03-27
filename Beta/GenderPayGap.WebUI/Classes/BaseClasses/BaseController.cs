@@ -165,8 +165,6 @@ namespace GenderPayGap
         {
 
             currentUser = null;
-            if (MvcApplication.MaintenanceMode)
-                return RedirectToAction("ServiceUnavailable", "Error");
 
             //Ensure user is logged in submit or rest of of registration
             if (!User.Identity.IsAuthenticated)

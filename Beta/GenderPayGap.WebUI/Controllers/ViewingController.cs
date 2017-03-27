@@ -62,9 +62,6 @@ namespace GenderPayGap.WebUI.Controllers
         [OutputCache(CacheProfile = "SearchResults")]
         public ActionResult SearchResults(string search = null, int year = 0, int page = 1, string sectors = null)
         {
-            //Show the maintenance page
-            if (MvcApplication.MaintenanceMode)return RedirectToAction("ServiceUnavailable", "Error");
-
             var model = this.UnstashModel<SearchViewModel>() ?? new SearchViewModel();
 
             //Make sure we know all the sic sectors
@@ -169,13 +166,10 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
+        //[ValidateAntiForgeryToken] removed as this breaks caching
         [Route("search-results")]
         public ActionResult SearchResults(SearchViewModel m, string command)
         {
-            //Show the maintenance page
-            if (MvcApplication.MaintenanceMode) return RedirectToAction("ServiceUnavailable", "Error");
-
             //Make sure we can load employers from session
             var model = this.UnstashModel<SearchViewModel>();
             if (model == null)
@@ -255,9 +249,6 @@ namespace GenderPayGap.WebUI.Controllers
         [OutputCache(CacheProfile = "Download")]
         public ActionResult Download()
         {
-            //Show the maintenance page
-            if (MvcApplication.MaintenanceMode) return RedirectToAction("ServiceUnavailable", "Error");
-
             //Get the latest return accounting date
             var returnYears = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted).Select(r => r.AccountingDate.Year).Distinct().ToList();
 
@@ -344,9 +335,6 @@ namespace GenderPayGap.WebUI.Controllers
         [OutputCache(CacheProfile = "DownloadData")]
         public ActionResult DownloadData(int year)
         {
-            //Show the maintenance page
-            if (MvcApplication.MaintenanceMode) return RedirectToAction("ServiceUnavailable", "Error");
-
             //Ensure we have a directory
             if (!MvcApplication.FileRepository.GetDirectoryExists(Settings.Default.DownloadsLocation)) return new HttpNotFoundResult("There are no GPG data files");
 
@@ -382,9 +370,6 @@ namespace GenderPayGap.WebUI.Controllers
         [OutputCache(CacheProfile = "EmployerDetails")]
         public ActionResult EmployerDetails(string id=null, string view=null)
         {
-            //Show the maintenance page
-            if (MvcApplication.MaintenanceMode) return RedirectToAction("ServiceUnavailable", "Error");
-
             //Make sure we have a view
             if (string.IsNullOrWhiteSpace(view))
                 view = "hourly-rate";

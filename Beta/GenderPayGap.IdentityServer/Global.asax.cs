@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
-using System.Web.Security;
-using System.Web.SessionState;
 using Autofac;
 using Extensions;
 using GenderPayGap.Core.Classes;
@@ -66,6 +62,9 @@ namespace GenderPayGap.IdentityServer
             }
         }
 
+        public static bool MaintenanceMode = ConfigurationManager.AppSettings["MaintenanceMode"].ToBoolean();
+        public static bool StickySessions = ConfigurationManager.AppSettings["StickySessions"].ToBoolean(true);
+
         protected void Application_Start(object sender, EventArgs e)
         {
 
@@ -92,8 +91,10 @@ namespace GenderPayGap.IdentityServer
         protected void Application_BeginRequest(object sender, EventArgs e)
         {
             //Redirect to holding mage if in maintenance mode
-            if (ConfigurationManager.AppSettings["MaintenanceMode"].ToBoolean())
-                HttpContext.Current.Response.Redirect(@"/Error/service-unavailable");
+            if (MaintenanceMode)HttpContext.Current.Response.Redirect(@"/Error/service-unavailable", true);
+
+            //Disable sticky sessions
+            if (!StickySessions) Response.Headers.Add("Arr-Disable-Session-Affinity", "True");
         }
 
         protected void Application_AuthenticateRequest(object sender, EventArgs e)

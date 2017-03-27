@@ -14,8 +14,8 @@ using IdentityModel.Client;
 using System.Threading.Tasks;
 using System.Configuration;
 
-[assembly: OwinStartupAttribute(typeof(GenderPayGap.Startup))]
-namespace GenderPayGap
+[assembly: OwinStartupAttribute(typeof(GenderPayGap.WebUI.Startup))]
+namespace GenderPayGap.WebUI
 {
     public partial class Startup
     {
