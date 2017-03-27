@@ -35,7 +35,7 @@ namespace GenderPayGap.IdentityServer
 
             if (localLoginDetails != null)
             {
-                Global.Log.WriteLine($"LOGIN ATTEMPT:{evt.EventType},REMOTEIP:{HttpContext.Current.Request.UserHostAddress}, Username:{localLoginDetails.LoginUserName},Details:{evt.Message},Name:{evt.Name}");
+                Global.InfoLog.WriteLine($"LOGIN ATTEMPT:{evt.EventType},REMOTEIP:{HttpContext.Current.Request.UserHostAddress}, Username:{localLoginDetails.LoginUserName},Details:{evt.Message},Name:{evt.Name}");
             }
             else if (externalLoginDetails!=null)
             {

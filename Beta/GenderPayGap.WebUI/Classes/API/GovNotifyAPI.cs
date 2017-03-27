@@ -47,7 +47,8 @@ namespace GenderPayGap
             }
             catch (Exception ex)
             {
-                MvcApplication.Log.WriteLine($"Cant send verification email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
+                MvcApplication.ErrorLog.WriteLine($"Cant send verification email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
+                SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send verification email to Gov Notify will try direct send for {emailAddress} due to following error:\n\n{ex.Message}");
 
                 try
                 {
@@ -58,7 +59,7 @@ namespace GenderPayGap
                 }
                 catch (Exception ex1)
                 {
-                    MvcApplication.Log.WriteLine($"Cant send verification email directly for {emailAddress} due to following error:{ex1.Message}");
+                    MvcApplication.ErrorLog.WriteLine($"Cant send verification email directly for {emailAddress} due to following error:{ex1.Message}");
                 }
             }
             return false;
@@ -83,7 +84,8 @@ namespace GenderPayGap
                 }
                 catch (Exception ex)
                 {
-                    MvcApplication.Log.WriteLine($"Cant send registration request email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
+                    MvcApplication.ErrorLog.WriteLine($"Cant send registration request email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
+                    SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send registration request email to Gov Notify will try direct send for {emailAddress} due to following error:\n\n{ex.Message}");
 
                     try
                     {
@@ -98,7 +100,7 @@ namespace GenderPayGap
                     }
                     catch (Exception ex1)
                     {
-                        MvcApplication.Log.WriteLine($"Cant send registration request email directly for {emailAddress} due to following error:{ex1.Message}");
+                        MvcApplication.ErrorLog.WriteLine($"Cant send registration request email directly for {emailAddress} due to following error:{ex1.Message}");
                     }
                 }
             }
@@ -118,7 +120,8 @@ namespace GenderPayGap
             }
             catch (Exception ex)
             {
-                MvcApplication.Log.WriteLine($"Cant send registration approved email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
+                MvcApplication.ErrorLog.WriteLine($"Cant send registration approved email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
+                SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send registration approved email to Gov Notify will try direct send for {emailAddress} due to following error:\n\n{ex.Message}");
 
                 try
                 {
@@ -129,7 +132,7 @@ namespace GenderPayGap
                 }
                 catch (Exception ex1)
                 {
-                    MvcApplication.Log.WriteLine($"Cant send registration approved email directly for {emailAddress} due to following error:{ex1.Message}");
+                    MvcApplication.ErrorLog.WriteLine($"Cant send registration approved email directly for {emailAddress} due to following error:{ex1.Message}");
                 }
             }
             return false;
@@ -147,7 +150,8 @@ namespace GenderPayGap
             }
             catch (Exception ex)
             {
-                MvcApplication.Log.WriteLine($"Cant send registration declined email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
+                MvcApplication.ErrorLog.WriteLine($"Cant send registration declined email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
+                SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send registration declined email to Gov Notify will try direct send for {emailAddress} due to following error:\n\n{ex.Message}");
 
                 try
                 {
@@ -159,7 +163,7 @@ namespace GenderPayGap
                 }
                 catch (Exception ex1)
                 {
-                    MvcApplication.Log.WriteLine($"Cant send registration declined email directly for {emailAddress} due to following error:{ex1.Message}");
+                    MvcApplication.ErrorLog.WriteLine($"Cant send registration declined email directly for {emailAddress} due to following error:{ex1.Message}");
                 }
             }
             return false;
@@ -176,7 +180,8 @@ namespace GenderPayGap
             }
             catch (Exception ex)
             {
-                MvcApplication.Log.WriteLine($"Cant send Pin-In-Post to Gov Notify for {address.ToDelimitedString()} due to following error:{ex.Message}");
+                MvcApplication.ErrorLog.WriteLine($"Cant send Pin-In-Post to Gov Notify for {address.ToDelimitedString()} due to following error:{ex.Message}");
+                SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send Pin-In-Post to Gov Notify will try manual post for {address.ToDelimitedString()} due to following error:\n\n{ex.Message}");
             }
             return SendPinInPostManual(imagePath, returnUrl, contactName, jobtitle, organisationName, address, pin, sendDate, expiresDate);
         }
@@ -209,13 +214,43 @@ namespace GenderPayGap
             }
             catch (Exception ex)
             {
-                MvcApplication.Log.WriteLine($"Cant send manual Pin In POST to {contactName} for {organisationName} at {address.ToDelimitedString()} via {GEODistributionList} directly due to following error:{ex.Message}");
+                MvcApplication.ErrorLog.WriteLine($"Cant send manual Pin In POST to {contactName} for {organisationName} at {address.ToDelimitedString()} via {GEODistributionList} directly due to following error:{ex.Message}");
             }
 
             return false;
         }
 
         #endregion
+
+        /// <summary>
+        /// Send a message to GEO distribution list
+        /// </summary>
+        /// <param name="subject"></param>
+        /// <param name="message"></param>
+        /// <returns></returns>
+        public static bool SendGeoMessage(string subject, string message)
+        {
+
+            var emailAddresses = GEODistributionList.SplitI(";");
+            if (emailAddresses.Length == 0) throw new ArgumentNullException(nameof(GEODistributionList));
+            if (!emailAddresses.ContainsAllEmails()) throw new ArgumentException($"{GEODistributionList} contains an invalid email address", nameof(GEODistributionList));
+
+            var successCount = 0;
+            foreach (var emailAddress in emailAddresses)
+            {
+                try
+                {
+                    Email.QuickSend(subject, SmtpUsername, SmtpSenderName, emailAddress, message, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort);
+                    successCount++;
+                }
+                catch (Exception ex1)
+                {
+                    MvcApplication.ErrorLog.WriteLine($"Cant send message '{subject}' '{message}' directly to {emailAddress} due to following error:{ex1.Message}");
+                }
+            }
+
+            return successCount == emailAddresses.Length;
+        }
 
     }
 }

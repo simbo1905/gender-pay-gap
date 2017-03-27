@@ -76,7 +76,6 @@ namespace GenderPayGap
                             n.AuthenticationTicket.Properties);
 
                     },
-
                     RedirectToIdentityProvider = n =>
                     {
                         if (n.ProtocolMessage.RequestType == OpenIdConnectRequestType.LogoutRequest)

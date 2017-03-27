@@ -54,7 +54,7 @@ namespace GenderPayGap.IdentityServer
             }
             catch (Exception ex)
             {
-                Global.Log.WriteLine(ex.Message);
+                Global.ErrorLog.WriteLine(ex.Message);
                 throw;
             }
 

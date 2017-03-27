@@ -29,7 +29,7 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Init()
         {
 #if DEBUG
-            MvcApplication.Log.WriteLine("Submit Controller Initialised");
+            MvcApplication.InfoLog.WriteLine("Submit Controller Initialised");
 #endif
             return new EmptyResult();
         }

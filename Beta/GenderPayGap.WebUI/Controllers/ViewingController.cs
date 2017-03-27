@@ -38,7 +38,7 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Init()
         {
 #if DEBUG
-            MvcApplication.Log.WriteLine("Viewing Controller Initialised");
+            MvcApplication.InfoLog.WriteLine("Viewing Controller Initialised");
 #endif
             return new EmptyResult();
         }
@@ -51,7 +51,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [Route]
-        [OutputCache(Duration = 86400, VaryByParam = "none")]
+        [OutputCache(CacheProfile = "RedirectIndex")]
         public ActionResult Redirect()
         {
             return RedirectToAction("SearchResults");
@@ -59,8 +59,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("search-results")]
-        [OutputCache(Duration=3600,VaryByParam = "search;page;sectors")]
-
+        [OutputCache(CacheProfile = "SearchResults")]
         public ActionResult SearchResults(string search = null, int year = 0, int page = 1, string sectors = null)
         {
             //Show the maintenance page
@@ -253,7 +252,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("download")]
-        [OutputCache(Duration = 3600, VaryByParam = "none")]
+        [OutputCache(CacheProfile = "Download")]
         public ActionResult Download()
         {
             //Show the maintenance page
@@ -308,7 +307,7 @@ namespace GenderPayGap.WebUI.Controllers
                     }
                     catch (Exception ex)
                     {
-                        MvcApplication.Log.WriteLine(ex.Message);
+                        MvcApplication.ErrorLog.WriteLine(ex.Message);
                     }
                 }
                 finally
@@ -342,7 +341,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("download-data")]
-        [OutputCache(Duration = 3600, VaryByParam = "year")]
+        [OutputCache(CacheProfile = "DownloadData")]
         public ActionResult DownloadData(int year)
         {
             //Show the maintenance page
@@ -380,8 +379,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("employer-details")]
-        [OutputCache(Duration = 3600, VaryByParam = "id;view")]
-
+        [OutputCache(CacheProfile = "EmployerDetails")]
         public ActionResult EmployerDetails(string id=null, string view=null)
         {
             //Show the maintenance page
@@ -402,7 +400,7 @@ namespace GenderPayGap.WebUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    MvcApplication.Log.WriteLine("Cannot decrypt organisation id from querystring");
+                    MvcApplication.ErrorLog.WriteLine("Cannot decrypt organisation id from querystring");
                     return View("CustomError", new ErrorViewModel(400));
                 }
 

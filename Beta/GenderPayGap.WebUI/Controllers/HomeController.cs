@@ -31,7 +31,7 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Init()
         {
 #if DEBUG
-            MvcApplication.Log.WriteLine("Home Controller Initialised");
+            MvcApplication.InfoLog.WriteLine("Home Controller Initialised");
 #endif
             return new EmptyResult();
         }
@@ -214,7 +214,7 @@ namespace GenderPayGap.WebUI.Controllers
                             var code = sicCode.ToInt32();
                             if (!sicCodes.Any(s => s.SicCodeId == code))
                             {
-                                MvcApplication.Log.WriteLine($"Invalid SIC code '{code}' received from companies house");
+                                MvcApplication.WarningLog.WriteLine($"Invalid SIC code '{code}' received from companies house");
                                 continue;
                             }
                             if (organisation.OrganisationSicCodes.Any(a => a.SicCodeId == code)) continue;

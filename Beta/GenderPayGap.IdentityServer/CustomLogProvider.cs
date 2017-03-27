@@ -59,7 +59,7 @@ namespace GenderPayGap.IdentityServer
 
             if (string.IsNullOrWhiteSpace(result)) return false;
 
-            Global.Log.WriteLine(result);
+            Global.ErrorLog.WriteLine(result);
             return true;
         }
     }

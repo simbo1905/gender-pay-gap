@@ -34,7 +34,7 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Init()
         {
 #if DEBUG
-            MvcApplication.Log.WriteLine("Register Controller Initialised");
+            MvcApplication.InfoLog.WriteLine("Register Controller Initialised");
 #endif
             return new EmptyResult();
         }
@@ -42,7 +42,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         #region about-you
         [Route]
-        [OutputCache(Duration = 86400, VaryByParam = "none")]
+        [OutputCache(CacheProfile = "RedirectIndex")]
         public ActionResult Redirect()
         {
             return RedirectToAction("AboutYou");
@@ -159,7 +159,7 @@ namespace GenderPayGap.WebUI.Controllers
             catch (Exception ex)
             {
                 //Log the exception
-                MvcApplication.Log.WriteLine(ex.Message);
+                MvcApplication.ErrorLog.WriteLine(ex.Message);
                 return false;
             }
 
@@ -442,11 +442,16 @@ namespace GenderPayGap.WebUI.Controllers
             switch (model.SectorType)
             {
                 case SectorTypes.Private:
-
-                    model.Employers = PrivateSectorRepository.Search(model.SearchText,1, Settings.Default.EmployerPageSize);
-
+                    try
+                    {
+                        model.Employers = PrivateSectorRepository.Search(model.SearchText, 1, Settings.Default.EmployerPageSize);
+                    }
+                    catch (Exception ex)
+                    {
+                        GovNotifyAPI.SendGeoMessage("GPG - COMPANIES HOUSE ERROR", $"Cant search using Companies House API for query '{model.SearchText}' page:'1' due to following error:\n\n{ex.Message}");
+                        throw;
+                    }
                     break;
-
                 case SectorTypes.Public:
 
                     model.Employers = PublicSectorRepository.Search(model.SearchText, 1, Settings.Default.EmployerPageSize);
@@ -591,7 +596,15 @@ namespace GenderPayGap.WebUI.Controllers
                 switch (model.SectorType)
                 {
                     case SectorTypes.Private:
-                        model.Employers = PrivateSectorRepository.Search(model.SearchText, nextPage, Settings.Default.EmployerPageSize);
+                        try
+                        {
+                            model.Employers = PrivateSectorRepository.Search(model.SearchText, nextPage, Settings.Default.EmployerPageSize);
+                        }
+                        catch (Exception ex)
+                        {
+                            GovNotifyAPI.SendGeoMessage("GPG - COMPANIES HOUSE ERROR", $"Cant search using Companies House API for query '{model.SearchText}' page:'{nextPage}' due to following error:\n\n{ex.Message}");
+                            throw;
+                        }
                         break;
 
                     case SectorTypes.Public:
@@ -864,7 +877,15 @@ namespace GenderPayGap.WebUI.Controllers
 
             //Get the sic codes from companies house
             if (!model.ManualRegistration && model.SectorType == SectorTypes.Private && model.SelectedEmployer!=null)
-                model.SelectedEmployer.SicCodes = PrivateSectorRepository.GetSicCodes(model.SelectedEmployer.CompanyNumber);
+                try
+                {
+                    model.SelectedEmployer.SicCodes = PrivateSectorRepository.GetSicCodes(model.SelectedEmployer.CompanyNumber);
+                }
+                catch (Exception ex)
+                {
+                    GovNotifyAPI.SendGeoMessage("GPG - COMPANIES HOUSE ERROR", $"Cant get SIC Codes from Companies House API for company {model.SelectedEmployer.Name} No:{model.SelectedEmployer.CompanyNumber} due to following error:\n\n{ex.Message}");
+                    throw;
+                }
 
             //Save the registration
             SaveRegistration(currentUser, model);
@@ -930,7 +951,7 @@ namespace GenderPayGap.WebUI.Controllers
                         {
                             var sicCode = code == 0 ? null : allSicCodes.FirstOrDefault(sic => sic.SicCodeId == code);
                             if (sicCode == null)
-                                MvcApplication.Log.WriteLine($"Invalid SIC code '{code}' received from companies house");
+                                MvcApplication.WarningLog.WriteLine($"Invalid SIC code '{code}' received from companies house");
                             else
                                 org.OrganisationSicCodes.Add(new OrganisationSicCode() {Organisation = org, SicCode = sicCode});
                         }
@@ -1043,7 +1064,7 @@ namespace GenderPayGap.WebUI.Controllers
             catch (Exception ex)
             {
                 //Log the exception
-                MvcApplication.Log.WriteLine(ex.Message);
+                MvcApplication.ErrorLog.WriteLine(ex.Message);
                 throw;
             }
         }
@@ -1242,7 +1263,7 @@ namespace GenderPayGap.WebUI.Controllers
             catch (Exception ex)
             {
                 //Log the exception
-                MvcApplication.Log.WriteLine(ex.Message);
+                MvcApplication.ErrorLog.WriteLine(ex.Message);
                 throw;
             }
         }
@@ -1338,7 +1359,7 @@ namespace GenderPayGap.WebUI.Controllers
             catch (Exception ex)
             {
                 //Log the exception
-                MvcApplication.Log.WriteLine(ex.Message);
+                MvcApplication.ErrorLog.WriteLine(ex.Message);
                 throw;
             }
         }
@@ -1423,7 +1444,7 @@ namespace GenderPayGap.WebUI.Controllers
                 }
                 catch (Exception ex)
                 {
-                    MvcApplication.Log.WriteLine(ex.Message);
+                    MvcApplication.ErrorLog.WriteLine(ex.Message);
                     return View("CustomError", new ErrorViewModel(3014));
                 }
             }

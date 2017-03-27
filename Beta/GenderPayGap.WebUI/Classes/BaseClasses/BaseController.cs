@@ -125,7 +125,7 @@ namespace GenderPayGap
         protected override void OnException(ExceptionContext filterContext)
         {
             //Add to the log
-            MvcApplication.Log.WriteLine(filterContext.Exception.ToString());
+            MvcApplication.ErrorLog.WriteLine(filterContext.Exception.ToString());
 
             // Output a nice error page
             if (filterContext.HttpContext.IsCustomErrorEnabled)

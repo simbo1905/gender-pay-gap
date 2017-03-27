@@ -25,13 +25,33 @@ namespace GenderPayGap
         public static IContainer ContainerIOC;
         public static IFileRepository FileRepository;
 
-        private static Logger _Log;
-        public static Logger Log
+        private static Logger _InfoLog;
+        public static Logger InfoLog
         {
             get
             {
-                if (_Log == null) _Log = new Logger(FileRepository, Path.Combine(ConfigurationManager.AppSettings["LogPath"], "WebServer"));
-                return _Log;
+                if (_InfoLog == null) _InfoLog = new Logger(FileRepository, Path.Combine(ConfigurationManager.AppSettings["LogPath"], "WebServer", "InfoLog.txt"));
+                return _InfoLog;
+            }
+        }
+
+        private static Logger _WarningLog;
+        public static Logger WarningLog
+        {
+            get
+            {
+                if (_WarningLog == null) _WarningLog = new Logger(FileRepository, Path.Combine(ConfigurationManager.AppSettings["LogPath"], "WebServer","WarningLog.txt"));
+                return _WarningLog;
+            }
+        }
+
+        private static Logger _ErrorLog;
+        public static Logger ErrorLog
+        {
+            get
+            {
+                if (_ErrorLog == null) _ErrorLog = new Logger(FileRepository, Path.Combine(ConfigurationManager.AppSettings["LogPath"], "WebServer", "ErrorLog.txt"));
+                return _ErrorLog;
             }
         }
 
@@ -98,7 +118,7 @@ namespace GenderPayGap
             if (raisedException == null) return;
 
             //Add to the log
-            Log.WriteLine(raisedException.ToString());
+            ErrorLog.WriteLine(raisedException.ToString());
 
             // Note: A single instance of telemetry client is sufficient to track multiple telemetry items.
 
