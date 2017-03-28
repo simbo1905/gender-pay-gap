@@ -83,43 +83,5 @@
 			</tbody>
 		</table>
 	</div>
-
-
-
-	<script type="text/javascript">
-		
-		function getParameterByName(name, url) {
-			if (!url) url = window.location.href;
-			name = name.replace(/[\[\]]/g, "\\$&");
-			var regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)"),
-			results = regex.exec(url);
-			if (!results) return null;
-			if (!results[2]) return '';
-			return decodeURIComponent(results[2].replace(/\+/g, " "));
-		}
-
-		var dynamicContent = getParameterByName('dc');
-
-		$(document).ready(function() {
-
-			if (dynamicContent == 'manual') {
-				$('.manual').show();
-			}
-
-			else {
-				$('.default-content').show();
-			}
-		});
-
-	</script>
-
-    <script src="/public/javascripts/govuk-template.js?0.18.3"></script>
-
     
-  <!-- Javascript -->
-<script src="/public/javascripts/jquery-1.11.3.js"></script>
-<script src="/public/javascripts/govuk/selection-buttons.js"></script>
-<script src="/public/javascripts/govuk/shim-links-with-button-role.js"></script>
-<script src="/public/javascripts/govuk/show-hide-content.js"></script>
-<script src="/public/javascripts/application.js"></script>	
 </body>

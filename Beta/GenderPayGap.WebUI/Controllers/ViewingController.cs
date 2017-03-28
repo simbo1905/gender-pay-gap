@@ -60,42 +60,39 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpGet]
         [Route("search-results")]
         [OutputCache(CacheProfile = "SearchResults")]
-        public ActionResult SearchResults(string search = null, int year = 0, int page = 1, string sectors = null)
+        public ActionResult SearchResults(string search = null, IEnumerable<string> s = null, int p = 1, int z = 0, int y = 0)
         {
-            var model = this.UnstashModel<SearchViewModel>() ?? new SearchViewModel();
+            var model = new SearchViewModel();
 
             //Make sure we know all the sic sectors
-            if (model.AllSectors == null)
+            var list = new List<SearchViewModel.SicSection>();
+            foreach (var sector in DataRepository.GetAll<SicSection>().OrderBy(sic => sic.SicSectionId))
             {
-                var list = new List<SearchViewModel.SicSection>();
-                foreach (var sector in DataRepository.GetAll<SicSection>().OrderBy(s => s.SicSectionId))
+                list.Add(new SearchViewModel.SicSection()
                 {
-                    list.Add(new SearchViewModel.SicSection()
-                    {
-                        SicSectionId = sector.SicSectionId,
-                        Description = sector.Description = sector.Description.BeforeFirst(";")
-                    });
-                }
-                model.AllSectors = list.AsEnumerable();
+                    SicSectionId = sector.SicSectionId,
+                    Description = sector.Description = sector.Description.BeforeFirst(";")
+                });
             }
+            model.AllSectors = list.AsEnumerable();
 
-            var newSectors = sectors.SplitI(string.Empty).ToList();
-
-            if (search != model.SearchText || model.Employers == null || model.Employers.RowCount == 0 || model.Employers.CurrentPage != page || model.Year != year || (model.NewSectors==null || !model.NewSectors.EqualsI(newSectors)))
+            var newSectors = s.ToDelimitedString(string.Empty);
+            if (z < 1) z = Settings.Default.EmployerPageSize;
+            if (y < 1) y = DateTime.Now.Year;
+            if (search != model.search || model.Employers == null || model.Employers.RowCount == 0 || model.Employers.CurrentPage != p || model.y != y || (model.s==null || !model.s.ToDelimitedString(string.Empty).EqualsI(newSectors)))
             {
-                model.SearchText = search;
-
                 //Make sure we can load employers from session
-                var searchSectors = newSectors.EqualsI(model.AllSectors) ? new List<string>() : newSectors;
-                model.Employers = Search(search, searchSectors, page, Settings.Default.EmployerPageSize, year);
-                model.LastSearch = search;
-                model.LastSectors = searchSectors.ToDelimitedString(string.Empty);
-                model.LastPage = page;
-                model.LastPageSize = Settings.Default.EmployerPageSize;
-                model.LastYear = year;
+                var searchSectors = s?.Where(sc=>!string.IsNullOrWhiteSpace(sc)).ToList();
+                var allSectors = model.AllSectors.Select(sic => sic.SicSectionId).ToDelimitedString(string.Empty);
+                if (newSectors.EqualsI(allSectors)) searchSectors = new List<string>();
+                model.Employers = Search(search, searchSectors, p, Settings.Default.EmployerPageSize, y);
+                model.search = search;
+                model.p = p;
+                model.z = z;
+                model.y = y;
+                model.s = s;
                 LastSearch = Request.Url.PathAndQuery;
-                model.NewSectors = newSectors;
-
+                
                 var sources = new List<Core.Classes.SelectedItem>();
                 foreach (var sector in model.AllSectors)
                 {
@@ -107,7 +104,6 @@ namespace GenderPayGap.WebUI.Controllers
                     });
                 }
                 model.SectorSources = sources;
-                this.StashModel(model);
             }
 
             return View("SearchResults", model);
@@ -127,29 +123,29 @@ namespace GenderPayGap.WebUI.Controllers
             };
 
             string pattern = searchText?.ToLower();
-            var hasSector = sectors.Any();
+            var hasSector = sectors!=null && sectors.Any();
 
             //using (DataRepository.BeginTransaction(IsolationLevel.Snapshot))
             {
                 IQueryable<Return> searchResults;
                 if (!string.IsNullOrWhiteSpace(searchText) && hasSector)
-                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status==ReturnStatuses.Submitted &&
+                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status==ReturnStatuses.Submitted && r.Organisation.Status == OrganisationStatuses.Active &&
                         ((r.AccountingDate == privateAccountingDate && r.Organisation.SectorType == SectorTypes.Private) || (r.AccountingDate == publicAccountingDate && r.Organisation.SectorType == SectorTypes.Public)) &&
                         r.Organisation.OrganisationName.ToLower().Contains(pattern) &&
                         r.Organisation.OrganisationSicCodes.Any(sic => sectors.Contains(sic.SicCode.SicSectionId)))
                         .OrderBy(r => r.Organisation.OrganisationName);
                 else if (!string.IsNullOrWhiteSpace(searchText) && !hasSector)
-                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted &&
+                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted && r.Organisation.Status == OrganisationStatuses.Active &&
                     ((r.AccountingDate == privateAccountingDate && r.Organisation.SectorType == SectorTypes.Private) || (r.AccountingDate == publicAccountingDate && r.Organisation.SectorType == SectorTypes.Public)) &&
                     r.Organisation.OrganisationName.ToLower().Contains(pattern))
                     .OrderBy(r => r.Organisation.OrganisationName);
                 else if (string.IsNullOrWhiteSpace(searchText) && hasSector)
-                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted &&
+                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted && r.Organisation.Status == OrganisationStatuses.Active &&
                         ((r.AccountingDate == privateAccountingDate && r.Organisation.SectorType == SectorTypes.Private) || (r.AccountingDate == publicAccountingDate && r.Organisation.SectorType == SectorTypes.Public)) &&
                         r.Organisation.OrganisationSicCodes.Any(sic => sectors.Contains(sic.SicCode.SicSectionId)))
                         .OrderBy(r => r.Organisation.OrganisationName);
                 else
-                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted &&
+                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted && r.Organisation.Status == OrganisationStatuses.Active &&
                         (r.AccountingDate == privateAccountingDate && r.Organisation.SectorType == SectorTypes.Private) || (r.AccountingDate == publicAccountingDate && r.Organisation.SectorType == SectorTypes.Public))
                         .OrderBy(r => r.Organisation.OrganisationName);
 
@@ -165,84 +161,6 @@ namespace GenderPayGap.WebUI.Controllers
             return result;
         }
 
-        [HttpPost]
-        //[ValidateAntiForgeryToken] removed as this breaks caching
-        [Route("search-results")]
-        public ActionResult SearchResults(SearchViewModel m, string command)
-        {
-            //Make sure we can load employers from session
-            var model = this.UnstashModel<SearchViewModel>();
-            if (model == null)
-            {
-                model=new SearchViewModel();
-                model.SearchText = m.LastSearch;
-                model.Employers = Search(m.LastSearch, m.LastSectors.SplitI(string.Empty).ToList(), m.LastPage, m.LastPageSize, m.LastYear);
-            }
-
-            var nextPage = model.Employers.CurrentPage;
-
-            var oldSearchText = model.SearchText;
-            if (command == "search")
-            {
-                bool clearSearch = !string.IsNullOrWhiteSpace(model.SearchText) && string.IsNullOrWhiteSpace(m.SearchText);
-                model.SearchText = m.SearchText.TrimI();
-                if (!clearSearch)
-                {
-                    if (string.IsNullOrWhiteSpace(model.SearchText))
-                    {
-                        AddModelError(3019, "SearchText");
-                        this.CleanModelErrors<SearchViewModel>();
-                        return View("SearchResults", model);
-                    }
-                    if (model.SearchText.Length < 3 || model.SearchText.Length > 100)
-                    {
-                        AddModelError(3007, "SearchText");
-                        this.CleanModelErrors<SearchViewModel>();
-                        return View("SearchResults", model);
-                    }
-                }
-            }
-            else if (command == "pageNext")
-            {
-                if (nextPage >= model.Employers.PageCount)
-                    throw new Exception("Cannot go past last page");
-                nextPage++;
-            }
-            else if (command == "pagePrev")
-            {
-                if (nextPage <= 1)
-                    throw new Exception("Cannot go before previous page");
-                nextPage--;
-            }
-            else if (command.StartsWithI("page_"))
-            {
-                var page = command.AfterFirst("page_").ToInt32();
-                if (page < 1 || page > model.Employers.PageCount)
-                    throw new Exception("Invalid page selected");
-
-                if (page != nextPage)
-                {
-                    nextPage = page;
-                }
-            }
-
-            ModelState.Clear();
-
-            var selectedSectors = m.NewSectors.ToDelimitedString(string.Empty);
-
-            //If search text, sectors or page changed then redirect to search page
-            if (oldSearchText != m.SearchText)
-                nextPage = 1;
-
-            if (oldSearchText != model.SearchText || nextPage != model.Employers.CurrentPage || selectedSectors != model.NewSectors.ToDelimitedString(string.Empty))
-            {
-                model.SearchText = oldSearchText;
-                return RedirectToAction("SearchResults", new { search = m.SearchText, page = nextPage, sectors = selectedSectors });
-            }
-
-            //Otherwise show the same results
-            return View("SearchResults", model);
-        }
 
         [HttpGet]
         [Route("download")]

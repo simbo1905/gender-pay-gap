@@ -53,7 +53,7 @@ namespace GenderPayGap
                 try
                 {
                     var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/verify.html"));
-                    html = html.Replace("((VerifyUrl))", verifyUrl);
+                    html = html.Replace("((url))", verifyUrl);
                     Email.QuickSend("GPG Registration Verification", SmtpUsername, SmtpSenderName, emailAddress, html, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort);
                     return true;
                 }

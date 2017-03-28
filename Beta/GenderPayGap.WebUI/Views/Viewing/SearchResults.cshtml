@@ -6,15 +6,13 @@
 @using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
-    @using (Html.BeginForm())
+    @using (Html.BeginForm("SearchResults","Viewing",FormMethod.Get))
     {
         <!--@Html.AntiForgeryToken() Removed as this breaks caching -->
 
-        @Html.HiddenFor(model => model.LastSearch)
-        @Html.HiddenFor(model => model.LastSectors)
-        @Html.HiddenFor(model => model.LastPage)
-        @Html.HiddenFor(model => model.LastYear)
-        @Html.HiddenFor(model=>model.LastPageSize)
+        @Html.HiddenFor(model => model.p)
+        @Html.HiddenFor(model => model.y)
+        @Html.HiddenFor(model=>model.s)
 
         <div class="grid-row">
             <div class="column-full">
@@ -38,11 +36,11 @@
                                 <div class="grid-row">
                                     <div class="column-one-third">
                                         <p class="reducedMargins">Search by:</p>
-                                        @Html.ValidationMessageFor(model => model.SearchText, "", new { @class = "error-danger" })
+                                        @Html.ValidationMessageFor(model => model.search, "", new { @class = "error-danger" })
                                         <div class="search-bar flush2">
                                             <div class="searchfield">
-                                                    @Html.CustomEditorFor(model => model.SearchText, htmlAttributes: new {@class = "search-input", @placeholder = "Employer name"})
-                                                    <button type="submit" class="search-submit" name="command" value="search">Search</button>
+                                                    @Html.CustomEditorFor(model => model.search, htmlAttributes: new {@class = "search-input", @placeholder = "Employer name"})
+                                                    <button type="submit" class="search-submit">Search</button>
                                             </div>
                                         </div>
                                         <p class="reducedMargins">Filter by:</p>
@@ -52,7 +50,7 @@
                                                 Sectors
                                             </div>
                                             <div class="checkbox-container">
-                                                @Html.CheckBoxListFor(model => model.NewSectors, Model.SectorSources)
+                                                @Html.CheckBoxListFor(model => model.s, Model.SectorSources)
                                             </div>
                                         </div>
                                     </div>
@@ -62,7 +60,7 @@
                                         @if (Model.Employers.Results.Count < 1)
                                         {
                                             <div class="zero-results">
-                                                @if (string.IsNullOrWhiteSpace(Model.SearchText) && string.IsNullOrWhiteSpace(Model.LastSectors))
+                                                @if (string.IsNullOrWhiteSpace(Model.search) && !Model.s.Any())
                                                 {
                                                     <h2 class="heading-medium">There is no gender pay gap data available</h2>
                                                    <ul class="list list-bullet">
@@ -112,7 +110,7 @@
                                                     <div class="pager-controls">
                                                         @if (Model.Employers.CurrentPage > 1)
                                                         {
-                                                            <button type="submit" class="link-button" name="command" value="pagePrev">Previous</button>
+                                                            <a class="link-button" href="@Url.AddQuery("SearchResults",new {p=Model.Employers.CurrentPage-1})">Previous</a>
                                                         }
                                                         @if (Model.Employers.PageCount > 1)
                                                         {
@@ -126,7 +124,7 @@
                                                                     else
                                                                     {
                                                                         <li>
-                                                                            <button type="submit" class="link-button" name="command" value="page_@i">@i</button>
+                                                                            <a class="link-button" href="@Url.AddQuery("SearchResults",new {p=i})">@i</a>
                                                                         </li>
                                                                     }
                                                                 }
@@ -134,7 +132,7 @@
                                                         }
                                                         @if (Model.Employers.CurrentPage < Model.Employers.PageCount)
                                                         {
-                                                            <button type="submit" class="link-button" name="command" value="pageNext">Next</button>
+                                                            <a class="link-button" href="@Url.AddQuery("SearchResults",new {p=Model.Employers.CurrentPage +1})">Next</a>
                                                         }
                                                     </div>
                                                     <div class="pager-summary">Showing @Model.EmployerStartIndex – @Model.EmployerEndIndex of @Model.Employers.RowCount employers</div>
@@ -153,10 +151,11 @@
 </main>
 <script type="text/javascript">
     $(document).ready(function() {
-        $("[name='NewSectors'").click(SubmitSectors);
+        $("[name='s'").click(SubmitSectors);
     });
 
     function SubmitSectors(e) {
         $(this).closest('form').submit();
+        $("[name='s'").prop("disabled", true);
     }
 </script>
