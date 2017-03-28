@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using GenderPayGap.Models.SqlDatabase;
@@ -102,7 +103,8 @@ namespace GenderPayGap.WebUI.Controllers
                     Request.GetOwinContext().Authentication.SignOut();
                     break;
                 case "CreateTestData":
-                    CreateTestData();
+                    var recordCount = ConfigurationManager.AppSettings["TESTING-Records"].ToInt32(500);
+                    CreateTestData(recordCount);
                     break;
                 case "ClearDatabase":
                     DbContext.Truncate();

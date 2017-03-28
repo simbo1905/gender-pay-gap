@@ -148,6 +148,12 @@ namespace GenderPayGap.WebUI.Controllers
             try
             {
                 var verifyCode = Encryption.EncryptQuerystring(currentUser.UserId + ":" + currentUser.Created.ToSmallDateTime());
+#if DEBUG || TEST
+                var testcode = ConfigurationManager.AppSettings["TESTING-VerifyCode"];
+                if (!string.IsNullOrWhiteSpace(testcode))
+                    verifyCode = testcode;
+                else
+#endif
                 if (!this.SendVerifyEmail(currentUser.EmailAddress, verifyCode))
                     throw new Exception("Could not send verification email. Please try again later.");
 
@@ -232,7 +238,6 @@ namespace GenderPayGap.WebUI.Controllers
                 return View("CustomError", new ErrorViewModel(1110, new { remainingTime = remainingLock.ToFriendly(maxParts: 2) }));
 
             ActionResult result;
-
             if (currentUser.EmailVerifyHash != code.GetSHA512Checksum())
             {
                 currentUser.VerifyAttempts++;
@@ -1424,11 +1429,16 @@ namespace GenderPayGap.WebUI.Controllers
             {
                 try
                 {
-                    //Generate a new pin
-                    var pin = ConfigurationManager.AppSettings["TESTING-Pin"];
-                    if (string.IsNullOrWhiteSpace(pin))pin = Crypto.GeneratePasscode(Properties.Settings.Default.PINChars.ToCharArray(),Properties.Settings.Default.PINLength);
-
                     var now = DateTime.Now;
+
+                    //Generate a new pin
+                    var pin = Crypto.GeneratePasscode(Properties.Settings.Default.PINChars.ToCharArray(), Properties.Settings.Default.PINLength);
+#if DEBUG || TEST
+                    var testpin = ConfigurationManager.AppSettings["TESTING-Pin"];
+                    if (!string.IsNullOrWhiteSpace(testpin))
+                        pin = testpin;
+                    else
+#endif
                     //Try and send the PIN in post
                     if (!this.SendPinInPost(userOrg, pin, now))
                         throw new Exception("Could not send PIN in the POST.");
@@ -1465,9 +1475,9 @@ namespace GenderPayGap.WebUI.Controllers
             return GetSendPIN();
         }
 
-        #endregion
+#endregion
 
-        #region RequestPIN
+#region RequestPIN
         [HttpGet]
         [Auth]
         [Route("request-pin")]
@@ -1511,9 +1521,9 @@ namespace GenderPayGap.WebUI.Controllers
 
             return RedirectToAction("PINSent");
         }
-        #endregion
+#endregion
 
-        #region ActivateService
+#region ActivateService
         [HttpGet]
         [Auth]
         [Route("activate-service")]
@@ -1607,9 +1617,9 @@ namespace GenderPayGap.WebUI.Controllers
             //Prompt the user with confirmation
             return result1;
         }
-        #endregion
+#endregion
 
-        #region Complete
+#region Complete
         [HttpGet]
         [Auth]
         [Route("Complete")]
@@ -1630,6 +1640,6 @@ namespace GenderPayGap.WebUI.Controllers
             //Show the confirmation view
             return View("Complete",model);
         }
-        #endregion
+#endregion
     }
 }

@@ -10,3 +10,6 @@ LOGIN ATTEMPT:Success,REMOTEIP:::1, Username:mccabesp@hotmail.com,Details:,Name:
 Date:28/03/2017 19:16:26,Machine:TESTRIG02 -------
 LOGIN ATTEMPT:Success,REMOTEIP:::1, Username:mccabesp@hotmail.com,Details:,Name:Local Login Success
 
+Date:28/03/2017 21:00:26,Machine:TESTRIG02 -------
+LOGIN ATTEMPT:Success,REMOTEIP:::1, Username:mccabesp@hotmail.com,Details:,Name:Local Login Success
+
