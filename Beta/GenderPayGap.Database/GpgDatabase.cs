@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System.Configuration;
+using System.Data;
 using System.Data.Common;
 using System.Data.Entity.Validation;
 using Extensions;
@@ -21,6 +22,8 @@ namespace GenderPayGap.Models.SqlDatabase
             : base("GpgDatabase")
         {
         }
+
+        public static bool EncryptEmails = ConfigurationManager.AppSettings["EncryptEmails"].ToBoolean(true);
 
         public virtual DbSet<Organisation> Organisation { get; set; }
         public virtual DbSet<OrganisationAddress> OrganisationAddress { get; set; }

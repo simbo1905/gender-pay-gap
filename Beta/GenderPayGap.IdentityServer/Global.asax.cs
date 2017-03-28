@@ -64,6 +64,7 @@ namespace GenderPayGap.IdentityServer
 
         public static bool MaintenanceMode = ConfigurationManager.AppSettings["MaintenanceMode"].ToBoolean();
         public static bool StickySessions = ConfigurationManager.AppSettings["StickySessions"].ToBoolean(true);
+        public static bool EncryptEmails = ConfigurationManager.AppSettings["EncryptEmails"].ToBoolean(true);
 
         protected void Application_Start(object sender, EventArgs e)
         {

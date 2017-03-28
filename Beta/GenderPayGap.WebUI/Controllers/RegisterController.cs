@@ -188,9 +188,9 @@ namespace GenderPayGap.WebUI.Controllers
             if (currentUser.EmailVerifySendDate.EqualsI(null, DateTime.MinValue))
             {
                 if (!ResendVerifyCode(currentUser))
-                    model.Retry = true;
-                else
-                    model.Sent = true;
+                    return View("CustomError", new ErrorViewModel(1004));
+
+                model.Sent = true;
 
                 //Tell them to verify email
                 return View("VerifyEmail", model);

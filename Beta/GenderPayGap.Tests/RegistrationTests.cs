@@ -776,7 +776,6 @@ namespace GenderPayGap.Tests
             var model = new VerifyViewModel();
             model.EmailAddress = "test@hotmail.com";
             model.Resend = false;
-            model.Retry = false;
 
             //Set model as if email
 

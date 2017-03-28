@@ -24,16 +24,6 @@
                     <h2 class="heading-small">No email yet?</h2>
                     <p>Our email can take a few minutes to arrive. If you can’t see it in your inbox, check your junk mail folder.</p>
                 }
-                else if (Model.Retry)
-                {
-                    <h1 class="heading-large">
-                        Confirm your email address
-                    </h1>
-                    <p>
-                        To retry sending your verification email to <b>@Model.EmailAddress</b> click the button below:
-                    </p>
-                    <input type="submit" class="button" value="Resend" />
-                }
                 else if (Model.Resend)
                 {
                     <h1 class="heading-large">

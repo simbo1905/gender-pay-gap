@@ -17,11 +17,21 @@ namespace GenderPayGap.IdentityServer
             //var user = InternalUsers.SingleOrDefault(x => x.Username == context.UserName && x.Password == context.Password);
 
             var username = context.UserName.ToLower();
-
             try
             {
                 var dbContext = new DbContext();
-                var user = dbContext.User.FirstOrDefault(x => x.EmailAddress == username);
+                User user = null;
+                var encryptedUsername = Global.EncryptEmails && !string.IsNullOrWhiteSpace(username) ? Encryption.EncryptData(username) : null;
+                if (Global.EncryptEmails)
+                {
+                    user = dbContext.User.FirstOrDefault(x => x.EmailAddressDB == encryptedUsername);
+                    if (user == null) user = dbContext.User.FirstOrDefault(x => x.EmailAddressDB == username);
+                }
+                else
+                {
+                    user = dbContext.User.FirstOrDefault(x => x.EmailAddressDB == username);
+                    if (user == null) user = dbContext.User.FirstOrDefault(x => x.EmailAddressDB == encryptedUsername);
+                }
 
                 if (user != null)
                 {

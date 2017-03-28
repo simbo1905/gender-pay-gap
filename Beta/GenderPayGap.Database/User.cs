@@ -1,3 +1,5 @@
+using IdentityServer3.Core.Services.Default;
+
 namespace GenderPayGap.Models.SqlDatabase
 {
     using Extensions;
@@ -32,7 +34,24 @@ namespace GenderPayGap.Models.SqlDatabase
         [Required(AllowEmptyStrings = false)]
         [MaxLength(255)]
         [Index]
-        public string EmailAddress { get; set; }
+        [Column("EmailAddress")]
+        public string EmailAddressDB { get; set; }
+
+        [NotMapped]
+        public string EmailAddress
+        {
+            get
+            {
+                return string.IsNullOrWhiteSpace(EmailAddressDB) ? EmailAddressDB : Encryption.DecryptData(EmailAddressDB);
+            }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(value) && DbContext.EncryptEmails)
+                    EmailAddressDB = Encryption.EncryptData(value);
+                else
+                    EmailAddressDB = value;
+            }
+        }
 
         [MaxLength(50)]
         public string ContactJobTitle { get; set; }
@@ -48,7 +67,24 @@ namespace GenderPayGap.Models.SqlDatabase
 
         [MaxLength(255)]
         [Index]
-        public string ContactEmailAddress { get; set; }
+        [Column("ContactEmailAddress")]
+        public string ContactEmailAddressDB { get; set; }
+
+        [NotMapped]
+        public string ContactEmailAddress
+        {
+            get
+            {
+                return string.IsNullOrWhiteSpace(ContactEmailAddressDB) ? ContactEmailAddressDB : Encryption.DecryptData(ContactEmailAddressDB);
+            }
+            set
+            {
+                if (!string.IsNullOrWhiteSpace(ContactEmailAddressDB) && DbContext.EncryptEmails)
+                    ContactEmailAddressDB=Encryption.EncryptData(value);
+                else
+                    ContactEmailAddressDB = value;
+            }
+        }
 
         [MaxLength(20)]
         [Index]

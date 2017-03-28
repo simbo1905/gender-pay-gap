@@ -1,0 +1,36 @@
+Date:28/03/2017 18:06:27,Machine:TESTRIG02 -------
+Home Controller Initialised
+
+Date:28/03/2017 18:06:27,Machine:TESTRIG02 -------
+Register Controller Initialised
+
+Date:28/03/2017 18:06:28,Machine:TESTRIG02 -------
+Viewing Controller Initialised
+
+Date:28/03/2017 18:31:39,Machine:TESTRIG02 -------
+Home Controller Initialised
+
+Date:28/03/2017 18:31:39,Machine:TESTRIG02 -------
+Register Controller Initialised
+
+Date:28/03/2017 18:31:40,Machine:TESTRIG02 -------
+Viewing Controller Initialised
+
+Date:28/03/2017 18:45:41,Machine:TESTRIG02 -------
+Home Controller Initialised
+
+Date:28/03/2017 18:45:42,Machine:TESTRIG02 -------
+Register Controller Initialised
+
+Date:28/03/2017 18:45:43,Machine:TESTRIG02 -------
+Viewing Controller Initialised
+
+Date:28/03/2017 18:50:55,Machine:TESTRIG02 -------
+Home Controller Initialised
+
+Date:28/03/2017 18:50:55,Machine:TESTRIG02 -------
+Register Controller Initialised
+
+Date:28/03/2017 18:50:57,Machine:TESTRIG02 -------
+Viewing Controller Initialised
+

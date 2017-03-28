@@ -1,0 +1,103 @@
+Date:28/03/2017 18:33:51,Machine:TESTRIG02 -------
+Cant send verification email to Gov Notify for  due to following error:Status code 400. The following errors occured [
+  {
+    "error": "ValidationError",
+    "message": "email_address None is not of type string"
+  }
+]
+
+Date:28/03/2017 18:33:52,Machine:TESTRIG02 -------
+Cant send verification email directly for  due to following error:A recipient must be specified.
+
+Date:28/03/2017 18:33:52,Machine:TESTRIG02 -------
+Could not send verification email. Please try again later.
+
+Date:28/03/2017 18:35:10,Machine:TESTRIG02 -------
+Cant send verification email to Gov Notify for  due to following error:Status code 400. The following errors occured [
+  {
+    "error": "ValidationError",
+    "message": "email_address None is not of type string"
+  }
+]
+
+Date:28/03/2017 18:35:11,Machine:TESTRIG02 -------
+Cant send verification email directly for  due to following error:A recipient must be specified.
+
+Date:28/03/2017 18:35:11,Machine:TESTRIG02 -------
+Could not send verification email. Please try again later.
+
+Date:28/03/2017 18:35:58,Machine:TESTRIG02 -------
+Cant send verification email to Gov Notify for  due to following error:Status code 400. The following errors occured [
+  {
+    "error": "ValidationError",
+    "message": "email_address None is not of type string"
+  }
+]
+
+Date:28/03/2017 18:35:59,Machine:TESTRIG02 -------
+Cant send verification email directly for  due to following error:A recipient must be specified.
+
+Date:28/03/2017 18:35:59,Machine:TESTRIG02 -------
+Could not send verification email. Please try again later.
+
+Date:28/03/2017 18:37:44,Machine:TESTRIG02 -------
+Cant send verification email to Gov Notify for  due to following error:Status code 400. The following errors occured [
+  {
+    "error": "ValidationError",
+    "message": "email_address None is not of type string"
+  }
+]
+
+Date:28/03/2017 18:37:45,Machine:TESTRIG02 -------
+Cant send verification email directly for  due to following error:A recipient must be specified.
+
+Date:28/03/2017 18:38:13,Machine:TESTRIG02 -------
+Could not send verification email. Please try again later.
+
+Date:28/03/2017 18:46:00,Machine:TESTRIG02 -------
+Cant send verification email to Gov Notify for  due to following error:Status code 400. The following errors occured [
+  {
+    "error": "ValidationError",
+    "message": "email_address None is not of type string"
+  }
+]
+
+Date:28/03/2017 18:46:01,Machine:TESTRIG02 -------
+Cant send verification email directly for  due to following error:A recipient must be specified.
+
+Date:28/03/2017 18:46:23,Machine:TESTRIG02 -------
+Could not send verification email. Please try again later.
+
+Date:28/03/2017 18:47:05,Machine:TESTRIG02 -------
+Cant send verification email to Gov Notify for  due to following error:Status code 400. The following errors occured [
+  {
+    "error": "ValidationError",
+    "message": "email_address None is not of type string"
+  }
+]
+
+Date:28/03/2017 18:47:06,Machine:TESTRIG02 -------
+Cant send verification email directly for  due to following error:A recipient must be specified.
+
+Date:28/03/2017 18:47:15,Machine:TESTRIG02 -------
+Could not send verification email. Please try again later.
+
+Date:28/03/2017 18:49:23,Machine:TESTRIG02 -------
+Cant send verification email to Gov Notify for  due to following error:Status code 400. The following errors occured [
+  {
+    "error": "ValidationError",
+    "message": "email_address None is not of type string"
+  }
+]
+
+Date:28/03/2017 18:49:36,Machine:TESTRIG02 -------
+Cant send verification email directly for  due to following error:A recipient must be specified.
+
+Date:28/03/2017 18:51:23,Machine:TESTRIG02 -------
+Cant send verification email to Gov Notify for mccabesp@hotmail.com due to following error:Status code 404. The following errors occured [
+  {
+    "error": "NoResultFound",
+    "message": "No result found"
+  }
+]
+

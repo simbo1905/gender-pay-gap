@@ -68,8 +68,19 @@ namespace GenderPayGap.WebUI.Classes
         {
             if (string.IsNullOrWhiteSpace(emailAddress))throw new ArgumentNullException("emailAddress");
             
-            //If internal user the load it using the identifier as the UserID
-            return repository.GetAll<User>().FirstOrDefault(u => u.EmailAddress == emailAddress);
+            var encryptedUsername = MvcApplication.EncryptEmails ? Encryption.EncryptData(emailAddress) : null;
+            User user = null;
+            if (MvcApplication.EncryptEmails)
+            {
+                user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == encryptedUsername);
+                if (user == null) user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == emailAddress);
+            }
+            else
+            {
+                user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == emailAddress);
+                if (user == null) user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == encryptedUsername);
+            }
+            return user;
         }
 
         public static User FindUserByVerifyCode(this IRepository repository, string verifyCode)
