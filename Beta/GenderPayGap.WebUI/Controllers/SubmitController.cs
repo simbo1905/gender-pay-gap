@@ -364,6 +364,10 @@ namespace GenderPayGap.WebUI.Controllers
                 scope.Complete();
             }
 
+            //Alert on submit
+            if (oldReturn==null && MvcApplication.EnableSubmitAlerts && !currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                GovNotifyAPI.SendGeoMessage("GPG Data Submission Notification",$"GPG data was submitted for first time by '{newReturn.Organisation.OrganisationName}' on {newReturn.StatusDate.ToShortDateString()}\n\n See {Url.Action("EmployerDetails","Viewing",new {id=newReturn.Organisation.GetEncryptedId()},"https")}");
+
             return RedirectToAction("SubmissionComplete");
         }
 

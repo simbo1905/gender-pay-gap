@@ -73,6 +73,7 @@ namespace GenderPayGap
         public static bool MaintenanceMode= ConfigurationManager.AppSettings["MaintenanceMode"].ToBoolean();
         public static bool StickySessions = ConfigurationManager.AppSettings["StickySessions"].ToBoolean(true);
         public static bool EncryptEmails = ConfigurationManager.AppSettings["EncryptEmails"].ToBoolean(true);
+        public static bool EnableSubmitAlerts = ConfigurationManager.AppSettings["EnableSubmitAlerts"].ToBoolean();
 
         /// <summary>
         /// Return true if exactly one concrete admin defined 

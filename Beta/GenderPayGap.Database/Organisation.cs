@@ -127,5 +127,11 @@ namespace GenderPayGap.Models.SqlDatabase
         {
             return OrganisationSicCodes.Select(s => s.SicCode.SicSection.Description).ToDelimitedString(delimiter);
         }
+
+        public string GetEncryptedId()
+        {
+            return Encryption.EncryptQuerystring(OrganisationId.ToString());
+        }
+
     }
 }
