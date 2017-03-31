@@ -532,3 +532,26 @@ Find your organisation ->
 						POST ->  AddContact - contact 
 						POST ->  ConfirmOrganisation_Post_PublicSector_Success() - Confirm your organisations details	  
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------ 
+
+Questions:
+how do i add to the file Repository
+and do we place download.csv
+try and mock the Settings.settings for Download()
+
+
+UNIT TEST HEADING
+Word document for all TDDS
+Columns:
+Test Description   |   Date of test  |    Actual result / Expected Result
+
+
+
+name GPG Test and Deployment Procedures
+
+table of content
+unit test
+integrations test
+manual test
+Deployment procedures
+
+use the data documents as a template

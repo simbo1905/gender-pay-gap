@@ -292,7 +292,7 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("check-data")]
-        public ActionResult CheckData  /*Confirm*/(ReturnViewModel model)
+        public ActionResult CheckData(ReturnViewModel model)
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -336,7 +336,7 @@ namespace GenderPayGap.WebUI.Controllers
                 MaleMiddlePayBand = model.MaleMiddlePayBand.Value,
                 MaleUpperPayBand = model.MaleUpperPayBand.Value,
                 Status = ReturnStatuses.Draft,
-                OrganisationId = model.OrganisationId
+                OrganisationId = model.OrganisationId,
             };
 
             //Retire the old one 
@@ -361,6 +361,8 @@ namespace GenderPayGap.WebUI.Controllers
 
                 scope.Complete();
             }
+
+            this.StashModel(model);
 
             return RedirectToAction("SubmissionComplete");
         }

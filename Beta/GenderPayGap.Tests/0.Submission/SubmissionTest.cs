@@ -663,7 +663,7 @@ namespace GenderPayGap.Tests.Submission
         //TODO Test needed for fields are now using regex to ensure only 1 decimal place
 
         [Test]
-        [Description("Create action result should load the return model view")]
+        [Description("Ensure the Enter Calculations form returns an existing return if there is one and the loaded model of the return is valid")]
         public void EnterCalculations_VerifyActionReturns_ValidReturnModel()
         {
             //ARRANGE:
@@ -741,7 +741,7 @@ namespace GenderPayGap.Tests.Submission
         }
 
         [Test]
-        [Description("Create action result should load the return model view")]
+        [Description("Ensure the EnterCalculations formreturns an existing return if there is one for the current user ")]
         public void EnterCalculations_VerifyActionReturns_AnExistingReturn()
         {
             // Arrange
@@ -775,7 +775,7 @@ namespace GenderPayGap.Tests.Submission
         }
 
         [Test]
-        [Description("EnterCalculations should fail when any field is empty")]
+        [Description("Ensure the EnterCalculations form is returned for the current user ")]
         public void EnterCalculations_Get_Success()
         {
             // Arrange
@@ -932,7 +932,7 @@ namespace GenderPayGap.Tests.Submission
 
         #region Positive Tests
         [Test]
-        [Description("EnterCalculations should fail when any field is empty")]
+        [Description("Ensure the Person Responsible form is returned for the current user ")]
         public void PersonResponsible_Get_Success()
         {
             // Arrange
@@ -974,7 +974,7 @@ namespace GenderPayGap.Tests.Submission
 
 
         [Test]
-        [Description("EnterCalculations should fail when any field is empty")]
+        [Description("Ensure that Person Responsible form is filled and sent successfully ")]
         public void PersonResponsible_Post_Success()
         {
             // Arrange
@@ -1164,7 +1164,7 @@ namespace GenderPayGap.Tests.Submission
             //controller.bind();
 
             //Act:
-            var result = controller.PersonResponsible(model, command) as ViewResult; ;
+            var result = controller.PersonResponsible(model, command) as ViewResult;
 
             //Assert
             Assert.Multiple(() =>
@@ -1193,7 +1193,7 @@ namespace GenderPayGap.Tests.Submission
 
         #region Positive Tests
         [Test]
-        [Description("EmployerWebsite should succeed when view is requested")]
+        [Description("Ensure the employer Website form is returned for the current user ")]
         public void EmployerWebsite_Get_Success()
         {
             // Arrange
@@ -1229,7 +1229,7 @@ namespace GenderPayGap.Tests.Submission
         }
 
         [Test]
-        [Description("EmployerWebsite should succeed its field is empty or null on View Post")]
+        [Description("Ensure that employer Website form is filled and sent successfully when there is no value as it is optional")]
         public void EmployerWebsite_Post_Without_CompanyLinkToGPGInfoValue_Success()
         {
             // Arrange
@@ -1291,7 +1291,7 @@ namespace GenderPayGap.Tests.Submission
         }
 
         [Test]
-        [Description("EmployerWebsite should succeed its field has value on View Post, no need to check validity of the value here, (due to client-side validation)")]
+        [Description("Ensure that employer Website form is filled and sent successfully when its field value is a valid url value")]
         public void EmployerWebsite_Post_With_CompanyLinkToGPGInfoValue_Success()
         {
             // Arrange
@@ -1467,7 +1467,7 @@ namespace GenderPayGap.Tests.Submission
 
         #region Positive Tests
         [Test]
-        [Description("CheckData should fail when any field is empty")]
+        [Description("Ensure the Check Data form is returned for the current user ")]
         public void CheckData_Get_Success()
         {
             // Arrange
@@ -1517,9 +1517,9 @@ namespace GenderPayGap.Tests.Submission
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
         }
 
-        [Ignore("This test needs fixing")]
+        //why is ReturnID = 0, Investigate!
         [Test]
-        [Description("CheckData should fail when any field is empty")]
+        [Description("Ensure that CheckData form has all previous form values correct and validated and sent successfully")]
         public void CheckData_Post_Success()
         {
             // Arrange
@@ -1537,7 +1537,7 @@ namespace GenderPayGap.Tests.Submission
 
             var PrivateAccountingDate = new DateTime(2017, 4, 4);
 
-            //mock entered return at review CheckData view
+            //mock entered 'return' at review CheckData view
             var model = new ReturnViewModel()
             {
                 AccountingDate = (DateTime)WebUI.Properties.Settings.Default["PrivateAccountingDate"],
@@ -1570,18 +1570,23 @@ namespace GenderPayGap.Tests.Submission
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.CheckData(model) as ViewResult;
-            var resultModel = result.Model as ReturnViewModel;
+            var result = controller.CheckData(model) as RedirectToRouteResult;
+            //var resultModel = result.Model as ReturnViewModel;
+            var resultModel = controller.UnstashModel<ReturnViewModel>();
 
             //DONE this should just return the correct record with returnid=1
             var resultDB = (controller.DataRepository.GetAll<Return>().FirstOrDefault(r => r.ReturnId == 1));
 
             // ASSERT:
             //3.Check that the result is not null
-            Assert.That(result != null && result.GetType() == typeof(ViewResult), "Expected ViewResult or Incorrect resultType returned");
-            Assert.That(result.ViewName == "SubmissionComplete", "Incorrect view returned");
-            Assert.That(result.Model  != null && result.Model.GetType() == typeof(ReturnViewModel), "Expected ReturnViewModelis null or Incorrect resultType returned");
-            Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
+            Assert.That(result != null && result.GetType() == typeof(RedirectToRouteResult), "Expected RedirectToRouteResult or Incorrect resultType returned");
+            Assert.That(result.RouteValues["action"].ToString() == "SubmissionComplete", "Incorrect view returned");
+
+            Assert.That(resultModel  != null && resultModel.GetType() == typeof(ReturnViewModel), "Expected ReturnViewModelis null or Incorrect resultType returned");
+
+            //Check the Model State
+            //Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
+            
 
             // get the data from the mock database and assert it is there
             Assert.That(model.CompanyLinkToGPGInfo == resultModel.CompanyLinkToGPGInfo, "expected: entered companyLinkToGPGInfo is what is saved in db");

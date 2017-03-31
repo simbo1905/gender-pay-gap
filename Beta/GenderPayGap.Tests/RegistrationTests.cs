@@ -360,7 +360,7 @@ namespace GenderPayGap.Tests
             Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step2", "");
+            Assert.That(result.RouteValues["action"].ToString() == "Step2", "Redirected to the wrong view");
 
             //check that the model stashed preserved with the redirect is equal to what is expected the Arrange values here
             //Retreive the model stashed preserved with the redirect.
@@ -542,7 +542,7 @@ namespace GenderPayGap.Tests
 
         #region Positive tests
         [Test]
-        [Description("Ensure the Step1 succeeds and gets a new registration form for newly authorized users to register")]
+        [Description("Ensure that a new registration form is returned for a user to register")]
         public void AboutYou_Get_NewRegistration_Success()
         {
             //ARRANGE:
@@ -572,7 +572,7 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Ensure the Step1 succeeds when all fields are good")]
+        [Description("Ensure that the new registration form filled with correct values is sent successfully when all fields values are valid")]
         public void AboutYou_Post_Success()
         {
             //ARRANGE:
@@ -820,7 +820,7 @@ namespace GenderPayGap.Tests
         #region Positive tests
 
         [Test]
-        [Description("Ensure the Step3 succeeds when all fields are good")]
+        [Description("Ensure the Organisation type form is returned for the current user ")]
         public void OrganisationType_Get_Success()
         {
             //ARRANGE:
@@ -847,7 +847,7 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Ensure the Step3 succeeds when all fields are good")]
+        [Description("Private Sector:Ensure the Organisation type form is confirmed and sent successfully")]
         public void OrganisationType_Post_PrivateSector_Success()
         {
             //ARRANGE:
@@ -901,7 +901,7 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Ensure the Step3 succeeds when all fields are good")]
+        [Description("Public Sector:Ensure the Organisation type form is confirmed and sent successfully")]
         public void OrganisationType_Post_PublicSector_Success()
         {
             //ARRANGE:
@@ -963,7 +963,7 @@ namespace GenderPayGap.Tests
 
         #region Positive tests
         [Test]
-        [Description("Ensure the Step4 succeeds when all fields are good")]
+        [Description("Ensure the Organisation search form is returned for the current user ")]
         public void OrganisationSearch_Get_Success()
         {
             //ARRANGE:
@@ -996,7 +996,7 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Ensure the Step4 succeeds when all fields are good")]
+        [Description("Ensure that organisation search form has a search text in its field sent successfully and a a matching record is returned")]
         public void OrganisationSearch_Post_PrivateSector_Success()
         {
             //ARRANGE:
@@ -1160,7 +1160,7 @@ namespace GenderPayGap.Tests
 
         #region Positive tests
         [Test]
-        [Description("Ensure the Step5 succeeds when all fields are good")]
+        [Description("Ensure the Choose Organisation form is returned for the current user to choose an organisation")]
         public void ChooseOrganisation_Get_Success()
         {
             //ARRANGE:
@@ -1190,7 +1190,7 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Ensure the Step5 succeeds when all fields are good")]
+        [Description("Ensure that the new Choose Organisation form is selected and sent successfully when all fields values are valid")]
         public void ChooseOrganisation_Post_PrivateSector_Success()
         {
             //ARRANGE:
@@ -1273,7 +1273,7 @@ namespace GenderPayGap.Tests
         /// Emailpattern matching organisation matching:
         /// </summary>
         [Test]
-        [Description("Ensure the Step5 succeeds when all fields are good")]
+        [Description("Ensure that when Choose Organisation form is selected and sent successfully")]
         public void ChooseOrganisation_Post_PublicSector_Success()
         {
             //ARRANGE:
@@ -1350,7 +1350,7 @@ namespace GenderPayGap.Tests
         /// Emailpattern not matching and organisation not matching:
         /// </summary>
         [Test]
-        [Description("Ensure the Step5 succeeds when all fields are good")]
+        [Description("Public Manual Journey: Ensure that when Choose Organisation form is selected and email pattern and organisation does not matched, user is redirected to the add organisation form")]
         public void ChooseOrganisation_Post_PublicSector_NoEmailMatch_NoOrgMatch_Success()
         {
             //ARRANGE:
@@ -1433,7 +1433,7 @@ namespace GenderPayGap.Tests
         /// Public Sector: Add organisaton address
         /// </summary>
         [Test]
-        [Description("Ensure the AddOrganisation succeeds when all fields are good")]
+        [Description("Ensure the Add Organisation form is returned for the current user to add an organisation")]
         public void AddOrganisation_Get_Success()
         {
             //ARRANGE:
@@ -1468,7 +1468,7 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Ensure the AddAddress succeeds when all fields are good")]
+        [Description("Ensure that the new Add Address form is filled and sent successfully when all fields values are valid")]
         public void AddOrganisation_Post_Success()
         {
             //ARRANGE:
@@ -1527,7 +1527,7 @@ namespace GenderPayGap.Tests
         #region ManualRegistration: Add organisation - Private Sector 
 
         [Test]
-        [Description("Private Manual: Choose your org in private sector in manual reg mode takes you to the Add org name and address view ")]
+        [Description("Private Manual Journey Choose your org in private sector in manual reg mode returns the Add Organisation view ")]
         public void AddOrganisation_Get_PrivateSector_ManualRegistration_Success()
         {
             //ARRANGE:
@@ -1567,7 +1567,7 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Private Manual: Choose your org in private sector in manual reg mode takes you to the Add org name and address view ")]
+        [Description("Private Manual journey: Ensure that the new AddOrganisation form is filled and sent successfully when all fields values are valid")]
         public void AddOrganisation_Post_PrivateSector_ManualRegistration_Success()
         {
             //ARRANGE:
@@ -1674,7 +1674,7 @@ namespace GenderPayGap.Tests
         #region ManualRegistration: Add contact - Private Sector 
 
         [Test]
-        [Description("Private Manual:   ")]
+        [Description("Private Manual Journey: ensure Add Contact form is returned successfully to the user")]
         public void AddContact_Get_PrivateSector_ManualRegistration_Success()
         {
             //ARRANGE:
@@ -1716,7 +1716,7 @@ namespace GenderPayGap.Tests
 
         //[Ignore("This test needs fixing")]
         [Test]
-        [Description("Private Manual:   ")]
+        [Description("Private Manual Journey: ensure Add Contact form is filled and sent successfully")]
         public void AddContact_Post_PrivateSector_ManualRegistration_Success()
         {
             //ARRANGE:
@@ -1785,7 +1785,7 @@ namespace GenderPayGap.Tests
         #region ManualRegistration: Add organisation - Public Sector 
 
         [Test]
-        [Description("Public Manual:   ")]
+        [Description("Public Manual Journey Choose your org in private sector in manual reg mode returns the Add Organisation view")]
         public void AddOrganisation_Get_PublicSector_ManualRegistration_Success()
         {
             //ARRANGE:
@@ -1825,7 +1825,7 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Public Manual:   ")]
+        [Description("Public Manual journey: Ensure that the new AddOrganisation form is filled and sent successfully when all fields values are valid")]
         public void AddOrganisation_Post_PublicSector_ManualRegistration_Success()
         {
             //ARRANGE:
@@ -1922,7 +1922,7 @@ namespace GenderPayGap.Tests
         #region ManualRegistration: Add contact - Public Sector 
 
         [Test]
-        [Description("Public Manual:   ")]
+        [Description("Public Sector Manual Journey: ensure Add Contact form is returned successfully to the user")]
         public void AddContact_Get_PublicManualRegistration_Success()
         {
             //ARRANGE:
@@ -1964,7 +1964,7 @@ namespace GenderPayGap.Tests
 
 
         [Test]
-        [Description("Public Manual:   ")]
+        [Description("Public Manual:ensure Add Contact form is returned successfully to the user")]
         public void AddContact_Post_PublicSector_ManualRegistration_Success()
         {
             //ARRANGE:
@@ -2019,7 +2019,7 @@ namespace GenderPayGap.Tests
             var result = controller.AddContact(model) as RedirectToRouteResult;
 
             //ASSERT:
-            Assert.NotNull(result, "Expected ViewResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
             //4.Check that the redirection went to the right url step.
             Assert.That(result.RouteValues["action"].ToString() == "ConfirmOrganisation", "Redirected to the wrong view");
             var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
@@ -2037,7 +2037,7 @@ namespace GenderPayGap.Tests
         #region Positive tests
 
         [Test]
-        [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
+        [Description("Ensure the Confirm Organisation form is returned for the current user to confirm an organisation selection")]
         public void ConfirmOrganisation_Get_Success()
         {
             //ARRANGE:
@@ -2070,7 +2070,7 @@ namespace GenderPayGap.Tests
         #region Private sector confirm organisation
        
         [Test]
-        [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
+        [Description("Private Sector Journey: Ensure the Confirm Organisation form is returned for the current user to confirm an organisation selection")]
         public void ConfirmOrganisation_Get_PrivateSector_Success()
         {
             //ARRANGE:
@@ -2104,17 +2104,13 @@ namespace GenderPayGap.Tests
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
         }
 
-        //[Ignore("This test needs fixing")]
         [Test]
-        [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
+        [Description("Private Sector Journey: Ensure the Confirm Organisation form is confirmed and sent successfuly")]
         public void ConfirmOrganisation_Post_PrivateSector_Success()
         {
             //ARRANGE:
             //1.Arrange the test setup variables
             var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
-
-            //var organisation = new Organisation() { OrganisationId = 1, OrganisationSicCodes = OrgSicCodeList };
-            //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
             ICollection<OrganisationSicCode> OrgSicCodeList = new List<OrganisationSicCode>();
 
@@ -2161,19 +2157,8 @@ namespace GenderPayGap.Tests
                 {
                     new EmployerRecord() { Name = "Acme  Inc", Address1 = "10", Address2 = "EverGreen Terrace", CompanyNumber = "123QA10", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 1).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "w12  3we" },
                     new EmployerRecord() { Name = "Beano Inc", Address1 = "11", Address2 = "EverGreen Terrace", CompanyNumber = "123QA11", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 2).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "n12  4qw" },
-                    //new EmployerRecord() { Name = "Smith ltd", Address1 = "12", Address2 = "EverGreen Terrace", CompanyNumber = "123QA12", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 3).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "nw2  1de" },
-                    //new EmployerRecord() { Name = "Trax ltd",  Address1 = "13", Address2 = "EverGreen Terrace", CompanyNumber = "123QA13", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 4).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "sw2  5gh" },
-                    //new EmployerRecord() { Name = "Exant ltd", Address1 = "14", Address2 = "EverGreen Terrace", CompanyNumber = "123QA14", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 5).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "se2  2bh" },
-                    //new EmployerRecord() { Name = "Serif ltd", Address1 = "15", Address2 = "EverGreen Terrace", CompanyNumber = "123QA15", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 6).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "da2  6cd" },
-                    //new EmployerRecord() { Name = "West ltd",  Address1 = "16", Address2 = "EverGreen Terrace", CompanyNumber = "123QA16", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 7).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "cd2  1cs" },
-                    //new EmployerRecord() { Name = "North ltd", Address1 = "17", Address2 = "EverGreen Terrace", CompanyNumber = "123QA17", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 8).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "e12  7xs" },
-                    //new EmployerRecord() { Name = "South ltd", Address1 = "18", Address2 = "EverGreen Terrace", CompanyNumber = "123QA18", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 9).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "e17  8za" },
-                    //new EmployerRecord() { Name = "East ltd",  Address1 = "19", Address2 = "EverGreen Terrace", CompanyNumber = "123QA19", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 10).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "sw25 9bh" },
-                    //new EmployerRecord() { Name = "Dax ltd",   Address1 = "20", Address2 = "EverGreen Terrace", CompanyNumber = "123QA20", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 11).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "se1  6nh" },
-                    //new EmployerRecord() { Name = "Merty ltd", Address1 = "21", Address2 = "EverGreen Terrace", CompanyNumber = "123QA21", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 12).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "se32 2nj" },
-                    //new EmployerRecord() { Name = "Daxam ltd", Address1 = "22", Address2 = "EverGreen Terrace", CompanyNumber = "123QA22", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 13).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "e1   1nh" },
-                    //new EmployerRecord() { Name = "Greta ltd", Address1 = "23", Address2 = "EverGreen Terrace", CompanyNumber = "123QA23", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 14).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "e19  8vt" },
-                    //new EmployerRecord() { Name = "Buxom ltd", Address1 = "24", Address2 = "EverGreen Terrace", CompanyNumber = "123QA24", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 15).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "sw1  5ml" }
+                    new EmployerRecord() { Name = "Smith ltd", Address1 = "12", Address2 = "EverGreen Terrace", CompanyNumber = "123QA12", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 3).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "nw2  1de" },
+                    new EmployerRecord() { Name = "Trax ltd",  Address1 = "13", Address2 = "EverGreen Terrace", CompanyNumber = "123QA13", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 4).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "sw2  5gh" },
                 }
             };
 
@@ -2291,6 +2276,7 @@ namespace GenderPayGap.Tests
         #region Public sector confirm organisation
 
         //Does not exist - check
+        [Ignore("does not exist")]
         [Test]
         [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
         public void ConfirmOrganisation_Get_PublicSector_Success()
@@ -2309,6 +2295,7 @@ namespace GenderPayGap.Tests
 
             //create an existing organisation model in the db
             var organisation = new Organisation() { OrganisationId = 1 };
+
             var userOrganisation = new UserOrganisation() { OrganisationId = organisation.OrganisationId, Organisation = organisation, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
             //Set user email address verified code and expired sent date

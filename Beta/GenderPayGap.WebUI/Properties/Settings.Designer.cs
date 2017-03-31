@@ -15,7 +15,7 @@ namespace GenderPayGap.WebUI.Properties {
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "14.0.0.0")]
     public sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
-        private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
+        internal static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
         
         public static Settings Default {
             get {
@@ -107,7 +107,7 @@ namespace GenderPayGap.WebUI.Properties {
         
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("2017-04-04")]
+        [global::System.Configuration.DefaultSettingValueAttribute("2017-06-04")]
         public global::System.DateTime PrivateAccountingDate {
             get {
                 return ((global::System.DateTime)(this["PrivateAccountingDate"]));
