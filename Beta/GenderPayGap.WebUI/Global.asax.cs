@@ -69,6 +69,7 @@ namespace GenderPayGap
         }
 
         public static string AdminEmails = ConfigurationManager.AppSettings["AdminEmails"];
+        public static string TestPrefix = ConfigurationManager.AppSettings["TestPrefix"];
         public static bool MaintenanceMode= ConfigurationManager.AppSettings["MaintenanceMode"].ToBoolean();
         public static bool StickySessions = ConfigurationManager.AppSettings["StickySessions"].ToBoolean(true);
         public static bool EncryptEmails = ConfigurationManager.AppSettings["EncryptEmails"].ToBoolean(true);

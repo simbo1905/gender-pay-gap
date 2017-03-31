@@ -158,7 +158,7 @@ namespace Extensions
         {
             if (item == null && values.Contains(null)) return true;
 
-            if (values != null)
+            if (item!=null && values != null)
                 foreach (var value in values)
                     if (item.Equals(value)) return true;
             return false;

@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Configuration;
+using System.Linq;
+using Autofac;
+using Extensions;
 using GenderPayGap.Core.Interfaces;
 using GenderPayGap.Core.Classes;
+using GenderPayGap.Models.SqlDatabase;
 using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap
@@ -19,10 +24,10 @@ namespace GenderPayGap
             throw new NotImplementedException();
         }
 
-        public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize)
+        public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize, bool test=false)
         {
             int totalRecords;
-            var searchResults = CompaniesHouseAPI.SearchEmployers(out totalRecords, searchText, page, pageSize);
+            var searchResults = CompaniesHouseAPI.SearchEmployers(out totalRecords, searchText, page, pageSize, test);
             var result = new PagedResult<EmployerRecord>();
             result.RowCount = totalRecords;
             result.CurrentPage = page;

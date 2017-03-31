@@ -8,7 +8,7 @@ namespace GenderPayGap.Core.Interfaces
         void Insert(T entity);
         void Delete(T entity);
 
-        PagedResult<T> Search(string searchText, int page, int pageSize);
+        PagedResult<T> Search(string searchText, int page, int pageSize, bool test=false);
 
         string GetSicCodes(string companyNumber);
     }

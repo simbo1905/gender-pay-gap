@@ -37,6 +37,9 @@ namespace GenderPayGap
         #region Emails
         public static bool SendVerifyEmail(string verifyUrl,string emailAddress, string verifyCode)
         {
+            //If the email address is a test email then simulate sending
+            if (emailAddress.StartsWithI(MvcApplication.TestPrefix)) return true;
+
             var personalisation = new Dictionary<string, dynamic> { { "url", verifyUrl } };
 
             try
@@ -67,6 +70,7 @@ namespace GenderPayGap
 
         public static bool SendRegistrationRequest(string reviewUrl, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
         {
+
             var personalisation = new Dictionary<string, dynamic> { { "url", reviewUrl }, {"name",contactName}, { "org1", contactOrg }, { "org2", reportingOrg },{ "address", reportingAddress} };
 
             var emailAddresses = GEODistributionList.SplitI(";");
@@ -110,6 +114,9 @@ namespace GenderPayGap
 
         public static bool SendRegistrationApproved(string returnUrl, string emailAddress)
         {
+            //If the email address is a test email then simulate sending
+            if (emailAddress.StartsWithI(MvcApplication.TestPrefix)) return true;
+
             var personalisation = new Dictionary<string, dynamic> { { "url", returnUrl } };
 
             try
@@ -140,6 +147,9 @@ namespace GenderPayGap
 
         public static bool SendRegistrationDeclined(string returnUrl, string emailAddress, string reason)
         {
+            //If the email address is a test email then simulate sending
+            if (emailAddress.StartsWithI(MvcApplication.TestPrefix)) return true;
+
             var personalisation = new Dictionary<string, dynamic> {{ "reason", reason} };
 
             try

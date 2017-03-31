@@ -29,5 +29,11 @@ namespace DailyClean
         {
             Program.InfoLog.WriteLine($"Executing {nameof(PurgeGPGData)}");   
         }
+
+        //Remove test users and organisations
+        public static void PurgeTestData()
+        {
+            
+        }
     }
 }

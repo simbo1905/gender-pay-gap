@@ -521,7 +521,6 @@
     <Content Include="Views\Register\ReviewRequest.cshtml" />
     <Content Include="Views\Register\RequestAccepted.cshtml" />
     <Content Include="Views\Register\RequestCancelled.cshtml" />
-    <Content Include="Views\Register\RequestApproved.cshtml" />
     <Content Include="Views\Register\ConfirmCancellation.cshtml" />
     <Content Include="Views\Register\RequestPIN.cshtml" />
     <Content Include="Views\Viewing\HourlyRate.cshtml" />

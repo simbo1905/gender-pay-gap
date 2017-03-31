@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Web;
 using IdentityServer3.Core;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services.Default;
@@ -21,8 +22,8 @@ namespace GenderPayGap.IdentityServer
             {
                 var dbContext = new DbContext();
                 User user = null;
-                var encryptedUsername = Global.EncryptEmails && !string.IsNullOrWhiteSpace(username) ? Encryption.EncryptData(username) : null;
-                if (Global.EncryptEmails)
+                var encryptedUsername = MvCApplication.EncryptEmails && !string.IsNullOrWhiteSpace(username) ? Encryption.EncryptData(username) : null;
+                if (MvCApplication.EncryptEmails)
                 {
                     user = dbContext.User.FirstOrDefault(x => x.EmailAddressDB == encryptedUsername);
                     if (user == null) user = dbContext.User.FirstOrDefault(x => x.EmailAddressDB == username);
@@ -40,16 +41,22 @@ namespace GenderPayGap.IdentityServer
                     {
                         context.AuthenticateResult = new AuthenticateResult("Too many failed sign in attempts. Please try again in " + remaining.ToFriendly(maxParts: 2));
                     }
-                    else if (user.PasswordHash == context.Password.GetSHA512Checksum())
-                    {
-                        context.AuthenticateResult = new AuthenticateResult(user.UserId.ToString(), user.Fullname, new[] { new Claim(Constants.ClaimTypes.Subject, user.UserId.ToString()), });
-                        user.LoginAttempts = 0;
-                    }
-                    else
+                    else if (user.PasswordHash != context.Password.GetSHA512Checksum())
                     {
                         context.AuthenticateResult = new AuthenticateResult("Please enter your email address and password again.");
                         user.LoginAttempts++;
                     }
+                    else if (IsAdministrator(user) && !IsTrustedIP())
+                    {
+                        context.AuthenticateResult = new AuthenticateResult("Administrators are not permitted to sign in from your network location.");
+                        user.LoginAttempts++;
+                    }
+                    else 
+                    {
+                        context.AuthenticateResult = new AuthenticateResult(user.UserId.ToString(), user.Fullname, new[] { new Claim(Constants.ClaimTypes.Subject, user.UserId.ToString()), });
+                        user.LoginAttempts = 0;
+                    }
+
                     user.LoginDate = DateTime.Now;
                     dbContext.SaveChanges();
                 }
@@ -59,11 +66,23 @@ namespace GenderPayGap.IdentityServer
             }
             catch (Exception ex)
             {
-                Global.ErrorLog.WriteLine(ex.Message);
+                MvCApplication.ErrorLog.WriteLine(ex.Message);
                 throw;
             }
 
             return Task.FromResult(0);
+        }
+
+        public static bool IsAdministrator(User user)
+        {
+            if (!user.EmailAddress.IsEmailAddress()) throw new ArgumentException("Bad email address");
+            if (string.IsNullOrWhiteSpace(MvCApplication.AdminEmails)) throw new ArgumentException("Missing AdminEmails from web.config");
+            return user.EmailAddress.LikeAny(MvCApplication.AdminEmails.SplitI(";"));
+        }
+
+        public static bool IsTrustedIP()
+        {
+            return string.IsNullOrWhiteSpace(MvCApplication.TrustedIPDomains) || HttpContext.Current.Request.UserHostAddress.IsTrustedAddress(MvCApplication.TrustedIPDomains.SplitI());
         }
 
         public override Task GetProfileDataAsync(ProfileDataRequestContext context)

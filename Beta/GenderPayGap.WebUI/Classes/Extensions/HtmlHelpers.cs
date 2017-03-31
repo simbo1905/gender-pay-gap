@@ -71,6 +71,29 @@ namespace GenderPayGap.WebUI.Classes
             return helper.Action(actionName) + "?"+querystring;
         }
 
+        public static string RemoveQuery(this UrlHelper helper, string actionName, object routeValues)
+        {
+            var newRoute = new NameValueCollection(helper.RequestContext.HttpContext.Request.QueryString);
+
+            foreach (var item in new RouteValueDictionary(routeValues))
+            {
+                newRoute[item.Key] = item.Value.ToString();
+            }
+
+            string querystring = null;
+            foreach (var key in newRoute.AllKeys)
+            {
+                foreach (var value in newRoute.GetValues(key))
+                {
+                    if (string.IsNullOrWhiteSpace(value)) continue;
+                    if (!string.IsNullOrWhiteSpace(querystring)) querystring += "&";
+                    querystring += $"{key}={value}";
+                }
+            }
+
+            return helper.Action(actionName) + "?" + querystring;
+        }
+
         #region Checkbox list
         /// <summary>
         /// Returns a checkbox for each of the provided <paramref name="items"/>.

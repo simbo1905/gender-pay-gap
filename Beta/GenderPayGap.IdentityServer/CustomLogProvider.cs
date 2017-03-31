@@ -49,13 +49,13 @@ namespace GenderPayGap.IdentityServer
             {
                 result = exception.ToString();
                 //Track the exception with Application Insights if it is available
-                Global.AppInsightsClient?.TrackException(exception);
+                MvCApplication.AppInsightsClient?.TrackException(exception);
 
             }
 
             if (string.IsNullOrWhiteSpace(result)) return false;
 
-            Global.ErrorLog.WriteLine(result);
+            MvCApplication.ErrorLog.WriteLine(result);
             return true;
         }
     }

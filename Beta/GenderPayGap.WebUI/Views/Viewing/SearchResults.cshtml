@@ -93,7 +93,7 @@
                                                 {
                                                     <tr>
                                                         <td>
-                                                            @Html.ActionLink(Model.Employers.Results[i].Name, "EmployerDetails", new { view = "hourly-rate", id = Model.Employers.Results[i].GetEncryptedId() })<br/>
+                                                            @Html.ActionLink(Model.Employers.Results[i].Name, "EmployerDetails", new { view = "hourly-rate", id = Model.Employers.Results[i].GetEncryptedId() },new {data_name="ViewLink",data_id=Model.Employers.Results[i].GetEncryptedId()})<br/>
                                                             <span>@Model.Employers.Results[i].FullAddress</span>
                                                         </td>
                                                         <td>
@@ -106,7 +106,7 @@
 
                                             if (Model.Employers.Results.Count > 1)
                                             {
-                                                <div class="pager">
+                                                <div class="pager" data-pagecount="@Model.Employers.PageCount">
                                                     <div class="pager-controls">
                                                         @if (Model.Employers.CurrentPage > 1)
                                                         {

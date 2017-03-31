@@ -1,6 +1,7 @@
 ﻿@{
     ViewBag.Title = "Verify your email address - Gender pay gap reporting service";
 }
+@using Extensions
 @using GenderPayGap.WebUI.Classes
 @model GenderPayGap.WebUI.Models.Register.VerifyViewModel
 
@@ -18,7 +19,15 @@
                         Verify your email address
                     </h1>
                     <p>
-                        We have sent you a confirmation email to <br /><b>@Model.EmailAddress</b>
+                        We have sent you a confirmation email to <br/>
+                        @if (Model.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                        {
+                            <a href="@Url.Action("VerifyEmail",new {code=ViewBag.VerifyCode,login=Model.EmailAddress})"><b id="SavedEmailAddress">@Model.EmailAddress</b></a>
+                        }
+                        else
+                        {
+                            <b id="SavedEmailAddress">@Model.EmailAddress</b>
+                        }
                     </p>
                     <p>Follow the instructions in the email to continue your registration.</p>
                     <h2 class="heading-small">No email yet?</h2>

@@ -125,6 +125,7 @@ namespace GenderPayGap.WebUI.Controllers
             string pattern = searchText?.ToLower();
             var hasSector = sectors!=null && sectors.Any();
 
+            
             //using (DataRepository.BeginTransaction(IsolationLevel.Snapshot))
             {
                 IQueryable<Return> searchResults;
@@ -196,7 +197,7 @@ namespace GenderPayGap.WebUI.Controllers
                     using (var textWriter = tempfile.CreateText())
                     {
                         var downloadData = DataRepository.GetAll<Return>().Where(r => r.AccountingDate.Year == year).OrderBy(r => r.Organisation.OrganisationName).ToList();
-                        var records = downloadData.Select(r => r.ToDownloadRecord());
+                        var records = downloadData.Where(r=> !r.Organisation.OrganisationName.StartsWithI(MvcApplication.TestPrefix)).Select(r => r.ToDownloadRecord());
                         using (var writer = new CsvWriter(textWriter))
                         {
                             writer.WriteRecords(records);
@@ -251,8 +252,14 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpGet]
         [Route("download-data")]
         [OutputCache(CacheProfile = "DownloadData")]
-        public ActionResult DownloadData(int year)
+        public ActionResult DownloadData(int year=0)
         {
+            if (year == 0)
+            {
+                var ret= DataRepository.GetAll<Return>().OrderBy(a=>Guid.NewGuid()).FirstOrDefault(r => r.Status == ReturnStatuses.Submitted);
+                if (ret != null) year = ret.AccountingDate.Year;
+            }
+
             //Ensure we have a directory
             if (!MvcApplication.FileRepository.GetDirectoryExists(Settings.Default.DownloadsLocation)) return new HttpNotFoundResult("There are no GPG data files");
 

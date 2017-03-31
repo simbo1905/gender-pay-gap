@@ -13,7 +13,7 @@ using Microsoft.ApplicationInsights.Extensibility;
 
 namespace GenderPayGap.IdentityServer
 {
-    public class Global : System.Web.HttpApplication
+    public class MvCApplication : System.Web.HttpApplication
     {
 
         public static IContainer ContainerIOC;
@@ -62,6 +62,8 @@ namespace GenderPayGap.IdentityServer
             }
         }
 
+        public static string AdminEmails = ConfigurationManager.AppSettings["AdminEmails"];
+        public static string TrustedIPDomains = ConfigurationManager.AppSettings["TrustedIPDomains"];
         public static bool MaintenanceMode = ConfigurationManager.AppSettings["MaintenanceMode"].ToBoolean();
         public static bool StickySessions = ConfigurationManager.AppSettings["StickySessions"].ToBoolean(true);
         public static bool EncryptEmails = ConfigurationManager.AppSettings["EncryptEmails"].ToBoolean(true);

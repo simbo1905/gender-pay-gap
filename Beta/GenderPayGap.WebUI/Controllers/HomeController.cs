@@ -46,8 +46,16 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [Route("SignOut")]
-        public ActionResult SignOut()
+        public ActionResult SignOut(bool delete=true)
         {
+            //Delete the test user 
+            if (delete)
+            {
+                var currentUser = DataRepository.FindUser(User);
+                if (currentUser != null && currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                    DbContext.DeleteAccount(currentUser.UserId);
+            }
+
             Session.Abandon();
             Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("EnterCalculations", "Submit",null,"https") });
             return RedirectToAction("EnterCalculations","Submit");
@@ -56,6 +64,11 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("TimeOut")]
         public ActionResult TimeOut()
         {
+            //Delete the test user 
+            var currentUser = DataRepository.FindUser(User);
+            if (currentUser != null && currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                DbContext.DeleteAccount(currentUser.UserId);
+
             Session.Abandon();
             Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("EnterCalculations","Submit", null, "https") });
             return null;

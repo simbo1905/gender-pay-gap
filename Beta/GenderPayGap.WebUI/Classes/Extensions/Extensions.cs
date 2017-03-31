@@ -15,6 +15,7 @@ using System.Web.Mvc.Html;
 using System.Linq.Expressions;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
+using System.Net;
 
 namespace GenderPayGap.WebUI.Classes
 {
@@ -55,6 +56,8 @@ namespace GenderPayGap.WebUI.Classes
 
         public static User FindUser(this IRepository repository, IPrincipal principal)
         {
+            if (principal == null) return null;
+
             //GEt the logged in users identifier
             var userId = principal.GetUserId();
 
@@ -115,6 +118,9 @@ namespace GenderPayGap.WebUI.Classes
  
         public static bool SendPinInPost(this RegisterController controller, UserOrganisation userOrg, string pin, DateTime sendDate)
         {
+            //If the email address is a test email then simulate sending
+            if (userOrg.User.EmailAddress.StartsWithI(MvcApplication.TestPrefix)) return true;
+
             var returnUrl = controller.Url.Action("ActivateService", "Register",null,"https");
 
             var imagePath = new System.UriBuilder(controller.Request.Url.AbsoluteUri){Path = controller.Url.Content(@"~/Content/img/")}.Uri.ToString();

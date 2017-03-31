@@ -1,0 +1,530 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebTest Name="RegisterPublic" Id="85679aa2-c3db-467a-9c8c-11c464166a14" Owner="" Priority="2147483647" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="0" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="" CredentialUserName="" CredentialPassword="" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="RegisterPrivate.cec4e7c2-32c1-4b80-b326-9b316a9be0d0.rec.webtestresult" ResultsLocale="">
+  <Items>
+    <Request Method="GET" Guid="2704de50-a3df-4c1f-9954-501a6ba5f378" Version="1.1" Url="{{WebServer1}}/Register/" ThinkTime="1" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer1}}/Register/about-you" ReportingName="" IgnoreHttpStatusCode="False">
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+    </Request>
+    <Request Method="POST" Guid="900252f6-db33-4e56-952a-129a2365b51d" Version="1.1" Url="{{WebServer1}}/Register/about-you" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer1}}/Register/verify-email" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Register/about-you" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="SavedEmailAddress" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;login=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam1.code" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?code=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam2.login" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;login=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <FormPostHttpBody>
+        <FormPostParameter Name="__RequestVerificationToken" Value="{{$HIDDEN1.__RequestVerificationToken}}" RecordedValue="MW5yQMq1ihw8NW6ucv75J7mgEghvVmaUYIr0a9koSrSolb5Fk6oVDKxRYfggNqaFS6OAX-xqkzx5R9AhvwZLKLdIWsc1" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SpamProtectionTimeStamp" Value="{{$HIDDEN1.SpamProtectionTimeStamp}}" RecordedValue="===GFSjUtHW5f1w0Hm05wRaQZD2kHNGmlD8xdnfILwaqOk====" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="EmailAddress" Value="{{EmailAddress}}" RecordedValue="gpgtest123@domain.co.uk" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ConfirmEmailAddress" Value="{{EmailAddress}}" RecordedValue="gpgtest123@domain.co.uk" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FirstName" Value="gpgtest" RecordedValue="gpgtest" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="LastName" Value="gpgtest" RecordedValue="gpgtest" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="JobTitle" Value="gpgtest" RecordedValue="gpgtest" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="Password" Value="Testing123" RecordedValue="Testing123" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ConfirmPassword" Value="Testing123" RecordedValue="Testing123" CorrelationBinding="" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Request Method="GET" Guid="5ec39bfd-2e32-429d-88c7-37d035ce9c4c" Version="1.1" Url="{{WebServer1}}/Register/verify-email" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer1}}/Register/email-confirmed" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Register/verify-email" />
+      </Headers>
+      <QueryStringParameters>
+        <QueryStringParameter Name="code" Value="{{QueryStringParam1.code}}" RecordedValue="wI87R11755hxIkTKDOASKyH6rlcsCxQfO3FCpk1BdqE%21" CorrelationBinding="{{QueryStringParam1.code}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="login" Value="{{SavedEmailAddress}}" RecordedValue="gpgtest123%40domain.co.uk" CorrelationBinding="{{QueryStringParam2.login}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="5d0efdb2-7789-4f99-ae99-8e7a055beeca" Version="1.1" Url="{{WebServer1}}/Register/organisation-type" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Register/email-confirmed" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam8.SectorType" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="Name" Value="radio-2" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+            <RuleParameter Name="Index" Value="1" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+    </Request>
+    <Request Method="POST" Guid="eed9e560-5ba9-4f93-a74b-3c574d4120b5" Version="1.1" Url="{{WebServer1}}/Register/organisation-type" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer1}}/Register/organisation-search" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Register/organisation-type" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam7.command" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+            <RuleParameter Name="EndsWith" Value="&quot;&gt;Sea" />
+            <RuleParameter Name="Index" Value="5" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <FormPostHttpBody>
+        <FormPostParameter Name="__RequestVerificationToken" Value="{{$HIDDEN1.__RequestVerificationToken}}" RecordedValue="9Y1P_ERVu0JfOyfYat8xkoSBktRFf6gB65B_LI7ofsMoOhGQG61kdCXGCvzkQo9LyGm6apC_pgx2KH9d6_7dwd8Dxvb4LsUYgwUOk1S3-6DBzRtl6BoiCaPOR-opNpINBfmMdQ2" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SearchText" Value="{{$HIDDEN1.SearchText}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SectorType" Value="Public" RecordedValue="Public" CorrelationBinding="{{FormPostParam8.SectorType}}" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Request Method="POST" Guid="6c67d204-5006-4fa2-91af-54a32df6bf9d" Version="1.1" Url="{{WebServer1}}/Register/organisation-search" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer1}}/Register/choose-organisation" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Register/organisation-search" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam5.SearchText" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="Name" Value="SearchText" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+            <RuleParameter Name="Index" Value="0" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam6.command" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="lue=&quot;" />
+            <RuleParameter Name="EndsWith" Value="&quot;&gt;Cho" />
+            <RuleParameter Name="Index" Value="5" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <FormPostHttpBody>
+        <FormPostParameter Name="__RequestVerificationToken" Value="{{$HIDDEN1.__RequestVerificationToken}}" RecordedValue="7DX_a22U1CHd7vm5lSR6NP01jwaTeMCGJltUNFEWHDuSZOur4lmKOPH_GNruV7d-49PtboMe0JuCMZV5HmlO-IGPUCAafA_xHRsNocSJmweoahn2QWitkHbdA4EdVCYKgpPJNg2" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SectorType" Value="{{$HIDDEN1.SectorType}}" RecordedValue="Public" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ManualRegistration" Value="{{$HIDDEN1.ManualRegistration}}" RecordedValue="True" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SearchText" Value="test" RecordedValue="test" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="command" Value="search" RecordedValue="search" CorrelationBinding="{{FormPostParam7.command}}" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Request Method="POST" Guid="44d6c2e5-36d3-430b-b24d-e28b67f5fc2a" Version="1.1" Url="{{WebServer1}}/Register/choose-organisation" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer1}}/Register/add-organisation" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Register/choose-organisation" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam4.command" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="Name" Value="command" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+            <RuleParameter Name="Index" Value="0" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <FormPostHttpBody>
+        <FormPostParameter Name="__RequestVerificationToken" Value="{{$HIDDEN1.__RequestVerificationToken}}" RecordedValue="fRTWmunobLnqqMg5PMz3x3tFQBn2Xkiuz2KaZ34WLAJm8_eQ9Ekjzzc7t8tqtdZEfeb2IJLCxdk6OuIAwWMSEzfaEcNubJXLkquoBusvcHDUYcuWskdtwTRTqThXl6XE6Ip1cA2" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SectorType" Value="{{$HIDDEN1.SectorType}}" RecordedValue="Public" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SearchText" Value="test" RecordedValue="test" CorrelationBinding="{{FormPostParam5.SearchText}}" UrlEncode="True" />
+        <FormPostParameter Name="command" Value="employer_0" RecordedValue="employer_0" CorrelationBinding="{{FormPostParam6.command}}" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Request Method="POST" Guid="12115e1c-e656-4a06-a494-b683c5238d39" Version="1.1" Url="{{WebServer1}}/Register/add-organisation" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer1}}/Register/confirm-organisation" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Register/add-organisation" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <FormPostHttpBody>
+        <FormPostParameter Name="__RequestVerificationToken" Value="{{$HIDDEN1.__RequestVerificationToken}}" RecordedValue="nToTqG8pV7QozttVN4CfRc3nlAQlFWKUEnN0S8mkalIHZLCCf4CJ9fghkjz7ZmCI_KjAH863RL4nuiKEZ4gaDrrOz__VSUEv2tJiDtJh8SgDlKzToBCNR847uz_8-HkmSnFg9g2" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SelectedEmployerIndex" Value="{{$HIDDEN1.SelectedEmployerIndex}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ManualRegistration" Value="{{$HIDDEN1.ManualRegistration}}" RecordedValue="False" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="BackAction" Value="{{$HIDDEN1.BackAction}}" RecordedValue="ChooseOrganisation" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SearchText" Value="{{$HIDDEN1.SearchText}}" RecordedValue="test" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SectorType" Value="{{$HIDDEN1.SectorType}}" RecordedValue="Public" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ContactFirstName" Value="{{$HIDDEN1.ContactFirstName}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ContactLastName" Value="{{$HIDDEN1.ContactLastName}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ContactJobTitle" Value="{{$HIDDEN1.ContactJobTitle}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ContactOrganisation" Value="{{$HIDDEN1.ContactOrganisation}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ContactEmailAddress" Value="{{$HIDDEN1.ContactEmailAddress}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ContactPhoneNumber" Value="{{$HIDDEN1.ContactPhoneNumber}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="Name" Value="{{$HIDDEN1.Name}}" RecordedValue="GPGTEST_GovDept_15826203" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="Address1" Value="GpgTestAddress1" RecordedValue="GpgTestAddress1" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="Address2" Value="GpgTestAddress2" RecordedValue="GpgTestAddress2" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="Address3" Value="GpgTestTown" RecordedValue="GpgTestTown" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="PostCode" Value="GpgTestPostcode" RecordedValue="GpgTestPostcode" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="command" Value="Continue" RecordedValue="Continue" CorrelationBinding="{{FormPostParam4.command}}" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Request Method="POST" Guid="c1b60565-8079-4b9e-8f9b-249306895765" Version="1.1" Url="{{WebServer1}}/Register/confirm-organisation" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer1}}/Register/pin-sent" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Register/confirm-organisation" />
+      </Headers>
+      <FormPostHttpBody>
+        <FormPostParameter Name="__RequestVerificationToken" Value="{{$HIDDEN1.__RequestVerificationToken}}" RecordedValue="ygO7DAUve9XpD6Nwee3Zl8A-hLV8PLfPkAFYgHZrQsmRm0bNUDLL2hedIkJzpDWzRJNJ1rGNBsTubH2LQzcqGV2KYFjoS-HoTLN2kvgRwjwkJY0C-c9vECFW_IpjMar-KsZRwg2" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SearchText" Value="{{$HIDDEN1.SearchText}}" RecordedValue="test" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SelectedEmployerIndex" Value="{{$HIDDEN1.SelectedEmployerIndex}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SectorType" Value="{{$HIDDEN1.SectorType}}" RecordedValue="Public" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ManualRegistration" Value="{{$HIDDEN1.ManualRegistration}}" RecordedValue="False" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="BackAction" Value="{{$HIDDEN1.BackAction}}" RecordedValue="ChooseOrganisation" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SearchText" Value="{{$HIDDEN1.SearchText}}" RecordedValue="test" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SectorType" Value="{{$HIDDEN1.SectorType}}" RecordedValue="Public" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="Name" Value="{{$HIDDEN1.Name}}" RecordedValue="GPGTEST_GovDept_15826203" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="Address1" Value="{{$HIDDEN1.Address1}}" RecordedValue="GpgTestAddress1" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="Address2" Value="{{$HIDDEN1.Address2}}" RecordedValue="GpgTestAddress2" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="Address3" Value="{{$HIDDEN1.Address3}}" RecordedValue="GpgTestTown" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="Country" Value="{{$HIDDEN1.Country}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="PostCode" Value="{{$HIDDEN1.PostCode}}" RecordedValue="GpgTestPostcode" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="PoBox" Value="{{$HIDDEN1.PoBox}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ContactFirstName" Value="{{$HIDDEN1.ContactFirstName}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ContactLastName" Value="{{$HIDDEN1.ContactLastName}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ContactJobTitle" Value="{{$HIDDEN1.ContactJobTitle}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ContactOrganisation" Value="{{$HIDDEN1.ContactOrganisation}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ContactEmailAddress" Value="{{$HIDDEN1.ContactEmailAddress}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ContactPhoneNumber" Value="{{$HIDDEN1.ContactPhoneNumber}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Request Method="GET" Guid="73a8706b-dd40-4a4a-b534-28f3d6b9bddc" Version="1.1" Url="{{WebServer1}}/Submit/enter-calculations" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Register/pin-sent" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam3.command" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="Name" Value="command" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+            <RuleParameter Name="Index" Value="0" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+    </Request>
+    <Request Method="POST" Guid="1f2630ac-e5f5-4f0c-ba14-8d56e1fa9fdd" Version="1.1" Url="{{WebServer1}}/Submit/enter-calculations" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer1}}/Submit/employer-website" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Submit/enter-calculations" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam2.command" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="Name" Value="command" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+            <RuleParameter Name="Index" Value="0" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <FormPostHttpBody>
+        <FormPostParameter Name="__RequestVerificationToken" Value="{{$HIDDEN1.__RequestVerificationToken}}" RecordedValue="L8Uf6L98nSQqV-gcWO7Jayvidea761hM7e71uIP6Nj5c07QbuiFLfCIFSdtzkBiwTLZdgYASwy2SpHpah7e08eDTo_O41Tc68b1l68sjZtuOcMUNNu3VGFfIdWdoXAn2k6Nb_A2" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ReturnId" Value="{{$HIDDEN1.ReturnId}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="OrganisationId" Value="{{$HIDDEN1.OrganisationId}}" RecordedValue="531" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FirstName" Value="{{$HIDDEN1.FirstName}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="JobTitle" Value="{{$HIDDEN1.JobTitle}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="LastName" Value="{{$HIDDEN1.LastName}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="AccountingDate" Value="{{$HIDDEN1.AccountingDate}}" RecordedValue="01/04/2016 00:00:00" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SectorType" Value="{{$HIDDEN1.SectorType}}" RecordedValue="Public" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="CompanyLinkToGPGInfo" Value="{{$HIDDEN1.CompanyLinkToGPGInfo}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="DiffMeanHourlyPayPercent" Value="10" RecordedValue="10" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="DiffMedianHourlyPercent" Value="20" RecordedValue="20" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="DiffMeanBonusPercent" Value="30" RecordedValue="30" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="DiffMedianBonusPercent" Value="40" RecordedValue="40" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="MaleMedianBonusPayPercent" Value="50" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FemaleMedianBonusPayPercent" Value="60" RecordedValue="60" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="MaleUpperQuartilePayBand" Value="50" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FemaleUpperQuartilePayBand" Value="50" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="MaleUpperPayBand" Value="50" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FemaleUpperPayBand" Value="50" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="MaleMiddlePayBand" Value="50" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FemaleMiddlePayBand" Value="50" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="MaleLowerPayBand" Value="50" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FemaleLowerPayBand" Value="50" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="command" Value="Continue" RecordedValue="Continue" CorrelationBinding="{{FormPostParam3.command}}" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Request Method="POST" Guid="ce7d343e-7fc2-44f7-8226-54491784ef9a" Version="1.1" Url="{{WebServer1}}/Submit/employer-website" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer1}}/Submit/check-data" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Submit/employer-website" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam1.command" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="Name" Value="command" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+            <RuleParameter Name="Index" Value="0" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <FormPostHttpBody>
+        <FormPostParameter Name="__RequestVerificationToken" Value="{{$HIDDEN1.__RequestVerificationToken}}" RecordedValue="IMy1MGfWP11keQWbr8opLxJw44-WmxMYdw5mClvqa4W0vdM0KM7KIF8J3VbY2WW8hg6lMjLp7Ify55EfjP6ZCXDMaLa20eWjTmb6mG8B9dUec-Quzc3cvcN9BgIFfTHbkeMWeg2" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ReturnId" Value="{{$HIDDEN1.ReturnId}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="OrganisationId" Value="{{$HIDDEN1.OrganisationId}}" RecordedValue="531" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FirstName" Value="{{$HIDDEN1.FirstName}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="JobTitle" Value="{{$HIDDEN1.JobTitle}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="LastName" Value="{{$HIDDEN1.LastName}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ReturnId" Value="{{$HIDDEN1.ReturnId}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="OrganisationId" Value="{{$HIDDEN1.OrganisationId}}" RecordedValue="531" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="DiffMeanBonusPercent" Value="{{$HIDDEN1.DiffMeanBonusPercent}}" RecordedValue="30" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="DiffMeanHourlyPayPercent" Value="{{$HIDDEN1.DiffMeanHourlyPayPercent}}" RecordedValue="10" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="DiffMedianBonusPercent" Value="{{$HIDDEN1.DiffMedianBonusPercent}}" RecordedValue="40" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="DiffMedianHourlyPercent" Value="{{$HIDDEN1.DiffMedianHourlyPercent}}" RecordedValue="20" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FemaleLowerPayBand" Value="{{$HIDDEN1.FemaleLowerPayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FemaleMedianBonusPayPercent" Value="{{$HIDDEN1.FemaleMedianBonusPayPercent}}" RecordedValue="60" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FemaleMiddlePayBand" Value="{{$HIDDEN1.FemaleMiddlePayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FemaleUpperPayBand" Value="{{$HIDDEN1.FemaleUpperPayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FemaleUpperQuartilePayBand" Value="{{$HIDDEN1.FemaleUpperQuartilePayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="MaleLowerPayBand" Value="{{$HIDDEN1.MaleLowerPayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="MaleMedianBonusPayPercent" Value="{{$HIDDEN1.MaleMedianBonusPayPercent}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="MaleMiddlePayBand" Value="{{$HIDDEN1.MaleMiddlePayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="MaleUpperPayBand" Value="{{$HIDDEN1.MaleUpperPayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="MaleUpperQuartilePayBand" Value="{{$HIDDEN1.MaleUpperQuartilePayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="AccountingDate" Value="{{$HIDDEN1.AccountingDate}}" RecordedValue="01/04/2016 00:00:00" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SectorType" Value="{{$HIDDEN1.SectorType}}" RecordedValue="Public" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="CompanyLinkToGPGInfo" Value="{{WebServer2}}" RecordedValue="https://gpgtest.com" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="command" Value="Continue" RecordedValue="Continue" CorrelationBinding="{{FormPostParam2.command}}" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Request Method="POST" Guid="57c94583-804f-4a3d-9ab7-50e8c2c71d94" Version="1.1" Url="{{WebServer1}}/Submit/check-data" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer1}}/Submit/submission-complete" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Submit/check-data" />
+      </Headers>
+      <FormPostHttpBody>
+        <FormPostParameter Name="__RequestVerificationToken" Value="{{$HIDDEN1.__RequestVerificationToken}}" RecordedValue="EdbZU73mV05S-0km6PGLtcevogpud-klNuJH2WCv3uO9SNPTlmJ3iz9_Kf5it1gmKGPD_38uPnoz2O4_eYU__IicbmF0oNxkVvNOExkwYeR_yLM9KGcSm522BUrknc-GIR3agQ2" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ReturnId" Value="{{$HIDDEN1.ReturnId}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="OrganisationId" Value="{{$HIDDEN1.OrganisationId}}" RecordedValue="531" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FirstName" Value="{{$HIDDEN1.FirstName}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="JobTitle" Value="{{$HIDDEN1.JobTitle}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="LastName" Value="{{$HIDDEN1.LastName}}" RecordedValue="" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ReturnId" Value="{{$HIDDEN1.ReturnId}}" RecordedValue="0" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="OrganisationId" Value="{{$HIDDEN1.OrganisationId}}" RecordedValue="531" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="DiffMeanBonusPercent" Value="{{$HIDDEN1.DiffMeanBonusPercent}}" RecordedValue="30" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="DiffMeanHourlyPayPercent" Value="{{$HIDDEN1.DiffMeanHourlyPayPercent}}" RecordedValue="10" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="DiffMedianBonusPercent" Value="{{$HIDDEN1.DiffMedianBonusPercent}}" RecordedValue="40" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="DiffMedianHourlyPercent" Value="{{$HIDDEN1.DiffMedianHourlyPercent}}" RecordedValue="20" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FemaleLowerPayBand" Value="{{$HIDDEN1.FemaleLowerPayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FemaleMedianBonusPayPercent" Value="{{$HIDDEN1.FemaleMedianBonusPayPercent}}" RecordedValue="60" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FemaleMiddlePayBand" Value="{{$HIDDEN1.FemaleMiddlePayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FemaleUpperPayBand" Value="{{$HIDDEN1.FemaleUpperPayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="FemaleUpperQuartilePayBand" Value="{{$HIDDEN1.FemaleUpperQuartilePayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="MaleLowerPayBand" Value="{{$HIDDEN1.MaleLowerPayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="MaleMedianBonusPayPercent" Value="{{$HIDDEN1.MaleMedianBonusPayPercent}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="MaleMiddlePayBand" Value="{{$HIDDEN1.MaleMiddlePayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="MaleUpperPayBand" Value="{{$HIDDEN1.MaleUpperPayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="MaleUpperQuartilePayBand" Value="{{$HIDDEN1.MaleUpperQuartilePayBand}}" RecordedValue="50" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="CompanyLinkToGPGInfo" Value="{{$HIDDEN1.CompanyLinkToGPGInfo}}" RecordedValue="https://gpgtest.com" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="AccountingDate" Value="{{$HIDDEN1.AccountingDate}}" RecordedValue="01/04/2016 00:00:00" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SectorType" Value="{{$HIDDEN1.SectorType}}" RecordedValue="Public" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="command" Value="Confirm and submit" RecordedValue="Confirm and submit" CorrelationBinding="{{FormPostParam1.command}}" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Request Method="GET" Guid="7ee259a7-9cac-45a8-bbcf-e615bc146418" Version="1.1" Url="{{WebServer1}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Submit/submission-complete" />
+      </Headers>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam4.view" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?view=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam1895.view" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?view=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+    </Request>
+    <Request Method="GET" Guid="353a4032-01db-464f-a023-41ed4ab4a57a" Version="1.1" Url="{{WebServer1}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+    <Request Method="GET" Guid="d2a39d77-691c-470f-8c6e-247569672bc9" Version="1.1" Url="{{WebServer1}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Viewing/employer-details" />
+      </Headers>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam3.view" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?view=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="1" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam2174.view" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?view=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="1" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="view" Value="pay-quartiles" RecordedValue="pay-quartiles" CorrelationBinding="{{QueryStringParam4.view}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="2af62a9e-eb7e-491a-a122-5424443ae67b" Version="1.1" Url="{{WebServer1}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <QueryStringParameters>
+        <QueryStringParameter Name="view" Value="pay-quartiles" RecordedValue="pay-quartiles" CorrelationBinding="{{QueryStringParam1895.view}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="98cde37d-c55e-4528-86a0-962b067287ed" Version="1.1" Url="{{WebServer1}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Viewing/employer-details?view=pay-quartiles" />
+      </Headers>
+      <QueryStringParameters>
+        <QueryStringParameter Name="view" Value="bonus-pay" RecordedValue="bonus-pay" CorrelationBinding="{{QueryStringParam3.view}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="74c4d4a7-759b-415c-bd55-b295a3db5628" Version="1.1" Url="{{WebServer1}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <QueryStringParameters>
+        <QueryStringParameter Name="view" Value="bonus-pay" RecordedValue="bonus-pay" CorrelationBinding="{{QueryStringParam2174.view}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="076bfc42-6da0-41f6-adc1-521bda617568" Version="1.1" Url="{{WebServer1}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Viewing/employer-details?view=bonus-pay" />
+      </Headers>
+    </Request>
+    <Request Method="GET" Guid="e22ca94c-dd3e-409f-8eb9-97264f41c019" Version="1.1" Url="{{WebServer1}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+    <Request Method="GET" Guid="a85d2335-279d-4875-a986-6684eeb7e916" Version="1.1" Url="{{WebServer1}}/Home/SignOut" ThinkTime="0" Timeout="300" ParseDependentRequests="False" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer1}}/Submit/submission-complete" />
+      </Headers>
+    </Request>
+  </Items>
+  <ContextParameters>
+    <ContextParameter Name="EmailAddress" Value="" />
+    <ContextParameter Name="SavedEmailAddress" Value="" />
+    <ContextParameter Name="WebServer1" Value="https://localhost:44371" />
+    <ContextParameter Name="WebServer2" Value="https://gpgtest.com" />
+  </ContextParameters>
+  <ValidationRules>
+    <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidateResponseUrl, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response URL" Description="Validates that the response URL after redirects are followed is the same as the recorded response URL.  QueryString parameters are ignored." Level="Low" ExectuionOrder="BeforeDependents" />
+    <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidationRuleResponseTimeGoal, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response Time Goal" Description="Validates that the response time for the request is less than or equal to the response time goal as specified on the request.  Response time goals of zero will be ignored." Level="Low" ExectuionOrder="AfterDependents">
+      <RuleParameters>
+        <RuleParameter Name="Tolerance" Value="0" />
+      </RuleParameters>
+    </ValidationRule>
+  </ValidationRules>
+  <WebTestPlugins>
+    <WebTestPlugin Classname="WebPlugins.RandomEmailPlugin, GenderPayGap.Performance, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null" DisplayName="RandomEmailPlugin" Description="">
+      <RuleParameters>
+        <RuleParameter Name="ContextParamTarget" Value="EmailAddress" />
+      </RuleParameters>
+    </WebTestPlugin>
+  </WebTestPlugins>
+</WebTest>
