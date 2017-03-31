@@ -106,7 +106,7 @@
 
                                             if (Model.Employers.Results.Count > 1)
                                             {
-                                                <div class="pager" data-pagecount="@Model.Employers.PageCount">
+                                                <div class="pager" data-pagecount="@Model.Employers.PageCount" data-currentpage="@Model.Employers.CurrentPage">
                                                     <div class="pager-controls">
                                                         @if (Model.Employers.CurrentPage > 1)
                                                         {

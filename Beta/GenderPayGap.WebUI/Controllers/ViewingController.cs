@@ -151,6 +151,13 @@ namespace GenderPayGap.WebUI.Controllers
                         .OrderBy(r => r.Organisation.OrganisationName);
 
                 result.RowCount = searchResults.Count();
+                
+                //Pick a random page if none specified
+                if (page==0)
+                    page = 1;
+                else if (page < 0)
+                    page = Numeric.Rand(1, result.PageCount);
+
                 result.Results = searchResults.ToList().Select(r => r.Organisation.ToEmployerRecord()).Page(pageSize, page).ToList();
             }
 
@@ -304,18 +311,24 @@ namespace GenderPayGap.WebUI.Controllers
             Organisation org=null;
             if (!string.IsNullOrWhiteSpace(id))
             {
-                try
+                long orgId = 0;
+                if (id.EqualsI("-1", "random", "rand"))
+                    org = DataRepository.GetAll<Organisation>().OrderBy(a => Guid.NewGuid()).FirstOrDefault();
+                else
                 {
-                    id = Encryption.DecryptQuerystring(id);
-                }
-                catch (Exception ex)
-                {
-                    MvcApplication.ErrorLog.WriteLine("Cannot decrypt organisation id from querystring");
-                    return View("CustomError", new ErrorViewModel(400));
-                }
+                    try
+                    {
+                        id = Encryption.DecryptQuerystring(id);
+                        orgId = id.ToInt64();
+                    }
+                    catch (Exception ex)
+                    {
+                        MvcApplication.ErrorLog.WriteLine("Cannot decrypt organisation id from querystring");
+                        return View("CustomError", new ErrorViewModel(400));
+                    }
 
-                var orgId = id.ToInt64();
-                org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == orgId);
+                    if (orgId > 0) org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == orgId);
+                }
             }
             else if (User.Identity.IsAuthenticated)
             {

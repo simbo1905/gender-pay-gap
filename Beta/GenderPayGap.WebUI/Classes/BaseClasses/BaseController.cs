@@ -244,8 +244,11 @@ namespace GenderPayGap
             {
                 var impersonate = Request.QueryString["impersonate"];
                 //Simulate signin
-                if (!string.IsNullOrWhiteSpace(impersonate))
+                if (!string.IsNullOrWhiteSpace(impersonate)
+                    //Only allow impersonation if admin is not a testadmin or user targte user is a test user 
+                    && (!currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix) || impersonate.StartsWithI(MvcApplication.TestPrefix)))
                 {
+                    
                     var impersonateResult = ImpersonateUser(impersonate);
                     if (impersonateResult != null) return impersonateResult;
                 }
