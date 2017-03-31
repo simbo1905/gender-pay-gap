@@ -29,7 +29,7 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Init()
         {
 #if DEBUG
-            MvcApplication.Log.WriteLine("Submit Controller Initialised");
+            MvcApplication.InfoLog.WriteLine("Submit Controller Initialised");
 #endif
             return new EmptyResult();
         }
@@ -345,7 +345,9 @@ namespace GenderPayGap.WebUI.Controllers
                 if (oldReturn.Equals(newReturn))
                     newReturn = oldReturn;
                 else
+                {
                     oldReturn.SetStatus(ReturnStatuses.Retired, currentUser.UserId);
+                }
             }
 
             //add the new one

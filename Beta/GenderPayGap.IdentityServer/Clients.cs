@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using Extensions;
 
-namespace GpgIdentityServer
+namespace GenderPayGap.IdentityServer
 {
     public static class Clients
     {

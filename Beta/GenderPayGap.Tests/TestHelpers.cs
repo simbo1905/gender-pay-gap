@@ -199,7 +199,7 @@ namespace GenderPayGap.Tests
             AllEmployers.Add(employer);
         }
 
-        public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize)
+        public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize,bool test=false)
         {
             var result = new PagedResult<EmployerRecord>();
             //DONE:NastyBug! Page method arguments Page(pageSize, page) where in vice-versa positions as in Page(page, pageSize)! now fixed 
@@ -211,7 +211,7 @@ namespace GenderPayGap.Tests
             return result;
         }
 
-        PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize)
+        PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize,bool test=false)
         {
           int totalRecords;
          // var searchResults = CompaniesHouseAPI.SearchEmployers(out totalRecords, searchText, page, pageSize);
@@ -267,7 +267,7 @@ namespace GenderPayGap.Tests
             AllEmployers.Add(employer);
         }
 
-        public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize)
+        public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize, bool test=false)
         {
             var result = new PagedResult<EmployerRecord>();
             //DONE:NastyBug! Page method arguments Page(pageSize, page) where in vice-versa positions as in Page(page, pageSize)! now fixed 
@@ -284,7 +284,7 @@ namespace GenderPayGap.Tests
             return AllEmployers.FirstOrDefault(c => c.CompanyNumber == companyNumber)?.SicCodes;
         }
 
-        PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize)
+        PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize, bool test=false)
         {
             //var searchResults = PublicSectorOrgs.Messages.List.Where(o => o.Name.ContainsI(searchText));
             int totalRecords;

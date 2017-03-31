@@ -4,6 +4,7 @@ using GenderPayGap.Models.SqlDatabase;
 using IdentityServer3.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -14,6 +15,7 @@ using System.Web.Mvc.Html;
 using System.Linq.Expressions;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
+using System.Net;
 
 namespace GenderPayGap.WebUI.Classes
 {
@@ -54,6 +56,8 @@ namespace GenderPayGap.WebUI.Classes
 
         public static User FindUser(this IRepository repository, IPrincipal principal)
         {
+            if (principal == null) return null;
+
             //GEt the logged in users identifier
             var userId = principal.GetUserId();
 
@@ -67,8 +71,19 @@ namespace GenderPayGap.WebUI.Classes
         {
             if (string.IsNullOrWhiteSpace(emailAddress))throw new ArgumentNullException("emailAddress");
             
-            //If internal user the load it using the identifier as the UserID
-            return repository.GetAll<User>().FirstOrDefault(u => u.EmailAddress == emailAddress);
+            var encryptedUsername = MvcApplication.EncryptEmails ? Encryption.EncryptData(emailAddress) : null;
+            User user = null;
+            if (MvcApplication.EncryptEmails)
+            {
+                user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == encryptedUsername);
+                if (user == null) user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == emailAddress);
+            }
+            else
+            {
+                user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == emailAddress);
+                if (user == null) user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == encryptedUsername);
+            }
+            return user;
         }
 
         public static User FindUserByVerifyCode(this IRepository repository, string verifyCode)
@@ -103,11 +118,13 @@ namespace GenderPayGap.WebUI.Classes
  
         public static bool SendPinInPost(this RegisterController controller, UserOrganisation userOrg, string pin, DateTime sendDate)
         {
-            var returnUrl = controller.Url.Action("/", "Submit",null,"https");
+            //If the email address is a test email then simulate sending
+            if (userOrg.User.EmailAddress.StartsWithI(MvcApplication.TestPrefix)) return true;
+
+            var returnUrl = controller.Url.Action("ActivateService", "Register",null,"https");
 
             var imagePath = new System.UriBuilder(controller.Request.Url.AbsoluteUri){Path = controller.Url.Content(@"~/Content/img/")}.Uri.ToString();
 
-            if (GovNotifyAPI.ManualPip) return GovNotifyAPI.SendPinInPostManual(imagePath,returnUrl, userOrg.User.Fullname, userOrg.User.JobTitle, userOrg.Organisation.OrganisationName, userOrg.Address.GetList(), pin, sendDate, sendDate.AddDays(Properties.Settings.Default.PinInPostExpiryDays));
             return GovNotifyAPI.SendPinInPost(imagePath,returnUrl, userOrg.User.Fullname, userOrg.User.JobTitle, userOrg.Organisation.OrganisationName, userOrg.Address.GetList(), pin, sendDate, sendDate.AddDays(Properties.Settings.Default.PinInPostExpiryDays));
         }
         #endregion
@@ -196,8 +213,8 @@ namespace GenderPayGap.WebUI.Classes
                 var attributes = propertyInfo == null ? null : propertyInfo.GetCustomAttributes(typeof(ValidationAttribute), false).ToList<ValidationAttribute>();
 
                 //Get the display name
-                var displayAttribute = propertyInfo==null ? null : propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
-                var displayName = displayAttribute == null ? propertyName : displayAttribute.Name;
+                var displayAttribute = propertyInfo==null ? null : propertyInfo.GetCustomAttributes(typeof(DisplayNameAttribute), false).FirstOrDefault() as DisplayNameAttribute;
+                var displayName = displayAttribute == null ? propertyName : displayAttribute.DisplayName;
 
 
                 foreach (var error in modelState.Value.Errors)

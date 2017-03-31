@@ -11,7 +11,20 @@
             <div class="bold-small">
                 What happens next.
             </div>
-            <p class="dynamic-content" style="display: block;">We’ve sent @Model.ContactFirstName&nbsp;@Model.ContactLastName an email confirming they can report on behalf of @Model.Name. </p>
+            <p class="dynamic-content" style="display: block;">
+                We’ve sent @if (!string.IsNullOrWhiteSpace(ViewBag.TestUrl))
+                           {
+                               <a date-name="testurl" href="@ViewBag.TestUrl">
+                                   @Model.ContactFirstName&nbsp;@Model.ContactLastName
+                               </a>
+                           }
+                           else
+                           {
+                               <span>@Model.ContactFirstName&nbsp;@Model.ContactLastName</span>
+                           } an email confirming they can report on behalf of @Model.Name.
+            </p>
+            <a href="@Url.Action("SignOut","Home")" class="button">Sign Out</a>
+
         </div>
     </div>
 </main>

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using GenderPayGap.Models.SqlDatabase;
@@ -31,7 +32,7 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Init()
         {
 #if DEBUG
-            MvcApplication.Log.WriteLine("Home Controller Initialised");
+            MvcApplication.InfoLog.WriteLine("Home Controller Initialised");
 #endif
             return new EmptyResult();
         }
@@ -46,8 +47,16 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [Route("SignOut")]
-        public ActionResult SignOut()
+        public ActionResult SignOut(bool delete=true)
         {
+            //Delete the test user 
+            if (delete)
+            {
+                var currentUser = DataRepository.FindUser(User);
+                if (currentUser != null && currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                    DbContext.DeleteAccount(currentUser.UserId);
+            }
+
             Session.Abandon();
             Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("EnterCalculations", "Submit",null,"https") });
             return RedirectToAction("EnterCalculations","Submit");
@@ -56,6 +65,11 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("TimeOut")]
         public ActionResult TimeOut()
         {
+            //Delete the test user 
+            var currentUser = DataRepository.FindUser(User);
+            if (currentUser != null && currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                DbContext.DeleteAccount(currentUser.UserId);
+
             Session.Abandon();
             Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("EnterCalculations","Submit", null, "https") });
             return null;
@@ -103,12 +117,14 @@ namespace GenderPayGap.WebUI.Controllers
                     Request.GetOwinContext().Authentication.SignOut();
                     break;
                 case "CreateTestData":
-                    CreateTestData();
+                    var recordCount = ConfigurationManager.AppSettings["TESTING-Records"].ToInt32(500);
+                    CreateTestData(recordCount);
                     break;
                 case "ClearDatabase":
                     DbContext.Truncate();
 
-                    MvcApplication.FileRepository.DeleteFiles(Settings.Default.DownloadsLocation);
+                    if (MvcApplication.FileRepository.GetDirectoryExists(Settings.Default.DownloadsLocation))
+                        MvcApplication.FileRepository.DeleteFiles(Settings.Default.DownloadsLocation);
 
                     //Refresh the repository
                     DataRepository = null;
@@ -214,7 +230,7 @@ namespace GenderPayGap.WebUI.Controllers
                             var code = sicCode.ToInt32();
                             if (!sicCodes.Any(s => s.SicCodeId == code))
                             {
-                                MvcApplication.Log.WriteLine($"Invalid SIC code '{code}' received from companies house");
+                                MvcApplication.WarningLog.WriteLine($"Invalid SIC code '{code}' received from companies house");
                                 continue;
                             }
                             if (organisation.OrganisationSicCodes.Any(a => a.SicCodeId == code)) continue;

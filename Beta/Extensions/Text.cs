@@ -981,8 +981,9 @@ namespace Extensions
         public static bool StartsWithI(this string original, params string[] texts)
         {
             if (string.IsNullOrWhiteSpace(original)) return false;
-            foreach (var text in texts)
-                if (original.ToLower().StartsWith(text.ToLower()))return true;
+            if (texts!=null)
+                foreach (var text in texts)
+                    if (original.ToLower().StartsWith(text.ToLower()))return true;
             return false;
         }
 

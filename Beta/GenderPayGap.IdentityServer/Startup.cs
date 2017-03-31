@@ -2,20 +2,16 @@
 using Owin;
 using IdentityServer3.Core.Configuration;
 using System.Security.Cryptography.X509Certificates;
-using Microsoft.Owin.Security.Google;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
 using IdentityServer3.Core.Logging;
-using Microsoft.Owin.Security.Twitter;
 using IdentityServer3.Core.Services;
-using Microsoft.Owin.Security.Facebook;
-using Serilog;
 using IdentityServer3.Core.Services.Default;
 
-[assembly: OwinStartup(typeof(GpgIdentityServer.Startup))]
+[assembly: OwinStartup(typeof(GenderPayGap.IdentityServer.Startup))]
 
-namespace GpgIdentityServer
+namespace GenderPayGap.IdentityServer
 {
     public class Startup
     {

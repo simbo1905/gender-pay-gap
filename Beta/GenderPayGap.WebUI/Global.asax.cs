@@ -10,11 +10,15 @@ using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
+using System.Web.Helpers;
 using System.Web.Mvc;
 using System.Web.Optimization;
 using System.Web.Routing;
 using GenderPayGap.WebUI.Properties;
 using GenderPayGap.WebUI.Classes;
+using IdentityServer3.Core;
+using Microsoft.ApplicationInsights;
+using Microsoft.ApplicationInsights.Extensibility;
 
 namespace GenderPayGap
 {
@@ -23,18 +27,52 @@ namespace GenderPayGap
         public static IContainer ContainerIOC;
         public static IFileRepository FileRepository;
 
-        private static Logger _Log;
-        public static Logger Log
+        private static Logger _InfoLog;
+        public static Logger InfoLog
         {
             get
             {
-                if (_Log == null) _Log = new Logger(FileRepository, Path.Combine(ConfigurationManager.AppSettings["LogPath"], "WebServer"));
-                return _Log;
+                if (_InfoLog == null) _InfoLog = new Logger(FileRepository, Path.Combine(ConfigurationManager.AppSettings["LogPath"], "WebServer", "InfoLog.txt"));
+                return _InfoLog;
+            }
+        }
+
+        private static Logger _WarningLog;
+        public static Logger WarningLog
+        {
+            get
+            {
+                if (_WarningLog == null) _WarningLog = new Logger(FileRepository, Path.Combine(ConfigurationManager.AppSettings["LogPath"], "WebServer","WarningLog.txt"));
+                return _WarningLog;
+            }
+        }
+
+        private static Logger _ErrorLog;
+        public static Logger ErrorLog
+        {
+            get
+            {
+                if (_ErrorLog == null) _ErrorLog = new Logger(FileRepository, Path.Combine(ConfigurationManager.AppSettings["LogPath"], "WebServer", "ErrorLog.txt"));
+                return _ErrorLog;
+            }
+        }
+
+        private static TelemetryClient _AppInsightsClient;
+        public static TelemetryClient AppInsightsClient
+        {
+            get
+            {
+                if (_AppInsightsClient==null && !string.IsNullOrWhiteSpace(TelemetryConfiguration.Active.InstrumentationKey) && !TelemetryConfiguration.Active.DisableTelemetry)
+                    _AppInsightsClient = new TelemetryClient();
+                return _AppInsightsClient;
             }
         }
 
         public static string AdminEmails = ConfigurationManager.AppSettings["AdminEmails"];
+        public static string TestPrefix = ConfigurationManager.AppSettings["TestPrefix"];
         public static bool MaintenanceMode= ConfigurationManager.AppSettings["MaintenanceMode"].ToBoolean();
+        public static bool StickySessions = ConfigurationManager.AppSettings["StickySessions"].ToBoolean(true);
+        public static bool EncryptEmails = ConfigurationManager.AppSettings["EncryptEmails"].ToBoolean(true);
 
         /// <summary>
         /// Return true if exactly one concrete admin defined 
@@ -72,25 +110,44 @@ namespace GenderPayGap
 
             //Set the machine key
             SetMachineKey();
+
+            //Set Application Insights instrumentation key
+            Microsoft.ApplicationInsights.Extensibility.TelemetryConfiguration.Active.InstrumentationKey = ConfigurationManager.AppSettings["APPINSIGHTS_INSTRUMENTATIONKEY"];
+
+            AntiForgeryConfig.UniqueClaimTypeIdentifier = Constants.ClaimTypes.Subject;
+        }
+
+        protected void Application_BeginRequest(object sender, EventArgs e)
+        {
+            //Redirect to holding mage if in maintenance mode
+            if (MaintenanceMode && !HttpContext.Current.Request.Url.PathAndQuery.StartsWithI(@"/Error/service-unavailable")) HttpContext.Current.Response.Redirect(@"/Error/service-unavailable",true);
+
+            //Disable sticky sessions
+            if (!StickySessions) Response.Headers.Add("Arr-Disable-Session-Affinity", "True");
         }
 
         protected void Application_Error(Object sender, EventArgs e)
         {
             // Process exception
-            if (HttpContext.Current.IsCustomErrorEnabled)
-            {
-                var raisedException = Server.GetLastError();
-                if (raisedException != null)
-                {
-                    //Add to the log
-                    Log.WriteLine(raisedException.ToString());
+            if (!HttpContext.Current.IsCustomErrorEnabled) return;
+            var raisedException = Server.GetLastError();
+            if (raisedException == null) return;
 
-                    if (raisedException is HttpException)
-                        HttpContext.Current.Response.Redirect("~/Error?code=" + ((HttpException) raisedException).GetHttpCode());
-                    else
-                        HttpContext.Current.Response.Redirect("~/Error");
-                }
-            }
+            //Add to the log
+            ErrorLog.WriteLine(raisedException.ToString());
+
+            // Note: A single instance of telemetry client is sufficient to track multiple telemetry items.
+
+            var ai = new TelemetryClient();
+            ai.TrackException(raisedException);
+
+            if (raisedException is HttpException)
+                HttpContext.Current.Response.Redirect("~/Error?code=" + ((HttpException) raisedException).GetHttpCode());
+            else
+                HttpContext.Current.Response.Redirect("~/Error");
+
+            //Track the exception with Application Insights if it is available
+            AppInsightsClient?.TrackException(raisedException);
         }
         
         public static IContainer BuildContainerIoC()

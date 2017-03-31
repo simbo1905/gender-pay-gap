@@ -1,12 +1,13 @@
 ﻿@{
     ViewBag.Title = "Verify your email address - Gender pay gap reporting service";
 }
+@using Extensions
 @using GenderPayGap.WebUI.Classes
 @model GenderPayGap.WebUI.Models.Register.VerifyViewModel
 
 <main id="content" role="main">
     <div class="grid-row">
-        <div class="column-full">
+        <div class="column-two-thirds">
             @Html.CustomValidationSummary()
             @using (Html.BeginForm())
             {
@@ -18,21 +19,19 @@
                         Verify your email address
                     </h1>
                     <p>
-                        We have sent you a confirmation email to <br /><b>@Model.EmailAddress</b>
+                        We have sent you a confirmation email to <br/>
+                        @if (Model.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                        {
+                            <a href="@Url.Action("VerifyEmail",new {code=ViewBag.VerifyCode,login=Model.EmailAddress})"><b id="SavedEmailAddress">@Model.EmailAddress</b></a>
+                        }
+                        else
+                        {
+                            <b id="SavedEmailAddress">@Model.EmailAddress</b>
+                        }
                     </p>
                     <p>Follow the instructions in the email to continue your registration.</p>
                     <h2 class="heading-small">No email yet?</h2>
                     <p>Our email can take a few minutes to arrive. If you can’t see it in your inbox, check your junk mail folder.</p>
-                }
-                else if (Model.Retry)
-                {
-                    <h1 class="heading-large">
-                        Confirm your email address
-                    </h1>
-                    <p>
-                        To retry sending your verification email to <b>@Model.EmailAddress</b> click the button below:
-                    </p>
-                    <input type="submit" class="button" value="Resend" />
                 }
                 else if (Model.Resend)
                 {

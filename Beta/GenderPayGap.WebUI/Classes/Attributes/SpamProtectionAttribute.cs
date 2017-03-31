@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Configuration;
 using System.Web;
 using System.Web.Mvc;
 using Extensions;
@@ -26,6 +27,10 @@ namespace GenderPayGap.WebUI.Classes
             catch (Exception ex)
             {
             }
+
+#if DEBUG || TEST
+            if (ConfigurationManager.AppSettings["TESTING-SkipSpamProtection"].ToBoolean()) return;
+#endif
             throw new HttpException(429,"Too Many Requests");
         }
     }

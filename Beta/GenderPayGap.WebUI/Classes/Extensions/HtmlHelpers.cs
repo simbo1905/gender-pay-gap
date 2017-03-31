@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
 using System.Globalization;
@@ -44,6 +46,52 @@ namespace GenderPayGap.WebUI.Classes
                 return state == null || state.Errors.Count == 0 ? new MvcHtmlString(noErrorClassName) : new MvcHtmlString(errorClassName);
 
             return  state == null || state.Errors.Count == 0 ? MvcHtmlString.Empty : new MvcHtmlString(errorClassName);
+        }
+
+        public static string AddQuery(this UrlHelper helper, string actionName, object routeValues)
+        {
+            var newRoute = new NameValueCollection(helper.RequestContext.HttpContext.Request.QueryString);
+
+            foreach (var item in new RouteValueDictionary(routeValues))
+            {
+                newRoute[item.Key] = item.Value.ToString();
+            }
+
+            string querystring=null;
+            foreach (var key in newRoute.AllKeys)
+            {
+                foreach (var value in newRoute.GetValues(key))
+                {
+                    if (string.IsNullOrWhiteSpace(value)) continue;
+                    if (!string.IsNullOrWhiteSpace(querystring)) querystring += "&";
+                    querystring += $"{key}={value}";
+                }
+            }
+
+            return helper.Action(actionName) + "?"+querystring;
+        }
+
+        public static string RemoveQuery(this UrlHelper helper, string actionName, object routeValues)
+        {
+            var newRoute = new NameValueCollection(helper.RequestContext.HttpContext.Request.QueryString);
+
+            foreach (var item in new RouteValueDictionary(routeValues))
+            {
+                newRoute[item.Key] = item.Value.ToString();
+            }
+
+            string querystring = null;
+            foreach (var key in newRoute.AllKeys)
+            {
+                foreach (var value in newRoute.GetValues(key))
+                {
+                    if (string.IsNullOrWhiteSpace(value)) continue;
+                    if (!string.IsNullOrWhiteSpace(querystring)) querystring += "&";
+                    querystring += $"{key}={value}";
+                }
+            }
+
+            return helper.Action(actionName) + "?" + querystring;
         }
 
         #region Checkbox list
@@ -127,8 +175,8 @@ namespace GenderPayGap.WebUI.Classes
             string propertyName = ExpressionHelper.GetExpressionText(expression);
             var propertyInfo = containerType.GetPropertyInfo(propertyName);
 
-            var displayAttribute = propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
-            var displayName = displayAttribute == null ? propertyName : displayAttribute.Name;
+            var displayAttribute = propertyInfo.GetCustomAttributes(typeof(DisplayNameAttribute), false).FirstOrDefault() as DisplayNameAttribute;
+            var displayName = displayAttribute == null ? propertyName : displayAttribute.DisplayName;
 
             string par1 = null;
             string par2 = null;

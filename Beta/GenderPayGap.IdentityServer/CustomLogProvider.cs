@@ -1,13 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Configuration;
-using System.Linq;
-using System.Web;
 using Extensions;
 using IdentityServer3.Core.Logging;
 using Logger = IdentityServer3.Core.Logging.Logger;
 
-namespace GpgIdentityServer
+namespace GenderPayGap.IdentityServer
 {
     public class CustomLogProvider : ILogProvider
     {
@@ -49,11 +46,16 @@ namespace GpgIdentityServer
             if (!string.IsNullOrWhiteSpace(result))
                 result = string.Format(result, formatParameters);
             else if (exception != null)
+            {
                 result = exception.ToString();
+                //Track the exception with Application Insights if it is available
+                MvCApplication.AppInsightsClient?.TrackException(exception);
+
+            }
 
             if (string.IsNullOrWhiteSpace(result)) return false;
 
-            Global.Log.WriteLine(result);
+            MvCApplication.ErrorLog.WriteLine(result);
             return true;
         }
     }

@@ -24,7 +24,6 @@ namespace GenderPayGap.WebUI.Classes
 
         protected override void HandleUnauthorizedRequest(AuthorizationContext filterContext)
         {
-
             if (filterContext.HttpContext.User.Identity.IsAuthenticated)
             {
                 // 403 we know who you are, but you haven't been granted access
