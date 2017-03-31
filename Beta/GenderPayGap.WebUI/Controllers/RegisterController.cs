@@ -1513,7 +1513,7 @@ namespace GenderPayGap.WebUI.Controllers
 
 #endregion
 
-#region RequestPIN
+        #region RequestPIN
         [HttpGet]
         [Auth]
         [Route("request-pin")]
@@ -1559,7 +1559,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 #endregion
 
-#region ActivateService
+        #region ActivateService
         [HttpGet]
         [Auth]
         [Route("activate-service")]
@@ -1659,7 +1659,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 #endregion
 
-#region Complete
+        #region Complete
         [HttpGet]
         [Auth]
         [Route("Complete")]
@@ -1680,6 +1680,181 @@ namespace GenderPayGap.WebUI.Controllers
             //Show the confirmation view
             return View("Complete",model);
         }
-#endregion
+        #endregion
+
+        #region password-reset
+        [HttpGet]
+        [Route("password-reset")]
+        public ActionResult PasswordReset()
+        {
+            User currentUser;
+            //Ensure user has not completed the registration process
+            var result = CheckUserRegisteredOk(out currentUser);
+            if (result != null) return result;
+
+            //Clear the stash
+            this.ClearStash();
+
+            //Start new user registration
+            return View("PasswordReset", new ResetViewModel());
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("password-reset")]
+        public ActionResult PasswordReset(ResetViewModel model)
+        {
+            User currentUser;
+            //Ensure user has not completed the registration process
+            var result = CheckUserRegisteredOk(out currentUser);
+            if (result != null) return result;
+
+            //Validate the submitted fields
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<ResetViewModel>();
+                return View("PasswordReset", model);
+            }
+
+            //Ensure email is always lower case
+            model.EmailAddress = model.EmailAddress.ToLower();
+
+            //Check this email address isnt already assigned to another user
+            currentUser = DataRepository.FindUserByEmail(model.EmailAddress);
+            if (currentUser == null)
+            {
+                //A registered user with this email already exists.
+                AddModelError(3020, "EmailAddress");
+                this.CleanModelErrors<RegisterViewModel>();
+                return View("PasswordReset", model);
+            }
+
+            //Block them if they have requested too many today
+            var remaining = currentUser.ResetSendDate == null ? TimeSpan.Zero : currentUser.ResetSendDate.Value.AddDays(1) - DateTime.Now;
+            if (currentUser.ResetAttempts >= Properties.Settings.Default.MaxResetsPerDay && remaining > TimeSpan.Zero)
+                return View("CustomError", new ErrorViewModel(1121, new { remainingTime = remaining.ToFriendly(maxParts: 2) }));
+
+            if (!ResendPasswordReset(currentUser))
+            {
+                this.AddModelError(1122);
+                this.CleanModelErrors<ResetViewModel>();
+                return View("PasswordReset", model);
+            }
+
+            if (remaining <= TimeSpan.Zero)
+            {
+                currentUser.ResetAttempts=0;
+                currentUser.ResetSendDate = DateTime.Now;
+            }
+
+            currentUser.ResetAttempts++;
+
+            DataRepository.SaveChanges();
+
+            //show confirmation
+            ViewBag.EmailAddress = currentUser.EmailAddress;
+            return View("PasswordResetSent");
+        }
+
+        private bool ResendPasswordReset(User currentUser)
+        {
+            //Send a password reset link to the email address
+            string resetCode = null;
+            try
+            {
+                resetCode = Encryption.EncryptQuerystring(currentUser.UserId + ":" + DateTime.Now.ToSmallDateTime());
+                if (!this.SendPasswordReset(currentUser.EmailAddress, resetCode))
+                    throw new Exception("Could not send password reset email. Please try again later.");
+            }
+            catch (Exception ex)
+            {
+                //Log the exception
+                MvcApplication.ErrorLog.WriteLine(ex.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+
+        [HttpGet]
+        [Route("enter-new-password")]
+        public ActionResult NewPassword(string code=null)
+        {
+            User currentUser;
+            //Ensure user has not completed the registration process
+            var result = CheckUserRegisteredOk(out currentUser);
+            if (result != null) return result;
+
+            result=UnwrapPasswordReset(code, out currentUser);
+            if (result != null) return result;
+
+            //Start new user registration
+            return View("NewPassword", new ResetViewModel());
+        }
+
+        private ActionResult UnwrapPasswordReset(string code, out User user)
+        {
+            user = null;
+
+            long userId = 0;
+            DateTime resetDate;
+            try
+            {
+                code = Encryption.DecryptQuerystring(code);
+                code = HttpUtility.UrlDecode(code);
+                var args = code.SplitI(":");
+                if (args.Length != 2) throw new ArgumentException("Too few parameters in password reset code");
+                userId = args[0].ToLong();
+                if (userId == 0) throw new ArgumentException("Invalid user id in password reset code");
+                resetDate = args[1].FromSmallDateTime();
+                if (resetDate==DateTime.MinValue) throw new ArgumentException("Invalid password reset date in password reset code");
+            }
+            catch (Exception ex)
+            {
+                return View("CustomError", new ErrorViewModel(1123));
+            }
+
+            //Get the user oganisation
+            user = DataRepository.GetAll<User>().FirstOrDefault(u => u.UserId == userId);
+
+            if (user == null) return View("CustomError", new ErrorViewModel(1124));
+            if (resetDate.AddDays(1) <DateTime.Now) return View("CustomError", new ErrorViewModel(1126));
+
+            return null;
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("enter-new-password")]
+        public ActionResult NewPassword(ResetViewModel model, string code)
+        {
+            User currentUser;
+            //Ensure user has not completed the registration process
+            var result = CheckUserRegisteredOk(out currentUser);
+            if (result != null) return result;
+
+            //Validate the submitted fields
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<ResetViewModel>();
+                return View("PasswordReset", model);
+            }
+
+            result = UnwrapPasswordReset(code, out currentUser);
+            if (result != null) return result;
+
+            //Save the user to ensure UserId>0 for new status
+            currentUser.PasswordHash = model.Password.GetSHA512Checksum();
+            currentUser.ResetAttempts = 0;
+            currentUser.ResetSendDate = null;
+            DataRepository.SaveChanges();
+
+            //Send the verification code and showconfirmation
+            return View("CustomError", new ErrorViewModel(1127));
+        }
+
+        #endregion
+
     }
 }

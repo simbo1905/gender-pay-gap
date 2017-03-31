@@ -344,6 +344,7 @@
     <Compile Include="Models\ErrorViewModel.cs" />
     <Compile Include="Models\Register\CompleteViewModel.cs" />
     <Compile Include="Models\Register\OrganisationViewModel.cs" />
+    <Compile Include="Models\Register\ResetViewModel.cs" />
     <Compile Include="Models\Register\VerifyViewModel.cs" />
     <Compile Include="Models\Register\RegisterViewModels.cs" />
     <Compile Include="Models\Search\DownloadViewModel.cs" />
@@ -358,6 +359,7 @@
     <Compile Include="Startup.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\PasswordReset.html" />
     <Content Include="Content\img\GEO.jpg" />
     <Content Include="App_Data\PinCover.html" />
     <Content Include="App_Data\PublicSectorOrgs.config">
@@ -526,6 +528,9 @@
     <Content Include="Views\Viewing\HourlyRate.cshtml" />
     <Content Include="Views\Viewing\PayQuartiles.cshtml" />
     <Content Include="Views\Viewing\BonusPay.cshtml" />
+    <Content Include="Views\Register\PasswordReset.cshtml" />
+    <Content Include="Views\Register\NewPassword.cshtml" />
+    <Content Include="Views\Register\PasswordResetSent.cshtml" />
     <None Include="Web.DEV.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

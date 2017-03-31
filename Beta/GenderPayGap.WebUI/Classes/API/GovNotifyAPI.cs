@@ -13,8 +13,8 @@ namespace GenderPayGap
     public static class GovNotifyAPI
     {
         private static readonly string VerifyTemplateId = ConfigurationManager.AppSettings["GovNotifyVerifyTemplateId"];
+        private static readonly string ResetTemplateId = ConfigurationManager.AppSettings["GovNotifyResetTemplateId"];
         private static readonly string PinTemplateId = ConfigurationManager.AppSettings["GovNotifyPINTemplateId"];
-        private static readonly string ConfirmTemplateId = ConfigurationManager.AppSettings["GovNotifyConfirmTemplateId"];
         private static readonly string RegistrationRequestTemplateId = ConfigurationManager.AppSettings["GovNotifyRegistrationRequestTemplateId"];
         private static readonly string GEODistributionList = ConfigurationManager.AppSettings["GEODistributionList"];
         private static readonly string RegistrationApprovedTemplateId = ConfigurationManager.AppSettings["GovNotifyRegistrationApprovedTemplateId"];
@@ -178,6 +178,40 @@ namespace GenderPayGap
             }
             return false;
         }
+
+        public static bool SendPasswordReset(string resetUrl, string emailAddress, string resetCode)
+        {
+            //If the email address is a test email then simulate sending
+            if (emailAddress.StartsWithI(MvcApplication.TestPrefix)) return true;
+
+            var personalisation = new Dictionary<string, dynamic> { { "url", resetUrl } };
+
+            try
+            {
+                var result = GovNotify.SendEmail(emailAddress, ResetTemplateId, personalisation);
+                if (!result.status.EqualsI("created", "sending", "delivered")) throw new Exception($"Unexpected status '{result.status}' returned");
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MvcApplication.ErrorLog.WriteLine($"Cant send password reset email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
+                SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send password reset email to Gov Notify will try direct send for {emailAddress} due to following error:\n\n{ex.Message}");
+
+                try
+                {
+                    var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/PasswordReset.html"));
+                    html = html.Replace("((url))", resetUrl);
+                    Email.QuickSend("Password Reset - Gender Pay Gap reporting service", SmtpUsername, SmtpSenderName, emailAddress, html, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort);
+                    return true;
+                }
+                catch (Exception ex1)
+                {
+                    MvcApplication.ErrorLog.WriteLine($"Cant send password reset email directly for {emailAddress} due to following error:{ex1.Message}");
+                }
+            }
+            return false;
+        }
+
         #endregion
 
         #region Postal

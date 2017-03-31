@@ -115,7 +115,13 @@ namespace GenderPayGap.WebUI.Classes
             var verifyUrl=controller.Url.Action("VerifyEmail", "Register", new {code= verifyCode },"https");
             return GovNotifyAPI.SendVerifyEmail(verifyUrl,emailAddress, verifyCode);
         }
- 
+
+        public static bool SendPasswordReset(this RegisterController controller, string emailAddress, string resetCode)
+        {
+            var resetUrl = controller.Url.Action("NewPassword", "Register", new { code = resetCode }, "https");
+            return GovNotifyAPI.SendPasswordReset(resetUrl, emailAddress, resetCode);
+        }
+
         public static bool SendPinInPost(this RegisterController controller, UserOrganisation userOrg, string pin, DateTime sendDate)
         {
             //If the email address is a test email then simulate sending

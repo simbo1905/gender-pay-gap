@@ -190,6 +190,9 @@ namespace GenderPayGap
                 //Allow anonymous users when starting registration
                 if (IsAnyAction("Register/AboutYou", "Register/VerifyEmail")) return null;
 
+                //Allow anonymous users when resetting password
+                if (IsAnyAction("Register/PasswordReset", "Register/NewPassword")) return null;
+
                 //Otherwise ask the user to login
                 return new HttpUnauthorizedResult();
             }
@@ -319,8 +322,11 @@ namespace GenderPayGap
             {
                 if (IsAnyAction("Register/RequestReceived")) return null;
                 if (IsAnyAction("Register/Complete") && WasAnyAction("Register/ActivateService", "Register/ConfirmOrganisation")) return null;
+
                 return View("CustomError", new ErrorViewModel(1109));
             }
+
+
 
             return null;
         }
