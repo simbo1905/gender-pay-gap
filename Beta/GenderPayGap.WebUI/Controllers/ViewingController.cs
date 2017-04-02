@@ -333,11 +333,11 @@ namespace GenderPayGap.WebUI.Controllers
             else if (User.Identity.IsAuthenticated)
             {
                 //Do not cache page 
-                Response.Cache.SetExpires(DateTime.UtcNow.AddDays(-1));
-                Response.Cache.SetValidUntilExpires(false);
-                Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
-                Response.Cache.SetCacheability(HttpCacheability.NoCache);
-                Response.Cache.SetNoStore();
+       //         Response.Cache.SetExpires(DateTime.UtcNow.AddDays(-1));
+        //        Response.Cache.SetValidUntilExpires(false);
+         //       Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
+           //     Response.Cache.SetCacheability(HttpCacheability.NoCache);
+          //      Response.Cache.SetNoStore();
 
                 //TODO Load the current users details
                 var currentUser = DataRepository.FindUser(User);

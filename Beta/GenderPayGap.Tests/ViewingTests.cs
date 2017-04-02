@@ -85,12 +85,15 @@ namespace GenderPayGap.Tests
             SearchViewModel sModel = new SearchViewModel()
             {
                  Employers = employerResult,
-                 SearchText = "Acme",
+                //TODO: is SearchText noe search? SearchText = "Acme",
+                search = "Acme",
             };
 
             //Stash an object to pass in for this.ClearStash()
             SearchViewModel model = new SearchViewModel()
-            {};
+            {
+                search = "Acme"
+            };
 
             string command = "search"; //do additional tests for pageNext, pagePreview, page_ + pageNo:
 
@@ -98,7 +101,7 @@ namespace GenderPayGap.Tests
             controller.StashModel(sModel);
 
             //ACT:
-            var result = controller.SearchResults(model, command) as RedirectToRouteResult;
+            var result = controller.SearchResults(model.search) as RedirectToRouteResult;
 
             //ASSERT:
             Assert.NotNull(result, "Expected RedirectToRouteResult");
@@ -137,15 +140,18 @@ namespace GenderPayGap.Tests
             SearchViewModel sModel = new SearchViewModel()
             {
                 Employers = employerResult,
-                SearchText = "Acme",
-                NewSectors = new List<string>() {  }
+                //TODO: is SearchText noe search? SearchText = "Acme",
+                search = "Acme",
+                //TODO: what is this replaced with ? NewSectors = new List<string>() {  },
+                 
             };
 
             //Stash an object to pass in for this.ClearStash()
             SearchViewModel model = new SearchViewModel()
             {
                 Employers = employerResult,
-                SearchText = "Acme",
+                //TODO: is SearchText noe search? SearchText = "Acme",
+                search = "Acme",
 
             };
             string command = "search"; //do additional tests for pageNext, pagePreview, page_ + pageNo:
@@ -154,7 +160,7 @@ namespace GenderPayGap.Tests
             controller.StashModel(sModel);
 
             //ACT:
-            var result = controller.SearchResults(model, command) as ViewResult;
+            var result = controller.SearchResults(model.search/*, command*/) as ViewResult;
 
             //ASSERT:
             Assert.NotNull(result, "Expected ViewResult");
