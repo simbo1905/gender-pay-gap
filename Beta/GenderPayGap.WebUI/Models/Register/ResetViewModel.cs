@@ -35,5 +35,8 @@ namespace GenderPayGap.WebUI.Models.Register
         [Display(Name = "Confirm password")]
         [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; }
+
+        public string Resetcode { get; set; }
+
     }
 }

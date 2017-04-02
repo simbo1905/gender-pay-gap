@@ -6,7 +6,7 @@ using Autofac;
 using Extensions;
 using GenderPayGap.Core.Interfaces;
 using GenderPayGap.Core.Classes;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap

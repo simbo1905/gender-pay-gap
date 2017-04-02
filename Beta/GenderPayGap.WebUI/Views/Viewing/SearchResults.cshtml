@@ -60,7 +60,7 @@
                                         @if (Model.Employers.Results.Count < 1)
                                         {
                                             <div class="zero-results">
-                                                @if (string.IsNullOrWhiteSpace(Model.search) && !Model.s.Any())
+                                                @if (string.IsNullOrWhiteSpace(Model.search) && (Model.s!=null && !Model.s.Any()))
                                                 {
                                                     <h2 class="heading-medium">There is no gender pay gap data available</h2>
                                                    <ul class="list list-bullet">

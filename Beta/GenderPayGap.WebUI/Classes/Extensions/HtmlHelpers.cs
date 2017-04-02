@@ -23,7 +23,7 @@ namespace GenderPayGap.WebUI.Classes
     {
         public static MvcHtmlString PageIdentifier(this HtmlHelper htmlHelper)
         {
-            return new MvcHtmlString($"Date:{DateTime.Now}, Version:{typeof(BaseController).Assembly.GetName().Version}, Machine:{Environment.MachineName}, Instance:{Environment.GetEnvironmentVariable("WEBSITE_INSTANCE_ID")}");
+            return new MvcHtmlString($"Date:{DateTime.Now}, Version:{typeof(BaseController).Assembly.GetName().Version}, Slot:{ConfigurationManager.AppSettings["DeploymentSlot"]}, Machine:{Environment.MachineName}, Instance:{Environment.GetEnvironmentVariable("WEBSITE_INSTANCE_ID")}");
         }
 
         public static MvcHtmlString AppSetting(this HtmlHelper htmlHelper,string appSettingKey)
@@ -175,8 +175,9 @@ namespace GenderPayGap.WebUI.Classes
             string propertyName = ExpressionHelper.GetExpressionText(expression);
             var propertyInfo = containerType.GetPropertyInfo(propertyName);
 
-            var displayAttribute = propertyInfo.GetCustomAttributes(typeof(DisplayNameAttribute), false).FirstOrDefault() as DisplayNameAttribute;
-            var displayName = displayAttribute == null ? propertyName : displayAttribute.DisplayName;
+            var displayNameAttribute = propertyInfo?.GetCustomAttributes(typeof(DisplayNameAttribute), false).FirstOrDefault() as DisplayNameAttribute;
+            var displayAttribute = propertyInfo?.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
+            var displayName = displayNameAttribute!= null ? displayNameAttribute.DisplayName : displayAttribute != null ? displayAttribute.Name : propertyName;
 
             string par1 = null;
             string par2 = null;

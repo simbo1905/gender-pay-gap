@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.Owin.Security;

@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using Autofac;
 using CsvHelper;
 using Extensions;

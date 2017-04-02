@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using GenderPayGap.Core.Interfaces;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using GenderPayGap.WebUI.Models;
 using IdentityServer3.Core;
 using Moq;

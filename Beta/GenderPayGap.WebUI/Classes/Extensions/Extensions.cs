@@ -1,6 +1,6 @@
 ﻿using Extensions;
 using GenderPayGap.Core.Interfaces;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using IdentityServer3.Core;
 using System;
 using System.Collections.Generic;
@@ -219,9 +219,9 @@ namespace GenderPayGap.WebUI.Classes
                 var attributes = propertyInfo == null ? null : propertyInfo.GetCustomAttributes(typeof(ValidationAttribute), false).ToList<ValidationAttribute>();
 
                 //Get the display name
-                var displayAttribute = propertyInfo==null ? null : propertyInfo.GetCustomAttributes(typeof(DisplayNameAttribute), false).FirstOrDefault() as DisplayNameAttribute;
-                var displayName = displayAttribute == null ? propertyName : displayAttribute.DisplayName;
-
+                var displayNameAttribute = propertyInfo?.GetCustomAttributes(typeof(DisplayNameAttribute), false).FirstOrDefault() as DisplayNameAttribute;
+                var displayAttribute = propertyInfo?.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
+                var displayName = displayNameAttribute != null ? displayNameAttribute.DisplayName : displayAttribute != null ? displayAttribute.Name : propertyName;
 
                 foreach (var error in modelState.Value.Errors)
                 { 

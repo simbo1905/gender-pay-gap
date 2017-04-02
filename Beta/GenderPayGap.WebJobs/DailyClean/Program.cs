@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Autofac;
 using GenderPayGap.Core.Classes;
 using GenderPayGap.Core.Interfaces;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using Microsoft.Azure.WebJobs;
 
 namespace DailyClean

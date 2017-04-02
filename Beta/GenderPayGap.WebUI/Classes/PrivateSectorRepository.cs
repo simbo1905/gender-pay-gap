@@ -5,14 +5,14 @@ using Autofac;
 using Extensions;
 using GenderPayGap.Core.Interfaces;
 using GenderPayGap.Core.Classes;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap
 {
     public class PrivateSectorRepository: IPagedRepository<EmployerRecord>
     {
-        const Models.SqlDatabase.SectorTypes Type = Models.SqlDatabase.SectorTypes.Private;
+        const SectorTypes Type = SectorTypes.Private;
 
         public void Delete(EmployerRecord entity)
         {

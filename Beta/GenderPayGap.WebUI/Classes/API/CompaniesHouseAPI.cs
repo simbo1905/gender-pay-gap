@@ -10,7 +10,7 @@ using Autofac;
 using Extensions;
 using GenderPayGap.Core.Classes;
 using GenderPayGap.Core.Interfaces;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using GenderPayGap.WebUI.Classes;
 using Microsoft.Owin.Security.Provider;
 

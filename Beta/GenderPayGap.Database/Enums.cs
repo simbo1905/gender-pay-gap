@@ -1,4 +1,4 @@
-﻿namespace GenderPayGap.Models.SqlDatabase
+﻿namespace GenderPayGap.Database
 {
     public enum UserStatuses:byte
     {

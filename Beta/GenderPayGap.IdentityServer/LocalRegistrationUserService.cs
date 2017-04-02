@@ -6,7 +6,7 @@ using System.Web;
 using IdentityServer3.Core;
 using IdentityServer3.Core.Models;
 using IdentityServer3.Core.Services.Default;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using Extensions;
 
 namespace GenderPayGap.IdentityServer

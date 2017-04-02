@@ -1,4 +1,4 @@
-namespace GenderPayGap.Models.SqlDatabase
+namespace GenderPayGap.Database
 {
     using Extensions;
     using System;

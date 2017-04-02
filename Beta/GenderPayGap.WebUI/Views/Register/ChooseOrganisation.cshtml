@@ -3,7 +3,7 @@
 }
 
 @model GenderPayGap.WebUI.Models.Register.OrganisationViewModel
-@using GenderPayGap.Models.SqlDatabase
+@using GenderPayGap.Database
 @using GenderPayGap.WebUI.Classes
 
 <main id="content" role="main">
@@ -23,7 +23,7 @@
 
                 <div class="search-bar">
                     <div class="searchfield">
-                        @Html.CustomEditorFor(model => model.SearchText, htmlAttributes: new {@class = "search-input", @placeholder = Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Public ? "Organisation name" : "Organisation name or company no"})
+                        @Html.CustomEditorFor(model => model.SearchText, htmlAttributes: new {@class = "search-input", @placeholder = Model.SectorType == GenderPayGap.Database.SectorTypes.Public ? "Organisation name" : "Organisation name or company no"})
 
                         <button type="submit" class="search-submit" name="command" value="search">Search</button>
                     </div>
@@ -53,7 +53,7 @@
                             <caption class="visuallyhidden">Customer and Business search listing</caption>
                             <thead>
                                 <tr>
-                                    @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
+                                    @if (Model.SectorType == GenderPayGap.Database.SectorTypes.Private)
                                     {
                                         <th scope="col">Organisation name and registered address</th>
                                         <th scope="col">Registered number</th>
@@ -71,7 +71,7 @@
                                 @for (var i = 0; i < Model.Employers.Results.Count; i++)
                                 {
                                     <tr>
-                                        @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
+                                        @if (Model.SectorType == GenderPayGap.Database.SectorTypes.Private)
                                         {
                                             <td>@Model.Employers.Results[i].Name <span>@Model.Employers.Results[i].FullAddress</span></td>
 
@@ -80,7 +80,7 @@
                                                 </td>
                                         }
 
-                                        @if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Public)
+                                        @if (Model.SectorType == GenderPayGap.Database.SectorTypes.Public)
                                         {
                                             <td>@Model.Employers.Results[i].Name</td>
                                         }

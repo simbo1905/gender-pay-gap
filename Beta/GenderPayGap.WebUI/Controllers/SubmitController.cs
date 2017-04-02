@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 using Extensions;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using System.Linq;
 using System.Transactions;
 using System.Web;

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using Extensions;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 
 namespace GenderPayGap.WebUI.Models.Submit
 {

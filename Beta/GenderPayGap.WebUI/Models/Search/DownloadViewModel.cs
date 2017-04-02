@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using Extensions;
 using GenderPayGap.Core.Classes;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap.WebUI.Models.Search

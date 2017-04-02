@@ -4,7 +4,7 @@ using System.Linq;
 using System.Security.Authentication;
 using System.Web.Mvc;
 using Extensions;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using Autofac;
 using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Classes;
@@ -215,11 +215,12 @@ namespace GenderPayGap.WebUI.Controllers
             //If verification code has expired
             if (currentUser.EmailVerifySendDate.Value.AddHours(Settings.Default.EmailVerificationExpiryHours) < DateTime.Now)
             {
-                AddModelError(1103);
+                AddModelError(3016);
 
                 model.Resend = true;
 
                 //prompt user to click to request a new one
+                this.CleanModelErrors<VerifyViewModel>();
                 return View("VerifyEmail", model);
             }
 
@@ -231,16 +232,10 @@ namespace GenderPayGap.WebUI.Controllers
                 if (remainingResend>TimeSpan.Zero)
                     //Prompt to check email or wait
                     return View("CustomError", new ErrorViewModel(1102, new { remainingTime = remainingLock.ToFriendly(maxParts: 2) }));
-                else
-                {
-                    //Expired with resend
-                    AddModelError(3016);
-                    this.CleanModelErrors<VerifyViewModel>();
 
-                    //Prompt to click resend
-                    model.Resend = true;
-                    return View("VerifyEmail", model);
-                }
+                //Prompt to click resend
+                model.Resend = true;
+                return View("VerifyEmail", model);
             }
 
             //If too many wrong attempts
@@ -1699,6 +1694,7 @@ namespace GenderPayGap.WebUI.Controllers
             return View("PasswordReset", new ResetViewModel());
         }
 
+        [SpamProtection(3)]
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("password-reset")]
@@ -1708,6 +1704,9 @@ namespace GenderPayGap.WebUI.Controllers
             //Ensure user has not completed the registration process
             var result = CheckUserRegisteredOk(out currentUser);
             if (result != null) return result;
+
+            ModelState.Remove(nameof(model.Password));
+            ModelState.Remove(nameof(model.ConfirmPassword));
 
             //Validate the submitted fields
             if (!ModelState.IsValid)
@@ -1719,15 +1718,10 @@ namespace GenderPayGap.WebUI.Controllers
             //Ensure email is always lower case
             model.EmailAddress = model.EmailAddress.ToLower();
 
-            //Check this email address isnt already assigned to another user
+            //Check this email address still exists
             currentUser = DataRepository.FindUserByEmail(model.EmailAddress);
             if (currentUser == null)
-            {
-                //A registered user with this email already exists.
-                AddModelError(3020, "EmailAddress");
-                this.CleanModelErrors<RegisterViewModel>();
-                return View("PasswordReset", model);
-            }
+                return View("CustomError", new ErrorViewModel(1128));
 
             //Block them if they have requested too many today
             var remaining = currentUser.ResetSendDate == null ? TimeSpan.Zero : currentUser.ResetSendDate.Value.AddDays(1) - DateTime.Now;
@@ -1777,6 +1771,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
 
+        [SpamProtection(2)]
         [HttpGet]
         [Route("enter-new-password")]
         public ActionResult NewPassword(string code=null)
@@ -1788,9 +1783,12 @@ namespace GenderPayGap.WebUI.Controllers
 
             result=UnwrapPasswordReset(code, out currentUser);
             if (result != null) return result;
+            var model = new ResetViewModel();
+            model.Resetcode = code;
+            this.StashModel(model);
 
             //Start new user registration
-            return View("NewPassword", new ResetViewModel());
+            return View("NewPassword", model);
         }
 
         private ActionResult UnwrapPasswordReset(string code, out User user)
@@ -1827,22 +1825,29 @@ namespace GenderPayGap.WebUI.Controllers
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("enter-new-password")]
-        public ActionResult NewPassword(ResetViewModel model, string code)
+        public ActionResult NewPassword(ResetViewModel model)
         {
             User currentUser;
             //Ensure user has not completed the registration process
             var result = CheckUserRegisteredOk(out currentUser);
             if (result != null) return result;
 
+            ModelState.Remove(nameof(model.EmailAddress));
+            ModelState.Remove(nameof(model.ConfirmEmailAddress));
+
             //Validate the submitted fields
             if (!ModelState.IsValid)
             {
                 this.CleanModelErrors<ResetViewModel>();
-                return View("PasswordReset", model);
+                return View("NewPassword", model);
             }
 
-            result = UnwrapPasswordReset(code, out currentUser);
+            var m = this.UnstashModel<ResetViewModel>();
+            if (m==null || string.IsNullOrWhiteSpace(m.Resetcode)) return View("CustomError", new ErrorViewModel(0));
+
+            result = UnwrapPasswordReset(m.Resetcode, out currentUser);
             if (result != null) return result;
+            this.ClearStash();
 
             //Save the user to ensure UserId>0 for new status
             currentUser.PasswordHash = model.Password.GetSHA512Checksum();

@@ -2,7 +2,7 @@ using System.Linq;
 using Extensions;
 using GenderPayGap.Core.Classes;
 
-namespace GenderPayGap.Models.SqlDatabase
+namespace GenderPayGap.Database
 {
     using System;
     using System.Collections.Generic;

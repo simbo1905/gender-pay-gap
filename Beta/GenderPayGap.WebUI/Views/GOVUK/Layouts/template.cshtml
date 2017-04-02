@@ -1,5 +1,6 @@
-﻿@* @using Web.Identity 
-@using Web.UI.Helpers *@
+﻿@using GenderPayGap.WebUI.Classes
+@* @using Web.Identity
+    @using Web.UI.Helpers *@
 @{
     ViewBag.assetsPath = Url.Content("~/public/govuk_template/assets");
 
@@ -7,6 +8,7 @@
     var title = !string.IsNullOrEmpty(ViewBag.Title) ? ViewBag.Title : "Gender Pay Gap Management";
     var documentTitle = string.Format("{0} - {1}", title, "GOV.UK");
 }
+<!-- @Html.PageIdentifier() -->
 <!DOCTYPE html>
 <!--[if lt IE 9]><html class="lte-ie8" lang="en"><![endif]-->
 <!--[if gt IE 8]><!-->

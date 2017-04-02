@@ -5,7 +5,7 @@ using Extensions;
 using System;
 using GenderPayGap.WebUI.Classes;
 using Autofac;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using GenderPayGap.WebUI.Classes.API;
 
 namespace GenderPayGap

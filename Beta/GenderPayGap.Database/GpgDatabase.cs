@@ -4,7 +4,7 @@ using System.Data.Common;
 using System.Data.Entity.Validation;
 using Extensions;
 
-namespace GenderPayGap.Models.SqlDatabase
+namespace GenderPayGap.Database
 {
     using GenderPayGap.Core.Interfaces;
     using System;
@@ -160,6 +160,19 @@ namespace GenderPayGap.Models.SqlDatabase
             return result;
         }
 
+        public static List<string> GetTableList(System.Data.Entity.DbContext db)
+        {
+            var tableNames = db.Database.SqlQuery<string>("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME NOT LIKE '%Migration%' AND TABLE_NAME NOT LIKE 'AspNet%'").ToList();
+            return tableNames;
+            var type = db.GetType();
+
+            return db.GetType().GetProperties()
+                .Where(x => x.PropertyType.Name == "DbSet`1")
+                .Select(x => x.Name).ToList();
+        }
+#endif
+        #endregion
+
         public static void Delete(long userId, bool deleteReturns, bool deleteOrg, bool deleteUser)
         {
             var context = new DbContext();
@@ -220,19 +233,6 @@ namespace GenderPayGap.Models.SqlDatabase
         {
             Delete(userId, true, true, true);
         }
-
-        public static List<string> GetTableList(System.Data.Entity.DbContext db)
-        {
-            var tableNames = db.Database.SqlQuery<string>("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE' AND TABLE_NAME NOT LIKE '%Migration%' AND TABLE_NAME NOT LIKE 'AspNet%'").ToList();
-            return tableNames;
-            var type = db.GetType();
-
-            return db.GetType().GetProperties()
-                .Where(x => x.PropertyType.Name == "DbSet`1")
-                .Select(x => x.Name).ToList();
-        }
-#endif
-        #endregion
 
     }
 }
