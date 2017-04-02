@@ -7,8 +7,8 @@
     <ProjectGuid>{3073DF11-5D99-45A7-9CBA-836FD758C319}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GenderPayGap.Models.SqlDatabase</RootNamespace>
-    <AssemblyName>GpgDatabase</AssemblyName>
+    <RootNamespace>GenderPayGap.Database</RootNamespace>
+    <AssemblyName>GenderPayGap.Database</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />

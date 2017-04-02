@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using Autofac;
 using CsvHelper;
 using Extensions;
@@ -38,7 +38,7 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Init()
         {
 #if DEBUG
-            MvcApplication.Log.WriteLine("Viewing Controller Initialised");
+            MvcApplication.InfoLog.WriteLine("Viewing Controller Initialised");
 #endif
             return new EmptyResult();
         }
@@ -51,7 +51,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [Route]
-        [OutputCache(Duration = 86400, VaryByParam = "none")]
+        [OutputCache(CacheProfile = "RedirectIndex")]
         public ActionResult Redirect()
         {
             return RedirectToAction("SearchResults");
@@ -59,47 +59,40 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("search-results")]
-        [OutputCache(Duration=3600,VaryByParam = "search;page;sectors")]
-
-        public ActionResult SearchResults(string search = null, int year = 0, int page = 1, string sectors = null)
+        [OutputCache(CacheProfile = "SearchResults")]
+        public ActionResult SearchResults(string search = null, IEnumerable<string> s = null, int p = 1, int z = 0, int y = 0)
         {
-            //Show the maintenance page
-            if (MvcApplication.MaintenanceMode)return RedirectToAction("ServiceUnavailable", "Error");
-
-            var model = this.UnstashModel<SearchViewModel>() ?? new SearchViewModel();
+            var model = new SearchViewModel();
 
             //Make sure we know all the sic sectors
-            if (model.AllSectors == null)
+            var list = new List<SearchViewModel.SicSection>();
+            foreach (var sector in DataRepository.GetAll<SicSection>().OrderBy(sic => sic.SicSectionId))
             {
-                var list = new List<SearchViewModel.SicSection>();
-                foreach (var sector in DataRepository.GetAll<SicSection>().OrderBy(s => s.SicSectionId))
+                list.Add(new SearchViewModel.SicSection()
                 {
-                    list.Add(new SearchViewModel.SicSection()
-                    {
-                        SicSectionId = sector.SicSectionId,
-                        Description = sector.Description = sector.Description.BeforeFirst(";")
-                    });
-                }
-                model.AllSectors = list.AsEnumerable();
+                    SicSectionId = sector.SicSectionId,
+                    Description = sector.Description = sector.Description.BeforeFirst(";")
+                });
             }
+            model.AllSectors = list.AsEnumerable();
 
-            var newSectors = sectors.SplitI(string.Empty).ToList();
-
-            if (search != model.SearchText || model.Employers == null || model.Employers.RowCount == 0 || model.Employers.CurrentPage != page || model.Year != year || (model.NewSectors==null || !model.NewSectors.EqualsI(newSectors)))
+            var newSectors = s.ToDelimitedString(string.Empty);
+            if (z < 1) z = Settings.Default.EmployerPageSize;
+            if (y < 1) y = DateTime.Now.Year;
+            if (search != model.search || model.Employers == null || model.Employers.RowCount == 0 || model.Employers.CurrentPage != p || model.y != y || (model.s==null || !model.s.ToDelimitedString(string.Empty).EqualsI(newSectors)))
             {
-                model.SearchText = search;
-
                 //Make sure we can load employers from session
-                var searchSectors = newSectors.EqualsI(model.AllSectors) ? new List<string>() : newSectors;
-                model.Employers = Search(search, searchSectors, page, Settings.Default.EmployerPageSize, year);
-                model.LastSearch = search;
-                model.LastSectors = searchSectors.ToDelimitedString(string.Empty);
-                model.LastPage = page;
-                model.LastPageSize = Settings.Default.EmployerPageSize;
-                model.LastYear = year;
+                var searchSectors = s?.Where(sc=>!string.IsNullOrWhiteSpace(sc)).ToList();
+                var allSectors = model.AllSectors.Select(sic => sic.SicSectionId).ToDelimitedString(string.Empty);
+                if (newSectors.EqualsI(allSectors)) searchSectors = new List<string>();
+                model.Employers = Search(search, searchSectors, p, Settings.Default.EmployerPageSize, y);
+                model.search = search;
+                model.p = p;
+                model.z = z;
+                model.y = y;
+                model.s = s;
                 LastSearch = Request.Url.PathAndQuery;
-                model.NewSectors = newSectors;
-
+                
                 var sources = new List<Core.Classes.SelectedItem>();
                 foreach (var sector in model.AllSectors)
                 {
@@ -111,7 +104,6 @@ namespace GenderPayGap.WebUI.Controllers
                     });
                 }
                 model.SectorSources = sources;
-                this.StashModel(model);
             }
 
             return View("SearchResults", model);
@@ -131,33 +123,41 @@ namespace GenderPayGap.WebUI.Controllers
             };
 
             string pattern = searchText?.ToLower();
-            var hasSector = sectors.Any();
+            var hasSector = sectors!=null && sectors.Any();
 
+            
             //using (DataRepository.BeginTransaction(IsolationLevel.Snapshot))
             {
                 IQueryable<Return> searchResults;
                 if (!string.IsNullOrWhiteSpace(searchText) && hasSector)
-                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status==ReturnStatuses.Submitted &&
+                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status==ReturnStatuses.Submitted && r.Organisation.Status == OrganisationStatuses.Active &&
                         ((r.AccountingDate == privateAccountingDate && r.Organisation.SectorType == SectorTypes.Private) || (r.AccountingDate == publicAccountingDate && r.Organisation.SectorType == SectorTypes.Public)) &&
                         r.Organisation.OrganisationName.ToLower().Contains(pattern) &&
                         r.Organisation.OrganisationSicCodes.Any(sic => sectors.Contains(sic.SicCode.SicSectionId)))
                         .OrderBy(r => r.Organisation.OrganisationName);
                 else if (!string.IsNullOrWhiteSpace(searchText) && !hasSector)
-                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted &&
+                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted && r.Organisation.Status == OrganisationStatuses.Active &&
                     ((r.AccountingDate == privateAccountingDate && r.Organisation.SectorType == SectorTypes.Private) || (r.AccountingDate == publicAccountingDate && r.Organisation.SectorType == SectorTypes.Public)) &&
                     r.Organisation.OrganisationName.ToLower().Contains(pattern))
                     .OrderBy(r => r.Organisation.OrganisationName);
                 else if (string.IsNullOrWhiteSpace(searchText) && hasSector)
-                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted &&
+                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted && r.Organisation.Status == OrganisationStatuses.Active &&
                         ((r.AccountingDate == privateAccountingDate && r.Organisation.SectorType == SectorTypes.Private) || (r.AccountingDate == publicAccountingDate && r.Organisation.SectorType == SectorTypes.Public)) &&
                         r.Organisation.OrganisationSicCodes.Any(sic => sectors.Contains(sic.SicCode.SicSectionId)))
                         .OrderBy(r => r.Organisation.OrganisationName);
                 else
-                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted &&
+                    searchResults = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted && r.Organisation.Status == OrganisationStatuses.Active &&
                         (r.AccountingDate == privateAccountingDate && r.Organisation.SectorType == SectorTypes.Private) || (r.AccountingDate == publicAccountingDate && r.Organisation.SectorType == SectorTypes.Public))
                         .OrderBy(r => r.Organisation.OrganisationName);
 
                 result.RowCount = searchResults.Count();
+                
+                //Pick a random page if none specified
+                if (page==0)
+                    page = 1;
+                else if (page < 0)
+                    page = Numeric.Rand(1, result.PageCount);
+
                 result.Results = searchResults.ToList().Select(r => r.Organisation.ToEmployerRecord()).Page(pageSize, page).ToList();
             }
 
@@ -169,96 +169,12 @@ namespace GenderPayGap.WebUI.Controllers
             return result;
         }
 
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Route("search-results")]
-        public ActionResult SearchResults(SearchViewModel m, string command)
-        {
-            //Show the maintenance page
-            if (MvcApplication.MaintenanceMode) return RedirectToAction("ServiceUnavailable", "Error");
-
-            //Make sure we can load employers from session
-            var model = this.UnstashModel<SearchViewModel>();
-            if (model == null)
-            {
-                model=new SearchViewModel();
-                model.SearchText = m.LastSearch;
-                model.Employers = Search(m.LastSearch, m.LastSectors.SplitI(string.Empty).ToList(), m.LastPage, m.LastPageSize, m.LastYear);
-            }
-
-            var nextPage = model.Employers.CurrentPage;
-
-            var oldSearchText = model.SearchText;
-            if (command == "search")
-            {
-                bool clearSearch = !string.IsNullOrWhiteSpace(model.SearchText) && string.IsNullOrWhiteSpace(m.SearchText);
-                model.SearchText = m.SearchText.TrimI();
-                if (!clearSearch)
-                {
-                    if (string.IsNullOrWhiteSpace(model.SearchText))
-                    {
-                        AddModelError(3019, "SearchText");
-                        this.CleanModelErrors<SearchViewModel>();
-                        return View("SearchResults", model);
-                    }
-                    if (model.SearchText.Length < 3 || model.SearchText.Length > 100)
-                    {
-                        AddModelError(3007, "SearchText");
-                        this.CleanModelErrors<SearchViewModel>();
-                        return View("SearchResults", model);
-                    }
-                }
-            }
-            else if (command == "pageNext")
-            {
-                if (nextPage >= model.Employers.PageCount)
-                    throw new Exception("Cannot go past last page");
-                nextPage++;
-            }
-            else if (command == "pagePrev")
-            {
-                if (nextPage <= 1)
-                    throw new Exception("Cannot go before previous page");
-                nextPage--;
-            }
-            else if (command.StartsWithI("page_"))
-            {
-                var page = command.AfterFirst("page_").ToInt32();
-                if (page < 1 || page > model.Employers.PageCount)
-                    throw new Exception("Invalid page selected");
-
-                if (page != nextPage)
-                {
-                    nextPage = page;
-                }
-            }
-
-            ModelState.Clear();
-
-            var selectedSectors = m.NewSectors.ToDelimitedString(string.Empty);
-
-            //If search text, sectors or page changed then redirect to search page
-            if (oldSearchText != m.SearchText)
-                nextPage = 1;
-
-            if (oldSearchText != model.SearchText || nextPage != model.Employers.CurrentPage || selectedSectors != model.NewSectors.ToDelimitedString(string.Empty))
-            {
-                model.SearchText = oldSearchText;
-                return RedirectToAction("SearchResults", new { search = m.SearchText, page = nextPage, sectors = selectedSectors });
-            }
-
-            //Otherwise show the same results
-            return View("SearchResults", model);
-        }
 
         [HttpGet]
         [Route("download")]
-        [OutputCache(Duration = 3600, VaryByParam = "none")]
+        [OutputCache(CacheProfile = "Download")]
         public ActionResult Download()
         {
-            //Show the maintenance page
-            if (MvcApplication.MaintenanceMode) return RedirectToAction("ServiceUnavailable", "Error");
-
             //Get the latest return accounting date
             var returnYears = DataRepository.GetAll<Return>().Where(r => r.Status == ReturnStatuses.Submitted).Select(r => r.AccountingDate.Year).Distinct().ToList();
 
@@ -288,7 +204,7 @@ namespace GenderPayGap.WebUI.Controllers
                     using (var textWriter = tempfile.CreateText())
                     {
                         var downloadData = DataRepository.GetAll<Return>().Where(r => r.AccountingDate.Year == year).OrderBy(r => r.Organisation.OrganisationName).ToList();
-                        var records = downloadData.Select(r => r.ToDownloadRecord());
+                        var records = downloadData.Where(r=> !r.Organisation.OrganisationName.StartsWithI(MvcApplication.TestPrefix)).Select(r => r.ToDownloadRecord());
                         using (var writer = new CsvWriter(textWriter))
                         {
                             writer.WriteRecords(records);
@@ -308,7 +224,7 @@ namespace GenderPayGap.WebUI.Controllers
                     }
                     catch (Exception ex)
                     {
-                        MvcApplication.Log.WriteLine(ex.Message);
+                        MvcApplication.ErrorLog.WriteLine(ex.Message);
                     }
                 }
                 finally
@@ -342,11 +258,14 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("download-data")]
-        [OutputCache(Duration = 3600, VaryByParam = "year")]
-        public ActionResult DownloadData(int year)
+        [OutputCache(CacheProfile = "DownloadData")]
+        public ActionResult DownloadData(int year=0)
         {
-            //Show the maintenance page
-            if (MvcApplication.MaintenanceMode) return RedirectToAction("ServiceUnavailable", "Error");
+            if (year == 0)
+            {
+                var ret= DataRepository.GetAll<Return>().OrderBy(a=>Guid.NewGuid()).FirstOrDefault(r => r.Status == ReturnStatuses.Submitted);
+                if (ret != null) year = ret.AccountingDate.Year;
+            }
 
             //Ensure we have a directory
             if (!MvcApplication.FileRepository.GetDirectoryExists(Settings.Default.DownloadsLocation)) return new HttpNotFoundResult("There are no GPG data files");
@@ -380,13 +299,9 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("employer-details")]
-        [OutputCache(Duration = 3600, VaryByParam = "id;view")]
-
+        [OutputCache(CacheProfile = "EmployerDetails")]
         public ActionResult EmployerDetails(string id=null, string view=null)
         {
-            //Show the maintenance page
-            if (MvcApplication.MaintenanceMode) return RedirectToAction("ServiceUnavailable", "Error");
-
             //Make sure we have a view
             if (string.IsNullOrWhiteSpace(view))
                 view = "hourly-rate";
@@ -396,18 +311,24 @@ namespace GenderPayGap.WebUI.Controllers
             Organisation org=null;
             if (!string.IsNullOrWhiteSpace(id))
             {
-                try
+                long orgId = 0;
+                if (id.EqualsI("-1", "random", "rand"))
+                    org = DataRepository.GetAll<Organisation>().OrderBy(a => Guid.NewGuid()).FirstOrDefault();
+                else
                 {
-                    id = Encryption.DecryptQuerystring(id);
-                }
-                catch (Exception ex)
-                {
-                    MvcApplication.Log.WriteLine("Cannot decrypt organisation id from querystring");
-                    return View("CustomError", new ErrorViewModel(400));
-                }
+                    try
+                    {
+                        id = Encryption.DecryptQuerystring(id);
+                        orgId = id.ToInt64();
+                    }
+                    catch (Exception ex)
+                    {
+                        MvcApplication.ErrorLog.WriteLine("Cannot decrypt organisation id from querystring");
+                        return View("CustomError", new ErrorViewModel(400));
+                    }
 
-                var orgId = id.ToInt64();
-                org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == orgId);
+                    if (orgId > 0) org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.OrganisationId == orgId);
+                }
             }
             else if (User.Identity.IsAuthenticated)
             {

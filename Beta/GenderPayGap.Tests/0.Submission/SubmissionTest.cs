@@ -4,7 +4,7 @@ using System.Linq;
 using System.Web.Mvc;
 using System.Web.Routing;
 using GenderPayGap.WebUI.Controllers;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using GenderPayGap.WebUI.Classes;
 using GenderPayGap.WebUI.Models.Submit;
 

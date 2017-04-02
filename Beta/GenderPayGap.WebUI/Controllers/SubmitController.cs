@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 using Extensions;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using System.Linq;
 using System.Transactions;
 using System.Web;
@@ -29,7 +29,7 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Init()
         {
 #if DEBUG
-            MvcApplication.Log.WriteLine("Submit Controller Initialised");
+            MvcApplication.InfoLog.WriteLine("Submit Controller Initialised");
 #endif
             return new EmptyResult();
         }
@@ -345,7 +345,9 @@ namespace GenderPayGap.WebUI.Controllers
                 if (oldReturn.Equals(newReturn))
                     newReturn = oldReturn;
                 else
+                {
                     oldReturn.SetStatus(ReturnStatuses.Retired, currentUser.UserId);
+                }
             }
 
             //add the new one
@@ -361,6 +363,10 @@ namespace GenderPayGap.WebUI.Controllers
 
                 scope.Complete();
             }
+
+            //Alert on submit
+            if (oldReturn==null && MvcApplication.EnableSubmitAlerts && !currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                GovNotifyAPI.SendGeoMessage("GPG Data Submission Notification",$"GPG data was submitted for first time by '{newReturn.Organisation.OrganisationName}' on {newReturn.StatusDate.ToShortDateString()}\n\n See {Url.Action("EmployerDetails","Viewing",new {id=newReturn.Organisation.GetEncryptedId()},"https")}");
 
             return RedirectToAction("SubmissionComplete");
         }

@@ -16,88 +16,85 @@
         </ol>
     </div>
 
-    @using (Html.BeginForm())
-    {
-        @Html.AntiForgeryToken()
-
-        <div class="grid-row">
-            <div class="column-two-thirds gpg-details">
-                <h1 class="heading-large" style="margin-top: 0.3em;">
-                    <span class="heading-secondary">@Model.AccountingDate.Year to @(Model.AccountingDate.Year + 1) gender pay gap data</span>
-                    <span id="companyname">@Model.OrganisationName</span>
-                </h1>
-                <p><span class="font-small">Address:</span> <span id="address">@Model.Address</span></p>
-                <p><span class="font-small">Sector:</span> <span id="sector">@Model.Sector</span></p>
-                <div class="container">
-                    <ul class="tabs">
-                        @if (string.IsNullOrWhiteSpace(Request.QueryString["id"]))
-                        {
-                            <li class="tab-link" data-tab="tab-1">@Html.ActionLink("Hourly rate", "EmployerDetails", new {view = "hourly-rate"})</li>
-                            <li class="tab-link" data-tab="tab-2">@Html.ActionLink("Pay quartiles", "EmployerDetails", new {view = "pay-quartiles"})</li>
+    <div class="grid-row">
+        <div class="column-two-thirds gpg-details">
+            <h1 class="heading-large" style="margin-top: 0.3em;">
+                <span class="heading-secondary">@Model.AccountingDate.Year to @(Model.AccountingDate.Year + 1) gender pay gap data</span>
+                <span id="companyname">@Model.OrganisationName</span>
+            </h1>
+            <p><span class="font-small">Address:</span> <span id="address">@Model.Address</span></p>
+            <p><span class="font-small">Sector:</span> <span id="sector">@Model.Sector</span></p>
+            <div class="container">
+                <ul class="tabs">
+                    @if (string.IsNullOrWhiteSpace(Request.QueryString["id"]))
+                    {
+                        <li class="tab-link" data-tab="tab-1">@Html.ActionLink("Hourly rate", "EmployerDetails", new { view = "hourly-rate" })</li>
+                            <li class="tab-link" data-tab="tab-2">@Html.ActionLink("Pay quartiles", "EmployerDetails", new { view = "pay-quartiles" })</li>
                             <li class="tab-link current" data-tab="tab-3">Bonus pay</li>
-                        }
-                        else
-                        {
-                            <li class="tab-link" data-tab="tab-1">@Html.ActionLink("Hourly rate", "EmployerDetails", new { view = "hourly-rate", id = Model.GetEncryptedId() })</li>
+                    }
+                    else
+                    {
+                        <li class="tab-link" data-tab="tab-1">@Html.ActionLink("Hourly rate", "EmployerDetails", new { view = "hourly-rate", id = Model.GetEncryptedId() })</li>
                             <li class="tab-link" data-tab="tab-2">@Html.ActionLink("Pay quartiles", "EmployerDetails", new { view = "pay-quartiles", id = Model.GetEncryptedId() })</li>
                             <li class="tab-link current" data-tab="tab-3">Bonus pay</li>
-                        }
-                    </ul>
-                    <div id="tab-3" class="tab-content current">
-                        <h2 class="heading-medium no-sub"><span class="gender">Mens'</span> bonus pay is
-                        </h2>
-                        <div class="grid-row block">
-                            <div class="column-one-half ">
-                                <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.MaleMedianBonusPayPercent)%</h4>
-                                    <p class="font-small sub ">HIGHER </p>
-                                    <p class="type">(mean) </p>
-                                </div>
-                            </div>
-                            <div class="column-one-half">
-                                <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.FemaleMedianBonusPayPercent)% </h4>
-                                    <p class="font-small sub ">HIGHER </p>
-                                    <p class="type">(median) </p>
-                                </div>
+                    }
+                </ul>
+                <div id="tab-3" class="tab-content current">
+                    <h2 class="heading-medium no-sub">
+                        <span class="gender">Mens'</span> bonus pay is
+                    </h2>
+                    <div class="grid-row block">
+                        <div class="column-one-half ">
+                            <div class="data">
+                                <h4 class="bold-xlarge">@String.Format("{0:0}", Model.MaleMedianBonusPayPercent)%</h4>
+                                <p class="font-small sub ">HIGHER </p>
+                                <p class="type">(mean) </p>
                             </div>
                         </div>
-                        <h2 class="heading-medium no-sub">Who received bonus pay</h2>
-                        <div class="grid-row">
-                            <div class="column-one-half ">
-                                <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.DiffMeanBonusPercent)%</h4>
-                                    <p class="font-small">MEN </p>
-                                </div>
-                            </div>
-                            <div class="column-one-half">
-                                <div class="data">
-                                    <h4 class="bold-xlarge">@String.Format("{0:0}", Model.DiffMedianBonusPercent)%</h4>
-                                    <p class="font-small">WOMEN </p>
-                                </div>
+                        <div class="column-one-half">
+                            <div class="data">
+                                <h4 class="bold-xlarge">@String.Format("{0:0}", Model.FemaleMedianBonusPayPercent)% </h4>
+                                <p class="font-small sub ">HIGHER </p>
+                                <p class="type">(median) </p>
                             </div>
                         </div>
                     </div>
-                </div><!-- container -->
-            </div>
-            <div class="column-third">
-                <aside class="govuk-related-items" role="complementary">
-                    <nav role="navigation" aria-labelledby="subsection-title">
-                        <div class="section flush">
-                            <h3 class="heading-small">Employer's gender pay gap report </h3>
-                            <p class="font-xsmall">
-                                View the employer's @Model.AccountingDate.Year to @(Model.AccountingDate.Year + 1) gender pay gap report on their website.
-                                <a rel="external" href="@Model.CompanyLinkToGPGInfo" target="_blank">@Model.CompanyLinkToGPGInfo</a>
-                            </p>
+                    <h2 class="heading-medium no-sub">Who received bonus pay</h2>
+                    <div class="grid-row">
+                        <div class="column-one-half ">
+                            <div class="data">
+                                <h4 class="bold-xlarge">@String.Format("{0:0}", Model.DiffMeanBonusPercent)%</h4>
+                                <p class="font-small">MEN </p>
+                            </div>
                         </div>
-                        <div class="section flush sign" style="display: block;">
-                            <h3 class="heading-small">Person responsible for employer's report </h3>
-                            <p class="font-xsmall">@Model.FirstName @Model.LastName<br>@Model.JobTitle
-                            </p>
+                        <div class="column-one-half">
+                            <div class="data">
+                                <h4 class="bold-xlarge">@String.Format("{0:0}", Model.DiffMedianBonusPercent)%</h4>
+                                <p class="font-small">WOMEN </p>
+                            </div>
                         </div>
-                    </nav>
-                </aside>
-            </div>
+                    </div>
+                </div>
+            </div><!-- container -->
         </div>
-    }
+        <div class="column-third">
+            <aside class="govuk-related-items" role="complementary">
+                <nav role="navigation" aria-labelledby="subsection-title">
+                    <div class="section flush">
+                        <h3 class="heading-small">Employer's gender pay gap report </h3>
+                        <p class="font-xsmall">
+                            View the employer's @Model.AccountingDate.Year to @(Model.AccountingDate.Year + 1) gender pay gap report on their website.
+                            <a rel="external" href="@Model.CompanyLinkToGPGInfo" target="_blank">@Model.CompanyLinkToGPGInfo</a>
+                        </p>
+                    </div>
+                    <div class="section flush sign" style="display: block;">
+                        <h3 class="heading-small">Person responsible for employer's report </h3>
+                        <p class="font-xsmall">
+                            @Model.FirstName @Model.LastName<br>@Model.JobTitle
+                        </p>
+                    </div>
+                </nav>
+            </aside>
+        </div>
+    </div>
 </main>

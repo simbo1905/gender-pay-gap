@@ -67,7 +67,7 @@
 
                         <td></td>
                     </tr>
-                    @if (!Model.ManualRegistration && Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
+                    @if (!Model.ManualRegistration && Model.SectorType == GenderPayGap.Database.SectorTypes.Private)
                     {
                         <tr>
                             <td>
@@ -152,7 +152,7 @@
                         {
                             @Html.ActionLink("Back", "AddContact")
                         }
-                        else if (Model.SectorType == GenderPayGap.Models.SqlDatabase.SectorTypes.Private)
+                        else if (Model.SectorType == GenderPayGap.Database.SectorTypes.Private)
                         {
                             @Html.ActionLink("Back", "ChooseOrganisation")
                         }

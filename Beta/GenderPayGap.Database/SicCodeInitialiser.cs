@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using CsvHelper;
 
-namespace GenderPayGap.Models.SqlDatabase
+namespace GenderPayGap.Database
 {
     public class SicCodeInitialiser : CreateDatabaseIfNotExists<DbContext>
     {
@@ -17,7 +17,7 @@ namespace GenderPayGap.Models.SqlDatabase
         {
             var assembly = Assembly.GetExecutingAssembly();
 
-            var resourceName = "GenderPayGap.Models.SqlDatabase.App_Data.SicSections.csv";
+            var resourceName = "GenderPayGap.Database.App_Data.SicSections.csv";
             using (var stream = assembly.GetManifestResourceStream(resourceName))
             {
                 using (var reader = new StreamReader(stream, Encoding.UTF8))
@@ -33,7 +33,7 @@ namespace GenderPayGap.Models.SqlDatabase
 
             context.SaveChanges();
 
-            resourceName = "GenderPayGap.Models.SqlDatabase.App_Data.SicCodes.csv";
+            resourceName = "GenderPayGap.Database.App_Data.SicCodes.csv";
             using (var stream = assembly.GetManifestResourceStream(resourceName))
             {
                 using (var reader = new StreamReader(stream, Encoding.UTF8))

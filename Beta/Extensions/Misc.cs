@@ -157,8 +157,10 @@ namespace Extensions
         public static bool EqualsI(this object item, params object[] values)
         {
             if (item == null && values.Contains(null)) return true;
-            foreach (var value in values)
-                if (item.Equals(value)) return true;
+
+            if (item!=null && values != null)
+                foreach (var value in values)
+                    if (item.Equals(value)) return true;
             return false;
         }
 

@@ -22,7 +22,7 @@
                     <div class="tabs-panel" id="tab-1">
                         <div class="tabs-panel-inner text">
                             <h2 class="heading-medium">Download gender pay gap data </h2>
-                            <table class="download-table">
+                            <table class="download-table" data-downloadcount="@Model.Downloads.Count">
                                 <thead>
                                     <tr>
                                         <th scope="col">Year</th>
@@ -36,11 +36,11 @@
                                     }
                                     else
                                     {
-                                        foreach (var download in Model.Downloads)
+                                        for (var i=0;i<Model.Downloads.Count;i++)
                                         {
                                             <tr>
-                                                <td><a href="@download.Url" target="_blank">@download.Title </a><span class="info"> (@download.Extension.ToUpper(), @download.Size)</span></td>
-                                                <td> @download.Count </td>
+                                                <td><a data-name="download" data-index="@i" href="@Model.Downloads[i].Url" target="_blank">@Model.Downloads[i].Title </a><span class="info"> (@Model.Downloads[i].Extension.ToUpper(), @Model.Downloads[i].Size)</span></td>
+                                                <td> @Model.Downloads[i].Count </td>
                                             </tr>
                                         }
                                     }

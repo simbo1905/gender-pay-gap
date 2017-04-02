@@ -1,6 +1,6 @@
 ﻿using Autofac;
 using GenderPayGap.Core.Interfaces;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using GenderPayGap.WebUI.Models;
 using IdentityServer3.Core;
 using Moq;
@@ -192,7 +192,7 @@ namespace GenderPayGap.Tests
             AllEmployers.Add(employer);
         }
 
-        public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize)
+        public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize,bool test=false)
         {
             var result = new PagedResult<EmployerRecord>();
             result.Results = AllEmployers.Where(e => e.Name.ContainsI(searchText)).Page(page, pageSize).ToList();
@@ -203,7 +203,7 @@ namespace GenderPayGap.Tests
             return result;
         }
 
-        PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize)
+        PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize,bool test=false)
         {
           int totalRecords;
          // var searchResults = CompaniesHouseAPI.SearchEmployers(out totalRecords, searchText, page, pageSize);
@@ -258,7 +258,7 @@ namespace GenderPayGap.Tests
             AllEmployers.Add(employer);
         }
 
-        public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize)
+        public PagedResult<EmployerRecord> Search(string searchText, int page, int pageSize, bool test=false)
         {
             var result = new PagedResult<EmployerRecord>();
             result.Results = AllEmployers.Where(e => e.Name.ContainsI(searchText)).Page(page, pageSize).ToList();
@@ -274,7 +274,7 @@ namespace GenderPayGap.Tests
             return AllEmployers.FirstOrDefault(c => c.CompanyNumber == companyNumber)?.SicCodes;
         }
 
-        PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize)
+        PagedResult<EmployerRecord> IPagedRepository<EmployerRecord>.Search(string searchText, int page, int pageSize, bool test=false)
         {
             //var searchResults = PublicSectorOrgs.Messages.List.Where(o => o.Name.ContainsI(searchText));
             int totalRecords;

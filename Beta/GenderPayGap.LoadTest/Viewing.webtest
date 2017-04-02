@@ -1,0 +1,1080 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebTest Name="Viewing" Id="d29b4736-b819-4954-bb2c-ba8760bf52b9" Owner="" Priority="2147483647" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="0" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="" CredentialUserName="" CredentialPassword="" PreAuthenticate="False" Proxy="default" StopOnError="False" RecordedResultFile="Viewing.50bf91f3-fd56-45cd-971b-239059f3b0bf.rec.webtestresult" ResultsLocale="">
+  <Items>
+    <Request Method="GET" Guid="0c24a1e7-819b-45eb-b176-07643977d734" Version="1.1" Url="{{WebServer}}/Viewing" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Viewing/search-results" ReportingName="" IgnoreHttpStatusCode="False">
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractAttributeValue, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="PageCount" DisplayName="Extract Attribute Value" Description="Extract the value of an attribute from a specified HTML tag.">
+          <RuleParameters>
+            <RuleParameter Name="TagName" Value="div" />
+            <RuleParameter Name="AttributeName" Value="data-pagecount" />
+            <RuleParameter Name="MatchAttributeName" Value="class" />
+            <RuleParameter Name="MatchAttributeValue" Value="pager" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="Index" Value="0" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+    </Request>
+    <Request Method="GET" Guid="b5a6c8cc-3b41-4886-b7a0-924e23cae9d1" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="s" Value="{{$HIDDEN1.s}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="A" RecordedValue="A" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="p" Value="-1" RecordedValue="4" CorrelationBinding="{{QueryStringParam59.p}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="e2409e07-d8cb-47f8-a487-3d004010a942" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=1&amp;y=2017&amp;s=&amp;search=&amp;s=A&amp;s=B&amp;s=X" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam381.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam382.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="1" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam383.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="2" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam385.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="3" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="s" Value="{{$HIDDEN1.s}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="A" RecordedValue="A" CorrelationBinding="{{QueryStringParam387.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="B" RecordedValue="B" CorrelationBinding="{{QueryStringParam388.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="C" RecordedValue="C" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="X" RecordedValue="X" CorrelationBinding="{{QueryStringParam390.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="p" Value="-1" RecordedValue="4" CorrelationBinding="{{QueryStringParam59.p}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="936db504-2769-4a03-84a2-666cae4a0af7" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=1&amp;y=2017&amp;s=&amp;search=&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=X" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam366.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam367.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="1" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam368.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="2" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam369.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="3" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam370.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="4" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam372.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="5" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="s" Value="{{$HIDDEN1.s}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="search" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="A" RecordedValue="A" CorrelationBinding="{{QueryStringParam374.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="B" RecordedValue="B" CorrelationBinding="{{QueryStringParam375.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="C" RecordedValue="C" CorrelationBinding="{{QueryStringParam376.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="D" RecordedValue="D" CorrelationBinding="{{QueryStringParam377.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="E" RecordedValue="E" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="X" RecordedValue="X" CorrelationBinding="{{QueryStringParam379.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="p" Value="-1" RecordedValue="4" CorrelationBinding="{{QueryStringParam59.p}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="f54df36c-ad25-4dd9-9993-2b9f85463904" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=1&amp;y=2017&amp;s=&amp;search=&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=E&amp;s=F&amp;s=X" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam347.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam348.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="1" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam349.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="2" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam350.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="3" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam351.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="4" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam352.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="5" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam353.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="6" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam355.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="7" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="s" Value="{{$HIDDEN1.s}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="search" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="A" RecordedValue="A" CorrelationBinding="{{QueryStringParam357.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="B" RecordedValue="B" CorrelationBinding="{{QueryStringParam358.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="C" RecordedValue="C" CorrelationBinding="{{QueryStringParam359.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="D" RecordedValue="D" CorrelationBinding="{{QueryStringParam360.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="E" RecordedValue="E" CorrelationBinding="{{QueryStringParam361.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="F" RecordedValue="F" CorrelationBinding="{{QueryStringParam362.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="G" RecordedValue="G" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="X" RecordedValue="X" CorrelationBinding="{{QueryStringParam364.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="p" Value="-1" RecordedValue="4" CorrelationBinding="{{QueryStringParam59.p}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="e6c3d45f-fa2d-4b98-8705-f3b86c3100ff" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=1&amp;y=2017&amp;s=&amp;search=&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=E&amp;s=F&amp;s=G&amp;s=H&amp;s=X" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam324.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam325.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="1" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam326.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="2" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam327.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="3" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam328.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="4" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam329.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="5" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam330.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="6" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam331.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="7" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam332.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="8" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam334.s" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="9" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="s" Value="{{$HIDDEN1.s}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="search" Value="" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="A" RecordedValue="A" CorrelationBinding="{{QueryStringParam336.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="B" RecordedValue="B" CorrelationBinding="{{QueryStringParam337.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="C" RecordedValue="C" CorrelationBinding="{{QueryStringParam338.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="D" RecordedValue="D" CorrelationBinding="{{QueryStringParam339.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="E" RecordedValue="E" CorrelationBinding="{{QueryStringParam340.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="F" RecordedValue="F" CorrelationBinding="{{QueryStringParam341.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="G" RecordedValue="G" CorrelationBinding="{{QueryStringParam342.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="H" RecordedValue="H" CorrelationBinding="{{QueryStringParam343.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="I" RecordedValue="I" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="X" RecordedValue="X" CorrelationBinding="{{QueryStringParam345.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="p" Value="-1" RecordedValue="4" CorrelationBinding="{{QueryStringParam59.p}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="67de58bd-51e1-4b37-b96a-03b0cff919ed" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=2&amp;y=2017&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=E&amp;s=F&amp;s=G&amp;s=H&amp;s=I&amp;s=J&amp;s=K&amp;s=L&amp;s=M&amp;s=N&amp;s=O&amp;s=P&amp;s=Q&amp;s=R&amp;s=S&amp;s=T&amp;s=U&amp;s=X" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam60.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam61.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam62.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam63.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam64.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam65.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam66.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam67.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam68.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam69.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam70.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam71.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam72.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam73.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam74.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam75.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam76.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam77.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam78.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam79.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam80.s" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;s=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="44" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam59.p" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?p=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="2" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="p" Value="-1" RecordedValue="1" CorrelationBinding="{{QueryStringParam81.p}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="y" Value="{{$HIDDEN1.y}}" RecordedValue="2017" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{$HIDDEN1.s}}" RecordedValue="A" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="B" RecordedValue="B" CorrelationBinding="{{QueryStringParam82.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="C" RecordedValue="C" CorrelationBinding="{{QueryStringParam83.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="D" RecordedValue="D" CorrelationBinding="{{QueryStringParam84.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="E" RecordedValue="E" CorrelationBinding="{{QueryStringParam85.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="F" RecordedValue="F" CorrelationBinding="{{QueryStringParam86.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="G" RecordedValue="G" CorrelationBinding="{{QueryStringParam87.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="H" RecordedValue="H" CorrelationBinding="{{QueryStringParam88.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="I" RecordedValue="I" CorrelationBinding="{{QueryStringParam89.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="J" RecordedValue="J" CorrelationBinding="{{QueryStringParam90.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="K" RecordedValue="K" CorrelationBinding="{{QueryStringParam91.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="L" RecordedValue="L" CorrelationBinding="{{QueryStringParam92.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="M" RecordedValue="M" CorrelationBinding="{{QueryStringParam93.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="N" RecordedValue="N" CorrelationBinding="{{QueryStringParam94.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="O" RecordedValue="O" CorrelationBinding="{{QueryStringParam95.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="P" RecordedValue="P" CorrelationBinding="{{QueryStringParam96.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="Q" RecordedValue="Q" CorrelationBinding="{{QueryStringParam97.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="R" RecordedValue="R" CorrelationBinding="{{QueryStringParam98.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="S" RecordedValue="S" CorrelationBinding="{{QueryStringParam99.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="T" RecordedValue="T" CorrelationBinding="{{QueryStringParam100.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="U" RecordedValue="U" CorrelationBinding="{{QueryStringParam101.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="X" RecordedValue="X" CorrelationBinding="{{QueryStringParam102.s}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="7f1ce220-cbd5-4f7e-996d-7f7b14cad173" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=1&amp;y=2017&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=E&amp;s=F&amp;s=G&amp;s=H&amp;s=I&amp;s=J&amp;s=K&amp;s=L&amp;s=M&amp;s=N&amp;s=O&amp;s=P&amp;s=Q&amp;s=R&amp;s=S&amp;s=T&amp;s=U&amp;s=X" />
+      </Headers>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam57.view" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?view=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="3" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam58.id" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;id=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="3" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="p" Value="-1" RecordedValue="4" CorrelationBinding="{{QueryStringParam59.p}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{$HIDDEN1.s}}" RecordedValue="A" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam60.s}}" RecordedValue="B" CorrelationBinding="{{QueryStringParam60.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam61.s}}" RecordedValue="C" CorrelationBinding="{{QueryStringParam61.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam62.s}}" RecordedValue="D" CorrelationBinding="{{QueryStringParam62.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam63.s}}" RecordedValue="E" CorrelationBinding="{{QueryStringParam63.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam64.s}}" RecordedValue="F" CorrelationBinding="{{QueryStringParam64.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam65.s}}" RecordedValue="G" CorrelationBinding="{{QueryStringParam65.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam66.s}}" RecordedValue="H" CorrelationBinding="{{QueryStringParam66.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam67.s}}" RecordedValue="I" CorrelationBinding="{{QueryStringParam67.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam68.s}}" RecordedValue="J" CorrelationBinding="{{QueryStringParam68.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam69.s}}" RecordedValue="K" CorrelationBinding="{{QueryStringParam69.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam70.s}}" RecordedValue="L" CorrelationBinding="{{QueryStringParam70.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam71.s}}" RecordedValue="M" CorrelationBinding="{{QueryStringParam71.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam72.s}}" RecordedValue="N" CorrelationBinding="{{QueryStringParam72.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam73.s}}" RecordedValue="O" CorrelationBinding="{{QueryStringParam73.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam74.s}}" RecordedValue="P" CorrelationBinding="{{QueryStringParam74.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam75.s}}" RecordedValue="Q" CorrelationBinding="{{QueryStringParam75.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam76.s}}" RecordedValue="R" CorrelationBinding="{{QueryStringParam76.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam77.s}}" RecordedValue="S" CorrelationBinding="{{QueryStringParam77.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam78.s}}" RecordedValue="T" CorrelationBinding="{{QueryStringParam78.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam79.s}}" RecordedValue="U" CorrelationBinding="{{QueryStringParam79.s}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="s" Value="{{QueryStringParam80.s}}" RecordedValue="X" CorrelationBinding="{{QueryStringParam80.s}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="b5a6c8cc-3b41-4886-b7a0-924e23cae9d1" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractAttributeValue, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="DetailsQuery" DisplayName="Extract Attribute Value" Description="Extract the value of an attribute from a specified HTML tag.">
+          <RuleParameters>
+            <RuleParameter Name="TagName" Value="a" />
+            <RuleParameter Name="AttributeName" Value="data-id" />
+            <RuleParameter Name="MatchAttributeName" Value="data-name" />
+            <RuleParameter Name="MatchAttributeValue" Value="ViewLink" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="Index" Value="0" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="s" Value="{{$HIDDEN1.s}}" RecordedValue="" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="p" Value="-1" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="301cc03f-f51c-4c93-8f1f-11747bbd8b7c" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=4&amp;y=2017&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=E&amp;s=F&amp;s=G&amp;s=H&amp;s=I&amp;s=J&amp;s=K&amp;s=L&amp;s=M&amp;s=N&amp;s=O&amp;s=P&amp;s=Q&amp;s=R&amp;s=S&amp;s=T&amp;s=U&amp;s=X" />
+      </Headers>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam55.view" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?view=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam56.id" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;id=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="view" Value="hourly-rate" RecordedValue="hourly-rate" CorrelationBinding="{{QueryStringParam57.view}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="id" Value="{{DetailsQuery}}" RecordedValue="ItiBBhKnno1xL9EODyuSHA%21%21" CorrelationBinding="{{QueryStringParam58.id}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="4877c7e2-36c1-453b-ae73-7b40e5101124" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details?view=hourly-rate&amp;id={{DetailsQuery}}" />
+      </Headers>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam53.view" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?view=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="1" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam54.id" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;id=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="1" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="view" Value="pay-quartiles" RecordedValue="pay-quartiles" CorrelationBinding="{{QueryStringParam55.view}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="id" Value="{{DetailsQuery}}" RecordedValue="ItiBBhKnno1xL9EODyuSHA%21%21" CorrelationBinding="{{QueryStringParam56.id}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="2f7ced28-c0d9-49e6-898e-29cb9515c176" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details?view=pay-quartiles&amp;id={{DetailsQuery}}" />
+      </Headers>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam51.view" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?view=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam52.id" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;id=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="view" Value="bonus-pay" RecordedValue="bonus-pay" CorrelationBinding="{{QueryStringParam53.view}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="id" Value="{{DetailsQuery}}" RecordedValue="ItiBBhKnno1xL9EODyuSHA%21%21" CorrelationBinding="{{QueryStringParam54.id}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="301cc03f-f51c-4c93-8f1f-11747bbd8b7c" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=4&amp;y=2017&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=E&amp;s=F&amp;s=G&amp;s=H&amp;s=I&amp;s=J&amp;s=K&amp;s=L&amp;s=M&amp;s=N&amp;s=O&amp;s=P&amp;s=Q&amp;s=R&amp;s=S&amp;s=T&amp;s=U&amp;s=X" />
+      </Headers>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam55.view" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?view=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam56.id" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;id=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="view" Value="hourly-rate" RecordedValue="hourly-rate" CorrelationBinding="{{QueryStringParam57.view}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="id" Value="random" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="4877c7e2-36c1-453b-ae73-7b40e5101124" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details?view=hourly-rate&amp;id={{DetailsQuery}}" />
+      </Headers>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam53.view" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?view=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="1" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam54.id" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;id=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="1" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="view" Value="pay-quartiles" RecordedValue="pay-quartiles" CorrelationBinding="{{QueryStringParam55.view}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="id" Value="random" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="2f7ced28-c0d9-49e6-898e-29cb9515c176" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details?view=pay-quartiles&amp;id={{DetailsQuery}}" />
+      </Headers>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam51.view" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?view=" />
+            <RuleParameter Name="EndsWith" Value="&amp;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam52.id" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="&amp;amp;id=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="view" Value="bonus-pay" RecordedValue="bonus-pay" CorrelationBinding="{{QueryStringParam53.view}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="id" Value="random" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="b176f000-d786-4631-9bb1-40f067d26c08" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details?view=hourly-rate&amp;id=bgTXHoqrCpju3CpOQD2ezg%21%21" />
+      </Headers>
+    </Request>
+    <Request Method="GET" Guid="52abcc6d-9111-414c-a84d-155361d92545" Version="1.1" Url="{{WebServer}}/Viewing/download" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=4&amp;y=2017&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=E&amp;s=F&amp;s=G&amp;s=H&amp;s=I&amp;s=J&amp;s=K&amp;s=L&amp;s=M&amp;s=N&amp;s=O&amp;s=P&amp;s=Q&amp;s=R&amp;s=S&amp;s=T&amp;s=U&amp;s=X" />
+      </Headers>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam10990.year" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?year=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam10991.year" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?year=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+    </Request>
+    <Request Method="GET" Guid="98e5c9f2-898d-4215-b85c-d8604c9726d3" Version="1.1" Url="{{WebServer}}/Viewing/download-data" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/download" />
+      </Headers>
+    </Request>
+    <Request Method="GET" Guid="c6ca4130-5779-4a2e-8f1b-4f4e7876f31e" Version="1.1" Url="{{WebServer}}/Viewing/download-data" ThinkTime="15" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+    <Request Method="GET" Guid="fd352082-f56d-4e16-9773-a629aa54d61b" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="False" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Viewing/download" />
+      </Headers>
+    </Request>
+  </Items>
+  <ContextParameters>
+    <ContextParameter Name="WebServer" Value="https://localhost:44371" />
+    <ContextParameter Name="PageCount" Value="" />
+    <ContextParameter Name="DetailsQuery" Value="" />
+  </ContextParameters>
+  <ValidationRules>
+    <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidateResponseUrl, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response URL" Description="Validates that the response URL after redirects are followed is the same as the recorded response URL.  QueryString parameters are ignored." Level="Low" ExectuionOrder="BeforeDependents" />
+    <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidationRuleResponseTimeGoal, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response Time Goal" Description="Validates that the response time for the request is less than or equal to the response time goal as specified on the request.  Response time goals of zero will be ignored." Level="Low" ExectuionOrder="AfterDependents">
+      <RuleParameters>
+        <RuleParameter Name="Tolerance" Value="0" />
+      </RuleParameters>
+    </ValidationRule>
+  </ValidationRules>
+</WebTest>

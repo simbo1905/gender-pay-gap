@@ -11,7 +11,18 @@
                 <div class="bold-small">
                     What happens next.
                 </div>
-                <p>The Government Equalities Office will review your details and get in touch within 5 working days to confirm your registration. </p>
+                <p>
+                    The @if (!string.IsNullOrWhiteSpace(ViewBag.TestUrl))
+                    {
+                        <a data-name="testurl" href="@ViewBag.TestUrl">
+                            Government Equalities Office 
+                        </a>
+                    }
+                    else
+                    {
+                        <span>Government Equalities Office</span>
+                    } will review your details and get in touch within 5 working days to confirm your registration.
+                </p>
                 <p>If they need more information to complete your registration, they will call or email you.</p>
             </div>
         </div>

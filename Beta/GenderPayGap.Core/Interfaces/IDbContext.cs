@@ -8,6 +8,6 @@ namespace GenderPayGap.Core.Interfaces
         IDbSet<TEntity> Set<TEntity>() where TEntity : class;
         int SaveChanges();
 
-        Database GetDatabase();
+        System.Data.Entity.Database GetDatabase();
     }
 }

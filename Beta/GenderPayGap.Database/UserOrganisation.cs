@@ -1,6 +1,6 @@
 using System.Linq;
 
-namespace GenderPayGap.Models.SqlDatabase
+namespace GenderPayGap.Database
 {
     using System;
     using System.ComponentModel.DataAnnotations;
