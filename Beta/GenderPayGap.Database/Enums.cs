@@ -44,6 +44,16 @@
         Public = 2,
     }
 
+    public enum FeedbackTypes : int
+    {
+        Unknown = 0,
+        VeryEasy = 1,
+        Easy = 2,
+        Neutral=3,
+        Difficult=4,
+        VeryDifficult=5
+    }
+
     public enum OrgTypes : int
     {
         Unknown = 0,

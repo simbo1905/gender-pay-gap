@@ -344,6 +344,7 @@
     <Compile Include="Models\ErrorViewModel.cs" />
     <Compile Include="Models\Register\CompleteViewModel.cs" />
     <Compile Include="Models\Register\OrganisationViewModel.cs" />
+    <Compile Include="Models\Register\FeedbackViewModel.cs" />
     <Compile Include="Models\Register\ResetViewModel.cs" />
     <Compile Include="Models\Register\VerifyViewModel.cs" />
     <Compile Include="Models\Register\RegisterViewModels.cs" />
