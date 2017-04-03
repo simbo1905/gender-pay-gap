@@ -11,6 +11,7 @@ using Autofac;
 using Extensions;
 using GenderPayGap.Core.Classes;
 using GenderPayGap.WebUI.Classes;
+using GenderPayGap.WebUI.Models.Home;
 using GenderPayGap.WebUI.Properties;
 
 namespace GenderPayGap.WebUI.Controllers
@@ -45,7 +46,7 @@ namespace GenderPayGap.WebUI.Controllers
             return RedirectToAction("SearchResults","Viewing");
         }
 
-        [Route("SignOut")]
+        [Route("~/sign-out")]
         public ActionResult SignOut(bool delete=true)
         {
             //Delete the test user 
@@ -61,7 +62,7 @@ namespace GenderPayGap.WebUI.Controllers
             return RedirectToAction("EnterCalculations","Submit");
         }
 
-        [Route("TimeOut")]
+        [Route("~/time-out")]
         public ActionResult TimeOut()
         {
             //Delete the test user 
@@ -73,6 +74,40 @@ namespace GenderPayGap.WebUI.Controllers
             Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("EnterCalculations","Submit", null, "https") });
             return null;
         }
+
+        #region AddContact
+
+        [HttpGet]
+        [Route("~/send-feedback")]
+        public ActionResult SendFeedback()
+        {
+            //create the new view model 
+            var model = new FeedbackViewModel();
+            model.EmailAddress = DataRepository.FindUser(User)?.EmailAddress;
+
+            return View("SendFeedback", model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [SpamProtection()]
+        [Route("~/send-feedback")]
+        public ActionResult SendFeedback(FeedbackViewModel model)
+        {
+            //Check model is valid
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<FeedbackViewModel>();
+                return View("SendFeedback", model);
+            }
+
+            //Add the record to the log
+            MvcApplication.FeedbackLog.AppendCsv(model);
+
+            return View("FeedbackSent");
+        }
+        #endregion
+
 
         #region TEST CODE ONLY
 #if DEBUG || TEST

@@ -500,7 +500,7 @@
       </Headers>
     </Request>
     <Request Method="GET" Guid="e22ca94c-dd3e-409f-8eb9-97264f41c019" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
-    <Request Method="GET" Guid="a85d2335-279d-4875-a986-6684eeb7e916" Version="1.1" Url="{{WebServer}}/Home/SignOut" ThinkTime="0" Timeout="300" ParseDependentRequests="False" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="a85d2335-279d-4875-a986-6684eeb7e916" Version="1.1" Url="{{WebServer}}/sign-out" ThinkTime="0" Timeout="300" ParseDependentRequests="False" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Submit/submission-complete" />
       </Headers>

@@ -1773,6 +1773,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [SpamProtection(2)]
         [HttpGet]
+        [RequireHttps]
         [Route("enter-new-password")]
         public ActionResult NewPassword(string code=null)
         {
@@ -1823,6 +1824,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [HttpPost]
+        [RequireHttps]
         [ValidateAntiForgeryToken]
         [Route("enter-new-password")]
         public ActionResult NewPassword(ResetViewModel model)

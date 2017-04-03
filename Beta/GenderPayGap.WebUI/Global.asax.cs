@@ -57,6 +57,16 @@ namespace GenderPayGap
             }
         }
 
+        private static Logger _FeedbackLog;
+        public static Logger FeedbackLog
+        {
+            get
+            {
+                if (_FeedbackLog == null) _FeedbackLog = new Logger(FileRepository, Path.Combine(ConfigurationManager.AppSettings["LogPath"], "WebServer", "FeedbackLog.csv"));
+                return _FeedbackLog;
+            }
+        }
+
         private static TelemetryClient _AppInsightsClient;
         public static TelemetryClient AppInsightsClient
         {

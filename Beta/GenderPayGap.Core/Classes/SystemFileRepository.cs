@@ -4,6 +4,7 @@ using System.Configuration;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using Extensions;
 using GenderPayGap.Core.Interfaces;
@@ -35,13 +36,18 @@ namespace GenderPayGap.Core.Classes
             if (string.IsNullOrWhiteSpace(directoryPath)) throw new ArgumentNullException(nameof(directoryPath));
             if (!Path.IsPathRooted(directoryPath)) directoryPath = Path.Combine(_rootDir.FullName, directoryPath);
 
+            int retries = 0;
+            Retry:
             try
             {
                 Directory.CreateDirectory(directoryPath);
             }
-            catch
+            catch (IOException ex)
             {
-
+                if (retries >= 10) throw;
+                retries++;
+                Thread.Sleep(500);
+                goto Retry;
             }
         }
 
@@ -86,14 +92,40 @@ namespace GenderPayGap.Core.Classes
         {
             if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
             if (!Path.IsPathRooted(filePath)) filePath = Path.Combine(_rootDir.FullName, filePath);
-            File.AppendAllLines(filePath,lines);
+            int retries = 0;
+            Retry:
+            try
+            {
+                File.AppendAllLines(filePath, lines);
+            }
+            catch (IOException ex)
+            {
+                if (retries >= 10) throw;
+                retries++;
+                Thread.Sleep(500);
+                goto Retry;
+            }
         }
 
         public void DeleteFile(string filePath)
         {
             if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
             if (!Path.IsPathRooted(filePath)) filePath = Path.Combine(_rootDir.FullName, filePath);
-            if (File.Exists(filePath))File.Delete(filePath);
+
+            int retries = 0;
+            Retry:
+            try
+            {
+                if (File.Exists(filePath)) File.Delete(filePath);
+            }
+            catch (IOException ex)
+            {
+                if (retries >= 10) throw;
+                retries++;
+                Thread.Sleep(500);
+                goto Retry;
+            }
+
         }
 
         public void RenameFile(string filePath, string newFilename)
@@ -101,7 +133,21 @@ namespace GenderPayGap.Core.Classes
             if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
             if (string.IsNullOrWhiteSpace(newFilename)) throw new ArgumentNullException(nameof(newFilename));
             if (!Path.IsPathRooted(filePath)) filePath = Path.Combine(_rootDir.FullName, filePath);
-            File.Move(filePath,newFilename);
+
+            int retries = 0;
+            Retry:
+            try
+            {
+                File.Move(filePath, newFilename);
+            }
+            catch (IOException ex)
+            {
+                if (retries >= 10) throw;
+                retries++;
+                Thread.Sleep(500);
+                goto Retry;
+            }
+
         }
 
         public IEnumerable<string> GetFiles(string directoryPath, string searchPattern = null)
@@ -124,14 +170,57 @@ namespace GenderPayGap.Core.Classes
         {
             if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
             if (!Path.IsPathRooted(filePath)) filePath = Path.Combine(_rootDir.FullName, filePath);
-            File.AppendAllLines(filePath,lines);
+
+            int retries = 0;
+            Retry:
+            try
+            {
+                File.AppendAllLines(filePath, lines);
+            }
+            catch (IOException ex)
+            {
+                if (retries >= 10) throw;
+                retries++;
+                Thread.Sleep(500);
+                goto Retry;
+            }
+        }
+        public void Write(string filePath, string text)
+        {
+            if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
+            if (!Path.IsPathRooted(filePath)) filePath = Path.Combine(_rootDir.FullName, filePath);
+            int retries = 0;
+            Retry:
+            try
+            {
+                File.AppendAllText(filePath, text);
+            }
+            catch (IOException ex)
+            {
+                if (retries >= 10) throw;
+                retries++;
+                Thread.Sleep(500);
+                goto Retry;
+            }
         }
 
         public void Write(string filePath, Stream stream)
         {
             if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
             if (!Path.IsPathRooted(filePath)) filePath = Path.Combine(_rootDir.FullName, filePath);
-            File.AppendAllText(filePath, stream.ToString());
+            int retries = 0;
+            Retry:
+            try
+            {
+                File.AppendAllText(filePath, stream.ToString());
+            }
+            catch (IOException ex)
+            {
+                if (retries >= 10) throw;
+                retries++;
+                Thread.Sleep(500);
+                goto Retry;
+            }
         }
 
         public void Write(string filePath, FileInfo uploadFile)
@@ -139,7 +228,19 @@ namespace GenderPayGap.Core.Classes
             if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
             if (!Path.IsPathRooted(filePath)) filePath = Path.Combine(_rootDir.FullName, filePath);
             if (!uploadFile.Exists) throw new FileNotFoundException(nameof(uploadFile));
-            File.AppendAllText(filePath, File.ReadAllText(uploadFile.FullName));
+            int retries = 0;
+            Retry:
+            try
+            {
+                File.AppendAllText(filePath, File.ReadAllText(uploadFile.FullName));
+            }
+            catch (IOException ex)
+            {
+                if (retries >= 10) throw;
+                retries++;
+                Thread.Sleep(500);
+                goto Retry;
+            }
         }
 
         public string GetFullPath(string filePath)

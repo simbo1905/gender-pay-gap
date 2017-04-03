@@ -44,7 +44,7 @@
         Public = 2,
     }
 
-    public enum FeedbackTypes : int
+    public enum DifficultyTypes : int
     {
         Unknown = 0,
         VeryEasy = 1,
