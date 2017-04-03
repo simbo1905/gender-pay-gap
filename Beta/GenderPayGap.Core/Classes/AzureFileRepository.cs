@@ -3,15 +3,18 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.IO;
 using System.Linq;
+using System.Net;
 using System.Text;
+using System.Threading;
 using Extensions;
 using GenderPayGap.Core.Interfaces;
-using Microsoft.WindowsAzure.Storage; 
+using Microsoft.WindowsAzure.Storage;
 using Microsoft.WindowsAzure.Storage.File;
+using Microsoft.WindowsAzure.Storage.RetryPolicies;
 
 namespace GenderPayGap.Core.Classes
 {
-    public class AzureFileRepository:IFileRepository
+    public class AzureFileRepository : IFileRepository
     {
         public AzureFileRepository(string connectionString, string shareName)
         {
@@ -38,7 +41,7 @@ namespace GenderPayGap.Core.Classes
 
             var directory = _rootDir;
 
-            for (var i=0;i<dirs.Length; i++)
+            for (var i = 0; i < dirs.Length; i++)
             {
                 var file = directory.GetFileReference(dirs[i]);
                 if (file != null && file.Exists()) return null;
@@ -69,7 +72,21 @@ namespace GenderPayGap.Core.Classes
                 if (file != null && file.Exists()) return;
                 directory = directory.GetDirectoryReference(dirs[i]);
                 if (directory != null && !directory.Exists())
-                    directory.Create();
+                {
+                    int retries = 0;
+                    Retry:
+                    try
+                    {
+                        directory.Create();
+                    }
+                    catch (StorageException ex)
+                    {
+                        if (ex.RequestInformation.HttpStatusCode != (int)HttpStatusCode.Conflict || retries >= 10) throw;
+                        retries++;
+                        Thread.Sleep(500);
+                        goto Retry;
+                    }
+                }
             }
         }
 
@@ -84,22 +101,22 @@ namespace GenderPayGap.Core.Classes
         public bool GetDirectoryExists(string directoryPath)
         {
             if (string.IsNullOrWhiteSpace(directoryPath)) throw new ArgumentNullException(nameof(directoryPath));
-            return GetDirectory(directoryPath)!=null;
+            return GetDirectory(directoryPath) != null;
         }
 
         public bool GetFileExists(string filePath)
         {
-            if (string.IsNullOrWhiteSpace(filePath))throw new ArgumentNullException(nameof(filePath));
+            if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
             var directory = GetDirectory(Path.GetDirectoryName(filePath));
             if (directory == null) return false;
-            return GetFile(filePath)!=null;
+            return GetFile(filePath) != null;
         }
 
         public DateTime GetLastWriteTime(string filePath)
         {
             if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
             var file = GetFile(filePath);
-            if (file==null || !file.Exists())throw new FileNotFoundException($"Cannot find file '{filePath}'");
+            if (file == null || !file.Exists()) throw new FileNotFoundException($"Cannot find file '{filePath}'");
             return file.Properties.LastModified.Value.LocalDateTime;
         }
 
@@ -125,7 +142,19 @@ namespace GenderPayGap.Core.Classes
         {
             if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
             var file = GetFile(filePath);
-            file?.Delete();
+            int retries = 0;
+            Retry:
+            try
+            {
+                file?.Delete();
+            }
+            catch (StorageException ex)
+            {
+                if (ex.RequestInformation.HttpStatusCode != (int)HttpStatusCode.Conflict || retries >= 10) throw;
+                retries++;
+                Thread.Sleep(500);
+                goto Retry;
+            }
         }
 
         public void RenameFile(string filePath, string newFilename)
@@ -136,21 +165,33 @@ namespace GenderPayGap.Core.Classes
             var directory = GetDirectory(Path.GetDirectoryName(filePath));
             if (directory == null) throw new FileNotFoundException($"Cannot find file '{filePath}'");
 
-            var file=directory.GetFileReference(Path.GetFileName(filePath));
+            var file = directory.GetFileReference(Path.GetFileName(filePath));
             if (file == null) throw new FileNotFoundException($"Cannot find file '{filePath}'");
             var newfile = directory.GetFileReference(newFilename);
-            if (newfile!=null)throw new IOException($"The destination file '{newFilename}' already exists");
+            if (newfile != null) throw new IOException($"The destination file '{newFilename}' already exists");
 
-            var fileCopy = directory.GetFileReference(newFilename);
-            fileCopy.StartCopy(file);
-            file.DeleteIfExists();
+            int retries = 0;
+            Retry:
+            try
+            {
+                var fileCopy = directory.GetFileReference(newFilename);
+                fileCopy.StartCopy(file);
+                file.DeleteIfExists();
+            }
+            catch (StorageException ex)
+            {
+                if (ex.RequestInformation.HttpStatusCode != (int)HttpStatusCode.Conflict || retries >= 10) throw;
+                retries++;
+                Thread.Sleep(500);
+                goto Retry;
+            }
         }
 
         public IEnumerable<string> GetFiles(string directoryPath, string searchPattern = null)
         {
             if (string.IsNullOrWhiteSpace(directoryPath)) throw new ArgumentNullException(nameof(directoryPath));
             var directory = GetDirectory(directoryPath);
-            if (directory==null)throw new DirectoryNotFoundException($"Cannot find directory '{directoryPath}'");
+            if (directory == null) throw new DirectoryNotFoundException($"Cannot find directory '{directoryPath}'");
 
             var files = !string.IsNullOrWhiteSpace(searchPattern) ? directory.ListFilesAndDirectories().OfType<CloudFile>().Where(f => f.Name.Like(searchPattern)) : directory.ListFilesAndDirectories().OfType<CloudFile>();
 
@@ -165,24 +206,47 @@ namespace GenderPayGap.Core.Classes
             return file.DownloadText();
         }
 
+        public void Write(string filePath, string text)
+        {
+            if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
+            if (string.IsNullOrWhiteSpace(text)) throw new ArgumentNullException(nameof(text));
+
+            int retries = 0;
+        Retry:
+            try
+            {
+                var file = GetFile(filePath);
+                if (file.Exists())
+                {
+                    var buffer = Encoding.UTF8.GetBytes(text);
+                    file.Resize(file.Properties.Length + buffer.Length);
+                    using (var fileStream = file.OpenWrite(null))
+                    {
+                        fileStream.Seek(buffer.Length * -1, SeekOrigin.End);
+                        fileStream.Write(buffer, 0, buffer.Length);
+                    }
+                }
+                else
+                    file.UploadText(text);
+            }
+            catch (StorageException ex)
+            {
+                if (ex.RequestInformation.HttpStatusCode == (int)HttpStatusCode.Conflict)
+                {
+                    retries++;
+                    if (retries > 10) throw;
+                    Thread.Sleep(500);
+                    goto Retry;
+                }
+                throw;
+            }
+        }
+
         public void Write(string filePath, IEnumerable<string> lines)
         {
             if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
             var text = lines.ToDelimitedString(Environment.NewLine);
-
-            var file = GetFile(filePath);
-            if (file.Exists())
-            {
-                var buffer = Encoding.UTF8.GetBytes(text);
-                file.Resize(file.Properties.Length + buffer.Length);
-                using (var fileStream = file.OpenWrite(null))
-                {
-                    fileStream.Seek(buffer.Length * -1, SeekOrigin.End);
-                    fileStream.Write(buffer, 0, buffer.Length);
-                }
-            }
-            else
-                file.UploadText(text);
+            Write(filePath, text);
         }
 
         public void Write(string filePath, Stream stream)
@@ -190,7 +254,20 @@ namespace GenderPayGap.Core.Classes
             if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
             var file = GetFile(filePath);
 
-            file.UploadFromStream(stream);
+            int retries = 0;
+            Retry:
+            try
+            {
+                file.UploadFromStream(stream);
+            }
+            catch (StorageException ex)
+            {
+                if (ex.RequestInformation.HttpStatusCode != (int) HttpStatusCode.Conflict || retries >= 10) throw;
+                retries++;                    
+                Thread.Sleep(500);
+                goto Retry;
+            }
+
         }
 
         public void Write(string filePath, FileInfo uploadFile)
@@ -199,7 +276,19 @@ namespace GenderPayGap.Core.Classes
             if (!uploadFile.Exists) throw new FileNotFoundException(nameof(uploadFile));
             var file = GetFile(filePath);
 
-            file.UploadFromFile(uploadFile.FullName);
+            int retries = 0;
+            Retry:
+            try
+            {
+                file.UploadFromFile(uploadFile.FullName);
+            }
+            catch (StorageException ex)
+            {
+                if (ex.RequestInformation.HttpStatusCode != (int)HttpStatusCode.Conflict || retries >= 10) throw;
+                retries++;
+                Thread.Sleep(500);
+                goto Retry;
+            }
         }
 
         public string GetFullPath(string filePath)

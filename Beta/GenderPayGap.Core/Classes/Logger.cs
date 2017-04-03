@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.Entity.ModelConfiguration.Conventions;
 using System.IO;
+using System.Linq;
 using Autofac;
 using Autofac.Core;
+using CsvHelper;
 using Extensions;
 using GenderPayGap.Core.Interfaces;
 
@@ -42,7 +45,7 @@ namespace GenderPayGap.Core.Classes
             if (string.IsNullOrWhiteSpace(appendString)) return;
             lock (_syncRoot)
             {
-                _repository.Write(DailyPath, new []{appendString});
+                _repository.Write(DailyPath, appendString);
             }
         }
 
@@ -55,6 +58,26 @@ namespace GenderPayGap.Core.Classes
 
             if (addPrefix) appendString = prefix + " -------\n" + appendString;
             AppendToLog(appendString + Environment.NewLine);
+        }
+
+        public void AppendCsv<T>(T record)
+        {
+            if (record==null) return;
+            var path = DailyPath;
+            using (var textWriter = new StringWriter())
+            {
+                using (var writer = new CsvWriter(textWriter))
+                {
+                    if (!_repository.GetFileExists(path))writer.WriteHeader<T>();
+
+                    writer.WriteRecord(record);
+                }
+                var appendString=textWriter.ToString().Trim();
+                if (!string.IsNullOrWhiteSpace(appendString))
+                {
+                    AppendToLog(appendString + "\n");
+                }
+            }
         }
     }
 }

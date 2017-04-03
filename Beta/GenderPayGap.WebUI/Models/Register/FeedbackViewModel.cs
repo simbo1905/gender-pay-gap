@@ -15,7 +15,7 @@ namespace GenderPayGap.WebUI.Models.Register
         }
 
         [Required(AllowEmptyStrings = false)]
-        public FeedbackTypes? SectorType { get; set; }
+        public DifficultyTypes? SectorType { get; set; }
 
         [Required(AllowEmptyStrings = false)]
         [StringLength(2000, ErrorMessage = "The {0} must be at least {2} characters long.", MinimumLength = 3)]
