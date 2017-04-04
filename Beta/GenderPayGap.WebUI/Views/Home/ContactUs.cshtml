@@ -1,0 +1,48 @@
+﻿@model GenderPayGap.WebUI.Models.Home.FeedbackViewModel
+@{
+    ViewBag.Title = "Send us feedback - Gender pay gap reporting service";
+}
+@using GenderPayGap.WebUI.Classes
+
+<main id="content" role="main">
+    @using (Html.BeginForm())
+    {
+        @Html.CustomValidationSummary()
+        @Html.AntiForgeryToken()
+        @Html.SpamProtectionTimeStamp()
+
+        <div class="grid-row">
+            <div class="column-two-thirds">
+
+                <h1 class="heading-large ">
+                    Contact Us
+                </h1>
+
+                <h2 class="heading-medium">Online</h2>
+                <p>Contact us via our <a href="@Url.Action("SendFeedback")">feedback form</a>.</p>
+                <p>Read our guidance to <a href="https://www.gov.uk/guidance/gender-pay-gap-reporting-overview" target="_blank">gender pay gap reporting</a>.</p>
+
+                <h2 class="heading-medium">Phone</h2>
+                <p>Call the national helpline for advice on gender pay gap reporting.</p>
+                <p>Telephone: <b style="font-size: x-large;">0370 000 2288</b></p>
+                <p>Opening times: Monday to Friday, 9am to 5pm</p>
+                <h2 class="heading-medium">Post</h2>
+                <p>
+                    Write to the Government Equalities Office:
+                </p>
+                <p>
+                    Gender pay gap team<br/>
+                    Government Equalities Office<br />
+                    Sanctuary Buildings<br />
+                    Great Smith Street<br />
+                    London<br />
+                    SW1P 3BT
+                </p>
+                <p></p>
+                <p>
+                    <a class="button" href="javascript:window.open('','_self').close();">Close window</a>
+                </p>
+            </div>
+        </div>
+    }
+</main>

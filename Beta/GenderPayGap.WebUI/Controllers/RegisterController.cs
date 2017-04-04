@@ -1680,6 +1680,7 @@ namespace GenderPayGap.WebUI.Controllers
         #region password-reset
         [HttpGet]
         [Route("password-reset")]
+        [OutputCache(CacheProfile = "PasswordReset")]
         public ActionResult PasswordReset()
         {
             User currentUser;

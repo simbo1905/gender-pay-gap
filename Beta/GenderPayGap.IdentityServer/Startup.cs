@@ -188,7 +188,9 @@ namespace GenderPayGap.IdentityServer
 
                 certStore.Close();
             }
+
             if (cert==null)throw new Exception($"Cannot find certificate with thumbprint '{MvCApplication.CertThumprint}' in local store");
+            MvCApplication.InfoLog.WriteLine($"Successfully loaded certificate from thumbprint {MvCApplication.CertThumprint}");
             return cert;
         }
     }

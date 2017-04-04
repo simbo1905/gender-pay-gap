@@ -75,10 +75,22 @@ namespace GenderPayGap.WebUI.Controllers
             return null;
         }
 
-        #region AddContact
+        #region Contact Us
+
+        [HttpGet]
+        [Route("~/contact-us")]
+        [OutputCache(CacheProfile = "ContactUs")]
+        public ActionResult ContactUs()
+        {
+            return View("ContactUs");
+        }
+        #endregion
+
+        #region Feedback
 
         [HttpGet]
         [Route("~/send-feedback")]
+        [OutputCache(CacheProfile = "Feedback")]
         public ActionResult SendFeedback()
         {
             //create the new view model 
@@ -107,7 +119,6 @@ namespace GenderPayGap.WebUI.Controllers
             return View("FeedbackSent");
         }
         #endregion
-
 
         #region TEST CODE ONLY
 #if DEBUG || TEST
