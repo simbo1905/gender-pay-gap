@@ -35,29 +35,26 @@ namespace GenderPayGap
         }
 
         #region Emails
-        public static bool SendVerifyEmail(string verifyUrl,string emailAddress, string verifyCode)
+        public static bool SendVerifyEmail(string verifyUrl,string emailAddress, string verifyCode, bool test = false)
         {
-            //If the email address is a test email then simulate sending
-            if (emailAddress.StartsWithI(MvcApplication.TestPrefix)) return true;
-
             var personalisation = new Dictionary<string, dynamic> { { "url", verifyUrl } };
 
             try
             {
-                var result = GovNotify.SendEmail(emailAddress, VerifyTemplateId, personalisation);
+                var result = GovNotify.SendEmail(emailAddress, VerifyTemplateId, personalisation, test);
                 if (!result.status.EqualsI("created", "sending", "delivered"))throw new Exception($"Unexpected status '{result.status}' returned");
                 return true;
             }
             catch (Exception ex)
             {
                 MvcApplication.ErrorLog.WriteLine($"Cant send verification email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
-                SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send verification email to Gov Notify will try direct send for {emailAddress} due to following error:\n\n{ex.Message}");
+                SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send verification email to Gov Notify will try direct send for {emailAddress} due to following error:\n\n{ex.Message}",test);
 
                 try
                 {
                     var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/verify.html"));
                     html = html.Replace("((url))", verifyUrl);
-                    Email.QuickSend("GPG Registration Verification", SmtpUsername, SmtpSenderName, emailAddress, html, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort);
+                    Email.QuickSend("GPG Registration Verification", SmtpUsername, SmtpSenderName, emailAddress, html, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort,test:test);
                     return true;
                 }
                 catch (Exception ex1)
@@ -68,7 +65,7 @@ namespace GenderPayGap
             return false;
         }
 
-        public static bool SendRegistrationRequest(string reviewUrl, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
+        public static bool SendRegistrationRequest(string reviewUrl, string contactName, string contactOrg, string reportingOrg, string reportingAddress, bool test = false)
         {
 
             var personalisation = new Dictionary<string, dynamic> { { "url", reviewUrl }, {"name",contactName}, { "org1", contactOrg }, { "org2", reportingOrg },{ "address", reportingAddress} };
@@ -82,14 +79,14 @@ namespace GenderPayGap
             {
                 try
                 {
-                    var result = GovNotify.SendEmail(emailAddress, RegistrationRequestTemplateId, personalisation);
+                    var result = GovNotify.SendEmail(emailAddress, RegistrationRequestTemplateId, personalisation,test);
                     if (!result.status.EqualsI("created", "sending", "delivered")) throw new Exception($"Unexpected status '{result.status}' returned");
                     successCount++;
                 }
                 catch (Exception ex)
                 {
                     MvcApplication.ErrorLog.WriteLine($"Cant send registration request email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
-                    SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send registration request email to Gov Notify will try direct send for {emailAddress} due to following error:\n\n{ex.Message}");
+                    SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send registration request email to Gov Notify will try direct send for {emailAddress} due to following error:\n\n{ex.Message}",test);
 
                     try
                     {
@@ -99,7 +96,7 @@ namespace GenderPayGap
                         html = html.Replace("((org1))", contactOrg);
                         html = html.Replace("((org2))", reportingOrg);
                         html = html.Replace("((address))", reportingAddress);
-                        Email.QuickSend("Registration Request - Gender pay gap reporting service", SmtpUsername, SmtpSenderName, emailAddress, html, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort);
+                        Email.QuickSend("Registration Request - Gender pay gap reporting service", SmtpUsername, SmtpSenderName, emailAddress, html, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort,test:test);
                         successCount++;
                     }
                     catch (Exception ex1)
@@ -112,7 +109,7 @@ namespace GenderPayGap
             return successCount == emailAddresses.Length;
         }
 
-        public static bool SendRegistrationApproved(string returnUrl, string emailAddress)
+        public static bool SendRegistrationApproved(string returnUrl, string emailAddress, bool test = false)
         {
             //If the email address is a test email then simulate sending
             if (emailAddress.StartsWithI(MvcApplication.TestPrefix)) return true;
@@ -121,20 +118,20 @@ namespace GenderPayGap
 
             try
             {
-                var result = GovNotify.SendEmail(emailAddress, RegistrationApprovedTemplateId, personalisation);
+                var result = GovNotify.SendEmail(emailAddress, RegistrationApprovedTemplateId, personalisation,test);
                 if (!result.status.EqualsI("created", "sending", "delivered")) throw new Exception($"Unexpected status '{result.status}' returned");
                 return true;
             }
             catch (Exception ex)
             {
                 MvcApplication.ErrorLog.WriteLine($"Cant send registration approved email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
-                SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send registration approved email to Gov Notify will try direct send for {emailAddress} due to following error:\n\n{ex.Message}");
+                SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send registration approved email to Gov Notify will try direct send for {emailAddress} due to following error:\n\n{ex.Message}",test);
 
                 try
                 {
                     var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/RegistrationApproved.html"));
                     html = html.Replace("((url))", returnUrl);
-                    Email.QuickSend("Registration approved - Gender pay gap reporting service", SmtpUsername, SmtpSenderName, emailAddress, html, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort);
+                    Email.QuickSend("Registration approved - Gender pay gap reporting service", SmtpUsername, SmtpSenderName, emailAddress, html, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort,test:test);
                     return true;
                 }
                 catch (Exception ex1)
@@ -145,7 +142,7 @@ namespace GenderPayGap
             return false;
         }
 
-        public static bool SendRegistrationDeclined(string returnUrl, string emailAddress, string reason)
+        public static bool SendRegistrationDeclined(string returnUrl, string emailAddress, string reason, bool test = false)
         {
             //If the email address is a test email then simulate sending
             if (emailAddress.StartsWithI(MvcApplication.TestPrefix)) return true;
@@ -154,21 +151,21 @@ namespace GenderPayGap
 
             try
             {
-                var result = GovNotify.SendEmail(emailAddress, RegistrationDeclinedTemplateId, personalisation);
+                var result = GovNotify.SendEmail(emailAddress, RegistrationDeclinedTemplateId, personalisation,test);
                 if (!result.status.EqualsI("created", "sending", "delivered")) throw new Exception($"Unexpected status '{result.status}' returned");
                 return true;
             }
             catch (Exception ex)
             {
                 MvcApplication.ErrorLog.WriteLine($"Cant send registration declined email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
-                SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send registration declined email to Gov Notify will try direct send for {emailAddress} due to following error:\n\n{ex.Message}");
+                SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send registration declined email to Gov Notify will try direct send for {emailAddress} due to following error:\n\n{ex.Message}",test);
 
                 try
                 {
                     var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/RegistrationDeclined.html"));
                     html = html.Replace("((url))", returnUrl);
                     html = html.Replace("((reason))", reason);
-                    Email.QuickSend("Registration declined - Gender pay gap reporting service", SmtpUsername, SmtpSenderName, emailAddress, html, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort);
+                    Email.QuickSend("Registration declined - Gender pay gap reporting service", SmtpUsername, SmtpSenderName, emailAddress, html, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort,test:test);
                     return true;
                 }
                 catch (Exception ex1)
@@ -179,7 +176,7 @@ namespace GenderPayGap
             return false;
         }
 
-        public static bool SendPasswordReset(string resetUrl, string emailAddress, string resetCode)
+        public static bool SendPasswordReset(string resetUrl, string emailAddress, string resetCode, bool test = false)
         {
             //If the email address is a test email then simulate sending
             if (emailAddress.StartsWithI(MvcApplication.TestPrefix)) return true;
@@ -188,20 +185,20 @@ namespace GenderPayGap
 
             try
             {
-                var result = GovNotify.SendEmail(emailAddress, ResetTemplateId, personalisation);
+                var result = GovNotify.SendEmail(emailAddress, ResetTemplateId, personalisation,test);
                 if (!result.status.EqualsI("created", "sending", "delivered")) throw new Exception($"Unexpected status '{result.status}' returned");
                 return true;
             }
             catch (Exception ex)
             {
                 MvcApplication.ErrorLog.WriteLine($"Cant send password reset email to Gov Notify for {emailAddress} due to following error:{ex.Message}");
-                SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send password reset email to Gov Notify will try direct send for {emailAddress} due to following error:\n\n{ex.Message}");
+                SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send password reset email to Gov Notify will try direct send for {emailAddress} due to following error:\n\n{ex.Message}",test);
 
                 try
                 {
                     var html = System.IO.File.ReadAllText(FileSystem.ExpandLocalPath("~/App_Data/PasswordReset.html"));
                     html = html.Replace("((url))", resetUrl);
-                    Email.QuickSend("Password Reset - Gender Pay Gap reporting service", SmtpUsername, SmtpSenderName, emailAddress, html, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort);
+                    Email.QuickSend("Password Reset - Gender Pay Gap reporting service", SmtpUsername, SmtpSenderName, emailAddress, html, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort,test:test);
                     return true;
                 }
                 catch (Exception ex1)
@@ -215,7 +212,7 @@ namespace GenderPayGap
         #endregion
 
         #region Postal
-        public static bool SendPinInPost(string imagePath, string returnUrl, string contactName, string jobtitle, string organisationName, List<string> address, string pin, DateTime sendDate, DateTime expiresDate)
+        public static bool SendPinInPost(string imagePath, string returnUrl, string contactName, string jobtitle, string organisationName, List<string> address, string pin, DateTime sendDate, DateTime expiresDate, bool test = false)
         {
             if (!ManualPip)
             try
@@ -225,12 +222,12 @@ namespace GenderPayGap
             catch (Exception ex)
             {
                 MvcApplication.ErrorLog.WriteLine($"Cant send Pin-In-Post to Gov Notify for {address.ToDelimitedString()} due to following error:{ex.Message}");
-                SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send Pin-In-Post to Gov Notify will try manual post for {address.ToDelimitedString()} due to following error:\n\n{ex.Message}");
+                SendGeoMessage("GPG - GOV NOTIFY ERROR", $"Cant send Pin-In-Post to Gov Notify will try manual post for {address.ToDelimitedString()} due to following error:\n\n{ex.Message}",test);
             }
-            return SendPinInPostManual(imagePath, returnUrl, contactName, jobtitle, organisationName, address, pin, sendDate, expiresDate);
+            return SendPinInPostManual(imagePath, returnUrl, contactName, jobtitle, organisationName, address, pin, sendDate, expiresDate,test);
         }
 
-        private static bool SendPinInPostManual(string imagePath,string returnUrl, string contactName, string jobtitle, string organisationName, List<string> address, string pin, DateTime sendDate, DateTime expiresDate)
+        private static bool SendPinInPostManual(string imagePath,string returnUrl, string contactName, string jobtitle, string organisationName, List<string> address, string pin, DateTime sendDate, DateTime expiresDate, bool test = false)
         {
             if (string.IsNullOrWhiteSpace(GEODistributionList))throw new ArgumentNullException(nameof(GEODistributionList));
             if (!GEODistributionList.ContainsAllEmails())throw new ArgumentException($"{GEODistributionList} contains an invalid email address",nameof(GEODistributionList));
@@ -253,7 +250,7 @@ namespace GenderPayGap
                 pipHtml = pipHtml.Replace("((url))", returnUrl);
                 pipHtml = pipHtml.Replace("((ExpiresDate))", expiresDate.ToString("d MMMM yyyy"));
                 var pdf = PDF.HtmlToPDF(pipHtml);
-                Email.QuickSend("GPG PIN-in-Post", SmtpUsername, SmtpSenderName, GEODistributionList, coverHtml, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort,pdf, $"{organisationName.ToProper().Strip(" -_,")}.pdf");
+                Email.QuickSend("GPG PIN-in-Post", SmtpUsername, SmtpSenderName, GEODistributionList, coverHtml, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort,pdf, $"{organisationName.ToProper().Strip(" -_,")}.pdf",test);
                 return true;
             }
             catch (Exception ex)
@@ -272,7 +269,7 @@ namespace GenderPayGap
         /// <param name="subject"></param>
         /// <param name="message"></param>
         /// <returns></returns>
-        public static bool SendGeoMessage(string subject, string message)
+        public static bool SendGeoMessage(string subject, string message, bool test=false)
         {
 
             var emailAddresses = GEODistributionList.SplitI(";");
@@ -284,7 +281,7 @@ namespace GenderPayGap
             {
                 try
                 {
-                    Email.QuickSend(subject, SmtpUsername, SmtpSenderName, emailAddress, message, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort);
+                    Email.QuickSend(subject, SmtpUsername, SmtpSenderName, emailAddress, message, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort,test:test);
                     successCount++;
                 }
                 catch (Exception ex1)

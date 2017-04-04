@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Configuration;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Web;
 using System.Web.Configuration;
@@ -62,6 +63,7 @@ namespace GenderPayGap.IdentityServer
             }
         }
 
+        public static string CertThumprint = ConfigurationManager.AppSettings["WEBSITE_LOAD_CERTIFICATES"].SplitI(";").FirstOrDefault();
         public static string AdminEmails = ConfigurationManager.AppSettings["AdminEmails"];
         public static string TrustedIPDomains = ConfigurationManager.AppSettings["TrustedIPDomains"];
         public static bool MaintenanceMode = ConfigurationManager.AppSettings["MaintenanceMode"].ToBoolean();
