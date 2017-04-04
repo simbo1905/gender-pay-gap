@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <WebTest Name="RegisterManual" Id="b740850d-d157-4051-b80b-0bf67fbffbf5" Owner="" Priority="2147483647" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="0" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="" CredentialUserName="" CredentialPassword="" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="RegisterManual.201861f1-9847-40d8-8893-ded77eba501c.rec.webtestresult" ResultsLocale="">
   <Items>
-    <Request Method="GET" Guid="7800f425-9d86-4507-8187-3ebd23a53b62" Version="1.1" Url="{{WebServer}}/Register" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/about-you" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="7800f425-9d86-4507-8187-3ebd23a53b62" Version="1.1" Url="{{WebServer}}/Register" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/about-you" ReportingName="" IgnoreHttpStatusCode="False">
       <ExtractionRules>
         <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
           <RuleParameters>
@@ -11,7 +11,7 @@
         </ExtractionRule>
       </ExtractionRules>
     </Request>
-    <Request Method="POST" Guid="3c48ded3-54f5-41ee-bd69-885518ce90db" Version="1.1" Url="{{WebServer}}/Register/about-you" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/verify-email" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="POST" Guid="3c48ded3-54f5-41ee-bd69-885518ce90db" Version="1.1" Url="{{WebServer}}/Register/about-you" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/verify-email" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/about-you" />
       </Headers>
@@ -64,7 +64,7 @@
         <FormPostParameter Name="ConfirmPassword" Value="Testing123" RecordedValue="Testing123" CorrelationBinding="" UrlEncode="True" />
       </FormPostHttpBody>
     </Request>
-    <Request Method="GET" Guid="98f8a9f7-77e5-48c5-98f1-588e4d95e082" Version="1.1" Url="{{WebServer}}/Register/verify-email" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/email-confirmed" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="98f8a9f7-77e5-48c5-98f1-588e4d95e082" Version="1.1" Url="{{WebServer}}/Register/verify-email" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/email-confirmed" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/verify-email" />
       </Headers>
@@ -73,7 +73,7 @@
         <QueryStringParameter Name="login" Value="{{SavedEmailAddress}}" RecordedValue="gpgtest12345%40domain.co.uk" CorrelationBinding="{{QueryStringParam17024.login}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="c698c5f6-25e8-4926-9dd3-f5ee94f7ff38" Version="1.1" Url="{{WebServer}}/Register/organisation-type" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="c698c5f6-25e8-4926-9dd3-f5ee94f7ff38" Version="1.1" Url="{{WebServer}}/Register/organisation-type" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/email-confirmed" />
       </Headers>
@@ -96,7 +96,7 @@
         </ExtractionRule>
       </CorrelationExtractionRules>
     </Request>
-    <Request Method="POST" Guid="4127ff9f-b0d4-4acc-908d-461d016fd1ac" Version="1.1" Url="{{WebServer}}/Register/organisation-type" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/organisation-search" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="POST" Guid="4127ff9f-b0d4-4acc-908d-461d016fd1ac" Version="1.1" Url="{{WebServer}}/Register/organisation-type" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/organisation-search" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/organisation-type" />
       </Headers>
@@ -127,7 +127,7 @@
         <FormPostParameter Name="SectorType" Value="Public" RecordedValue="Public" CorrelationBinding="{{FormPostParam60.SectorType}}" UrlEncode="True" />
       </FormPostHttpBody>
     </Request>
-    <Request Method="POST" Guid="95fe569e-2bb8-4500-98bc-6acd740fcbbc" Version="1.1" Url="{{WebServer}}/Register/organisation-search" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/choose-organisation" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="POST" Guid="95fe569e-2bb8-4500-98bc-6acd740fcbbc" Version="1.1" Url="{{WebServer}}/Register/organisation-search" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/choose-organisation" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/organisation-search" />
       </Headers>
@@ -139,7 +139,7 @@
         <FormPostParameter Name="command" Value="search" RecordedValue="search" CorrelationBinding="{{FormPostParam59.command}}" UrlEncode="True" />
       </FormPostHttpBody>
     </Request>
-    <Request Method="GET" Guid="f6a0bc0e-7103-426c-bb92-7deebcc43457" Version="1.1" Url="{{WebServer}}/Register/add-organisation" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="f6a0bc0e-7103-426c-bb92-7deebcc43457" Version="1.1" Url="{{WebServer}}/Register/add-organisation" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/choose-organisation" />
       </Headers>
@@ -162,7 +162,7 @@
         </ExtractionRule>
       </CorrelationExtractionRules>
     </Request>
-    <Request Method="POST" Guid="9d7dcd21-a6ab-4a89-9934-1154c539b64d" Version="1.1" Url="{{WebServer}}/Register/add-organisation" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/add-contact" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="POST" Guid="9d7dcd21-a6ab-4a89-9934-1154c539b64d" Version="1.1" Url="{{WebServer}}/Register/add-organisation" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/add-contact" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/add-organisation" />
       </Headers>
@@ -245,7 +245,7 @@
         <FormPostParameter Name="command" Value="Continue" RecordedValue="Continue" CorrelationBinding="{{FormPostParam58.command}}" UrlEncode="True" />
       </FormPostHttpBody>
     </Request>
-    <Request Method="POST" Guid="2380b7df-81b6-48b7-a626-5f10b7c9d26b" Version="1.1" Url="{{WebServer}}/Register/add-contact" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/confirm-organisation" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="POST" Guid="2380b7df-81b6-48b7-a626-5f10b7c9d26b" Version="1.1" Url="{{WebServer}}/Register/add-contact" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/confirm-organisation" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/add-contact" />
       </Headers>
@@ -315,7 +315,7 @@
         <FormPostParameter Name="command" Value="Continue" RecordedValue="Continue" CorrelationBinding="{{FormPostParam57.command}}" UrlEncode="True" />
       </FormPostHttpBody>
     </Request>
-    <Request Method="POST" Guid="9ffd522d-f7cb-40c5-966c-96528538c5e7" Version="1.1" Url="{{WebServer}}/Register/confirm-organisation" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/request-received" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="POST" Guid="9ffd522d-f7cb-40c5-966c-96528538c5e7" Version="1.1" Url="{{WebServer}}/Register/confirm-organisation" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/request-received" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/confirm-organisation" />
       </Headers>
@@ -356,12 +356,12 @@
         <FormPostParameter Name="ContactPhoneNumber" Value="{{$HIDDEN1.ContactPhoneNumber}}" RecordedValue="07123456789" CorrelationBinding="" UrlEncode="True" />
       </FormPostHttpBody>
     </Request>
-    <Request Method="GET" Guid="5d361361-34b8-400b-9622-61984c997b93" Version="1.1" Url="{{WebServer}}/sign-out" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/account/login/logout?id=ca9a7684e960f2db32488ed7dd7638d9" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="5d361361-34b8-400b-9622-61984c997b93" Version="1.1" Url="{{WebServer}}/sign-out" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/account/login/logout?id=ca9a7684e960f2db32488ed7dd7638d9" ReportingName="" IgnoreHttpStatusCode="False">
       <QueryStringParameters>
         <QueryStringParameter Name="delete" Value="false" RecordedValue="false" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="65ba358b-2174-475a-b1b5-851bf0f2ad93" Version="1.1" Url="{{WebServer}}/register" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/about-you" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="65ba358b-2174-475a-b1b5-851bf0f2ad93" Version="1.1" Url="{{WebServer}}/register" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/about-you" ReportingName="" IgnoreHttpStatusCode="False">
       <ExtractionRules>
         <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
           <RuleParameters>
@@ -371,7 +371,7 @@
         </ExtractionRule>
       </ExtractionRules>
     </Request>
-    <Request Method="POST" Guid="f225fdf9-9f2f-486a-80d3-f6fc225e15cb" Version="1.1" Url="{{WebServer}}/Register/about-you" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/verify-email" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="POST" Guid="f225fdf9-9f2f-486a-80d3-f6fc225e15cb" Version="1.1" Url="{{WebServer}}/Register/about-you" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/verify-email" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/about-you" />
       </Headers>
@@ -424,7 +424,7 @@
         <FormPostParameter Name="ConfirmPassword" Value="Testing123" RecordedValue="Testing123" CorrelationBinding="" UrlEncode="True" />
       </FormPostHttpBody>
     </Request>
-    <Request Method="GET" Guid="26bb549a-cd88-422f-80ca-cfd443f686f6" Version="1.1" Url="{{WebServer}}/Register/verify-email" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/email-confirmed" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="26bb549a-cd88-422f-80ca-cfd443f686f6" Version="1.1" Url="{{WebServer}}/Register/verify-email" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/email-confirmed" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/verify-email" />
       </Headers>
@@ -433,7 +433,7 @@
         <QueryStringParameter Name="login" Value="{{SavedAdminEmailAddress}}" RecordedValue="gpgtest12345%40geo.gov.uk" CorrelationBinding="{{QueryStringParam17020.login}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="6cb99ac9-7ec4-4a44-8502-a39d75668744" Version="1.1" Url="{{WebServer}}/Register/review-request" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="6cb99ac9-7ec4-4a44-8502-a39d75668744" Version="1.1" Url="{{WebServer}}/Register/review-request" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <ExtractionRules>
         <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
           <RuleParameters>
@@ -470,7 +470,7 @@
         <QueryStringParameter Name="code" Value="{{QueryStringParam18969.code}}" RecordedValue="LMM7q6AVbHrYfrOfmYh9oq5uhOxXfckCuNOGOAD7z98%21" CorrelationBinding="{{QueryStringParam18969.code}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="POST" Guid="2e9eee18-fffd-42f9-8632-cc35c198a609" Version="1.1" Url="{{WebServer}}/Register/review-request" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/request-accepted" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="POST" Guid="2e9eee18-fffd-42f9-8632-cc35c198a609" Version="1.1" Url="{{WebServer}}/Register/review-request" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/request-accepted" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/review-request?code=LMM7q6AVbHrYfrOfmYh9oq5uhOxXfckCuNOGOAD7z98%21" />
       </Headers>
@@ -496,7 +496,7 @@
         <FormPostParameter Name="command" Value="approve" RecordedValue="approve" CorrelationBinding="{{FormPostParam51.command}}" UrlEncode="True" />
       </FormPostHttpBody>
     </Request>
-    <Request Method="GET" Guid="a73e09e3-629e-42e0-ab2a-d42428910d70" Version="1.1" Url="{{WebServer}}/Register/choose-organisation" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/choose-organisation" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="a73e09e3-629e-42e0-ab2a-d42428910d70" Version="1.1" Url="{{WebServer}}/Register/choose-organisation" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/choose-organisation" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/request-accepted" />
       </Headers>
@@ -504,7 +504,7 @@
         <QueryStringParameter Name="impersonate" Value="{{SavedEmailAddress}}" RecordedValue="gpgtest12345%40domain.co.uk" CorrelationBinding="{{QueryStringParam17015.impersonate}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="fdf74247-ae0e-4d20-97bd-d20ca05f1825" Version="1.1" Url="{{WebServer}}/Submit/enter-calculations" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="fdf74247-ae0e-4d20-97bd-d20ca05f1825" Version="1.1" Url="{{WebServer}}/Submit/enter-calculations" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/choose-organisation" />
       </Headers>
@@ -527,7 +527,7 @@
         </ExtractionRule>
       </CorrelationExtractionRules>
     </Request>
-    <Request Method="POST" Guid="cb9f3475-fedc-45d2-b11c-de65718109b5" Version="1.1" Url="{{WebServer}}/Submit/enter-calculations" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Submit/employer-website" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="POST" Guid="cb9f3475-fedc-45d2-b11c-de65718109b5" Version="1.1" Url="{{WebServer}}/Submit/enter-calculations" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Submit/employer-website" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Submit/enter-calculations" />
       </Headers>
@@ -576,7 +576,7 @@
         <FormPostParameter Name="command" Value="Continue" RecordedValue="Continue" CorrelationBinding="{{FormPostParam50.command}}" UrlEncode="True" />
       </FormPostHttpBody>
     </Request>
-    <Request Method="POST" Guid="3562014e-0fdf-4aea-8f26-83dd4d972d7c" Version="1.1" Url="{{WebServer}}/Submit/employer-website" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Submit/check-data" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="POST" Guid="3562014e-0fdf-4aea-8f26-83dd4d972d7c" Version="1.1" Url="{{WebServer}}/Submit/employer-website" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Submit/check-data" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Submit/employer-website" />
       </Headers>
@@ -627,7 +627,7 @@
         <FormPostParameter Name="command" Value="Continue" RecordedValue="Continue" CorrelationBinding="{{FormPostParam49.command}}" UrlEncode="True" />
       </FormPostHttpBody>
     </Request>
-    <Request Method="POST" Guid="79bfbdbe-459f-48bd-807f-35a016987577" Version="1.1" Url="{{WebServer}}/Submit/check-data" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Submit/submission-complete" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="POST" Guid="79bfbdbe-459f-48bd-807f-35a016987577" Version="1.1" Url="{{WebServer}}/Submit/check-data" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Submit/submission-complete" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Submit/check-data" />
       </Headers>
@@ -660,7 +660,7 @@
         <FormPostParameter Name="command" Value="Confirm and submit" RecordedValue="Confirm and submit" CorrelationBinding="{{FormPostParam48.command}}" UrlEncode="True" />
       </FormPostHttpBody>
     </Request>
-    <Request Method="GET" Guid="737027b2-6bb4-4580-876a-3b009e8f703c" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="737027b2-6bb4-4580-876a-3b009e8f703c" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Submit/submission-complete" />
       </Headers>
@@ -689,8 +689,8 @@
         </ExtractionRule>
       </CorrelationExtractionRules>
     </Request>
-    <Request Method="GET" Guid="ed0a2807-9a33-4ef1-81c5-af0538c3ede0" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
-    <Request Method="GET" Guid="56c236d1-4101-4525-9a1e-591400f98c3e" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="ed0a2807-9a33-4ef1-81c5-af0538c3ede0" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+    <Request Method="GET" Guid="56c236d1-4101-4525-9a1e-591400f98c3e" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details" />
       </Headers>
@@ -722,12 +722,12 @@
         <QueryStringParameter Name="view" Value="pay-quartiles" RecordedValue="pay-quartiles" CorrelationBinding="{{QueryStringParam17028.view}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="3dd1c0da-1592-49cb-b944-314bc08099ef" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="3dd1c0da-1592-49cb-b944-314bc08099ef" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <QueryStringParameters>
         <QueryStringParameter Name="view" Value="pay-quartiles" RecordedValue="pay-quartiles" CorrelationBinding="{{QueryStringParam21421.view}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="33ef546b-5132-4060-b397-05c8b6722a8d" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="33ef546b-5132-4060-b397-05c8b6722a8d" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details?view=pay-quartiles" />
       </Headers>
@@ -735,34 +735,34 @@
         <QueryStringParameter Name="view" Value="bonus-pay" RecordedValue="bonus-pay" CorrelationBinding="{{QueryStringParam17027.view}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="51e6d581-ca28-40ed-84fc-a35a090de03c" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="51e6d581-ca28-40ed-84fc-a35a090de03c" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <QueryStringParameters>
         <QueryStringParameter Name="view" Value="bonus-pay" RecordedValue="bonus-pay" CorrelationBinding="{{QueryStringParam21836.view}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="d9b105cd-9d50-4bbf-ae59-80ff90945c8f" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="d9b105cd-9d50-4bbf-ae59-80ff90945c8f" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details?view=bonus-pay" />
       </Headers>
     </Request>
-    <Request Method="GET" Guid="0e9b7135-b493-4080-b5d7-49882cf3967a" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
-    <Request Method="GET" Guid="bce3deb6-2509-4f38-98ba-782c50eb6b66" Version="1.1" Url="{{WebServer}}/sign-out" ThinkTime="0" Timeout="300" ParseDependentRequests="False" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="0e9b7135-b493-4080-b5d7-49882cf3967a" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+    <Request Method="GET" Guid="bce3deb6-2509-4f38-98ba-782c50eb6b66" Version="1.1" Url="{{WebServer}}/sign-out" ThinkTime="10" Timeout="300" ParseDependentRequests="False" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results" />
       </Headers>
     </Request>
-    <Request Method="GET" Guid="66ad0b3c-5d34-4d29-81ad-601d5b89718c" Version="1.1" Url="{{WebServer}}/sign-out" ThinkTime="0" Timeout="300" ParseDependentRequests="False" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
-    <Request Method="GET" Guid="0e0d11fd-9bd9-4f98-b3a2-e741eba717bb" Version="1.1" Url="{{WebServer}}/register/verify-email" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/verify-email" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="66ad0b3c-5d34-4d29-81ad-601d5b89718c" Version="1.1" Url="{{WebServer}}/sign-out" ThinkTime="10" Timeout="300" ParseDependentRequests="False" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+    <Request Method="GET" Guid="0e0d11fd-9bd9-4f98-b3a2-e741eba717bb" Version="1.1" Url="{{WebServer}}/register/verify-email" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/verify-email" ReportingName="" IgnoreHttpStatusCode="False">
       <QueryStringParameters>
         <QueryStringParameter Name="login" Value="{{SavedAdminEmailAddress}}" RecordedValue="gpgtest12345@geo.gov.uk" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="dde0515b-d820-4ccb-83ed-a19ef1551998" Version="1.1" Url="{{WebServer}}/register/verify-email" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/verify-email" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="dde0515b-d820-4ccb-83ed-a19ef1551998" Version="1.1" Url="{{WebServer}}/register/verify-email" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/verify-email" ReportingName="" IgnoreHttpStatusCode="False">
       <QueryStringParameters>
         <QueryStringParameter Name="login" Value="{{SavedAdminEmailAddress}}" RecordedValue="gpgtest12345@geo.gov.uk" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="0c7e03db-4591-437f-acd7-5fcafe1a5292" Version="1.1" Url="{{WebServer}}/sign-out" ThinkTime="0" Timeout="300" ParseDependentRequests="False" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="0c7e03db-4591-437f-acd7-5fcafe1a5292" Version="1.1" Url="{{WebServer}}/sign-out" ThinkTime="10" Timeout="300" ParseDependentRequests="False" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/verify-email" />
       </Headers>

@@ -1,5 +1,5 @@
 ﻿@using Extensions
-@if (!Request.Url.PathAndQuery.EqualsI(@Url.Action("SendFeedback", "Home")))
+@if (!Request.Url.PathAndQuery.EqualsI(Url.Action("SendFeedback", "Home"),Url.Action("ServiceUnavailable", "Error")))
 {
     <p style="margin-top: 10px">
         <strong class="phase-tag">BETA</strong>

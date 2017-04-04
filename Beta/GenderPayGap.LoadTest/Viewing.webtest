@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <WebTest Name="Viewing" Id="d29b4736-b819-4954-bb2c-ba8760bf52b9" Owner="" Priority="2147483647" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="0" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="" CredentialUserName="" CredentialPassword="" PreAuthenticate="False" Proxy="default" StopOnError="False" RecordedResultFile="Viewing.50bf91f3-fd56-45cd-971b-239059f3b0bf.rec.webtestresult" ResultsLocale="">
   <Items>
-    <Request Method="GET" Guid="0c24a1e7-819b-45eb-b176-07643977d734" Version="1.1" Url="{{WebServer}}/Viewing" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Viewing/search-results" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="0c24a1e7-819b-45eb-b176-07643977d734" Version="1.1" Url="{{WebServer}}/Viewing" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Viewing/search-results" ReportingName="" IgnoreHttpStatusCode="False">
       <ExtractionRules>
         <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
           <RuleParameters>
@@ -22,7 +22,7 @@
         </ExtractionRule>
       </ExtractionRules>
     </Request>
-    <Request Method="GET" Guid="b5a6c8cc-3b41-4886-b7a0-924e23cae9d1" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="b5a6c8cc-3b41-4886-b7a0-924e23cae9d1" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results" />
       </Headers>
@@ -40,7 +40,7 @@
         <QueryStringParameter Name="p" Value="-1" RecordedValue="4" CorrelationBinding="{{QueryStringParam59.p}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="e2409e07-d8cb-47f8-a487-3d004010a942" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="e2409e07-d8cb-47f8-a487-3d004010a942" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=1&amp;y=2017&amp;s=&amp;search=&amp;s=A&amp;s=B&amp;s=X" />
       </Headers>
@@ -107,7 +107,7 @@
         <QueryStringParameter Name="p" Value="-1" RecordedValue="4" CorrelationBinding="{{QueryStringParam59.p}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="936db504-2769-4a03-84a2-666cae4a0af7" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="936db504-2769-4a03-84a2-666cae4a0af7" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=1&amp;y=2017&amp;s=&amp;search=&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=X" />
       </Headers>
@@ -199,7 +199,7 @@
         <QueryStringParameter Name="p" Value="-1" RecordedValue="4" CorrelationBinding="{{QueryStringParam59.p}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="f54df36c-ad25-4dd9-9993-2b9f85463904" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="f54df36c-ad25-4dd9-9993-2b9f85463904" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=1&amp;y=2017&amp;s=&amp;search=&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=E&amp;s=F&amp;s=X" />
       </Headers>
@@ -315,7 +315,7 @@
         <QueryStringParameter Name="p" Value="-1" RecordedValue="4" CorrelationBinding="{{QueryStringParam59.p}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="e6c3d45f-fa2d-4b98-8705-f3b86c3100ff" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="e6c3d45f-fa2d-4b98-8705-f3b86c3100ff" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=1&amp;y=2017&amp;s=&amp;search=&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=E&amp;s=F&amp;s=G&amp;s=H&amp;s=X" />
       </Headers>
@@ -455,7 +455,7 @@
         <QueryStringParameter Name="p" Value="-1" RecordedValue="4" CorrelationBinding="{{QueryStringParam59.p}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="67de58bd-51e1-4b37-b96a-03b0cff919ed" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="67de58bd-51e1-4b37-b96a-03b0cff919ed" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=2&amp;y=2017&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=E&amp;s=F&amp;s=G&amp;s=H&amp;s=I&amp;s=J&amp;s=K&amp;s=L&amp;s=M&amp;s=N&amp;s=O&amp;s=P&amp;s=Q&amp;s=R&amp;s=S&amp;s=T&amp;s=U&amp;s=X" />
       </Headers>
@@ -738,7 +738,7 @@
         <QueryStringParameter Name="s" Value="X" RecordedValue="X" CorrelationBinding="{{QueryStringParam102.s}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="7f1ce220-cbd5-4f7e-996d-7f7b14cad173" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="7f1ce220-cbd5-4f7e-996d-7f7b14cad173" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=1&amp;y=2017&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=E&amp;s=F&amp;s=G&amp;s=H&amp;s=I&amp;s=J&amp;s=K&amp;s=L&amp;s=M&amp;s=N&amp;s=O&amp;s=P&amp;s=Q&amp;s=R&amp;s=S&amp;s=T&amp;s=U&amp;s=X" />
       </Headers>
@@ -792,7 +792,7 @@
         <QueryStringParameter Name="s" Value="{{QueryStringParam80.s}}" RecordedValue="X" CorrelationBinding="{{QueryStringParam80.s}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="b5a6c8cc-3b41-4886-b7a0-924e23cae9d1" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="b5a6c8cc-3b41-4886-b7a0-924e23cae9d1" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results" />
       </Headers>
@@ -820,7 +820,7 @@
         <QueryStringParameter Name="p" Value="-1" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="301cc03f-f51c-4c93-8f1f-11747bbd8b7c" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="301cc03f-f51c-4c93-8f1f-11747bbd8b7c" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=4&amp;y=2017&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=E&amp;s=F&amp;s=G&amp;s=H&amp;s=I&amp;s=J&amp;s=K&amp;s=L&amp;s=M&amp;s=N&amp;s=O&amp;s=P&amp;s=Q&amp;s=R&amp;s=S&amp;s=T&amp;s=U&amp;s=X" />
       </Headers>
@@ -853,7 +853,7 @@
         <QueryStringParameter Name="id" Value="{{DetailsQuery}}" RecordedValue="ItiBBhKnno1xL9EODyuSHA%21%21" CorrelationBinding="{{QueryStringParam58.id}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="4877c7e2-36c1-453b-ae73-7b40e5101124" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="4877c7e2-36c1-453b-ae73-7b40e5101124" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details?view=hourly-rate&amp;id={{DetailsQuery}}" />
       </Headers>
@@ -886,7 +886,7 @@
         <QueryStringParameter Name="id" Value="{{DetailsQuery}}" RecordedValue="ItiBBhKnno1xL9EODyuSHA%21%21" CorrelationBinding="{{QueryStringParam56.id}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="2f7ced28-c0d9-49e6-898e-29cb9515c176" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="2f7ced28-c0d9-49e6-898e-29cb9515c176" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details?view=pay-quartiles&amp;id={{DetailsQuery}}" />
       </Headers>
@@ -919,7 +919,7 @@
         <QueryStringParameter Name="id" Value="{{DetailsQuery}}" RecordedValue="ItiBBhKnno1xL9EODyuSHA%21%21" CorrelationBinding="{{QueryStringParam54.id}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="301cc03f-f51c-4c93-8f1f-11747bbd8b7c" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="301cc03f-f51c-4c93-8f1f-11747bbd8b7c" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=4&amp;y=2017&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=E&amp;s=F&amp;s=G&amp;s=H&amp;s=I&amp;s=J&amp;s=K&amp;s=L&amp;s=M&amp;s=N&amp;s=O&amp;s=P&amp;s=Q&amp;s=R&amp;s=S&amp;s=T&amp;s=U&amp;s=X" />
       </Headers>
@@ -952,7 +952,7 @@
         <QueryStringParameter Name="id" Value="random" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="4877c7e2-36c1-453b-ae73-7b40e5101124" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="4877c7e2-36c1-453b-ae73-7b40e5101124" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details?view=hourly-rate&amp;id={{DetailsQuery}}" />
       </Headers>
@@ -985,7 +985,7 @@
         <QueryStringParameter Name="id" Value="random" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="2f7ced28-c0d9-49e6-898e-29cb9515c176" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="2f7ced28-c0d9-49e6-898e-29cb9515c176" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details?view=pay-quartiles&amp;id={{DetailsQuery}}" />
       </Headers>
@@ -1018,12 +1018,12 @@
         <QueryStringParameter Name="id" Value="random" RecordedValue="" CorrelationBinding="" UrlEncode="True" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="b176f000-d786-4631-9bb1-40f067d26c08" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="b176f000-d786-4631-9bb1-40f067d26c08" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details?view=hourly-rate&amp;id=bgTXHoqrCpju3CpOQD2ezg%21%21" />
       </Headers>
     </Request>
-    <Request Method="GET" Guid="52abcc6d-9111-414c-a84d-155361d92545" Version="1.1" Url="{{WebServer}}/Viewing/download" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="52abcc6d-9111-414c-a84d-155361d92545" Version="1.1" Url="{{WebServer}}/Viewing/download" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results?p=4&amp;y=2017&amp;s=A&amp;s=B&amp;s=C&amp;s=D&amp;s=E&amp;s=F&amp;s=G&amp;s=H&amp;s=I&amp;s=J&amp;s=K&amp;s=L&amp;s=M&amp;s=N&amp;s=O&amp;s=P&amp;s=Q&amp;s=R&amp;s=S&amp;s=T&amp;s=U&amp;s=X" />
       </Headers>
@@ -1052,13 +1052,13 @@
         </ExtractionRule>
       </CorrelationExtractionRules>
     </Request>
-    <Request Method="GET" Guid="98e5c9f2-898d-4215-b85c-d8604c9726d3" Version="1.1" Url="{{WebServer}}/Viewing/download-data" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="98e5c9f2-898d-4215-b85c-d8604c9726d3" Version="1.1" Url="{{WebServer}}/Viewing/download-data" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/download" />
       </Headers>
     </Request>
     <Request Method="GET" Guid="c6ca4130-5779-4a2e-8f1b-4f4e7876f31e" Version="1.1" Url="{{WebServer}}/Viewing/download-data" ThinkTime="15" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
-    <Request Method="GET" Guid="fd352082-f56d-4e16-9773-a629aa54d61b" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="0" Timeout="300" ParseDependentRequests="False" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="fd352082-f56d-4e16-9773-a629aa54d61b" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="10" Timeout="300" ParseDependentRequests="False" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Viewing/download" />
       </Headers>
