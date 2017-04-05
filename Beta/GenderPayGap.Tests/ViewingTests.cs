@@ -230,8 +230,9 @@ namespace GenderPayGap.Tests
             controller.StashModel(model);
 
             //insert a file in the file repository
+            Settings.Default["DownloadsLocation"] = AppDomain.CurrentDomain.BaseDirectory;
             var download = Settings.Default.DownloadsLocation;
-            MvcApplication.FileRepository.CreateDirectory(download);
+            
 
             int year = 2016;
             //ACT:
