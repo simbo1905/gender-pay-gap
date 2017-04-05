@@ -10,6 +10,7 @@ using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 using System.Data;
 using System.Data.Common;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Security.Claims;
@@ -139,7 +140,7 @@ namespace GenderPayGap.Tests
             }
         }
     }
-
+    
     public class MockRepository : IRepository
     {
         private readonly List<object> context = new List<object>();
