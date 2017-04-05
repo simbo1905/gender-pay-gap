@@ -162,6 +162,8 @@
     <Compile Include="SerializableDictionary.cs" />
     <Compile Include="SerializableList.cs" />
     <Compile Include="StyleCollection.cs" />
+    <Compile Include="Temporarydirectory.cs" />
+    <Compile Include="TemporaryFile.cs" />
     <Compile Include="Text.cs" />
     <Compile Include="Time.cs" />
   </ItemGroup>
