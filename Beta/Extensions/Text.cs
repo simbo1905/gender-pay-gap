@@ -983,7 +983,7 @@ namespace Extensions
             if (string.IsNullOrWhiteSpace(original)) return false;
             if (texts!=null)
                 foreach (var text in texts)
-                    if (original.ToLower().StartsWith(text.ToLower()))return true;
+                    if (text!=null && original.ToLower().StartsWith(text.ToLower()))return true;
             return false;
         }
 
