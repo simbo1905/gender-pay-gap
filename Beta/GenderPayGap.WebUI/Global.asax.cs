@@ -140,25 +140,21 @@ namespace GenderPayGap
         protected void Application_Error(Object sender, EventArgs e)
         {
             // Process exception
-            if (!HttpContext.Current.IsCustomErrorEnabled) return;
             var raisedException = Server.GetLastError();
             if (raisedException == null) return;
 
             //Add to the log
             ErrorLog.WriteLine(raisedException.ToString());
 
-            // Note: A single instance of telemetry client is sufficient to track multiple telemetry items.
+            //Track the exception with Application Insights if it is available
+            AppInsightsClient?.TrackException(raisedException);
 
-            var ai = new TelemetryClient();
-            ai.TrackException(raisedException);
+            if (!HttpContext.Current.IsCustomErrorEnabled) return;
 
             if (raisedException is HttpException)
                 HttpContext.Current.Response.Redirect("~/Error?code=" + ((HttpException) raisedException).GetHttpCode());
             else
                 HttpContext.Current.Response.Redirect("~/Error");
-
-            //Track the exception with Application Insights if it is available
-            AppInsightsClient?.TrackException(raisedException);
         }
         
         public static IContainer BuildContainerIoC()
