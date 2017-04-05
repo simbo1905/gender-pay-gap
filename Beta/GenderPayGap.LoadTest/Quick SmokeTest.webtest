@@ -84,7 +84,7 @@
     </Request>
   </Items>
   <ContextParameters>
-    <ContextParameter Name="WebServer" Value="https://localhost:44371" />
+    <ContextParameter Name="WebServer" Value="https://wa-t1pr-gpg-staging.azurewebsites.net" />
     <ContextParameter Name="WebServer2" Value="http://gpgtest.com" />
     <ContextParameter Name="WebServer3" Value="https%3A%2F%2Flocalhost%3A44371" />
   </ContextParameters>
