@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Data.Entity.ModelConfiguration.Conventions;
 using System.IO;
 using System.Linq;
+using System.Net;
+using System.Web;
 using Autofac;
 using Autofac.Core;
 using CsvHelper;
@@ -52,7 +54,7 @@ namespace GenderPayGap.Core.Classes
         public void WriteLine(string appendString, bool addPrefix=true)
         {
             if (string.IsNullOrWhiteSpace(appendString)) return;
-            var prefix=$"Date:{DateTime.Now},Machine:{Environment.MachineName}";
+            var prefix=$"Date:{DateTime.Now},Machine:{Environment.MachineName},Path:{HttpContext.Current?.Request?.Url.PathAndQuery},IP:{HttpContext.Current?.Request?.UserHostAddress}";
             var instance = Environment.GetEnvironmentVariable("WEBSITE_INSTANCE_ID");
             if (!string.IsNullOrWhiteSpace(instance)) prefix += $",Instance:{ instance}";
 

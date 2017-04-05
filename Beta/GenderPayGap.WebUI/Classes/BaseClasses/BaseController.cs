@@ -141,25 +141,23 @@ namespace GenderPayGap
             //Add to the log
             MvcApplication.ErrorLog.WriteLine(filterContext.Exception.ToString());
 
-            // Output a nice error page
-            if (filterContext.HttpContext.IsCustomErrorEnabled)
-            {
-                filterContext.ExceptionHandled = true;
-                if (filterContext.Exception is HttpException)
-                    filterContext.Result = View("CustomError", new ErrorViewModel(((HttpException) filterContext.Exception).GetHttpCode()));
-                else if (filterContext.Exception is IdentityNotMappedException)
-                    filterContext.Result = View("CustomError", new ErrorViewModel(1000));
-                else if (filterContext.Exception is UnauthorizedAccessException)
-                    filterContext.Result = View("CustomError", new ErrorViewModel(1001));
-                else if (filterContext.Exception is AuthenticationException)
-                    filterContext.Result = View("CustomError", new ErrorViewModel(1002));
-                else
-                    filterContext.Result = View("CustomError", new ErrorViewModel(1003));
-            }
-
             //Track the exception with Application Insights if it is available
             MvcApplication.AppInsightsClient?.TrackException(filterContext.Exception);
 
+            // Output a nice error page
+            if (!filterContext.HttpContext.IsCustomErrorEnabled) return;
+
+            filterContext.ExceptionHandled = true;
+            if (filterContext.Exception is HttpException)
+                filterContext.Result = View("CustomError", new ErrorViewModel(((HttpException) filterContext.Exception).GetHttpCode()));
+            else if (filterContext.Exception is IdentityNotMappedException)
+                filterContext.Result = View("CustomError", new ErrorViewModel(1000));
+            else if (filterContext.Exception is UnauthorizedAccessException)
+                filterContext.Result = View("CustomError", new ErrorViewModel(1001));
+            else if (filterContext.Exception is AuthenticationException)
+                filterContext.Result = View("CustomError", new ErrorViewModel(1002));
+            else
+                filterContext.Result = View("CustomError", new ErrorViewModel(1003));
         }
 
         protected void AddModelError(string propertyName, string errorContext, object parameters = null)
