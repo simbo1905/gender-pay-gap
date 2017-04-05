@@ -42,9 +42,7 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("~/")]
         public ActionResult Redirect()
         {
-            if (WasController("Register"))return RedirectToAction("AboutYou","Register");
-            if (WasController("Submit"))return RedirectToAction("EnterCalculations", "Submit");
-            return RedirectToAction("SearchResults","Viewing");
+            return RedirectToAction("EnterCalculations", "Submit");            
         }
 
         [Route("~/sign-out")]
