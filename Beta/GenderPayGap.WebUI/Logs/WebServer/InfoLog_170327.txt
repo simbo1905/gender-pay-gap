@@ -1,9 +1,0 @@
-Date:27/03/2017 20:46:31,Machine:TESTRIG02 -------
-Home Controller Initialised
-
-Date:27/03/2017 20:46:31,Machine:TESTRIG02 -------
-Register Controller Initialised
-
-Date:27/03/2017 20:46:41,Machine:TESTRIG02 -------
-Viewing Controller Initialised
-
