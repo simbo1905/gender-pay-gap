@@ -155,7 +155,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             this.StashModel(model);
 
-            return RedirectToAction(returnUrl.EqualsI("CheckData") ? "CheckData" : model.SectorType== SectorTypes.Public ? "EmployerWebsite" : "PersonResponsible");
+            return RedirectToAction(returnUrl.EqualsI("CheckData") ? "CheckData" : model.SectorType == SectorTypes.Public ? "EmployerWebsite" : "PersonResponsible");
         }
 
         [HttpGet]

@@ -355,7 +355,6 @@ namespace GenderPayGap.Tests.Submission
         #endregion
 
         #region Positive Tests
-        [Ignore("This test needs fixing")]
         [Test]
         [Description("Ensure that EnterCalculations passes when all zero values are entered in all/any of the fields as zero is a valid value")]
         public void EnterCalculations_ZeroValidValueInFields_NoError()
@@ -381,20 +380,18 @@ namespace GenderPayGap.Tests.Submission
                 DiffMeanHourlyPayPercent = zero,
                 DiffMedianBonusPercent = zero,
                 DiffMedianHourlyPercent = zero,
-                FemaleLowerPayBand = zero,
+                FemaleLowerPayBand = 50,
                 FemaleMedianBonusPayPercent = zero,
-                FemaleMiddlePayBand = zero,
-                FemaleUpperPayBand = zero,
-                FemaleUpperQuartilePayBand = zero,
-                MaleLowerPayBand = zero,
+                FemaleMiddlePayBand = 60,
+                FemaleUpperPayBand = 70,
+                FemaleUpperQuartilePayBand = 50,
+                MaleLowerPayBand = 50,
                 MaleMedianBonusPayPercent = zero,
-                MaleMiddlePayBand = zero,
-                MaleUpperPayBand = zero,
-                MaleUpperQuartilePayBand = zero,
+                MaleMiddlePayBand = 40,
+                MaleUpperPayBand = 30,
+                MaleUpperQuartilePayBand = 50,
                 SectorType = SectorTypes.Private
-
             };
-
 
             var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
             controller.Bind(model);
@@ -408,30 +405,44 @@ namespace GenderPayGap.Tests.Submission
             Assert.NotNull(resultModel as ReturnViewModel, "Unstashed model is Invalid Expected ReturnViewModel");
             Assert.That(result.RouteValues["action"].ToString() == "CheckData", "Expected a RedirectToRouteResult to CheckData");
 
-            // Assert.Multiple(() =>
-            // {
-            //Assert.NotNull(result, "Expected ViewResult");
-            //Assert.That(result.ViewName == "EnterCalculations", "Incorrect view returned");
+            Assert.NotNull(result, "Expected RedirectResult");
+            var x = controller.ViewData.Model as ReturnViewModel;
 
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMeanBonusPercent"),        true, "Expected DiffMeanBonusPercent failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMeanHourlyPayPercent"),    true, "Expected DiffMeanHourlyPayPercent failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMedianBonusPercent"),      true, "Expected DiffMedianBonusPercent failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMedianHourlyPercent"),     true, "Expected DiffMedianHourlyPercent failure");
+            Assert.That(controller.ViewData.ModelState.IsValid, "Model is Invalid");
 
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleLowerPayBand"),          true, "Expected FemaleLowerPayBand failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleMedianBonusPayPercent"), true, "Expected FemaleMedianBonusPayPercent failure");                                                                         
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleMiddlePayBand"),         true, "Expected FemaleMiddlePayBand  failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleUpperPayBand"),          true, "Expected FemaleUpperPayBand  failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleUpperQuartilePayBand"),  true, "Expected FemaleUpperQuartilePayBand  failure");                                                                            
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleLowerPayBand"),            true, "Expected MaleLowerPayBand  failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleMedianBonusPayPercent"),   true, "Expected MaleMedianBonusPayPercent  failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleMiddlePayBand"),           true, "Expected MaleMiddlePayBand  failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleUpperPayBand"),            true, "Expected MaleUpperPayBand  failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleUpperQuartilePayBand"),    true, "Expected MaleUpperQuartilePayBand  failure");
-            // });
+            Assert.Multiple(() =>
+            {
+                Assert.NotNull(result, "Expected ViewResult");
+                Assert.That(resultModel.AccountingDate == model.AccountingDate, "Input value does not match model");
+                Assert.That(resultModel.Address == model.Address, "Input value does not match model");
+                Assert.That(resultModel.CompanyLinkToGPGInfo == model.CompanyLinkToGPGInfo, "Input value does not match model");
+                Assert.That(resultModel.DiffMeanBonusPercent == model.DiffMeanBonusPercent, "Input value does not match model");
+                Assert.That(resultModel.DiffMeanHourlyPayPercent == model.DiffMeanHourlyPayPercent, "Input value does not match model");
+                Assert.That(resultModel.DiffMedianBonusPercent == model.DiffMedianBonusPercent, "Input value does not match model");
+                Assert.That(resultModel.DiffMedianHourlyPercent == model.DiffMedianHourlyPercent, "Input value does not match model");
+                Assert.That(resultModel.FemaleLowerPayBand == model.FemaleLowerPayBand, "Input value does not match model");
+                Assert.That(resultModel.FemaleMedianBonusPayPercent == model.FemaleMedianBonusPayPercent, "Input value does not match model");
+                Assert.That(resultModel.FemaleMiddlePayBand == model.FemaleMiddlePayBand, "Input value does not match model");
+                Assert.That(resultModel.FemaleUpperPayBand == model.FemaleUpperPayBand, "Input value does not match model");
+                Assert.That(resultModel.FemaleUpperQuartilePayBand == model.FemaleUpperQuartilePayBand, "Input value does not match model");
+                Assert.That(resultModel.MaleLowerPayBand == model.MaleLowerPayBand, "Input value does not match model");
+                Assert.That(resultModel.MaleMiddlePayBand == model.MaleMiddlePayBand, "Input value does not match model");
+
+                Assert.That(resultModel.MaleUpperPayBand == model.MaleUpperPayBand, "Input value does not match model");
+                Assert.That(resultModel.MaleUpperQuartilePayBand == model.MaleUpperQuartilePayBand, "Input value does not match model");
+                Assert.That(resultModel.OrganisationId == model.OrganisationId, "Input value does not match model");
+                Assert.That(resultModel.OrganisationName == model.OrganisationName, "Input value does not match model");
+                Assert.That(resultModel.ReturnId == model.ReturnId, "Input value does not match model");
+                Assert.That(resultModel.ReturnUrl == model.ReturnUrl, "Input value does not match model");
+                Assert.That(resultModel.Sector == model.Sector, "Input value does not match model");
+                Assert.That(resultModel.SectorType == model.SectorType, "Input value does not match model");
+                Assert.That(resultModel.FirstName == model.FirstName, "Input value does not match model");
+                Assert.That(resultModel.JobTitle == model.JobTitle, "Input value does not match model");
+                Assert.That(resultModel.LastName == model.LastName, "Input value does not match model");
+            });
         }
 
-        [Ignore("This test needs fixing")]
+      //  [Ignore("This test needs fixing")]
         [Test]
         [Description("EnterCalculations should succeed when all fields have valid values")]
         public void EnterCalculations_ValidValueInFields_NoErrors()
@@ -448,25 +459,25 @@ namespace GenderPayGap.Tests.Submission
 
             string returnurl = "CheckData";
             var PrivateAccountingDate = WebUI.Properties.Settings.Default.PrivateAccountingDate;
-            decimal minValidValue = 100M;
+            decimal validValue = 100M;
 
             var model = new ReturnViewModel()
             {
                 AccountingDate = PrivateAccountingDate,
-                DiffMeanBonusPercent = minValidValue,
-                DiffMeanHourlyPayPercent = minValidValue,
-                DiffMedianBonusPercent = minValidValue,
-                DiffMedianHourlyPercent = minValidValue,
-                FemaleLowerPayBand = minValidValue,
-                FemaleMedianBonusPayPercent = minValidValue,
-                FemaleMiddlePayBand = minValidValue,
-                FemaleUpperPayBand = minValidValue,
-                FemaleUpperQuartilePayBand = minValidValue,
-                MaleLowerPayBand = minValidValue,
-                MaleMedianBonusPayPercent = minValidValue,
-                MaleMiddlePayBand = minValidValue,
-                MaleUpperPayBand = minValidValue,
-                MaleUpperQuartilePayBand = minValidValue,
+                DiffMeanBonusPercent = validValue,
+                DiffMeanHourlyPayPercent = validValue,
+                DiffMedianBonusPercent = validValue,
+                DiffMedianHourlyPercent = validValue,
+                FemaleLowerPayBand = 50,
+                FemaleMedianBonusPayPercent = validValue,
+                FemaleMiddlePayBand = 60,
+                FemaleUpperPayBand = 70,
+                FemaleUpperQuartilePayBand = 50,
+                MaleLowerPayBand = 50,
+                MaleMedianBonusPayPercent = validValue,
+                MaleMiddlePayBand = 40,
+                MaleUpperPayBand = 30,
+                MaleUpperQuartilePayBand = 50,
                 SectorType = SectorTypes.Private
 
             };
@@ -484,30 +495,44 @@ namespace GenderPayGap.Tests.Submission
             Assert.NotNull(resultModel as ReturnViewModel, "Unstashed model is Invalid Expected ReturnViewModel");
             Assert.That(result.RouteValues["action"].ToString() == "CheckData", "Expected a RedirectToRouteResult to CheckData");
 
-            // Assert.Multiple(() =>
-            // {
-            //Assert.NotNull(result, "Expected ViewResult");
-            //Assert.That(result.ViewName == "EnterCalculations", "Incorrect view returned");
+            Assert.NotNull(result, "Expected RedirectResult");
+            var x = controller.ViewData.Model as ReturnViewModel;
 
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMeanBonusPercent"),        true, "Expected DiffMeanBonusPercent failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMeanHourlyPayPercent"),    true, "Expected DiffMeanHourlyPayPercent failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMedianBonusPercent"),      true, "Expected DiffMedianBonusPercent failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMedianHourlyPercent"),     true, "Expected DiffMedianHourlyPercent failure");
+            Assert.That(controller.ViewData.ModelState.IsValid, "Model is Invalid");
 
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleLowerPayBand"),          true, "Expected FemaleLowerPayBand failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleMedianBonusPayPercent"), true, "Expected FemaleMedianBonusPayPercent failure");                                                                         
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleMiddlePayBand"),         true, "Expected FemaleMiddlePayBand  failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleUpperPayBand"),          true, "Expected FemaleUpperPayBand  failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleUpperQuartilePayBand"),  true, "Expected FemaleUpperQuartilePayBand  failure");                                                                            
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleLowerPayBand"),            true, "Expected MaleLowerPayBand  failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleMedianBonusPayPercent"),   true, "Expected MaleMedianBonusPayPercent  failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleMiddlePayBand"),           true, "Expected MaleMiddlePayBand  failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleUpperPayBand"),            true, "Expected MaleUpperPayBand  failure");
-            //Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleUpperQuartilePayBand"),    true, "Expected MaleUpperQuartilePayBand  failure");
-            // });
+            Assert.Multiple(() =>
+            {
+                Assert.NotNull(result, "Expected ViewResult");
+                Assert.That(resultModel.AccountingDate       == model.AccountingDate, "Input value does not match model");
+                Assert.That(resultModel.Address              == model.Address, "Input value does not match model");
+                Assert.That(resultModel.CompanyLinkToGPGInfo == model.CompanyLinkToGPGInfo, "Input value does not match model");
+                Assert.That(resultModel.DiffMeanBonusPercent == model.DiffMeanBonusPercent, "Input value does not match model");
+                Assert.That(resultModel.DiffMeanHourlyPayPercent == model.DiffMeanHourlyPayPercent, "Input value does not match model");
+                Assert.That(resultModel.DiffMedianBonusPercent == model.DiffMedianBonusPercent, "Input value does not match model");
+                Assert.That(resultModel.DiffMedianHourlyPercent == model.DiffMedianHourlyPercent, "Input value does not match model");
+                Assert.That(resultModel.FemaleLowerPayBand == model.FemaleLowerPayBand, "Input value does not match model");
+                Assert.That(resultModel.FemaleMedianBonusPayPercent == model.FemaleMedianBonusPayPercent, "Input value does not match model");
+                Assert.That(resultModel.FemaleMiddlePayBand == model.FemaleMiddlePayBand, "Input value does not match model");
+                Assert.That(resultModel.FemaleUpperPayBand == model.FemaleUpperPayBand, "Input value does not match model");
+                Assert.That(resultModel.FemaleUpperQuartilePayBand == model.FemaleUpperQuartilePayBand, "Input value does not match model");
+                Assert.That(resultModel.MaleLowerPayBand == model.MaleLowerPayBand, "Input value does not match model");
+                Assert.That(resultModel.MaleMiddlePayBand == model.MaleMiddlePayBand, "Input value does not match model");
+
+                Assert.That(resultModel.MaleUpperPayBand  == model.MaleUpperPayBand, "Input value does not match model");
+                Assert.That(resultModel.MaleUpperQuartilePayBand == model.MaleUpperQuartilePayBand, "Input value does not match model");
+                Assert.That(resultModel.OrganisationId    == model.OrganisationId, "Input value does not match model");
+                Assert.That(resultModel.OrganisationName  == model.OrganisationName, "Input value does not match model");
+                Assert.That(resultModel.ReturnId == model.ReturnId, "Input value does not match model");
+                Assert.That(resultModel.ReturnUrl == model.ReturnUrl, "Input value does not match model");
+                Assert.That(resultModel.Sector == model.Sector, "Input value does not match model");
+                Assert.That(resultModel.SectorType == model.SectorType, "Input value does not match model");
+                Assert.That(resultModel.FirstName == model.FirstName, "Input value does not match model");
+                Assert.That(resultModel.JobTitle == model.JobTitle, "Input value does not match model");
+                Assert.That(resultModel.LastName == model.LastName, "Input value does not match model");
+            });
         }
 
-        [Ignore("This test needs fixing")]
+      
         [Test]
         [Description("EnterCalculations should fail when any field is outside of the minimum allowed range of valid values")]
         public void EnterCalculations_MinValidValues_NoErrors()
@@ -524,27 +549,28 @@ namespace GenderPayGap.Tests.Submission
 
             string returnurl = "CheckData";
             var PrivateAccountingDate = WebUI.Properties.Settings.Default.PrivateAccountingDate;
-            decimal minValidValue = 200M;
+            decimal minValidValue = 200M; //-200.9M;
+            decimal maleEquiValue   = 50;
+            decimal femaleEquiValue = 50;
 
             var model = new ReturnViewModel()
             {
-                AccountingDate = PrivateAccountingDate,
-                DiffMeanBonusPercent = minValidValue,
-                DiffMeanHourlyPayPercent = minValidValue,
-                DiffMedianBonusPercent = minValidValue,
-                DiffMedianHourlyPercent = minValidValue,
-                FemaleLowerPayBand = minValidValue,
-                FemaleMedianBonusPayPercent = minValidValue,
-                FemaleMiddlePayBand = minValidValue,
-                FemaleUpperPayBand = minValidValue,
-                FemaleUpperQuartilePayBand = minValidValue,
-                MaleLowerPayBand = minValidValue,
-                MaleMedianBonusPayPercent = minValidValue,
-                MaleMiddlePayBand = minValidValue,
-                MaleUpperPayBand = minValidValue,
-                MaleUpperQuartilePayBand = minValidValue,
-                SectorType = SectorTypes.Private
-
+                AccountingDate               = PrivateAccountingDate,
+                DiffMeanBonusPercent         = minValidValue,
+                DiffMeanHourlyPayPercent     = minValidValue,
+                DiffMedianBonusPercent       = minValidValue,
+                DiffMedianHourlyPercent      = minValidValue,
+                FemaleLowerPayBand           = femaleEquiValue,
+                FemaleMedianBonusPayPercent  = minValidValue,
+                FemaleMiddlePayBand          = femaleEquiValue,
+                FemaleUpperPayBand           = femaleEquiValue,
+                FemaleUpperQuartilePayBand   = femaleEquiValue,
+                MaleLowerPayBand             = maleEquiValue,
+                MaleMedianBonusPayPercent    = minValidValue,
+                MaleMiddlePayBand            = maleEquiValue,
+                MaleUpperPayBand             = maleEquiValue,
+                MaleUpperQuartilePayBand     = maleEquiValue,
+                SectorType                   = SectorTypes.Private
             };
 
 
@@ -583,7 +609,7 @@ namespace GenderPayGap.Tests.Submission
             // });
         }
 
-        [Ignore("This test needs fixing")]
+        //[Ignore("This test needs fixing")]
         [Test]
         [Description("EnterCalculations should fail when any field is outside of the maximum allowed range of valid values")]
         public void EnterCalculations_MaxValidValues_NoErrors()
@@ -600,26 +626,28 @@ namespace GenderPayGap.Tests.Submission
 
             string returnurl = "CheckData";
             var PrivateAccountingDate = WebUI.Properties.Settings.Default.PrivateAccountingDate;
-            decimal maxValidValue = 200M;
+            decimal maxValidValue = 200.9M;
+            decimal maleEquiValue   = 50;
+            decimal femaleEquiValue = 50;
 
             var model = new ReturnViewModel()
             {
-                AccountingDate = PrivateAccountingDate,
-                DiffMeanBonusPercent = maxValidValue,
-                DiffMeanHourlyPayPercent = maxValidValue,
-                DiffMedianBonusPercent = maxValidValue,
-                DiffMedianHourlyPercent = maxValidValue,
-                FemaleLowerPayBand = maxValidValue,
-                FemaleMedianBonusPayPercent = maxValidValue,
-                FemaleMiddlePayBand = maxValidValue,
-                FemaleUpperPayBand = maxValidValue,
-                FemaleUpperQuartilePayBand = maxValidValue,
-                MaleLowerPayBand = maxValidValue,
-                MaleMedianBonusPayPercent = maxValidValue,
-                MaleMiddlePayBand = maxValidValue,
-                MaleUpperPayBand = maxValidValue,
-                MaleUpperQuartilePayBand = maxValidValue,
-                SectorType = SectorTypes.Private
+                AccountingDate               = PrivateAccountingDate,
+                DiffMeanBonusPercent         = maxValidValue,
+                DiffMeanHourlyPayPercent     = maxValidValue,
+                DiffMedianBonusPercent       = maxValidValue,
+                DiffMedianHourlyPercent      = maxValidValue,
+                FemaleLowerPayBand           = femaleEquiValue,
+                FemaleMedianBonusPayPercent  = maxValidValue,
+                FemaleMiddlePayBand          = femaleEquiValue,
+                FemaleUpperPayBand           = femaleEquiValue,
+                FemaleUpperQuartilePayBand   = femaleEquiValue,
+                MaleLowerPayBand             = maleEquiValue,
+                MaleMedianBonusPayPercent    = maxValidValue,
+                MaleMiddlePayBand            = maleEquiValue,
+                MaleUpperPayBand             = maleEquiValue,
+                MaleUpperQuartilePayBand     = maleEquiValue,
+                SectorType                   = SectorTypes.Private
 
             };
 
@@ -628,7 +656,6 @@ namespace GenderPayGap.Tests.Submission
             controller.Bind(model);
 
             //Act
-
             var result = controller.EnterCalculations(model, returnurl) as RedirectToRouteResult;
             var resultModel = controller.UnstashModel<ReturnViewModel>();
 
@@ -826,10 +853,10 @@ namespace GenderPayGap.Tests.Submission
 
         }
 
-        [Ignore("This test needs fixing")]
+      
         [Test]
         [Description("EnterCalculations should fail when any field is empty")]
-        public void EnterCalculations_Post_Success()
+        public void EnterCalculations_Post_Success_PrivateSector()
         {
             // Arrange
             var user = new User() { UserId = 1, EmailAddress = "magnuski@hotmail.com", EmailVerifiedDate = DateTime.Now };
@@ -847,24 +874,116 @@ namespace GenderPayGap.Tests.Submission
             {
                 AccountingDate = (DateTime)WebUI.Properties.Settings.Default["PrivateAccountingDate"],
                 CompanyLinkToGPGInfo = null,
+                DiffMeanBonusPercent = 0.0M,
+                DiffMeanHourlyPayPercent = 0,
+                DiffMedianBonusPercent = 0,
+                DiffMedianHourlyPercent = 0,
+                FemaleLowerPayBand = 10,
+                FemaleMedianBonusPayPercent = 0,
+                FemaleMiddlePayBand = 30,
+                FemaleUpperPayBand = 60,
+                FemaleUpperQuartilePayBand = 80,
+                FirstName = null,
+                LastName = null,
+                JobTitle = null,
+                MaleLowerPayBand = 90,
+                MaleMedianBonusPayPercent = 0,
+                MaleMiddlePayBand = 70,
+                MaleUpperPayBand = 40,
+                MaleUpperQuartilePayBand = 20,
+                OrganisationId = organisation.OrganisationId,
+                SectorType = SectorTypes.Private,
+                ReturnId = 0,
+            };
+
+            //TODO line above is wrong as you should be setting the fields to null not zero
+
+            var controller = TestHelper.GetController<SubmitController>(1, routeData, user, organisation, userOrganisation);
+            controller.Bind(model);
+
+           //controller.StashModel(model);
+
+            //ACT:
+            //2.Run and get the result of the test
+            var result = controller.EnterCalculations(model, returnurl) as RedirectToRouteResult;
+            var resultModel = controller.UnstashModel<ReturnViewModel>();
+
+
+            //TODO this test is completely wrong you should be cheking the all the fields are invalid in the modelstate
+
+            // ASSERT:
+            //3.Check that the result is not null
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
+
+            //4.Check that the redirection went to the right url step.
+            Assert.That(result.RouteValues["action"].ToString() == "PersonResponsible", "Expected a RedirectToRouteResult to PersonResponsible");
+
+            // See if there are anymore asserts that can be done for a redirect here.
+
+            Assert.Multiple(() =>
+            {
+                Assert.NotNull(resultModel is ReturnViewModel, "Expected ReturnViewModel");
+
+                Assert.That(controller.ViewData.ModelState.IsValid, "Model is Invalid");
+
+                Assert.That(controller.ViewData.ModelState.IsValidField("DiffMeanBonusPercent"),     "Expected DiffMeanBonusPercent failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("DiffMeanHourlyPayPercent"), "Expected DiffMeanHourlyPayPercent failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("DiffMedianBonusPercent"),   "Expected DiffMedianBonusPercent failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("DiffMedianHourlyPercent"),  "Expected DiffMedianHourlyPercent failure");
+                                
+                Assert.That(controller.ViewData.ModelState.IsValidField("FemaleLowerPayBand"),          "Expected FemaleLowerPayBand failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("FemaleMedianBonusPayPercent"), "Expected FemaleMedianBonusPayPercent failure");          
+                Assert.That(controller.ViewData.ModelState.IsValidField("FemaleMiddlePayBand"),         "Expected FemaleMiddlePayBand  failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("FemaleUpperPayBand"),          "Expected FemaleUpperPayBand  failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("FemaleUpperQuartilePayBand"),  "Expected FemaleUpperQuartilePayBand  failure");
+                               
+                Assert.That(controller.ViewData.ModelState.IsValidField("MaleLowerPayBand"),            "Expected MaleLowerPayBand  failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("MaleMedianBonusPayPercent"),   "Expected MaleMedianBonusPayPercent  failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("MaleMiddlePayBand"),           "Expected MaleMiddlePayBand  failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("MaleUpperPayBand"),            "Expected MaleUpperPayBand  failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("MaleUpperQuartilePayBand"),    "Expected MaleUpperQuartilePayBand  failure");
+            });
+        }
+
+        [Test]
+        [Description("EnterCalculations should fail when any field is empty")]
+        public void EnterCalculations_Post_Success_PublicSector()
+        {
+            // Arrange
+            var user = new User() { UserId = 1, EmailAddress = "magnuski@hotmail.com", EmailVerifiedDate = DateTime.Now };
+            var organisation = new Organisation() { OrganisationId = 1, SectorType = SectorTypes.Public };
+            var userOrganisation = new UserOrganisation() { OrganisationId = organisation.OrganisationId, Organisation = organisation, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "1" };
+
+            //set mock routeData
+            var routeData = new RouteData();
+            routeData.Values.Add("Action", "EnterCalculations");
+            routeData.Values.Add("Controller", "Submit");
+
+            string returnurl = "";
+
+            var model = new ReturnViewModel()
+            {
+                AccountingDate = (DateTime)WebUI.Properties.Settings.Default["PrivateAccountingDate"],
+                CompanyLinkToGPGInfo = null,
                 DiffMeanBonusPercent = 0,
                 DiffMeanHourlyPayPercent = 0,
                 DiffMedianBonusPercent = 0,
                 DiffMedianHourlyPercent = 0,
-                FemaleLowerPayBand = 0,
+                FemaleLowerPayBand = 10,
                 FemaleMedianBonusPayPercent = 0,
-                FemaleMiddlePayBand = 0,
-                FemaleUpperPayBand = 0,
-                FemaleUpperQuartilePayBand = 0,
+                FemaleMiddlePayBand = 30,
+                FemaleUpperPayBand = 60,
+                FemaleUpperQuartilePayBand = 80,
                 FirstName = null,
                 LastName = null,
                 JobTitle = null,
-                MaleLowerPayBand = 0,
+                MaleLowerPayBand = 90,
                 MaleMedianBonusPayPercent = 0,
-                MaleMiddlePayBand = 0,
-                MaleUpperPayBand = 0,
-                MaleUpperQuartilePayBand = 0,
+                MaleMiddlePayBand = 70,
+                MaleUpperPayBand = 40,
+                MaleUpperQuartilePayBand = 20,
                 OrganisationId = organisation.OrganisationId,
+                SectorType = SectorTypes.Public,
                 ReturnId = 0,
             };
 
@@ -878,50 +997,42 @@ namespace GenderPayGap.Tests.Submission
             //ACT:
             //2.Run and get the result of the test
             var result = controller.EnterCalculations(model, returnurl) as RedirectToRouteResult;
-
-            //TODO this test is completely wrong you should be cheking the all the fields are invalid in the modelstate
+            var resultModel = controller.UnstashModel<ReturnViewModel>();
 
             // ASSERT:
             //3.Check that the result is not null
             Assert.NotNull(result, "Expected RedirectToRouteResult");
-            //TODO This line is wrong as we should be returning as View since the modelstate was invalid
 
             //4.Check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "PersonResponsible", "Expected a RedirectToRouteResult to PersonResponsible");
+            Assert.That(result.RouteValues["action"].ToString() == "EmployerWebsite", "Expected a RedirectToRouteResult to EmployerWebsite");
 
             //TODO This line is wrong as we should be returning the same view since model state was invalid
-            //TODO Also note public sector orgs skip person responsible step and instead go to companylink step but then only on succcess
-
+           
             // See if there are anymore asserts that can be done for a redirect here.
 
-            // Assert.That(result.ViewName == "CheckData" || result.ViewName == "PersonResponsible", "Incorrect view returned");
-            // Assert.That(result.ViewName == returnurl, "Expected ViewResult");
+            Assert.Multiple(() =>
+            {
+                Assert.NotNull(resultModel is ReturnViewModel, "Expected ReturnViewModel");
 
-            //Assert.Multiple(() =>
-            //{
-            //    Assert.NotNull(result, "Expected ViewResult");
-            //    Assert.That(result.ViewName == "EnterCalculations", "Incorrect view returned");
+                Assert.That(controller.ViewData.ModelState.IsValid, "Model is Invalid");
 
-            //    Assert.NotNull(result.Model as ReturnViewModel, "Expected ReturnViewModel");
+                Assert.That(controller.ViewData.ModelState.IsValidField("DiffMeanBonusPercent"), "Expected DiffMeanBonusPercent failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("DiffMeanHourlyPayPercent"), "Expected DiffMeanHourlyPayPercent failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("DiffMedianBonusPercent"), "Expected DiffMedianBonusPercent failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("DiffMedianHourlyPercent"), "Expected DiffMedianHourlyPercent failure");
 
-            //    Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMeanBonusPercent"), false, "Expected DiffMeanBonusPercent failure");
-            //    Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMeanHourlyPayPercent"), false, "Expected DiffMeanHourlyPayPercent failure");
-            //    Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMedianBonusPercent"), false, "Expected DiffMedianBonusPercent failure");
-            //    Assert.AreEqual(result.ViewData.ModelState.IsValidField("DiffMedianHourlyPercent"), false, "Expected DiffMedianHourlyPercent failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("FemaleLowerPayBand"), "Expected FemaleLowerPayBand failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("FemaleMedianBonusPayPercent"), "Expected FemaleMedianBonusPayPercent failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("FemaleMiddlePayBand"), "Expected FemaleMiddlePayBand  failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("FemaleUpperPayBand"), "Expected FemaleUpperPayBand  failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("FemaleUpperQuartilePayBand"), "Expected FemaleUpperQuartilePayBand  failure");
 
-            //    Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleLowerPayBand"), false, "Expected FemaleLowerPayBand failure");
-            //    Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleMedianBonusPayPercent"), false, "Expected FemaleMedianBonusPayPercent failure");
-            //    Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleMiddlePayBand"), false, "Expected FemaleMiddlePayBand  failure");
-            //    Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleUpperPayBand"), false, "Expected FemaleUpperPayBand  failure");
-            //    Assert.AreEqual(result.ViewData.ModelState.IsValidField("FemaleUpperQuartilePayBand"), false, "Expected FemaleUpperQuartilePayBand  failure");
-
-            //    Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleLowerPayBand"), false, "Expected MaleLowerPayBand  failure");
-            //    Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleMedianBonusPayPercent"), false, "Expected MaleMedianBonusPayPercent  failure");
-            //    Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleMiddlePayBand"), false, "Expected MaleMiddlePayBand  failure");
-            //    Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleUpperPayBand"), false, "Expected MaleUpperPayBand  failure");
-            //    Assert.AreEqual(result.ViewData.ModelState.IsValidField("MaleUpperQuartilePayBand"), false, "Expected MaleUpperQuartilePayBand  failure");
-
-            //});
+                Assert.That(controller.ViewData.ModelState.IsValidField("MaleLowerPayBand"), "Expected MaleLowerPayBand  failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("MaleMedianBonusPayPercent"), "Expected MaleMedianBonusPayPercent  failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("MaleMiddlePayBand"), "Expected MaleMiddlePayBand  failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("MaleUpperPayBand"), "Expected MaleUpperPayBand  failure");
+                Assert.That(controller.ViewData.ModelState.IsValidField("MaleUpperQuartilePayBand"), "Expected MaleUpperQuartilePayBand  failure");
+            });
         }
         #endregion
 
@@ -971,7 +1082,6 @@ namespace GenderPayGap.Tests.Submission
             Assert.Null(resultModel.JobTitle, "JobTitle:Expected a null  or empty field");
 
         }
-
 
         [Test]
         [Description("Ensure that Person Responsible form is filled and sent successfully ")]
@@ -1034,10 +1144,12 @@ namespace GenderPayGap.Tests.Submission
             Assert.That(result.RouteValues["action"].ToString() == "EmployerWebsite", "Expected a RedirectToRouteResult to EmployerWebsite");
 
             //TODO you are not checking here for model state is invalid
-            Assert.That(controller.ViewData.ModelState.IsValid, "");
+            Assert.That(controller.ViewData.ModelState.IsValid, "Model is Invalid");
             //DONE you should be checking modelstate.isvalid and each modelstate error
             //DONE you should be checking only the exact failed fields show and error message
-            Assert.That(controller.ViewData.ModelState.IsValid, "Model is Invalid");
+            Assert.That(controller.ViewData.ModelState.IsValidField("FirstName"), "Model is Invalid");
+            Assert.That(controller.ViewData.ModelState.IsValidField("LastName"), "Model is Invalid");
+            Assert.That(controller.ViewData.ModelState.IsValidField("Title"), "Model is Invalid");
 
             //TODO you should be checking each error message is exact as per confilg file
         }

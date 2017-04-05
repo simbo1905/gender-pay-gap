@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<LoadTest Name="5 minute 2000 user even mix - copy" Description="" Owner="" storage="d:\cadencepartnership.com\gpgbeta\beta\genderpaygap.loadtest\5 minute 2000 user even mix - copy.loadtest" Priority="2147483647" Enabled="true" CssProjectStructure="" CssIteration="" DeploymentItemsEditable="" WorkItemIds="" TraceLevel="None" CurrentRunConfig="Run Settings1" Id="52b4af9b-075b-4264-ac76-462c31d2fe86" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+<LoadTest Name="15 Minute 100-1000 User Even Mix" Description="" Owner="" storage="c:\cadence\gpgbeta\beta\genderpaygap.loadtest\15 minute 100-1000 user even mix.loadtest" Priority="2147483647" Enabled="true" CssProjectStructure="" CssIteration="" DeploymentItemsEditable="" WorkItemIds="" TraceLevel="None" CurrentRunConfig="Run Settings1" Id="52b4af9b-075b-4264-ac76-462c31d2fe86" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Scenarios>
     <Scenario Name="Scenario1" DelayBetweenIterations="0" PercentNewUsers="0" IPSwitching="false" TestMixType="PercentageOfUsersRunning" ApplyDistributionToPacingDelay="true" MaxTestIterations="0" DisableDuringWarmup="false" DelayStartTime="0" AllowedAgents="">
       <ThinkProfile Value="0.2" Pattern="NormalDistribution" />
@@ -495,7 +495,7 @@
         <GeoLocation Location="West Europe" Percentage="100" />
       </LoadGeneratorLocations>
       <ContextParameters>
-        <ContextParameter Name="WebServer" Value="https://wa-t1dv-gpg.azurewebsites.net" />
+        <ContextParameter Name="WebServer" Value="https://wa-t1te-gpg.azurewebsites.net" />
       </ContextParameters>
     </RunConfiguration>
   </RunConfigurations>

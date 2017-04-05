@@ -66,7 +66,6 @@ namespace GenderPayGap.Tests
             routeData.Values.Add("Action", "SearchResults");
             routeData.Values.Add("Controller", "Viewing");
 
-
             var employerResult = new PagedResult<EmployerRecord>()
             {
                 Results = new List<EmployerRecord>()
@@ -92,6 +91,7 @@ namespace GenderPayGap.Tests
             //Stash an object to pass in for this.ClearStash()
             SearchViewModel model = new SearchViewModel()
             {
+                Employers = employerResult, //just Added
                 search = "Acme"
             };
 
@@ -101,14 +101,19 @@ namespace GenderPayGap.Tests
             controller.StashModel(sModel);
 
             //ACT:
-            var result = controller.SearchResults(model.search) as RedirectToRouteResult;
+            var result = controller.SearchResults(model.search) as ViewResult;
 
             //ASSERT:
-            Assert.NotNull(result, "Expected RedirectToRouteResult");
-            Assert.That(result.RouteValues["action"].ToString() == "SearchResults", "Redirected to the wrong view");
+            Assert.NotNull(result, "Expected ViewResult");
+            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
+            Assert.That(result.ViewName == "SearchResults", "Incorrect view returned");
+            Assert.That(result.Model != null && result.Model.GetType() == typeof(SearchViewModel), "Expected RegisterViewModel or Incorrect resultType returned");
+            Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
+
             var unStashedmodel = controller.UnstashModel<SearchViewModel>();
             Assert.NotNull(unStashedmodel, "Expected OrganisationViewModel");
-  //        Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
+
+          //  Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
         }
 
         //[Ignore("This test is ignored as Post HTTP is beig taking out")]
@@ -168,7 +173,6 @@ namespace GenderPayGap.Tests
             Assert.That(result.ViewName == "SearchResults", "Incorrect view returned");
             Assert.That(result.Model != null && result.Model.GetType() == typeof(SearchViewModel), "Expected RegisterViewModel or Incorrect resultType returned");
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
-
         }
 
         #endregion
@@ -338,6 +342,7 @@ namespace GenderPayGap.Tests
             view = null;
             result = controller.EmployerDetails(id, view) as ViewResult;
             resultModel = result.Model as ReturnViewModel;
+            
             Assert.That(result.ViewName == "HourlyRate", "Incorrect view returned");
 
             //HOURLYRATE TEST: -> call to Employers details  Id and hourly-rate View

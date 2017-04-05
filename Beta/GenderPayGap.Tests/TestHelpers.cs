@@ -93,11 +93,14 @@ namespace GenderPayGap.Tests
 
         public class MockHttpSession : HttpSessionStateBase
         {
-            Dictionary<string, object> m_SessionStorage = new Dictionary<string, object>(); 
-
+            Dictionary<string, object> m_SessionStorage = new Dictionary<string, object>();
+           
             public override object this[string name]
             {
-                get { return m_SessionStorage[name]; }
+                get
+                {
+                    return m_SessionStorage.ContainsKey(name) ? m_SessionStorage[name] : null;
+                }
                 set { m_SessionStorage[name] = value; }
             }
 
@@ -293,25 +296,29 @@ namespace GenderPayGap.Tests
             {
                 Results = new List<EmployerRecord>()
                 {
-                    new EmployerRecord() { Name="2Gether NHS Foundation Trust",                EmailPatterns = "nhs.uk" },
-                    new EmployerRecord() { Name="5 Boroughs Partnership NHS Foundation Trust", EmailPatterns = "nhs.uk" },
-                    new EmployerRecord() { Name="Abbots Langley Parish Council",               EmailPatterns = "abbotslangley-pc.gov.uk" },
-                    new EmployerRecord() { Name="Aberdeen City Council",                       EmailPatterns = "aberdeencityandshire-sdpa.gov.uk" },
-                    new EmployerRecord() { Name="Aberdeenshire Council",                       EmailPatterns = "aberdeenshire.gov.uk" },
-                    new EmployerRecord() { Name="Aberford &amp; District Parish Council",      EmailPatterns = "aberford-pc.gov.uk" },
-                    new EmployerRecord() { Name="Abergavenny Town Council",                    EmailPatterns = "AbergavennyTownCouncil.gov.uk" },
-                    new EmployerRecord() { Name="Aberporth Community Council",                 EmailPatterns = "aberporthcommunitycouncil.gov.uk" },
-                    new EmployerRecord() { Name="Abertilly and Llanhilleth Community Council", EmailPatterns = "abertilleryandllanhilleth-wcc.gov.uk" },
-                    new EmployerRecord() { Name="Aberystwyth Town Council",                    EmailPatterns = "aberystwyth.gov.uk" },
-                    new EmployerRecord() { Name="Abingdon Town Council",                       EmailPatterns = "abingdon.gov.uk" },
-                    new EmployerRecord() { Name="Academies Enterprise Trust",                  EmailPatterns = "" },
-                    new EmployerRecord() { Name="Academy Transformation Trust",                EmailPatterns = "" },
-                    new EmployerRecord() { Name="Account NI DFP",                              EmailPatterns = "accountni.gov.uk" },
-                    new EmployerRecord() { Name="Accountant in Bankruptcy",                    EmailPatterns = "aib.gov.uk" }
+                    //new EmployerRecord() { Name="2Gether NHS Foundation Trust",                EmailPatterns = "nhs.uk" },
+                    //new EmployerRecord() { Name="5 Boroughs Partnership NHS Foundation Trust", EmailPatterns = "nhs.uk" },
+                    //new EmployerRecord() { Name="Abbots Langley Parish Council",               EmailPatterns = "abbotslangley-pc.gov.uk" },
+                    //new EmployerRecord() { Name="Aberdeen City Council",                       EmailPatterns = "aberdeencityandshire-sdpa.gov.uk" },
+                    //new EmployerRecord() { Name="Aberdeenshire Council",                       EmailPatterns = "aberdeenshire.gov.uk" },
+                    //new EmployerRecord() { Name="Aberford &amp; District Parish Council",      EmailPatterns = "aberford-pc.gov.uk" },
+                    //new EmployerRecord() { Name="Abergavenny Town Council",                    EmailPatterns = "AbergavennyTownCouncil.gov.uk" },
+                    //new EmployerRecord() { Name="Aberporth Community Council",                 EmailPatterns = "aberporthcommunitycouncil.gov.uk" },
+                    //new EmployerRecord() { Name="Abertilly and Llanhilleth Community Council", EmailPatterns = "abertilleryandllanhilleth-wcc.gov.uk" },
+                    //new EmployerRecord() { Name="Aberystwyth Town Council",                    EmailPatterns = "aberystwyth.gov.uk" },
+                    //new EmployerRecord() { Name="Abingdon Town Council",                       EmailPatterns = "abingdon.gov.uk" },
+                    //new EmployerRecord() { Name="Academies Enterprise Trust",                  EmailPatterns = "" },
+                    //new EmployerRecord() { Name="Academy Transformation Trust",                EmailPatterns = "" },
+                    //new EmployerRecord() { Name="Account NI DFP",                              EmailPatterns = "accountni.gov.uk" },
+                    //new EmployerRecord() { Name="Accountant in Bankruptcy",                    EmailPatterns = "aib.gov.uk" }
                 }
             };
 
-            result.Results = AllEmployers.Where(e => e.Name.ContainsI(searchText)).Page(page, pageSize).ToList();
+            //result.Results = AllEmployers.Where(e => e.Name.ContainsI(searchText)).Page(page, pageSize).ToList();
+            //TODO: ste -> using this until Page function lines 879 and 888  in Lists.cs is fixed.  
+            result.Results = AllEmployers.Where(e => e.Name.ContainsI(searchText)).ToList();
+
+            //DONE:NastyBug! Page method arguments Page(pageSize, page) where in vice-versa positions as in Page(page, pageSize)! now fixed 
             result.RowCount = totalRecords = result.Results.Count;
             result.CurrentPage = page;
             result.PageSize = pageSize;

@@ -57,6 +57,15 @@ namespace GenderPayGap.WebUI.Controllers
             return RedirectToAction("SearchResults");
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="search"></param>
+        /// <param name="s">s is search</param>
+        /// <param name="p">p is current page</param>
+        /// <param name="z">z is page size</param>
+        /// <param name="y">y is current year</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("search-results")]
         [OutputCache(CacheProfile = "SearchResults")]
@@ -249,7 +258,7 @@ namespace GenderPayGap.WebUI.Controllers
                 model.Downloads.Add(download);
             }
 
-            //Sort downloadsby descending year
+            //Sort downloads by descending year
             model.Downloads = model.Downloads.OrderByDescending(d => d.Title).ToList();
 
             //Return the view with the model
@@ -333,11 +342,11 @@ namespace GenderPayGap.WebUI.Controllers
             else if (User.Identity.IsAuthenticated)
             {
                 //Do not cache page 
-       //         Response.Cache.SetExpires(DateTime.UtcNow.AddDays(-1));
-        //        Response.Cache.SetValidUntilExpires(false);
-         //       Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
-           //     Response.Cache.SetCacheability(HttpCacheability.NoCache);
-          //      Response.Cache.SetNoStore();
+                //Response.Cache.SetExpires(DateTime.UtcNow.AddDays(-1));
+                //Response.Cache.SetValidUntilExpires(false);
+                //Response.Cache.SetRevalidation(HttpCacheRevalidation.AllCaches);
+                //Response.Cache.SetCacheability(HttpCacheability.NoCache);
+                //Response.Cache.SetNoStore();
 
                 //TODO Load the current users details
                 var currentUser = DataRepository.FindUser(User);
