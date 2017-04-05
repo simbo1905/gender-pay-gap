@@ -169,8 +169,18 @@ namespace Extensions
             return found;
         }
 
-        public static void QuickSend(string subject, string senderEmailAddress, string senderName, string recipients, string html, string smtpServer, string smtpUsername, string smtpPassword, int smtpPort = 25, byte[] attachment=null, string attachmentFilename="attachment.dat")
+        public static void QuickSend(string subject, string senderEmailAddress, string senderName, string recipients, string html, string smtpServer, string smtpUsername, string smtpPassword, int smtpPort = 25, byte[] attachment=null, string attachmentFilename="attachment.dat", bool test = false)
         {
+            if (string.IsNullOrWhiteSpace(senderEmailAddress)) throw new ArgumentNullException(nameof(senderEmailAddress), "Missing or empty senderEmailAddress");
+            if (string.IsNullOrWhiteSpace(recipients)) throw new ArgumentNullException(nameof(recipients), "Missing or empty recipients");
+            if (string.IsNullOrWhiteSpace(html)) throw new ArgumentNullException(nameof(html), "Missing or empty html");
+            if (string.IsNullOrWhiteSpace(senderEmailAddress)) throw new ArgumentNullException(nameof(senderEmailAddress), "Missing or empty senderEmailAddress");
+
+            //Throw an error of no SMTP server, username or password is set
+            if (string.IsNullOrWhiteSpace(smtpServer)) throw new ArgumentNullException(nameof(smtpServer), "Missing or empty SmtpServer");
+            if (string.IsNullOrWhiteSpace(smtpUsername)) throw new ArgumentNullException(nameof(smtpUsername), "Missing or empty SmtpUsername");
+            if (string.IsNullOrWhiteSpace(smtpPassword)) throw new ArgumentNullException(nameof(smtpPassword), "Missing or empty SmtpPassword");
+
             var mySmtpClient = new SmtpClient(smtpServer)
             {
                 Port = smtpPort,
@@ -200,12 +210,16 @@ namespace Extensions
                 myMail.To.Add(new MailAddress(recipient));
             
             //Add the attachment
-            if (attachment == null)
-                mySmtpClient.Send(myMail);
-            else using (var stream = new MemoryStream(attachment))
+            if (!test)
             {
-                myMail.Attachments.Add(new Attachment(stream,attachmentFilename));
-                mySmtpClient.Send(myMail);
+                if (attachment == null)
+                    mySmtpClient.Send(myMail);
+                else
+                    using (var stream = new MemoryStream(attachment))
+                    {
+                        myMail.Attachments.Add(new Attachment(stream, attachmentFilename));
+                        mySmtpClient.Send(myMail);
+                    }
             }
         }
 

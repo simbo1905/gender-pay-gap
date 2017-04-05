@@ -1,0 +1,99 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<WebTest Name="Quick SmokeTest" Id="2ec310b7-b103-47b8-ad15-2fc67dc48c97" Owner="" Priority="2147483647" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="0" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="" CredentialUserName="" CredentialPassword="" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="Quick SmokeTest.8a7d99e8-b615-48bc-80a9-bb16c8194b08.rec.webtestresult" ResultsLocale="">
+  <Items>
+    <Request Method="GET" Guid="82e1f0c8-4996-4932-b76b-287ee44ae403" Version="1.1" Url="{{WebServer}}/account/login/.well-known/openid-configuration" ThinkTime="1" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <ValidationRules>
+        <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidationRuleFindText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Find Text" Description="Verifies the existence of the specified text in the response." Level="High" ExectuionOrder="BeforeDependents">
+          <RuleParameters>
+            <RuleParameter Name="FindText" Value="&quot;authorization_endpoint&quot;:&quot;{{WebServer}}/account/login/connect/authorize&quot;" />
+            <RuleParameter Name="IgnoreCase" Value="True" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="PassIfTextFound" Value="True" />
+          </RuleParameters>
+        </ValidationRule>
+      </ValidationRules>
+    </Request>
+    <Request Method="GET" Guid="fcd4ad2f-0a40-4a92-a52e-6d2cb8af9a83" Version="1.1" Url="{{WebServer}}/sign-out" ThinkTime="1" Timeout="300" ParseDependentRequests="True" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <QueryStringParameters>
+        <QueryStringParameter Name="delete" Value="-1" RecordedValue="-1" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <IncludedWebTest Name="RegisterPrivate" Path="registerprivate.webtest" Id="aaf244bf-99e2-4f00-b687-845b8dd4287d" IsCodedWebTest="False" InheritWebTestSettings="True" />
+    <IncludedWebTest Name="RegisterPublic" Path="registerpublic.webtest" Id="85679aa2-c3db-467a-9c8c-11c464166a14" IsCodedWebTest="False" InheritWebTestSettings="True" />
+    <IncludedWebTest Name="RegisterManual" Path="registermanual.webtest" Id="b740850d-d157-4051-b80b-0bf67fbffbf5" IsCodedWebTest="False" InheritWebTestSettings="True" />
+    <Request Method="GET" Guid="1c7abf07-3a74-4598-926e-4d190d23ed2c" Version="1.1" Url="{{WebServer}}/contact-us" ThinkTime="1" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+    <Request Method="GET" Guid="3f73f378-5bc0-46a4-9ae8-f366eb9e04c3" Version="1.1" Url="https://localhost:44371/send-feedback" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <CorrelationExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam9.DifficultyType" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="Name" Value="radio-5" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+            <RuleParameter Name="Index" Value="4" />
+          </RuleParameters>
+        </ExtractionRule>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractFormField, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="FormPostParam10.command" DisplayName="" Description="">
+          <RuleParameters>
+            <RuleParameter Name="Name" Value="command" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+            <RuleParameter Name="Index" Value="0" />
+          </RuleParameters>
+        </ExtractionRule>
+      </CorrelationExtractionRules>
+    </Request>
+    <Request Method="POST" Guid="b501ab40-4120-42e4-8c0f-1d7f6da5937e" Version="1.1" Url="https://localhost:44371/send-feedback" ThinkTime="1" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="https://localhost:44371/send-feedback" />
+      </Headers>
+      <ValidationRules>
+        <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidationRuleFindText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Find Text" Description="Verifies the existence of the specified text in the response." Level="High" ExectuionOrder="BeforeDependents">
+          <RuleParameters>
+            <RuleParameter Name="FindText" Value="Thank you" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="PassIfTextFound" Value="True" />
+          </RuleParameters>
+        </ValidationRule>
+      </ValidationRules>
+      <FormPostHttpBody>
+        <FormPostParameter Name="__RequestVerificationToken" Value="{{$HIDDEN1.__RequestVerificationToken}}" RecordedValue="XSxaoOf7tqgkZ7qB9Oi2kdm4YYXcelsl-SJVBe_FTaTLSzJ5JnGRSLmdH_alkphpVGVWH6NKTBiIkmD1QU6VqjrMBG01" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SpamProtectionTimeStamp" Value="{{$HIDDEN1.SpamProtectionTimeStamp}}" RecordedValue="===XrEyNxGzhyOfC3lhzvw16nAjNmdOAksB7XGrbwvvqnE====" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="DifficultyType" Value="VeryDifficult" RecordedValue="VeryDifficult" CorrelationBinding="{{FormPostParam9.DifficultyType}}" UrlEncode="True" />
+        <FormPostParameter Name="Details" Value="This is test feedback and should not be logged" RecordedValue="This is test feedback and should not be logged" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="EmailAddress" Value="gpgtest1@domain.co.uk" RecordedValue="gpgtest1@domain.co.uk" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="PhoneNumber" Value="07123456789" RecordedValue="07123456789" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="command" Value="Send feedback" RecordedValue="Send feedback" CorrelationBinding="{{FormPostParam10.command}}" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <IncludedWebTest Name="RegisterPrivate5" Path="registerprivate5.webtest" Id="07b7fadf-6d26-4ca9-81aa-341b847a9ece" IsCodedWebTest="False" InheritWebTestSettings="True" />
+    <IncludedWebTest Name="RegisterPublic5" Path="registerpublic5.webtest" Id="e2c5bea2-c718-4db8-a65a-5dcb844255b8" IsCodedWebTest="False" InheritWebTestSettings="True" />
+    <IncludedWebTest Name="Viewing" Path="viewing.webtest" Id="d29b4736-b819-4954-bb2c-ba8760bf52b9" IsCodedWebTest="False" InheritWebTestSettings="False" />
+    <Request Method="GET" Guid="fcd4ad2f-0a40-4a92-a52e-6d2cb8af9a83" Version="1.1" Url="{{WebServer}}/sign-out" ThinkTime="1" Timeout="300" ParseDependentRequests="True" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <QueryStringParameters>
+        <QueryStringParameter Name="delete" Value="-1" RecordedValue="-1" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+  </Items>
+  <ContextParameters>
+    <ContextParameter Name="WebServer" Value="https://localhost:44371" />
+    <ContextParameter Name="WebServer2" Value="http://gpgtest.com" />
+    <ContextParameter Name="WebServer3" Value="https%3A%2F%2Flocalhost%3A44371" />
+  </ContextParameters>
+  <ValidationRules>
+    <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidateResponseUrl, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response URL" Description="Validates that the response URL after redirects are followed is the same as the recorded response URL.  QueryString parameters are ignored." Level="Low" ExectuionOrder="BeforeDependents" />
+    <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidationRuleResponseTimeGoal, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response Time Goal" Description="Validates that the response time for the request is less than or equal to the response time goal as specified on the request.  Response time goals of zero will be ignored." Level="Low" ExectuionOrder="AfterDependents">
+      <RuleParameters>
+        <RuleParameter Name="Tolerance" Value="0" />
+      </RuleParameters>
+    </ValidationRule>
+  </ValidationRules>
+</WebTest>

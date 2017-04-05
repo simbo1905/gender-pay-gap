@@ -16,15 +16,12 @@ namespace Extensions
     {
         public static string[] SplitI(this string list, string separators = ";,", int maxItems=0, StringSplitOptions options=StringSplitOptions.RemoveEmptyEntries)
         {
-            if (!string.IsNullOrWhiteSpace(list))
-            {
-                if (separators==null) throw new ArgumentNullException("separators");
-                if (separators == string.Empty) return list.ToCharArray().Select(c => c.ToString()).ToArray();
+            if (string.IsNullOrWhiteSpace(list)) return new string[0];
+            if (separators==null) throw new ArgumentNullException("separators");
+            if (separators == string.Empty) return list.ToCharArray().Select(c => c.ToString()).ToArray();
                 
-                if (maxItems>0)return list.Split(separators.ToCharArray(), maxItems, options);
-                return list.Split(separators.ToCharArray(), options);
-            }
-            return new string[0];
+            if (maxItems>0)return list.Split(separators.ToCharArray(), maxItems, options);
+            return list.Split(separators.ToCharArray(), options);
         }
         
         public static bool ContainsSame<T>(this IEnumerable<T> source, IEnumerable<T> target)

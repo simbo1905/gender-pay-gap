@@ -317,7 +317,7 @@ namespace GenderPayGap.Tests
     {
         string _Status = "delivered";
 
-        public Notification SendEmail(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation)
+        public Notification SendEmail(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation, bool test = false)
         {
             return new Notification()
             {
@@ -325,7 +325,7 @@ namespace GenderPayGap.Tests
             };
         }
 
-        public Notification SendSms(string mobileNumber, string templateId, Dictionary<string, dynamic> personalisation)
+        public Notification SendSms(string mobileNumber, string templateId, Dictionary<string, dynamic> personalisation, bool test = false)
         {
             return new Notification()
             {
@@ -333,7 +333,7 @@ namespace GenderPayGap.Tests
             };
         }
 
-        public Notification SendPost(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation)
+        public Notification SendPost(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation, bool test = false)
         {
             return new Notification()
             {

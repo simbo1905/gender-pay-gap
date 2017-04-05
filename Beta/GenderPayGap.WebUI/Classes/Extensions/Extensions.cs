@@ -73,7 +73,7 @@ namespace GenderPayGap.WebUI.Classes
             
             var encryptedUsername = MvcApplication.EncryptEmails ? Encryption.EncryptData(emailAddress) : null;
             User user = null;
-            if (MvcApplication.EncryptEmails)
+            if (MvcApplication.EncryptEmails && !emailAddress.StartsWithI(MvcApplication.TestPrefix))
             {
                 user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == encryptedUsername);
                 if (user == null) user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == emailAddress);
@@ -110,28 +110,25 @@ namespace GenderPayGap.WebUI.Classes
 
         #region Registraion Helpers
 
-        public static bool SendVerifyEmail(this RegisterController controller, string emailAddress, string verifyCode)
+        public static bool SendVerifyEmail(this RegisterController controller, string emailAddress, string verifyCode, bool test = false)
         {
             var verifyUrl=controller.Url.Action("VerifyEmail", "Register", new {code= verifyCode },"https");
-            return GovNotifyAPI.SendVerifyEmail(verifyUrl,emailAddress, verifyCode);
+            return GovNotifyAPI.SendVerifyEmail(verifyUrl,emailAddress, verifyCode,test);
         }
 
-        public static bool SendPasswordReset(this RegisterController controller, string emailAddress, string resetCode)
+        public static bool SendPasswordReset(this RegisterController controller, string emailAddress, string resetCode, bool test = false)
         {
             var resetUrl = controller.Url.Action("NewPassword", "Register", new { code = resetCode }, "https");
-            return GovNotifyAPI.SendPasswordReset(resetUrl, emailAddress, resetCode);
+            return GovNotifyAPI.SendPasswordReset(resetUrl, emailAddress, resetCode,test);
         }
 
-        public static bool SendPinInPost(this RegisterController controller, UserOrganisation userOrg, string pin, DateTime sendDate)
+        public static bool SendPinInPost(this RegisterController controller, UserOrganisation userOrg, string pin, DateTime sendDate, bool test = false)
         {
-            //If the email address is a test email then simulate sending
-            if (userOrg.User.EmailAddress.StartsWithI(MvcApplication.TestPrefix)) return true;
-
             var returnUrl = controller.Url.Action("ActivateService", "Register",null,"https");
 
             var imagePath = new System.UriBuilder(controller.Request.Url.AbsoluteUri){Path = controller.Url.Content(@"~/Content/img/")}.Uri.ToString();
 
-            return GovNotifyAPI.SendPinInPost(imagePath,returnUrl, userOrg.User.Fullname, userOrg.User.JobTitle, userOrg.Organisation.OrganisationName, userOrg.Address.GetList(), pin, sendDate, sendDate.AddDays(Properties.Settings.Default.PinInPostExpiryDays));
+            return GovNotifyAPI.SendPinInPost(imagePath,returnUrl, userOrg.User.Fullname, userOrg.User.JobTitle, userOrg.Organisation.OrganisationName, userOrg.Address.GetList(), pin, sendDate, sendDate.AddDays(Properties.Settings.Default.PinInPostExpiryDays), test);
         }
         #endregion
 

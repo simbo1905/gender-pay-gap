@@ -121,7 +121,10 @@ namespace GenderPayGap.WebUI.Controllers
             currentUser.Firstname = model.FirstName;
             currentUser.Lastname = model.LastName;
             currentUser.JobTitle = model.JobTitle;
-            currentUser.EmailAddress = model.EmailAddress;
+            if (model.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                currentUser.EmailAddressDB = model.EmailAddress;
+            else
+                currentUser.EmailAddress = model.EmailAddress;
             currentUser.PasswordHash = model.Password.GetSHA512Checksum();
             currentUser.EmailVerifySendDate = null;
             currentUser.EmailVerifiedDate = null;
@@ -152,7 +155,7 @@ namespace GenderPayGap.WebUI.Controllers
             try
             {
                 verifyCode = Encryption.EncryptQuerystring(currentUser.UserId + ":" + currentUser.Created.ToSmallDateTime());
-                if (!this.SendVerifyEmail(currentUser.EmailAddress, verifyCode))
+                if (!this.SendVerifyEmail(currentUser.EmailAddress, verifyCode, currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)))
                     throw new Exception("Could not send verification email. Please try again later.");
 
                 currentUser.EmailVerifyHash = verifyCode.GetSHA512Checksum();
@@ -459,7 +462,7 @@ namespace GenderPayGap.WebUI.Controllers
                     }
                     catch (Exception ex)
                     {
-                        GovNotifyAPI.SendGeoMessage("GPG - COMPANIES HOUSE ERROR", $"Cant search using Companies House API for query '{model.SearchText}' page:'1' due to following error:\n\n{ex.Message}");
+                        GovNotifyAPI.SendGeoMessage("GPG - COMPANIES HOUSE ERROR", $"Cant search using Companies House API for query '{model.SearchText}' page:'1' due to following error:\n\n{ex.Message}",test:currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
                         throw;
                     }
                     break;
@@ -613,7 +616,7 @@ namespace GenderPayGap.WebUI.Controllers
                         }
                         catch (Exception ex)
                         {
-                            GovNotifyAPI.SendGeoMessage("GPG - COMPANIES HOUSE ERROR", $"Cant search using Companies House API for query '{model.SearchText}' page:'{nextPage}' due to following error:\n\n{ex.Message}");
+                            GovNotifyAPI.SendGeoMessage("GPG - COMPANIES HOUSE ERROR", $"Cant search using Companies House API for query '{model.SearchText}' page:'{nextPage}' due to following error:\n\n{ex.Message}", test: currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
                             throw;
                         }
                         break;
@@ -887,16 +890,23 @@ namespace GenderPayGap.WebUI.Controllers
             model.Employers = m.Employers;
 
             //Get the sic codes from companies house
-            if (!model.ManualRegistration && model.SectorType == SectorTypes.Private && model.SelectedEmployer!=null && !currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
-                try
-                {
-                    model.SelectedEmployer.SicCodes = PrivateSectorRepository.GetSicCodes(model.SelectedEmployer.CompanyNumber);
-                }
-                catch (Exception ex)
-                {
-                    GovNotifyAPI.SendGeoMessage("GPG - COMPANIES HOUSE ERROR", $"Cant get SIC Codes from Companies House API for company {model.SelectedEmployer.Name} No:{model.SelectedEmployer.CompanyNumber} due to following error:\n\n{ex.Message}");
-                    throw;
-                }
+            if (!model.ManualRegistration && model.SelectedEmployer != null)
+            {
+                if (model.SectorType == SectorTypes.Public)
+                    model.SelectedEmployer.SicCodes = PublicSectorRepository.GetSicCodes(model.SelectedEmployer.CompanyNumber);
+                else if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                    model.SelectedEmployer.SicCodes = DataRepository.GetAll<SicCode>().FirstOrDefault(s => s.SicSectionId != "X")?.SicCodeId.ToString();
+                else
+                    try
+                    {
+                        model.SelectedEmployer.SicCodes = PrivateSectorRepository.GetSicCodes(model.SelectedEmployer.CompanyNumber);
+                    }
+                    catch (Exception ex)
+                    {
+                        GovNotifyAPI.SendGeoMessage("GPG - COMPANIES HOUSE ERROR", $"Cant get SIC Codes from Companies House API for company {model.SelectedEmployer.Name} No:{model.SelectedEmployer.CompanyNumber} due to following error:\n\n{ex.Message}", test: currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
+                        throw;
+                    }
+            }
 
             //Save the registration
             UserOrganisation userOrg;
@@ -960,7 +970,7 @@ namespace GenderPayGap.WebUI.Controllers
                     DataRepository.SaveChanges();
 
                     //Use public sector code or get from employer
-                    var sicCodes = employer!=null ? employer.GetSicCodes() : model.SectorType == SectorTypes.Public ? new[] {1} : null;
+                    var sicCodes = employer!=null ? employer.GetSicCodes()  : null;
 
                     //Save the sic codes for the organisation
                     if (sicCodes != null)
@@ -1044,7 +1054,7 @@ namespace GenderPayGap.WebUI.Controllers
                     DataRepository.SaveChanges();
 
                     //Send request to GEO
-                    SendRegistrationRequest(userOrg, $"{model.ContactFirstName} {currentUser.ContactLastName} ({currentUser.JobTitle})", currentUser.ContactOrganisation, org.OrganisationName, address.GetAddress());
+                    SendRegistrationRequest(userOrg, $"{model.ContactFirstName} {currentUser.ContactLastName} ({currentUser.JobTitle})", currentUser.ContactOrganisation, org.OrganisationName, address.GetAddress(), currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
                 }
 
                 //Set the status to active
@@ -1069,7 +1079,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         //Send the registration request
-        protected void SendRegistrationRequest(UserOrganisation userOrg, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
+        protected void SendRegistrationRequest(UserOrganisation userOrg, string contactName, string contactOrg, string reportingOrg, string reportingAddress, bool test = false)
         {
             //Send a verification link to the email address
             try
@@ -1080,7 +1090,7 @@ namespace GenderPayGap.WebUI.Controllers
                 //If the email address is a test email then simulate sending
                 if (userOrg.User.EmailAddress.StartsWithI(MvcApplication.TestPrefix)) return;
 
-                if (!GovNotifyAPI.SendRegistrationRequest(reviewUrl,contactName, contactOrg, reportingOrg, reportingAddress))
+                if (!GovNotifyAPI.SendRegistrationRequest(reviewUrl,contactName, contactOrg, reportingOrg, reportingAddress,test))
                     throw new Exception("Could not send registration request email. Please try again later.");
             }
             catch (Exception ex)
@@ -1258,7 +1268,7 @@ namespace GenderPayGap.WebUI.Controllers
                 userOrg.Organisation.SetStatus(OrganisationStatuses.Active, SingleAdmin?.UserId ?? currentUser.UserId, "Manually registered");
 
                 //Send the approved email to the applicant
-                SendRegistrationAccepted(userOrg.User.ContactEmailAddress);
+                SendRegistrationAccepted(userOrg.User.ContactEmailAddress, userOrg.User.ContactEmailAddress.StartsWithI(MvcApplication.TestPrefix));
 
                 if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)) TempData["TestUrl"] = Url.Action("ChooseOrganisation", new { impersonate=userOrg.User.EmailAddress });
                 result = RedirectToAction("RequestAccepted");
@@ -1276,13 +1286,13 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         //Send the registration request
-        protected void SendRegistrationAccepted(string emailAddress)
+        protected void SendRegistrationAccepted(string emailAddress, bool test = false)
         {
             //Send a verification link to the email address
             try
             {
                 string returnUrl = Url.Action("Redirect","Submit",null,"https");
-                if (!GovNotifyAPI.SendRegistrationApproved(returnUrl, emailAddress))
+                if (!GovNotifyAPI.SendRegistrationApproved(returnUrl, emailAddress,test))
                     throw new Exception("Could not send registration accepted email.");
             }
             catch (Exception ex)
@@ -1358,7 +1368,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
 
             //Send the declined email to the applicant
-            SendRegistrationDeclined(emailAddress,string.IsNullOrWhiteSpace(model.CancellationReason) ? "We haven't been able to verify your employer's identity. So we have declined your application." : model.CancellationReason);
+            SendRegistrationDeclined(emailAddress,string.IsNullOrWhiteSpace(model.CancellationReason) ? "We haven't been able to verify your employer's identity. So we have declined your application." : model.CancellationReason, test:emailAddress.StartsWithI(MvcApplication.TestPrefix));
             
             //Save the changes and redirect
             DataRepository.SaveChanges();
@@ -1372,13 +1382,13 @@ namespace GenderPayGap.WebUI.Controllers
 
 
         //Send the registration request
-        protected void SendRegistrationDeclined(string emailAddress,string reason)
+        protected void SendRegistrationDeclined(string emailAddress,string reason,bool test=false)
         {
             //Send a verification link to the email address
             try
             {
                 string returnUrl = Url.Action("OrganisationType", "Register",null,"https");
-                if (!GovNotifyAPI.SendRegistrationDeclined(returnUrl,emailAddress, reason))
+                if (!GovNotifyAPI.SendRegistrationDeclined(returnUrl,emailAddress, reason,test))
                     throw new Exception("Could not send registration declined email.");
             }
             catch (Exception ex)
@@ -1471,7 +1481,7 @@ namespace GenderPayGap.WebUI.Controllers
                         pin = "ABCDEF";
 
                     //Try and send the PIN in post
-                    else if (!this.SendPinInPost(userOrg, pin, now))
+                    else if (!this.SendPinInPost(userOrg, pin, now,userOrg.User.EmailAddress.StartsWithI(MvcApplication.TestPrefix)))
                         throw new Exception("Could not send PIN in the POST.");
 
                     //Try and send the confirmation email
@@ -1747,6 +1757,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             //show confirmation
             ViewBag.EmailAddress = currentUser.EmailAddress;
+            if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))ViewBag.TestUrl = Url.Action("NewPassword", "Register", new { code = Encryption.EncryptQuerystring(currentUser.UserId + ":" + DateTime.Now.ToSmallDateTime())}, "https"); 
             return View("PasswordResetSent");
         }
 
@@ -1757,7 +1768,7 @@ namespace GenderPayGap.WebUI.Controllers
             try
             {
                 resetCode = Encryption.EncryptQuerystring(currentUser.UserId + ":" + DateTime.Now.ToSmallDateTime());
-                if (!this.SendPasswordReset(currentUser.EmailAddress, resetCode))
+                if (!this.SendPasswordReset(currentUser.EmailAddress, resetCode, currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)))
                     throw new Exception("Could not send password reset email. Please try again later.");
             }
             catch (Exception ex)

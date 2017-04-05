@@ -85,7 +85,7 @@ namespace GenderPayGap.WebUI.Controllers
                 var searchSectors = s?.Where(sc=>!string.IsNullOrWhiteSpace(sc)).ToList();
                 var allSectors = model.AllSectors.Select(sic => sic.SicSectionId).ToDelimitedString(string.Empty);
                 if (newSectors.EqualsI(allSectors)) searchSectors = new List<string>();
-                model.Employers = Search(search, searchSectors, p, Settings.Default.EmployerPageSize, y);
+                model.Employers = Search(search, searchSectors, p, z, y);
                 model.search = search;
                 model.p = p;
                 model.z = z;

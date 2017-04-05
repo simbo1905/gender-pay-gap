@@ -56,7 +56,7 @@ namespace GenderPayGap.Core.Classes
             var instance = Environment.GetEnvironmentVariable("WEBSITE_INSTANCE_ID");
             if (!string.IsNullOrWhiteSpace(instance)) prefix += $",Instance:{ instance}";
 
-            if (addPrefix) appendString = prefix + " -------\n" + appendString;
+            if (addPrefix) appendString = prefix + " -------" + Environment.NewLine + appendString;
             AppendToLog(appendString + Environment.NewLine);
         }
 

@@ -535,6 +535,7 @@
     <Content Include="Views\Register\PasswordResetSent.cshtml" />
     <Content Include="Views\Home\SendFeedback.cshtml" />
     <Content Include="Views\Home\FeedbackSent.cshtml" />
+    <Content Include="Views\Home\ContactUs.cshtml" />
     <None Include="Web.DEV.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
