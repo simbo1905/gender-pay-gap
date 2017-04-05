@@ -266,7 +266,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("check-data")]
-        public ActionResult CheckData  /*Confirm*/(string returnUrl=null)
+        public ActionResult CheckData (string returnUrl=null)
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -286,13 +286,13 @@ namespace GenderPayGap.WebUI.Controllers
             }
             model.ReturnUrl = returnUrl;
 
-            return View(model);
+            return View("CheckData", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("check-data")]
-        public ActionResult CheckData  /*Confirm*/(ReturnViewModel model)
+        public ActionResult CheckData (ReturnViewModel model)
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -376,7 +376,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("submission-complete")]
-        public ActionResult SubmissionComplete(/*long id = 1*/ )
+        public ActionResult SubmissionComplete()
         {
             //Ensure user has completed the registration process
             User currentUser;

@@ -1683,8 +1683,6 @@ namespace GenderPayGap.Tests.Submission
             //ACT:
             //2.Run and get the result of the test
             var result = controller.CheckData(model) as RedirectToRouteResult;
-            //var resultModel = result.Model as ReturnViewModel;
-            var resultModel = controller.UnstashModel<ReturnViewModel>();
 
             //DONE this should just return the correct record with returnid=1
             var resultDB = (controller.DataRepository.GetAll<Return>().FirstOrDefault(r => r.ReturnId == 1));
@@ -1694,15 +1692,9 @@ namespace GenderPayGap.Tests.Submission
             Assert.That(result != null && result.GetType() == typeof(RedirectToRouteResult), "Expected RedirectToRouteResult or Incorrect resultType returned");
             Assert.That(result.RouteValues["action"].ToString() == "SubmissionComplete", "Incorrect view returned");
 
-            Assert.That(resultModel  != null && resultModel.GetType() == typeof(ReturnViewModel), "Expected ReturnViewModelis null or Incorrect resultType returned");
-
             //Check the Model State
             //Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
             
-
-            // get the data from the mock database and assert it is there
-            Assert.That(model.CompanyLinkToGPGInfo == resultModel.CompanyLinkToGPGInfo, "expected: entered companyLinkToGPGInfo is what is saved in db");
-
             //TODO this is wrong - you should be checking the model values you passed in have been saved exactly in resultDB in a new record and not in the old one since it has changed
 
             //TODO you should also do a test that if no changes saved no new record is recreated
