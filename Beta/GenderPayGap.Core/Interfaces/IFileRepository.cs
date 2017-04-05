@@ -30,6 +30,7 @@ namespace GenderPayGap.Core.Interfaces
         void Write(string filePath, string text);
 
         void Write(string filePath, IEnumerable<string> lines);
+        void Write(string filePath, byte[] bytes);
         void Write(string filePath, Stream stream);
         void Write(string filePath, FileInfo uploadFile);
 

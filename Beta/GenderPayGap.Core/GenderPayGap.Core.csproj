@@ -180,6 +180,7 @@
       <Link>SolutionVersionInfo.cs</Link>
     </Compile>
     <Compile Include="Classes\AzureFileRepository.cs" />
+    <Compile Include="Classes\MailQueue.cs" />
     <Compile Include="Classes\Logger.cs" />
     <Compile Include="Classes\SystemFileRepository.cs" />
     <Compile Include="Classes\SelectedItem.cs" />

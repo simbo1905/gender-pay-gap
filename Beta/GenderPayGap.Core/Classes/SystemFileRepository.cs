@@ -185,6 +185,8 @@ namespace GenderPayGap.Core.Classes
                 goto Retry;
             }
         }
+
+
         public void Write(string filePath, string text)
         {
             if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
@@ -194,6 +196,24 @@ namespace GenderPayGap.Core.Classes
             try
             {
                 File.AppendAllText(filePath, text);
+            }
+            catch (IOException ex)
+            {
+                if (retries >= 10) throw;
+                retries++;
+                Thread.Sleep(500);
+                goto Retry;
+            }
+        }
+        public void Write(string filePath, byte[] bytes)
+        {
+            if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
+            if (!Path.IsPathRooted(filePath)) filePath = Path.Combine(_rootDir.FullName, filePath);
+            int retries = 0;
+            Retry:
+            try
+            {
+                File.WriteAllBytes(filePath, bytes);
             }
             catch (IOException ex)
             {
