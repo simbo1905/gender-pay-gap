@@ -270,7 +270,7 @@ namespace GenderPayGap
             //Get the current users organisation registration
             var userOrg = DataRepository.GetUserOrg(currentUser);
 
-            //If they didnt have started organisation registration step then prompt to continue registration
+            //If they haven't started organisation registration step then prompt to continue registration
             if (userOrg == null)
             {
                 if (IsAnyAction("Register/EmailConfirmed", "Register/OrganisationType", "Register/OrganisationSearch", "Register/ChooseOrganisation", "Register/AddOrganisation", "Register/AddContact", "Register/ConfirmOrganisation")) return null;

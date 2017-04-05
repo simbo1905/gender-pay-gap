@@ -208,10 +208,11 @@ namespace GenderPayGap.WebUI.Controllers
                 model.Sent = true;
 
                 //If the email address is a test email then add to viewbag
-                if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)) ViewBag.VerifyCode = verifyCode;
+               
+               if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)) ViewBag.VerifyCode = verifyCode;
 
                 //Tell them to verify email
-                
+
                 return View("VerifyEmail", model);
             }
 
@@ -457,8 +458,8 @@ namespace GenderPayGap.WebUI.Controllers
             {
                 case SectorTypes.Private:
                     try
-                    {
-                        model.Employers = PrivateSectorRepository.Search(model.SearchText, 1, Settings.Default.EmployerPageSize, currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
+                    { 
+                        model.Employers = PrivateSectorRepository.Search(model.SearchText, 1, Settings.Default.EmployerPageSize, currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix) );
                     }
                     catch (Exception ex)
                     {
@@ -467,7 +468,6 @@ namespace GenderPayGap.WebUI.Controllers
                     }
                     break;
                 case SectorTypes.Public:
-
                     model.Employers = PublicSectorRepository.Search(model.SearchText, 1, Settings.Default.EmployerPageSize, currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
 
                     break;
@@ -928,7 +928,8 @@ namespace GenderPayGap.WebUI.Controllers
             if (model.SectorType == SectorTypes.Public)
             {
                 this.StashModel(new CompleteViewModel() { AccountingDate = GetAccountYearStartDate(model.SectorType.Value) });
-                RedirectToAction("Complete");
+                //BUG: the return keyword was missing here so no redirection would occur
+                return RedirectToAction("Complete");
             }
 
             //If private sector then send the pin
@@ -1035,6 +1036,8 @@ namespace GenderPayGap.WebUI.Controllers
                     {
                         UserId = currentUser.UserId,
                         OrganisationId = org.OrganisationId,
+                        //BUG: Org shoud be referenced here, org.OrganisationId is not enough
+                        Organisation = org,
                         Created = DateTime.Now
                     };
                     DataRepository.Insert(userOrg);

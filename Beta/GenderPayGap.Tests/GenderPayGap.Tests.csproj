@@ -209,6 +209,7 @@
     <Reference Include="System.Net.Http.WebRequest" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ViewingTests.cs" />
     <None Include="0.Submission\SubmissionTest.cs.old0" />
     <None Include="0.Submission\SubmissionTest.cs.old1" />
     <Compile Include="..\SolutionInfo.cs">

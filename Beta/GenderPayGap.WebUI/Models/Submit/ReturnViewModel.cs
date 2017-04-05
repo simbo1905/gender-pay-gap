@@ -43,14 +43,14 @@ namespace GenderPayGap.WebUI.Models.Submit
 
         [Required(AllowEmptyStrings=false)]
         [Display(Name = "Males who received bonus pay")]
-        [Range(0, 200.9, ErrorMessage = "Value must be between 0 and 200.9")]
+        [Range(-200.9, 200.9, ErrorMessage = "Value must be between 0 and 200.9")]
         [RegularExpression(@"^\d+(\.{0,1}\d)?$", ErrorMessage = "Value can't have more than 1 decimal place")]
         [DisplayFormat(DataFormatString = "{0:0.#}", ApplyFormatInEditMode = true)]
         public decimal? MaleMedianBonusPayPercent { get; set; }
 
         [Required(AllowEmptyStrings=false)]
         [Display(Name = "Females who received bonus pay")]
-        [Range(0, 200.9, ErrorMessage = "Value must be between 0 and 200.9")]
+        [Range(-200.9, 200.9, ErrorMessage = "Value must be between 0 and 200.9")]
         [RegularExpression(@"^\d+(\.{0,1}\d)?$", ErrorMessage = "Value can't have more than 1 decimal place")]
         [DisplayFormat(DataFormatString = "{0:0.#}", ApplyFormatInEditMode = true)]
         public decimal? FemaleMedianBonusPayPercent { get; set; }
