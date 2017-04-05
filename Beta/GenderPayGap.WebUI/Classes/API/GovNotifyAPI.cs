@@ -38,10 +38,7 @@ namespace GenderPayGap
         public static bool SendVerifyEmail(string verifyUrl,string emailAddress, string verifyCode)
         {
             //If the email address is a test email then simulate sending
-            //TODO:MvcApplication.TestPrefix does not exist in AppSettings
-            //if (emailAddress.StartsWithI(MvcApplication.TestPrefix)) return true;
-            if (emailAddress != null && emailAddress.IsEmailAddress()) return true;
-
+            if (emailAddress.StartsWithI(MvcApplication.TestPrefix)) return true;
             var personalisation = new Dictionary<string, dynamic> { { "url", verifyUrl } };
 
             try

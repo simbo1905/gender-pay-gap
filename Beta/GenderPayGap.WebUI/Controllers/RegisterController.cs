@@ -205,9 +205,8 @@ namespace GenderPayGap.WebUI.Controllers
                 model.Sent = true;
 
                 //If the email address is a test email then add to viewbag
-                //TODO:MvcApplication.TestPrefix does not exist in AppSettings
-               //if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)) ViewBag.VerifyCode = verifyCode;
-               if (currentUser.EmailAddress != null && currentUser.EmailAddress.IsEmailAddress()) ViewBag.VerifyCode = verifyCode;
+               
+               if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)) ViewBag.VerifyCode = verifyCode;
 
                 //Tell them to verify email
 
@@ -461,8 +460,8 @@ namespace GenderPayGap.WebUI.Controllers
             {
                 case SectorTypes.Private:
                     try
-                    { //TODO:MvcApplication.TestPrefix does not exist in AppSettings
-                        model.Employers = PrivateSectorRepository.Search(model.SearchText, 1, Settings.Default.EmployerPageSize /*currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)*/ );
+                    { 
+                        model.Employers = PrivateSectorRepository.Search(model.SearchText, 1, Settings.Default.EmployerPageSize, currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix) );
                     }
                     catch (Exception ex)
                     {
@@ -471,8 +470,7 @@ namespace GenderPayGap.WebUI.Controllers
                     }
                     break;
                 case SectorTypes.Public:
-                    //TODO:MvcApplication.TestPrefix does not exist in AppSettings
-                    model.Employers = PublicSectorRepository.Search(model.SearchText, 1, Settings.Default.EmployerPageSize/*, currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)*/);
+                    model.Employers = PublicSectorRepository.Search(model.SearchText, 1, Settings.Default.EmployerPageSize, currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
 
                     break;
 
@@ -893,9 +891,8 @@ namespace GenderPayGap.WebUI.Controllers
             if (m == null) return View("CustomError", new ErrorViewModel(1112));
             model.Employers = m.Employers;
 
-            //TODO:MvcApplication.TestPrefix does not exist in AppSettings
             //Get the sic codes from companies house
-            if (!model.ManualRegistration && model.SectorType == SectorTypes.Private && model.SelectedEmployer!=null /*&& !currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)*/)
+            if (!model.ManualRegistration && model.SectorType == SectorTypes.Private && model.SelectedEmployer!=null && !currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
                 try
                 {
                     model.SelectedEmployer.SicCodes = PrivateSectorRepository.GetSicCodes(model.SelectedEmployer.CompanyNumber);

@@ -726,7 +726,7 @@ namespace GenderPayGap.Tests
             //ARRANGE:
             //1.Arrange the test setup variables
             var code = "abcdefg";
-            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now, EmailVerifyHash = code.GetSHA512Checksum() };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = null, EmailVerifyHash = code.GetSHA512Checksum() };
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = organisation.OrganisationId, Organisation = organisation, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
@@ -760,7 +760,7 @@ namespace GenderPayGap.Tests
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = null };
 
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = organisation.OrganisationId, Organisation = organisation, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
