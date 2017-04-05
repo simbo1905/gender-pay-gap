@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Configuration;
 using System.Data;
 using System.Linq;
+using System.Threading.Tasks;
 using GenderPayGap.Database;
 using System.Web;
 using System.Web.Mvc;
@@ -47,18 +48,35 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         [Route("~/sign-out")]
-        public ActionResult SignOut(bool delete=true)
+        public ActionResult SignOut(int delete=0)
         {
-            //Delete the test user 
-            if (delete)
+            //Delete the test user
+            if (!string.IsNullOrWhiteSpace(MvcApplication.TestPrefix))
             {
-                var currentUser = DataRepository.FindUser(User);
-                if (currentUser != null && currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
-                    DbContext.DeleteAccount(currentUser.UserId);
+                if (delete == 1)
+                {
+                    var currentUser = DataRepository.FindUser(User);
+                    if (currentUser != null && currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                        DbContext.DeleteAccount(currentUser.UserId);
+                }
+                //Delete all test users
+                else if (delete == -1)
+                {
+                    var prefix = MvcApplication.TestPrefix.ToLower();
+                    Parallel.ForEach(DataRepository.GetAll<User>().Where(u => u.EmailAddressDB.ToLower().StartsWith(prefix)), user =>
+                    {
+                        DbContext.DeleteAccount(user.UserId);
+                    });
+                }
             }
 
             Session.Abandon();
-            Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("EnterCalculations", "Submit",null,"https") });
+
+            if (delete==0)
+                Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("EnterCalculations", "Submit",null,"https") });
+            else if (User.Identity.IsAuthenticated)
+                Request.GetOwinContext().Authentication.SignOut();
+
             return RedirectToAction("EnterCalculations","Submit");
         }
 
@@ -90,7 +108,6 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("~/send-feedback")]
-        [OutputCache(CacheProfile = "Feedback")]
         public ActionResult SendFeedback()
         {
             //create the new view model 
@@ -114,7 +131,8 @@ namespace GenderPayGap.WebUI.Controllers
             }
 
             //Add the record to the log
-            MvcApplication.FeedbackLog.AppendCsv(model);
+            if (!model.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                MvcApplication.FeedbackLog.AppendCsv(model);
 
             return View("FeedbackSent");
         }
@@ -226,11 +244,24 @@ namespace GenderPayGap.WebUI.Controllers
                             Status = AddressStatuses.Active
                         });
 
-                        DataRepository.Insert(new OrganisationSicCode()
+                        employer.SicCodes = PublicSectorRepository.GetSicCodes(employer.CompanyNumber);
+
+                        foreach (var sicCode in employer.SicCodes.SplitI())
                         {
-                            OrganisationId = organisation.OrganisationId,
-                            SicCodeId = 1
-                        });
+                            var code = sicCode.ToInt32();
+                            if (!sicCodes.Any(s => s.SicCodeId == code))
+                            {
+                                MvcApplication.WarningLog.WriteLine($"Invalid SIC code '{code}' received from companies house");
+                                continue;
+                            }
+                            if (organisation.OrganisationSicCodes.Any(a => a.SicCodeId == code)) continue;
+                            DataRepository.Insert(new OrganisationSicCode()
+                            {
+                                OrganisationId = organisation.OrganisationId,
+                                SicCodeId = code
+                            });
+                        }
+                        DataRepository.SaveChanges();
                     }
                 }
                 else if (sector == SectorTypes.Private)
@@ -286,6 +317,7 @@ namespace GenderPayGap.WebUI.Controllers
                             });
                         }
                         DataRepository.SaveChanges();
+
                     }
                 }
             }

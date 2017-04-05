@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<WebTest Name="RegisterPrivate" Id="aaf244bf-99e2-4f00-b687-845b8dd4287d" Owner="" Priority="2147483647" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="0" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="" CredentialUserName="" CredentialPassword="" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="RegisterPublic.b993f6d7-a296-465f-83a3-e86c4b828e4e.rec.webtestresult" ResultsLocale="">
+<WebTest Name="RegisterPrivate" Id="aaf244bf-99e2-4f00-b687-845b8dd4287d" Owner="" Priority="2147483647" Enabled="True" CssProjectStructure="" CssIteration="" Timeout="0" WorkItemIds="" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010" Description="" CredentialUserName="" CredentialPassword="" PreAuthenticate="True" Proxy="default" StopOnError="False" RecordedResultFile="RegisterPrivate.d03a10f0-99a1-48a0-843e-b70d86381c69.rec.webtestresult" ResultsLocale="">
   <Items>
     <Request Method="GET" Guid="f3a3c09e-1ca4-4c7a-b3f6-e3b2211ab7dc" Version="1.1" Url="{{WebServer}}/Register/" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/about-you" ReportingName="" IgnoreHttpStatusCode="False">
       <ExtractionRules>
@@ -461,12 +461,84 @@
         <Header Name="Referer" Value="{{WebServer}}/Submit/submission-complete" />
       </Headers>
     </Request>
+    <Request Method="GET" Guid="f9f54b16-aa49-4dce-9049-2d58eac1b41e" Version="1.1" Url="https://localhost:44371/Register/password-reset" ThinkTime="3" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+    </Request>
+    <Request Method="POST" Guid="ff987cb1-34f8-41a1-b3f9-d9aecfb8cbe1" Version="1.1" Url="https://localhost:44371/Register/password-reset" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="https://localhost:44371/Register/password-reset" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam1.code" DisplayName="Extract Text" Description="Extract text from the response and place it into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="StartsWith" Value="?code=" />
+            <RuleParameter Name="EndsWith" Value="&quot;" />
+            <RuleParameter Name="Index" Value="0" />
+            <RuleParameter Name="IgnoreCase" Value="False" />
+            <RuleParameter Name="UseRegularExpression" Value="False" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+            <RuleParameter Name="Required" Value="False" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <FormPostHttpBody>
+        <FormPostParameter Name="__RequestVerificationToken" Value="{{$HIDDEN1.__RequestVerificationToken}}" RecordedValue="3coP49Mn6UYnd60etnIyvAOvX_BdZCd9soVnngXmU1mfzkuPHUPOou8jVvfCm7PsAyiNate2ggh7pvPfkc1qMxptH6o1" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SpamProtectionTimeStamp" Value="{{$HIDDEN1.SpamProtectionTimeStamp}}" RecordedValue="===W5/WZR3zjVAfcy0sWEPHRDIZGyNropqZdfuHCIMqOsA====" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="EmailAddress" Value="{{SavedEmailAddress}}" RecordedValue="gpgtest381f61b429364ecb9d0ce52cd3beaf83@domain.co.uk" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ConfirmEmailAddress" Value="{{SavedEmailAddress}}" RecordedValue="gpgtest381f61b429364ecb9d0ce52cd3beaf83@domain.co.uk" CorrelationBinding="" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Request Method="GET" Guid="703c20e3-123c-4314-9917-14b02e58a4aa" Version="1.1" Url="https://localhost:44371/Register/enter-new-password" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="https://localhost:44371/Register/password-reset" />
+      </Headers>
+      <ExtractionRules>
+        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractHiddenFields, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="1" DisplayName="Extract Hidden Fields" Description="Extract all hidden fields from the response and place them into the test context.">
+          <RuleParameters>
+            <RuleParameter Name="Required" Value="True" />
+            <RuleParameter Name="HtmlDecode" Value="True" />
+          </RuleParameters>
+        </ExtractionRule>
+      </ExtractionRules>
+      <QueryStringParameters>
+        <QueryStringParameter Name="code" Value="{{QueryStringParam1.code}}" RecordedValue="eWWWyGJW7JyoXgmfitO2NeKZy6sCSSV1nNOn7jTrDtI%21" CorrelationBinding="{{QueryStringParam1.code}}" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="POST" Guid="1439493c-b2af-4e7e-8d49-92df3a4c0fca" Version="1.1" Url="https://localhost:44371/Register/enter-new-password" ThinkTime="0" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="https://localhost:44371/Register/enter-new-password?code=eWWWyGJW7JyoXgmfitO2NeKZy6sCSSV1nNOn7jTrDtI%21" />
+      </Headers>
+      <FormPostHttpBody>
+        <FormPostParameter Name="__RequestVerificationToken" Value="{{$HIDDEN1.__RequestVerificationToken}}" RecordedValue="W7a7tiaETMPio30_GEijm4jWSy0nVhfgCIm1cMFBpRSwnhyOXBSs-uQw-CjB8q_Sjpot0K5Ciihguwz3g9DVPrJUMqA1" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="SpamProtectionTimeStamp" Value="{{$HIDDEN1.SpamProtectionTimeStamp}}" RecordedValue="===0GhSNmOztqZGjrwUk+byel9UdwOlep5eIoW4sTXDtvQ====" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="Password" Value="Testing123" RecordedValue="Testing123" CorrelationBinding="" UrlEncode="True" />
+        <FormPostParameter Name="ConfirmPassword" Value="Testing123" RecordedValue="Testing123" CorrelationBinding="" UrlEncode="True" />
+      </FormPostHttpBody>
+    </Request>
+    <Request Method="GET" Guid="0e0d11fd-9bd9-4f98-b3a2-e741eba717bb" Version="1.1" Url="{{WebServer}}/register/verify-email" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/verify-email" ReportingName="" IgnoreHttpStatusCode="False">
+      <QueryStringParameters>
+        <QueryStringParameter Name="login" Value="{{SavedEmailAddress}}" RecordedValue="gpgtest12345@geo.gov.uk" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
+      </QueryStringParameters>
+    </Request>
+    <Request Method="GET" Guid="e6df6e93-74b5-4527-a9df-05f0b8a243cd" Version="1.1" Url="{{WebServer}}/sign-out?delete={{DeleteAccount}}" ThinkTime="10" Timeout="300" ParseDependentRequests="False" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+      <Headers>
+        <Header Name="Referer" Value="{{WebServer}}/Submit/submission-complete" />
+      </Headers>
+    </Request>
   </Items>
   <ContextParameters>
     <ContextParameter Name="EmailAddress" Value="" />
     <ContextParameter Name="SavedEmailAddress" Value="" />
     <ContextParameter Name="WebServer" Value="https://localhost:44371" />
     <ContextParameter Name="WebServer2" Value="http://gpgtest.com" />
+    <ContextParameter Name="DeleteAccount" Value="1" />
   </ContextParameters>
   <ValidationRules>
     <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidateResponseUrl, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response URL" Description="Validates that the response URL after redirects are followed is the same as the recorded response URL.  QueryString parameters are ignored." Level="Low" ExectuionOrder="BeforeDependents" />

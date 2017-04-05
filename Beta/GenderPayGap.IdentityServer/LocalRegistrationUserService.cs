@@ -22,8 +22,8 @@ namespace GenderPayGap.IdentityServer
             {
                 var dbContext = new DbContext();
                 User user = null;
-                var encryptedUsername = MvCApplication.EncryptEmails && !string.IsNullOrWhiteSpace(username) ? Encryption.EncryptData(username) : null;
-                if (MvCApplication.EncryptEmails)
+                var encryptedUsername = MvcApplication.EncryptEmails && !string.IsNullOrWhiteSpace(username) ? Encryption.EncryptData(username) : null;
+                if (MvcApplication.EncryptEmails && !username.StartsWithI(MvcApplication.TestPrefix))
                 {
                     user = dbContext.User.FirstOrDefault(x => x.EmailAddressDB == encryptedUsername);
                     if (user == null) user = dbContext.User.FirstOrDefault(x => x.EmailAddressDB == username);
@@ -66,7 +66,7 @@ namespace GenderPayGap.IdentityServer
             }
             catch (Exception ex)
             {
-                MvCApplication.ErrorLog.WriteLine(ex.Message);
+                MvcApplication.ErrorLog.WriteLine(ex.Message);
                 throw;
             }
 
@@ -76,13 +76,13 @@ namespace GenderPayGap.IdentityServer
         public static bool IsAdministrator(User user)
         {
             if (!user.EmailAddress.IsEmailAddress()) throw new ArgumentException("Bad email address");
-            if (string.IsNullOrWhiteSpace(MvCApplication.AdminEmails)) throw new ArgumentException("Missing AdminEmails from web.config");
-            return user.EmailAddress.LikeAny(MvCApplication.AdminEmails.SplitI(";"));
+            if (string.IsNullOrWhiteSpace(MvcApplication.AdminEmails)) throw new ArgumentException("Missing AdminEmails from web.config");
+            return user.EmailAddress.LikeAny(MvcApplication.AdminEmails.SplitI(";"));
         }
 
         public static bool IsTrustedIP()
         {
-            return string.IsNullOrWhiteSpace(MvCApplication.TrustedIPDomains) || HttpContext.Current.Request.UserHostAddress.IsTrustedAddress(MvCApplication.TrustedIPDomains.SplitI());
+            return string.IsNullOrWhiteSpace(MvcApplication.TrustedIPDomains) || HttpContext.Current.Request.UserHostAddress.IsTrustedAddress(MvcApplication.TrustedIPDomains.SplitI());
         }
 
         public override Task GetProfileDataAsync(ProfileDataRequestContext context)

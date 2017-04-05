@@ -73,7 +73,7 @@ namespace GenderPayGap.WebUI.Classes
             
             var encryptedUsername = MvcApplication.EncryptEmails ? Encryption.EncryptData(emailAddress) : null;
             User user = null;
-            if (MvcApplication.EncryptEmails)
+            if (MvcApplication.EncryptEmails && !emailAddress.StartsWithI(MvcApplication.TestPrefix))
             {
                 user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == encryptedUsername);
                 if (user == null) user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == emailAddress);

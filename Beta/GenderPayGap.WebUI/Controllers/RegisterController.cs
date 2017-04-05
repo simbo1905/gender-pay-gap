@@ -121,7 +121,10 @@ namespace GenderPayGap.WebUI.Controllers
             currentUser.Firstname = model.FirstName;
             currentUser.Lastname = model.LastName;
             currentUser.JobTitle = model.JobTitle;
-            currentUser.EmailAddress = model.EmailAddress;
+            if (model.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                currentUser.EmailAddressDB = model.EmailAddress;
+            else
+                currentUser.EmailAddress = model.EmailAddress;
             currentUser.PasswordHash = model.Password.GetSHA512Checksum();
             currentUser.EmailVerifySendDate = null;
             currentUser.EmailVerifiedDate = null;
@@ -887,16 +890,23 @@ namespace GenderPayGap.WebUI.Controllers
             model.Employers = m.Employers;
 
             //Get the sic codes from companies house
-            if (!model.ManualRegistration && model.SectorType == SectorTypes.Private && model.SelectedEmployer!=null && !currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
-                try
-                {
-                    model.SelectedEmployer.SicCodes = PrivateSectorRepository.GetSicCodes(model.SelectedEmployer.CompanyNumber);
-                }
-                catch (Exception ex)
-                {
-                    GovNotifyAPI.SendGeoMessage("GPG - COMPANIES HOUSE ERROR", $"Cant get SIC Codes from Companies House API for company {model.SelectedEmployer.Name} No:{model.SelectedEmployer.CompanyNumber} due to following error:\n\n{ex.Message}", test: currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
-                    throw;
-                }
+            if (!model.ManualRegistration && model.SelectedEmployer != null)
+            {
+                if (model.SectorType == SectorTypes.Public)
+                    model.SelectedEmployer.SicCodes = PublicSectorRepository.GetSicCodes(model.SelectedEmployer.CompanyNumber);
+                else if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                    model.SelectedEmployer.SicCodes = DataRepository.GetAll<SicCode>().FirstOrDefault(s => s.SicSectionId != "X")?.SicCodeId.ToString();
+                else
+                    try
+                    {
+                        model.SelectedEmployer.SicCodes = PrivateSectorRepository.GetSicCodes(model.SelectedEmployer.CompanyNumber);
+                    }
+                    catch (Exception ex)
+                    {
+                        GovNotifyAPI.SendGeoMessage("GPG - COMPANIES HOUSE ERROR", $"Cant get SIC Codes from Companies House API for company {model.SelectedEmployer.Name} No:{model.SelectedEmployer.CompanyNumber} due to following error:\n\n{ex.Message}", test: currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
+                        throw;
+                    }
+            }
 
             //Save the registration
             UserOrganisation userOrg;
@@ -960,7 +970,7 @@ namespace GenderPayGap.WebUI.Controllers
                     DataRepository.SaveChanges();
 
                     //Use public sector code or get from employer
-                    var sicCodes = employer!=null ? employer.GetSicCodes() : model.SectorType == SectorTypes.Public ? new[] {1} : null;
+                    var sicCodes = employer!=null ? employer.GetSicCodes()  : null;
 
                     //Save the sic codes for the organisation
                     if (sicCodes != null)
@@ -1680,7 +1690,6 @@ namespace GenderPayGap.WebUI.Controllers
         #region password-reset
         [HttpGet]
         [Route("password-reset")]
-        [OutputCache(CacheProfile = "PasswordReset")]
         public ActionResult PasswordReset()
         {
             User currentUser;
@@ -1748,6 +1757,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             //show confirmation
             ViewBag.EmailAddress = currentUser.EmailAddress;
+            if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))ViewBag.TestUrl = Url.Action("NewPassword", "Register", new { code = Encryption.EncryptQuerystring(currentUser.UserId + ":" + DateTime.Now.ToSmallDateTime())}, "https"); 
             return View("PasswordResetSent");
         }
 
@@ -1758,7 +1768,7 @@ namespace GenderPayGap.WebUI.Controllers
             try
             {
                 resetCode = Encryption.EncryptQuerystring(currentUser.UserId + ":" + DateTime.Now.ToSmallDateTime());
-                if (!this.SendPasswordReset(currentUser.EmailAddress, resetCode))
+                if (!this.SendPasswordReset(currentUser.EmailAddress, resetCode, currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)))
                     throw new Exception("Could not send password reset email. Please try again later.");
             }
             catch (Exception ex)

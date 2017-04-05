@@ -172,7 +172,7 @@ namespace GenderPayGap.IdentityServer
 
         X509Certificate2 LoadCertificate()
         {
-            if (string.IsNullOrWhiteSpace(MvCApplication.CertThumprint)) return new X509Certificate2(string.Format(@"{0}\bin\idsrv3test.pfx", AppDomain.CurrentDomain.BaseDirectory), "idsrv3test");
+            if (string.IsNullOrWhiteSpace(MvcApplication.CertThumprint)) return new X509Certificate2(string.Format(@"{0}\bin\idsrv3test.pfx", AppDomain.CurrentDomain.BaseDirectory), "idsrv3test");
 
             X509Certificate2 cert = null;
             using (var certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser))
@@ -180,9 +180,9 @@ namespace GenderPayGap.IdentityServer
                 certStore.Open(OpenFlags.ReadOnly);
 
                 //Try and get a valid cert
-                var certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, MvCApplication.CertThumprint, true);
+                var certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, MvcApplication.CertThumprint, true);
                 //Otherwise use an invalid cert
-                if (certCollection.Count == 0) certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, MvCApplication.CertThumprint, false);
+                if (certCollection.Count == 0) certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, MvcApplication.CertThumprint, false);
 
                 if (certCollection.Count > 0)cert=certCollection[0];
 
@@ -196,17 +196,17 @@ namespace GenderPayGap.IdentityServer
                     certStore.Open(OpenFlags.ReadOnly);
 
                     //Try and get a valid cert
-                    var certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, MvCApplication.CertThumprint, true);
+                    var certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, MvcApplication.CertThumprint, true);
                     //Otherwise use an invalid cert
-                    if (certCollection.Count == 0) certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, MvCApplication.CertThumprint, false);
+                    if (certCollection.Count == 0) certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, MvcApplication.CertThumprint, false);
 
                     if (certCollection.Count > 0) cert = certCollection[0];
 
                     certStore.Close();
                 }
 
-            if (cert==null)throw new Exception($"Cannot find certificate with thumbprint '{MvCApplication.CertThumprint}' in local store");
-            MvCApplication.InfoLog.WriteLine($"Successfully loaded certificate from thumbprint {MvCApplication.CertThumprint}");
+            if (cert==null)throw new Exception($"Cannot find certificate with thumbprint '{MvcApplication.CertThumprint}' in local store");
+            MvcApplication.InfoLog.WriteLine($"Successfully loaded certificate from thumbprint {MvcApplication.CertThumprint}");
             return cert;
         }
     }

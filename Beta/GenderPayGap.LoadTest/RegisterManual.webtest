@@ -660,66 +660,10 @@
         <FormPostParameter Name="command" Value="Confirm and submit" RecordedValue="Confirm and submit" CorrelationBinding="{{FormPostParam48.command}}" UrlEncode="True" />
       </FormPostHttpBody>
     </Request>
-    <Request Method="GET" Guid="737027b2-6bb4-4580-876a-3b009e8f703c" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
-      <Headers>
-        <Header Name="Referer" Value="{{WebServer}}/Submit/submission-complete" />
-      </Headers>
-      <CorrelationExtractionRules>
-        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam17028.view" DisplayName="" Description="">
-          <RuleParameters>
-            <RuleParameter Name="StartsWith" Value="?view=" />
-            <RuleParameter Name="EndsWith" Value="&quot;" />
-            <RuleParameter Name="Index" Value="0" />
-            <RuleParameter Name="IgnoreCase" Value="False" />
-            <RuleParameter Name="UseRegularExpression" Value="False" />
-            <RuleParameter Name="HtmlDecode" Value="True" />
-            <RuleParameter Name="Required" Value="False" />
-          </RuleParameters>
-        </ExtractionRule>
-        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam21421.view" DisplayName="" Description="">
-          <RuleParameters>
-            <RuleParameter Name="StartsWith" Value="?view=" />
-            <RuleParameter Name="EndsWith" Value="&quot;" />
-            <RuleParameter Name="Index" Value="0" />
-            <RuleParameter Name="IgnoreCase" Value="False" />
-            <RuleParameter Name="UseRegularExpression" Value="False" />
-            <RuleParameter Name="HtmlDecode" Value="True" />
-            <RuleParameter Name="Required" Value="False" />
-          </RuleParameters>
-        </ExtractionRule>
-      </CorrelationExtractionRules>
-    </Request>
     <Request Method="GET" Guid="ed0a2807-9a33-4ef1-81c5-af0538c3ede0" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
-    <Request Method="GET" Guid="56c236d1-4101-4525-9a1e-591400f98c3e" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
-      <Headers>
-        <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details" />
-      </Headers>
-      <CorrelationExtractionRules>
-        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam17027.view" DisplayName="" Description="">
-          <RuleParameters>
-            <RuleParameter Name="StartsWith" Value="?view=" />
-            <RuleParameter Name="EndsWith" Value="&quot;" />
-            <RuleParameter Name="Index" Value="1" />
-            <RuleParameter Name="IgnoreCase" Value="False" />
-            <RuleParameter Name="UseRegularExpression" Value="False" />
-            <RuleParameter Name="HtmlDecode" Value="True" />
-            <RuleParameter Name="Required" Value="False" />
-          </RuleParameters>
-        </ExtractionRule>
-        <ExtractionRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ExtractText, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" VariableName="QueryStringParam21836.view" DisplayName="" Description="">
-          <RuleParameters>
-            <RuleParameter Name="StartsWith" Value="?view=" />
-            <RuleParameter Name="EndsWith" Value="&quot;" />
-            <RuleParameter Name="Index" Value="1" />
-            <RuleParameter Name="IgnoreCase" Value="False" />
-            <RuleParameter Name="UseRegularExpression" Value="False" />
-            <RuleParameter Name="HtmlDecode" Value="True" />
-            <RuleParameter Name="Required" Value="False" />
-          </RuleParameters>
-        </ExtractionRule>
-      </CorrelationExtractionRules>
+    <Request Method="GET" Guid="ed0a2807-9a33-4ef1-81c5-af0538c3ede0" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <QueryStringParameters>
-        <QueryStringParameter Name="view" Value="pay-quartiles" RecordedValue="pay-quartiles" CorrelationBinding="{{QueryStringParam17028.view}}" UrlEncode="False" UseToGroupResults="False" />
+        <QueryStringParameter Name="view" Value="hourly-rate" RecordedValue="pay-quartiles" CorrelationBinding="{{QueryStringParam21421.view}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
     <Request Method="GET" Guid="3dd1c0da-1592-49cb-b944-314bc08099ef" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
@@ -727,42 +671,19 @@
         <QueryStringParameter Name="view" Value="pay-quartiles" RecordedValue="pay-quartiles" CorrelationBinding="{{QueryStringParam21421.view}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="33ef546b-5132-4060-b397-05c8b6722a8d" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
-      <Headers>
-        <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details?view=pay-quartiles" />
-      </Headers>
-      <QueryStringParameters>
-        <QueryStringParameter Name="view" Value="bonus-pay" RecordedValue="bonus-pay" CorrelationBinding="{{QueryStringParam17027.view}}" UrlEncode="False" UseToGroupResults="False" />
-      </QueryStringParameters>
-    </Request>
     <Request Method="GET" Guid="51e6d581-ca28-40ed-84fc-a35a090de03c" Version="1.1" Url="{{WebServer}}/Viewing/employer-details" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <QueryStringParameters>
         <QueryStringParameter Name="view" Value="bonus-pay" RecordedValue="bonus-pay" CorrelationBinding="{{QueryStringParam21836.view}}" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="d9b105cd-9d50-4bbf-ae59-80ff90945c8f" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
-      <Headers>
-        <Header Name="Referer" Value="{{WebServer}}/Viewing/employer-details?view=bonus-pay" />
-      </Headers>
-    </Request>
-    <Request Method="GET" Guid="0e9b7135-b493-4080-b5d7-49882cf3967a" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
-    <Request Method="GET" Guid="bce3deb6-2509-4f38-98ba-782c50eb6b66" Version="1.1" Url="{{WebServer}}/sign-out" ThinkTime="10" Timeout="300" ParseDependentRequests="False" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
-      <Headers>
-        <Header Name="Referer" Value="{{WebServer}}/Viewing/search-results" />
-      </Headers>
-    </Request>
-    <Request Method="GET" Guid="66ad0b3c-5d34-4d29-81ad-601d5b89718c" Version="1.1" Url="{{WebServer}}/sign-out" ThinkTime="10" Timeout="300" ParseDependentRequests="False" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+    <Request Method="GET" Guid="d9b105cd-9d50-4bbf-ae59-80ff90945c8f" Version="1.1" Url="{{WebServer}}/Viewing/search-results" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
+    <Request Method="GET" Guid="bce3deb6-2509-4f38-98ba-782c50eb6b66" Version="1.1" Url="{{WebServer}}/sign-out?delete={{DeleteAccount}}" ThinkTime="10" Timeout="300" ParseDependentRequests="False" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False" />
     <Request Method="GET" Guid="0e0d11fd-9bd9-4f98-b3a2-e741eba717bb" Version="1.1" Url="{{WebServer}}/register/verify-email" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/verify-email" ReportingName="" IgnoreHttpStatusCode="False">
       <QueryStringParameters>
         <QueryStringParameter Name="login" Value="{{SavedAdminEmailAddress}}" RecordedValue="gpgtest12345@geo.gov.uk" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
       </QueryStringParameters>
     </Request>
-    <Request Method="GET" Guid="dde0515b-d820-4ccb-83ed-a19ef1551998" Version="1.1" Url="{{WebServer}}/register/verify-email" ThinkTime="10" Timeout="300" ParseDependentRequests="True" FollowRedirects="True" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="{{WebServer}}/Register/verify-email" ReportingName="" IgnoreHttpStatusCode="False">
-      <QueryStringParameters>
-        <QueryStringParameter Name="login" Value="{{SavedAdminEmailAddress}}" RecordedValue="gpgtest12345@geo.gov.uk" CorrelationBinding="" UrlEncode="False" UseToGroupResults="False" />
-      </QueryStringParameters>
-    </Request>
-    <Request Method="GET" Guid="0c7e03db-4591-437f-acd7-5fcafe1a5292" Version="1.1" Url="{{WebServer}}/sign-out" ThinkTime="10" Timeout="300" ParseDependentRequests="False" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
+    <Request Method="GET" Guid="0c7e03db-4591-437f-acd7-5fcafe1a5292" Version="1.1" Url="{{WebServer}}/sign-out?delete={{DeleteAccount}}" ThinkTime="10" Timeout="300" ParseDependentRequests="False" FollowRedirects="False" RecordResult="True" Cache="False" ResponseTimeGoal="0" Encoding="utf-8" ExpectedHttpStatusCode="0" ExpectedResponseUrl="" ReportingName="" IgnoreHttpStatusCode="False">
       <Headers>
         <Header Name="Referer" Value="{{WebServer}}/Register/verify-email" />
       </Headers>
@@ -775,6 +696,7 @@
     <ContextParameter Name="SavedEmailAddress" Value="" />
     <ContextParameter Name="WebServer" Value="https://localhost:44371" />
     <ContextParameter Name="WebServer2" Value="https://gpgtest12345.com" />
+    <ContextParameter Name="DeleteAccount" Value="1" />
   </ContextParameters>
   <ValidationRules>
     <ValidationRule Classname="Microsoft.VisualStudio.TestTools.WebTesting.Rules.ValidateResponseUrl, Microsoft.VisualStudio.QualityTools.WebTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" DisplayName="Response URL" Description="Validates that the response URL after redirects are followed is the same as the recorded response URL.  QueryString parameters are ignored." Level="Low" ExectuionOrder="BeforeDependents" />
