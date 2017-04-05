@@ -1781,8 +1781,6 @@ namespace GenderPayGap.WebUI.Controllers
             return true;
         }
 
-
-        [SpamProtection(2)]
         [HttpGet]
         [RequireHttps]
         [Route("enter-new-password")]
