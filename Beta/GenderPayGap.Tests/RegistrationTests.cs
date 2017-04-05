@@ -674,7 +674,7 @@ namespace GenderPayGap.Tests
             //ARRANGE:
             //1.Arrange the test setup variables
             var code = "abcdefg";
-            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = null, EmailVerifySendDate = null, EmailVerifyHash = code.GetSHA512Checksum(), Status = UserStatuses.New, Organisations = null };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = null, EmailVerifySendDate = null, Status = UserStatuses.New, Organisations = null };
 
             var verifiedModel = new VerifyViewModel() { Sent = true };
 
@@ -697,7 +697,7 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.VerifyEmail(Encryption.EncryptQuerystring(code)) as ViewResult;
+            var result = controller.VerifyEmail() as ViewResult;
 
             var resultModel = result.Model as VerifyViewModel;
 
@@ -716,8 +716,10 @@ namespace GenderPayGap.Tests
 
             //ensure user is marked as verified
             Assert.AreEqual(resultModel.Sent, true, "Expected VerifyViewModel");
+            
+            //Check the user has a verified send date 
+            Assert.NotNull(user.EmailVerifySendDate, "Email is has not been confirmed!");
         }
-
 
         [Test]
         [Description("Ensure the Step2 succeeds when all fields are good")]
@@ -726,9 +728,7 @@ namespace GenderPayGap.Tests
             //ARRANGE:
             //1.Arrange the test setup variables
             var code = "abcdefg";
-            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = null, EmailVerifyHash = code.GetSHA512Checksum() };
-            var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = organisation.OrganisationId, Organisation = organisation, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = null, EmailVerifySendDate = DateTime.Now, EmailVerifyHash = code.GetSHA512Checksum() };
 
             //Set the user up as if finished step1 which is email known etc but not sent
             var routeData = new RouteData();
@@ -738,20 +738,23 @@ namespace GenderPayGap.Tests
             var model = new VerifyViewModel();
 
             //var controller = TestHelper.GetController<RegisterController>();
-            var controller = TestHelper.GetController<RegisterController>(1, routeData, user, organisation, userOrganisation);
-            //controller.Bind(model);
+            var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.VerifyEmail(Encryption.EncryptQuerystring(code)) as RedirectToRouteResult;
+            var result = controller.VerifyEmail(code) as RedirectToRouteResult;
 
             //ASSERT:
-            //Check the user is return the confirmation view
-            //Check the user verifcation is now marked as sent
-            //Check a verification has been set against user 
             Assert.NotNull(result, "Expected RedirectToRouteResult");
-            Assert.That(result.RouteValues["action"].ToString() == "Complete", "Registration is not complete!");
+            
+            //Check the user is return the confirmation view
+            Assert.That(result.RouteValues["action"].ToString() == "EmailConfirmed", "Email is has not been confirmed!");
+            
+            //Check the user verification is now marked as sent
+            Assert.NotNull(user.EmailVerifiedDate, "Email is has not been confirmed!");
 
+            //Check a verification has been set against user 
+            Assert.That(user.Status == UserStatuses.Active, "Email is has not been confirmed!");
         }
 
         [Test]
@@ -789,21 +792,14 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.VerifyEmail(model) as RedirectToRouteResult;
-
+          
+            var result = controller.VerifyEmail(model) as ViewResult;
             //ASSERT:
-            //3.Check that the result is not null
-            Assert.NotNull(result, "Expected RedirectToRouteResult");
-
-            //4.Check that the redirection went to the right url step.
-            // Assert.That(result.RouteValues["action"].ToString() == "Step3", "");
-            Assert.That(result.RouteValues["action"].ToString() == "Complete", "Registration is incomplete");
-
-            //5.If the redirection successfull retrieve the model stash sent with the redirect.
-            //  var unStashedmodel = controller.UnstashModel<RegisterViewModel>();
-
-            //6.Check that the unstashed model is not null
-            //  Assert.NotNull(model, "Expected RegisterViewModel");
+            Assert.NotNull(result, "Expected ViewResult");
+            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
+            Assert.That(result.ViewName == "VerifyEmail", "Incorrect view returned,Verifiction is incomplete");
+            Assert.That(result.Model != null && result.Model.GetType() == typeof(VerifyViewModel), "Expected VerifyViewModel or Incorrect resultType returned");
+            Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
         }
         #endregion
 
