@@ -28,6 +28,12 @@ namespace GenderPayGap
         private static readonly string SmtpUsername = ConfigurationManager.AppSettings["SMTPUsername"];
         private static readonly string SmtpPassword = ConfigurationManager.AppSettings["SMTPPassword"];
 
+        private static readonly string SmtpServer2 = ConfigurationManager.AppSettings["SMTPServer2"];
+        private static readonly int SmtpPort2 = ConfigurationManager.AppSettings["SMTPPort2"].ToInt32(25);
+        private static readonly string SmtpSenderName2 = ConfigurationManager.AppSettings["SmtpSenderName2"];
+        private static readonly string SmtpUsername2 = ConfigurationManager.AppSettings["SMTPUsername2"];
+        private static readonly string SmtpPassword2 = ConfigurationManager.AppSettings["SMTPPassword2"];
+
         private static IGovNotify GovNotify;
 
         public static void Initialise(IContainer container)
@@ -251,10 +257,10 @@ namespace GenderPayGap
                 pipHtml = pipHtml.Replace("((url))", returnUrl);
                 pipHtml = pipHtml.Replace("((ExpiresDate))", expiresDate.ToString("d MMMM yyyy"));
                 var pdf = PDF.HtmlToPDF(pipHtml);
-                if (string.IsNullOrWhiteSpace(SmtpServer) || string.IsNullOrWhiteSpace(SmtpUsername))
+                if (string.IsNullOrWhiteSpace(SmtpServer2) || string.IsNullOrWhiteSpace(SmtpUsername2))
                     MvcApplication.MailQueue.Enqueue(pdf,"pdf");
                 else
-                    Email.QuickSend("GPG PIN-in-Post", SmtpUsername, SmtpSenderName, GEODistributionList, coverHtml, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort,pdf, $"{organisationName.ToProper().Strip(" -_,")}.pdf",test);
+                    Email.QuickSend("GPG PIN-in-Post", SmtpUsername2, SmtpSenderName2, GEODistributionList, coverHtml, SmtpServer2, SmtpUsername2, SmtpPassword2, SmtpPort2,pdf, $"{organisationName.ToProper().Strip(" -_,")}.pdf",test);
                 return true;
             }
             catch (Exception ex)
@@ -285,7 +291,7 @@ namespace GenderPayGap
             {
                 try
                 {
-                    Email.QuickSend(subject, SmtpUsername, SmtpSenderName, emailAddress, message, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort,test:test);
+                    Email.QuickSend(subject, SmtpUsername2, SmtpSenderName2, emailAddress, message, SmtpServer, SmtpUsername2, SmtpPassword2, SmtpPort2,test:test);
                     successCount++;
                 }
                 catch (Exception ex1)

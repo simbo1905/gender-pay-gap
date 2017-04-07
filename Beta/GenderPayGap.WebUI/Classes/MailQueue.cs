@@ -37,13 +37,13 @@ namespace GenderPayGap.Core.Classes
 
         private string DailyPath => Path.Combine(Directory, DateTime.Now.ToString("yyyy-MM-dd"));
 
-        void AddFile(string filename, byte[] bytes)
+        void AddFile(byte[] bytes, string filename=null)
         {
             lock (_syncRoot)
             {
                 var filePath = Path.Combine(DailyPath, filename);
 
-                //_repository.Write(DailyPath, appendString);
+                _repository.Write(DailyPath, bytes);
             }
         }
     }
