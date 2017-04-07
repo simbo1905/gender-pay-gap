@@ -1223,6 +1223,7 @@ namespace GenderPayGap.WebUI.Controllers
             model.ContactJobTitle = userOrg.User.ContactJobTitle;
             model.ContactOrganisation = userOrg.User.ContactOrganisation;
             model.ContactEmailAddress = userOrg.User.ContactEmailAddress;
+            model.EmailAddress = userOrg.User.EmailAddress;
             model.ContactPhoneNumber = userOrg.User.ContactPhoneNumber;
 
             model.Name = userOrg.Organisation.OrganisationName;
