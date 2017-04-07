@@ -245,9 +245,13 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="GPGData_2016-2017_.csv">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="bin\Debug\Downloads\" />
     <Folder Include="TestRespository\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
