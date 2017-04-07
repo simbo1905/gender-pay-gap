@@ -103,7 +103,7 @@ namespace GenderPayGap
                         html = html.Replace("((org1))", contactOrg);
                         html = html.Replace("((org2))", reportingOrg);
                         html = html.Replace("((address))", reportingAddress);
-                        Email.QuickSend("Registration Request - Gender pay gap reporting service", SmtpUsername, SmtpSenderName, emailAddress, html, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort,test:test);
+                        Email.QuickSend("Registration Request - Gender pay gap reporting service", SmtpUsername2, SmtpSenderName2, emailAddress, html, SmtpServer2, SmtpUsername2, SmtpPassword2, SmtpPort2,test:test);
                         successCount++;
                     }
                     catch (Exception ex1)

@@ -63,8 +63,10 @@ namespace GenderPayGap
                             employer.Name = company.title;
                             employer.CompanyNumber = company.company_number;
                             employer.CompanyStatus = company.company_status;
-                            if (company.address.premises != null)
-                                employer.Address1 = company.address.premises + ", " + company.address.address_line_1;
+
+                            var premises = Misc.GetProperty(company.address, "premises");
+                            if (!string.IsNullOrWhiteSpace(premises))
+                                employer.Address1 = premises + ", " + company.address.address_line_1;
                             else
                                 employer.Address1 = company.address.address_line_1;
                             employer.Address2 = company.address.address_line_2;

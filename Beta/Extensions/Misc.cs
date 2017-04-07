@@ -17,6 +17,32 @@ namespace Extensions
 {
     public static class Misc
     {
+
+        public static bool HasProperty(dynamic obj, string property)
+        {
+            try
+            {
+                var value = obj[property];
+                return true;
+            }
+            catch (KeyNotFoundException)
+            {
+                return false;
+            }
+        }
+        public static string GetProperty(dynamic obj, string property)
+        {
+            try
+            {
+                var value = obj[property];
+                return (string)value;
+            }
+            catch (KeyNotFoundException)
+            {
+                return null;
+            }
+        }
+
         public static bool IsNull(this object item)
         {
             if (item == null || System.Convert.IsDBNull(item)) return true;

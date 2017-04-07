@@ -324,7 +324,6 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Classes\Extensions\HtmlHelpers.cs" />
-    <Compile Include="Classes\MailQueue.cs" />
     <Compile Include="Classes\PublicSectorRepository.cs" />
     <Compile Include="Classes\PrivateSectorRepository.cs" />
     <Compile Include="Classes\PublicSectorConfig.cs" />
