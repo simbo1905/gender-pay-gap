@@ -1,76 +1,23 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<LoadTest Name="15 Minute 100-1000 User Even Mix" Description="" Owner="" storage="d:\cadencepartnership.com\gpgbeta\beta\genderpaygap.loadtest\15 minute 100-1000 user even mix.loadtest" Priority="2147483647" Enabled="true" CssProjectStructure="" CssIteration="" DeploymentItemsEditable="" WorkItemIds="" TraceLevel="None" CurrentRunConfig="Run Settings1" Id="52b4af9b-075b-4264-ac76-462c31d2fe86" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
+<LoadTest Name="Quick smoke test - STAGING" Description="" Owner="" storage="d:\cadencepartnership.com\gpgbeta\beta\genderpaygap.loadtest\quick smoke test - staging.loadtest" Priority="2147483647" Enabled="true" CssProjectStructure="" CssIteration="" DeploymentItemsEditable="" WorkItemIds="" TraceLevel="None" CurrentRunConfig="Run Settings1" Id="d9d1294e-8f2f-4d68-97d2-08b67110d779" xmlns="http://microsoft.com/schemas/VisualStudio/TeamTest/2010">
   <Scenarios>
-    <Scenario Name="Scenario1" DelayBetweenIterations="0" PercentNewUsers="0" IPSwitching="false" TestMixType="PercentageOfUsersRunning" ApplyDistributionToPacingDelay="true" MaxTestIterations="0" DisableDuringWarmup="false" DelayStartTime="0" AllowedAgents="">
+    <Scenario Name="Scenario1" DelayBetweenIterations="0" PercentNewUsers="0" IPSwitching="false" TestMixType="Sequential" ApplyDistributionToPacingDelay="true" MaxTestIterations="0" DisableDuringWarmup="false" DelayStartTime="0" AllowedAgents="">
       <ThinkProfile Value="0.2" Pattern="NormalDistribution" />
-      <LoadProfile Pattern="Step" InitialUsers="100" MaxUsers="1000" StepUsers="100" StepDuration="90" StepRampTime="90" />
+      <LoadProfile Pattern="Constant" InitialUsers="1" />
       <TestMix>
-        <TestProfile Name="RegisterPrivate" Path="registerprivate.webtest" Id="aaf244bf-99e2-4f00-b687-845b8dd4287d" Percentage="25" Type="Microsoft.VisualStudio.TestTools.WebStress.DeclarativeWebTestElement, Microsoft.VisualStudio.QualityTools.LoadTest, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-        <TestProfile Name="RegisterPublic" Path="registerpublic.webtest" Id="85679aa2-c3db-467a-9c8c-11c464166a14" Percentage="25" Type="Microsoft.VisualStudio.TestTools.WebStress.DeclarativeWebTestElement, Microsoft.VisualStudio.QualityTools.LoadTest, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-        <TestProfile Name="RegisterManual" Path="registermanual.webtest" Id="b740850d-d157-4051-b80b-0bf67fbffbf5" Percentage="25" Type="Microsoft.VisualStudio.TestTools.WebStress.DeclarativeWebTestElement, Microsoft.VisualStudio.QualityTools.LoadTest, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
-        <TestProfile Name="Viewing" Path="viewing.webtest" Id="d29b4736-b819-4954-bb2c-ba8760bf52b9" Percentage="25" Type="Microsoft.VisualStudio.TestTools.WebStress.DeclarativeWebTestElement, Microsoft.VisualStudio.QualityTools.LoadTest, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+        <TestProfile Name="RegisterPrivate" Path="registerprivate.webtest" Id="aaf244bf-99e2-4f00-b687-845b8dd4287d" Percentage="0" Type="Microsoft.VisualStudio.TestTools.WebStress.DeclarativeWebTestElement, Microsoft.VisualStudio.QualityTools.LoadTest, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+        <TestProfile Name="RegisterPublic" Path="registerpublic.webtest" Id="85679aa2-c3db-467a-9c8c-11c464166a14" Percentage="0" Type="Microsoft.VisualStudio.TestTools.WebStress.DeclarativeWebTestElement, Microsoft.VisualStudio.QualityTools.LoadTest, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+        <TestProfile Name="RegisterManual" Path="registermanual.webtest" Id="b740850d-d157-4051-b80b-0bf67fbffbf5" Percentage="0" Type="Microsoft.VisualStudio.TestTools.WebStress.DeclarativeWebTestElement, Microsoft.VisualStudio.QualityTools.LoadTest, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+        <TestProfile Name="Viewing" Path="viewing.webtest" Id="d29b4736-b819-4954-bb2c-ba8760bf52b9" Percentage="0" Type="Microsoft.VisualStudio.TestTools.WebStress.DeclarativeWebTestElement, Microsoft.VisualStudio.QualityTools.LoadTest, Version=14.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
       </TestMix>
       <BrowserMix>
-        <BrowserProfile Percentage="17">
+        <BrowserProfile Percentage="100">
           <Browser Name="Internet Explorer 9.0" MaxConnections="6">
             <Headers>
               <Header Name="User-Agent" Value="Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Trident/5.0)" />
               <Header Name="Accept" Value="*/*" />
               <Header Name="Accept-Language" Value="{{$IEAcceptLanguage}}" />
               <Header Name="Accept-Encoding" Value="GZIP" />
-            </Headers>
-          </Browser>
-        </BrowserProfile>
-        <BrowserProfile Percentage="17">
-          <Browser Name="Chrome 2" MaxConnections="6">
-            <Headers>
-              <Header Name="User-Agent" Value="Mozilla/5.0 (Windows; U; Windows NT 5.1;) AppleWebKit/530.1 (KHTML, like Gecko) Chrome/2.0.169.1 Safari/530.1" />
-              <Header Name="Accept" Value="*/*" />
-              <Header Name="Accept-Language" Value="{{$IEAcceptLanguage}}" />
-              <Header Name="Accept-Encoding" Value="gzip,deflate" />
-              <Header Name="Accept-Charset" Value="ISO-8859-1,*,utf-8" />
-            </Headers>
-          </Browser>
-        </BrowserProfile>
-        <BrowserProfile Percentage="17">
-          <Browser Name="Firefox 3.0" MaxConnections="6">
-            <Headers>
-              <Header Name="User-Agent" Value="Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.8.1) Gecko/20061010 Firefox/3.0" />
-              <Header Name="Accept" Value="*/*" />
-              <Header Name="Accept-Language" Value="{{$IEAcceptLanguage}}" />
-              <Header Name="Accept-Encoding" Value="GZIP" />
-              <Header Name="Accept-Charset" Value="ISO-8859-1,utf-8;q=0.7,*;q=0.7" />
-            </Headers>
-          </Browser>
-        </BrowserProfile>
-        <BrowserProfile Percentage="17">
-          <Browser Name="Internet Explorer 10.0" MaxConnections="6">
-            <Headers>
-              <Header Name="User-Agent" Value="Mozilla/5.0 (compatible; MSIE 10.0; Windows NT 6.1; Trident/6.0)" />
-              <Header Name="Accept" Value="*/*" />
-              <Header Name="Accept-Language" Value="{{$IEAcceptLanguage}}" />
-              <Header Name="Accept-Encoding" Value="GZIP" />
-            </Headers>
-          </Browser>
-        </BrowserProfile>
-        <BrowserProfile Percentage="16">
-          <Browser Name="Internet Explorer 11.0" MaxConnections="6">
-            <Headers>
-              <Header Name="User-Agent" Value="Mozilla/5.0 (Windows NT 6.3; Trident/7.0; rv:11.0) like Gecko" />
-              <Header Name="Accept" Value="*/*" />
-              <Header Name="Accept-Language" Value="{{$IEAcceptLanguage}}" />
-              <Header Name="Accept-Encoding" Value="GZIP" />
-            </Headers>
-          </Browser>
-        </BrowserProfile>
-        <BrowserProfile Percentage="16">
-          <Browser Name="Safari 3" MaxConnections="4">
-            <Headers>
-              <Header Name="User-Agent" Value="Mozilla/5.0 (Windows; U; Windows NT 5.2; en-US) AppleWebKit/525.28 (KHTML, like Gecko) Version/3.2.2 Safari/525.28.1" />
-              <Header Name="Accept" Value="*/*" />
-              <Header Name="Accept-Language" Value="{{$IEAcceptLanguage}}" />
-              <Header Name="Accept-Encoding" Value="GZIP,deflate" />
-              <Header Name="Accept-Charset" Value="ISO-8859-1,utf-8;q=0.7,*;q=0.7" />
             </Headers>
           </Browser>
         </BrowserProfile>
@@ -477,7 +424,7 @@
     </CounterSet>
   </CounterSets>
   <RunConfigurations>
-    <RunConfiguration Name="Run Settings1" Description="" ResultsStoreType="Database" TimingDetailsStorage="AllIndividualDetails" SaveTestLogsOnError="true" SaveTestLogsFrequency="0" MaxErrorDetails="200" MaxErrorsPerType="1000" MaxThresholdViolations="1000" MaxRequestUrlsReported="1000" UseTestIterations="false" RunDuration="900" WarmupTime="0" CoolDownTime="0" TestIterations="100" WebTestConnectionModel="ConnectionPerUser" WebTestConnectionPoolSize="50" SampleRate="15" ValidationLevel="High" SqlTracingConnectString="" SqlTracingConnectStringDisplayValue="" SqlTracingDirectory="" SqlTracingEnabled="false" SqlTracingFileCount="2" SqlTracingRolloverEnabled="true" SqlTracingMinimumDuration="500" RunUnitTestsInAppDomain="true" CoreCount="0" ResourcesRetentionTimeInMinutes="0" UseMultipleIPs="true" TestAgentConfiguration="Default" AgentDiagnosticsLevel="Warning">
+    <RunConfiguration Name="Run Settings1" Description="" ResultsStoreType="Database" TimingDetailsStorage="AllIndividualDetails" SaveTestLogsOnError="true" SaveTestLogsFrequency="0" MaxErrorDetails="200" MaxErrorsPerType="1000" MaxThresholdViolations="1000" MaxRequestUrlsReported="1000" UseTestIterations="true" RunDuration="300" WarmupTime="0" CoolDownTime="0" TestIterations="3" WebTestConnectionModel="ConnectionPerUser" WebTestConnectionPoolSize="50" SampleRate="15" ValidationLevel="High" SqlTracingConnectString="" SqlTracingConnectStringDisplayValue="" SqlTracingDirectory="" SqlTracingEnabled="false" SqlTracingFileCount="2" SqlTracingRolloverEnabled="true" SqlTracingMinimumDuration="500" RunUnitTestsInAppDomain="true" CoreCount="0" ResourcesRetentionTimeInMinutes="0" UseMultipleIPs="true" TestAgentConfiguration="Default" AgentDiagnosticsLevel="Warning">
       <CounterSetMappings>
         <CounterSetMapping ComputerName="[CONTROLLER MACHINE]">
           <CounterSetReferences>
@@ -495,7 +442,7 @@
         <GeoLocation Location="West Europe" Percentage="100" />
       </LoadGeneratorLocations>
       <ContextParameters>
-        <ContextParameter Name="WebServer" Value="https://wa-t1dv-gpg.azurewebsites.net" />
+        <ContextParameter Name="WebServer" Value="https://wa-t1dv-gpg-staging.azurewebsites.net" />
       </ContextParameters>
     </RunConfiguration>
   </RunConfigurations>

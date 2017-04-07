@@ -63,11 +63,10 @@ namespace GenderPayGap
                             employer.Name = company.title;
                             employer.CompanyNumber = company.company_number;
                             employer.CompanyStatus = company.company_status;
-                            if (company.address.premises!=null)
+                            if (company.address.premises != null)
                                 employer.Address1 = company.address.premises + ", " + company.address.address_line_1;
                             else
                                 employer.Address1 = company.address.address_line_1;
-                            
                             employer.Address2 = company.address.address_line_2;
                             employer.Address3 = company.address.locality;
                             employer.Country = company.address.country;

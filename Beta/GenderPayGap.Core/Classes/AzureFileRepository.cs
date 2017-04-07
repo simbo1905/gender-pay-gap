@@ -109,7 +109,8 @@ namespace GenderPayGap.Core.Classes
             if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
             var directory = GetDirectory(Path.GetDirectoryName(filePath));
             if (directory == null) return false;
-            return GetFile(filePath) != null;
+            var file = GetFile(filePath);
+            return file != null && file.Exists();
         }
 
         public DateTime GetLastWriteTime(string filePath)
@@ -164,7 +165,6 @@ namespace GenderPayGap.Core.Classes
 
             var directory = GetDirectory(Path.GetDirectoryName(filePath));
             if (directory == null) throw new FileNotFoundException($"Cannot find file '{filePath}'");
-
             var file = directory.GetFileReference(Path.GetFileName(filePath));
             if (file == null) throw new FileNotFoundException($"Cannot find file '{filePath}'");
             var newfile = directory.GetFileReference(newFilename);
@@ -247,6 +247,26 @@ namespace GenderPayGap.Core.Classes
             if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
             var text = lines.ToDelimitedString(Environment.NewLine);
             Write(filePath, text);
+        }
+
+        public void Write(string filePath, byte[] bytes)
+        {
+            if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
+            var file = GetFile(filePath);
+
+            int retries = 0;
+            Retry:
+            try
+            {
+                file.UploadFromByteArray(bytes,0,bytes.Length);
+            }
+            catch (StorageException ex)
+            {
+                if (ex.RequestInformation.HttpStatusCode != (int)HttpStatusCode.Conflict || retries >= 10) throw;
+                retries++;
+                Thread.Sleep(500);
+                goto Retry;
+            }
         }
 
         public void Write(string filePath, Stream stream)

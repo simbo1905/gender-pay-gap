@@ -67,6 +67,16 @@ namespace GenderPayGap
             }
         }
 
+        private static MailQueue _MailQueue;
+        public static MailQueue MailQueue
+        {
+            get
+            {
+                if (_MailQueue == null) _MailQueue = new MailQueue(FileRepository, "MailQueue");
+                return _MailQueue;
+            }
+        }
+
         private static TelemetryClient _AppInsightsClient;
         public static TelemetryClient AppInsightsClient
         {

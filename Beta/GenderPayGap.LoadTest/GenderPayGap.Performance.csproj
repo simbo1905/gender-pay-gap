@@ -59,10 +59,13 @@
     <Compile Include="RandomEmailPlugin.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="15 Minute 100-1000 User Even Mix.loadtest">
+    <None Include="STAGING - 15 Minute 100-1000 User Even Mix.loadtest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
-    <None Include="5 Minute 25 User Even Mix.loadtest">
+    <None Include="STAGING - 5 Minute 25 User Even Mix.loadtest">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="STAGING - Quick smoke test.loadtest">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />

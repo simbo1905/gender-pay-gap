@@ -3,6 +3,7 @@ using System.Configuration;
 using Notify.Models;
 using Extensions;
 using System;
+using System.IO;
 using GenderPayGap.WebUI.Classes;
 using Autofac;
 using GenderPayGap.Database;
@@ -250,7 +251,10 @@ namespace GenderPayGap
                 pipHtml = pipHtml.Replace("((url))", returnUrl);
                 pipHtml = pipHtml.Replace("((ExpiresDate))", expiresDate.ToString("d MMMM yyyy"));
                 var pdf = PDF.HtmlToPDF(pipHtml);
-                Email.QuickSend("GPG PIN-in-Post", SmtpUsername, SmtpSenderName, GEODistributionList, coverHtml, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort,pdf, $"{organisationName.ToProper().Strip(" -_,")}.pdf",test);
+                if (string.IsNullOrWhiteSpace(SmtpServer) || string.IsNullOrWhiteSpace(SmtpUsername))
+                    MvcApplication.MailQueue.Enqueue(pdf,"pdf");
+                else
+                    Email.QuickSend("GPG PIN-in-Post", SmtpUsername, SmtpSenderName, GEODistributionList, coverHtml, SmtpServer, SmtpUsername, SmtpPassword, SmtpPort,pdf, $"{organisationName.ToProper().Strip(" -_,")}.pdf",test);
                 return true;
             }
             catch (Exception ex)
