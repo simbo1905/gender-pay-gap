@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Web.Mvc;
 using Extensions;
 using GenderPayGap.Core.Classes;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using GenderPayGap.WebUI.Classes;
 
 namespace GenderPayGap.WebUI.Models.Search
@@ -29,16 +29,9 @@ namespace GenderPayGap.WebUI.Models.Search
 
             public string Description { get; set; }
         }
-
-        public string SearchText { get; set; }
-
-        public int Year { get; set; }
         
         // This property contains the available options
         public IEnumerable<SicSection> AllSectors { get; set; }
-
-        // This property contains the selected options
-        public IEnumerable<string> NewSectors { get; set; }
         
         public List<Core.Classes.SelectedItem> SectorSources { get; set; }
 
@@ -82,10 +75,13 @@ namespace GenderPayGap.WebUI.Models.Search
             }
         }
 
-        public string LastSearch { get; set; }
-        public string LastSectors { get; set; }
-        public int LastPage { get; set; }
-        public int LastPageSize { get; set; }
-        public int LastYear { get; set; }
+        public string search { get; set; }
+
+        public IEnumerable<string> s { get; set; }
+
+        public int y { get; set; }
+
+        public int p { get; set; }
+        public int z { get; set; }
     }
 }

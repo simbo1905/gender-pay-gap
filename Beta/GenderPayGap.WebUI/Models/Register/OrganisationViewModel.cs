@@ -2,7 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using GenderPayGap.Core.Classes;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using GenderPayGap.WebUI.Classes;
 using System.Collections.Generic;
 using Extensions;
@@ -33,7 +33,7 @@ namespace GenderPayGap.WebUI.Models.Register
         public PagedResult<EmployerRecord> Employers { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        [MaxLength(100), MinLength(5)]
+        [MaxLength(100), MinLength(3)]
         public string Name { get; set; }
         public string CompanyNumber { get; set; }
 
@@ -74,6 +74,8 @@ namespace GenderPayGap.WebUI.Models.Register
         [Required(AllowEmptyStrings = false)]
         [DataType(DataType.EmailAddress)]
         public string ContactEmailAddress { get; set; }
+
+        public string EmailAddress { get; set; }
 
         [Required(AllowEmptyStrings = false)]
         [Phone]

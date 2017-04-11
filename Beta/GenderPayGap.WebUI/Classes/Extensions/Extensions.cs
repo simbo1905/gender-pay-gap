@@ -1,9 +1,10 @@
 ﻿using Extensions;
 using GenderPayGap.Core.Interfaces;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using IdentityServer3.Core;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Security.Claims;
 using System.Security.Principal;
@@ -14,6 +15,7 @@ using System.Web.Mvc.Html;
 using System.Linq.Expressions;
 using System.ComponentModel.DataAnnotations;
 using System.Configuration;
+using System.Net;
 
 namespace GenderPayGap.WebUI.Classes
 {
@@ -54,6 +56,8 @@ namespace GenderPayGap.WebUI.Classes
 
         public static User FindUser(this IRepository repository, IPrincipal principal)
         {
+            if (principal == null) return null;
+
             //GEt the logged in users identifier
             var userId = principal.GetUserId();
 
@@ -67,8 +71,19 @@ namespace GenderPayGap.WebUI.Classes
         {
             if (string.IsNullOrWhiteSpace(emailAddress))throw new ArgumentNullException("emailAddress");
             
-            //If internal user the load it using the identifier as the UserID
-            return repository.GetAll<User>().FirstOrDefault(u => u.EmailAddress == emailAddress);
+            var encryptedUsername = MvcApplication.EncryptEmails ? Encryption.EncryptData(emailAddress) : null;
+            User user = null;
+            if (MvcApplication.EncryptEmails && !emailAddress.StartsWithI(MvcApplication.TestPrefix))
+            {
+                user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == encryptedUsername);
+                if (user == null) user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == emailAddress);
+            }
+            else
+            {
+                user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == emailAddress);
+                if (user == null) user = repository.GetAll<User>().FirstOrDefault(x => x.EmailAddressDB == encryptedUsername);
+            }
+            return user;
         }
 
         public static User FindUserByVerifyCode(this IRepository repository, string verifyCode)
@@ -95,19 +110,25 @@ namespace GenderPayGap.WebUI.Classes
 
         #region Registraion Helpers
 
-        public static bool SendVerifyEmail(this RegisterController controller, string emailAddress, string verifyCode)
+        public static bool SendVerifyEmail(this RegisterController controller, string emailAddress, string verifyCode, bool test = false)
         {
             var verifyUrl=controller.Url.Action("VerifyEmail", "Register", new {code= verifyCode },"https");
-            return GovNotifyAPI.SendVerifyEmail(verifyUrl,emailAddress, verifyCode);
+            return GovNotifyAPI.SendVerifyEmail(verifyUrl,emailAddress, verifyCode,test);
         }
- 
-        public static bool SendPinInPost(this RegisterController controller, User user, Organisation organisation, string pin)
+
+        public static bool SendPasswordReset(this RegisterController controller, string emailAddress, string resetCode, bool test = false)
         {
-            var name = user.Fullname + " (" + user.JobTitle + ")";
+            var resetUrl = controller.Url.Action("NewPassword", "Register", new { code = resetCode }, "https");
+            return GovNotifyAPI.SendPasswordReset(resetUrl, emailAddress, resetCode,test);
+        }
+
+        public static bool SendPinInPost(this RegisterController controller, UserOrganisation userOrg, string pin, DateTime sendDate, bool test = false)
+        {
             var returnUrl = controller.Url.Action("ActivateService", "Register",null,"https");
-            var address = organisation.ActiveAddress ?? organisation.PendingAddress;
-            if (GovNotifyAPI.ManualPip) return GovNotifyAPI.SendPinInPostManual(returnUrl, name, organisation.OrganisationName, address.GetList(), pin);
-            return GovNotifyAPI.SendPinInPost(returnUrl, name, organisation.OrganisationName, address.GetList(), pin);
+
+            var imagePath = new System.UriBuilder(controller.Request.Url.AbsoluteUri){Path = controller.Url.Content(@"~/Content/img/")}.Uri.ToString();
+
+            return GovNotifyAPI.SendPinInPost(imagePath,returnUrl, userOrg.User.Fullname, userOrg.User.JobTitle, userOrg.Organisation.OrganisationName, userOrg.Address.GetList(), pin, sendDate, sendDate.AddDays(Properties.Settings.Default.PinInPostExpiryDays), test);
         }
         #endregion
 
@@ -195,9 +216,9 @@ namespace GenderPayGap.WebUI.Classes
                 var attributes = propertyInfo == null ? null : propertyInfo.GetCustomAttributes(typeof(ValidationAttribute), false).ToList<ValidationAttribute>();
 
                 //Get the display name
-                var displayAttribute = propertyInfo==null ? null : propertyInfo.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
-                var displayName = displayAttribute == null ? propertyName : displayAttribute.Name;
-
+                var displayNameAttribute = propertyInfo?.GetCustomAttributes(typeof(DisplayNameAttribute), false).FirstOrDefault() as DisplayNameAttribute;
+                var displayAttribute = propertyInfo?.GetCustomAttributes(typeof(DisplayAttribute), false).FirstOrDefault() as DisplayAttribute;
+                var displayName = displayNameAttribute != null ? displayNameAttribute.DisplayName : displayAttribute != null ? displayAttribute.Name : propertyName;
 
                 foreach (var error in modelState.Value.Errors)
                 { 

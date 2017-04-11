@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Configuration;
 
-namespace GpgIdentityServer
+namespace GenderPayGap.IdentityServer
 {
     public static class Scopes
     {

@@ -57,11 +57,21 @@
                         </tr>
                         <tr class="row dynamic-content publicManual ">
                             <td>
-                                Email
+                                Contact Email
                             </td>
                             <td>
                                 <!-- Default Dynamic Section -->
                                 @Model.ContactEmailAddress
+                            </td>
+                            <td></td>
+                        </tr>
+                        <tr class="row dynamic-content publicManual ">
+                            <td>
+                                Registered Email
+                            </td>
+                            <td>
+                                <!-- Default Dynamic Section -->
+                                @Model.EmailAddress
                             </td>
                             <td></td>
                         </tr>
@@ -105,7 +115,7 @@
                 <fieldset>
                     <br>
                     <p><button type="submit" class="button" name="command" value="approve">Confirm and complete registration</button></p>
-                    <p><button type="submit" class="link-button" name="command" value="decline">Cancel registration</button></p>
+                    <p><button type="submit" class="link-button" name="command" value="decline">Reject registration</button></p>
                 </fieldset>
             </div>
         </div>

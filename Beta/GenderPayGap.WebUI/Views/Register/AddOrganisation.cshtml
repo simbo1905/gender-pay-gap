@@ -14,14 +14,16 @@
         @Html.HiddenFor(model => model.BackAction)
         @Html.HiddenFor(model => model.SearchText)
         @Html.HiddenFor(model => model.SectorType)
-        @Html.HiddenFor(model => model.Name)
         @Html.HiddenFor(model => model.ContactFirstName)
         @Html.HiddenFor(model => model.ContactLastName)
         @Html.HiddenFor(model => model.ContactJobTitle)
         @Html.HiddenFor(model => model.ContactOrganisation)
         @Html.HiddenFor(model => model.ContactEmailAddress)
         @Html.HiddenFor(model => model.ContactPhoneNumber)
-
+        if (!Model.ManualRegistration)
+        {
+            @Html.HiddenFor(model => model.Name)
+        }
         <div class="grid-row">
             <div class="column-two-thirds">
                 @Html.CustomValidationSummary()

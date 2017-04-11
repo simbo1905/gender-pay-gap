@@ -10,7 +10,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route]
-        [OutputCache(Duration = 86400, VaryByParam = "code")]
+        [OutputCache(CacheProfile = "Error")]
         public ActionResult Default(int code=0)
         {
             var model = new ErrorViewModel(code);
@@ -19,7 +19,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("service-unavailable")]
-        [OutputCache(Duration = 86400, VaryByParam = "none")]
+        [OutputCache(CacheProfile = "Error")]
         public ActionResult ServiceUnavailable()
         {
             var model = new ErrorViewModel(1119);

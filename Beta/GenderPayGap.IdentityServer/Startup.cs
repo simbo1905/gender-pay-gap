@@ -2,20 +2,18 @@
 using Owin;
 using IdentityServer3.Core.Configuration;
 using System.Security.Cryptography.X509Certificates;
-using Microsoft.Owin.Security.Google;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Linq;
+using Extensions;
 using IdentityServer3.Core.Logging;
-using Microsoft.Owin.Security.Twitter;
 using IdentityServer3.Core.Services;
-using Microsoft.Owin.Security.Facebook;
-using Serilog;
 using IdentityServer3.Core.Services.Default;
 
-[assembly: OwinStartup(typeof(GpgIdentityServer.Startup))]
+[assembly: OwinStartup(typeof(GenderPayGap.IdentityServer.Startup))]
 
-namespace GpgIdentityServer
+namespace GenderPayGap.IdentityServer
 {
     public class Startup
     {
@@ -174,8 +172,42 @@ namespace GpgIdentityServer
 
         X509Certificate2 LoadCertificate()
         {
-            return new X509Certificate2(
-                string.Format(@"{0}\bin\idsrv3test.pfx", AppDomain.CurrentDomain.BaseDirectory), "idsrv3test");
+            if (string.IsNullOrWhiteSpace(MvcApplication.CertThumprint)) return new X509Certificate2(string.Format(@"{0}\bin\idsrv3test.pfx", AppDomain.CurrentDomain.BaseDirectory), "idsrv3test");
+
+            X509Certificate2 cert = null;
+            using (var certStore = new X509Store(StoreName.My, StoreLocation.CurrentUser))
+            {
+                certStore.Open(OpenFlags.ReadOnly);
+
+                //Try and get a valid cert
+                var certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, MvcApplication.CertThumprint, true);
+                //Otherwise use an invalid cert
+                if (certCollection.Count == 0) certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, MvcApplication.CertThumprint, false);
+
+                if (certCollection.Count > 0)cert=certCollection[0];
+
+                certStore.Close();
+            }
+
+            //Try again from local machine certificate store
+            if (cert == null)
+                using (var certStore = new X509Store(StoreLocation.LocalMachine))
+                {
+                    certStore.Open(OpenFlags.ReadOnly);
+
+                    //Try and get a valid cert
+                    var certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, MvcApplication.CertThumprint, true);
+                    //Otherwise use an invalid cert
+                    if (certCollection.Count == 0) certCollection = certStore.Certificates.Find(X509FindType.FindByThumbprint, MvcApplication.CertThumprint, false);
+
+                    if (certCollection.Count > 0) cert = certCollection[0];
+
+                    certStore.Close();
+                }
+
+            if (cert==null)throw new Exception($"Cannot find certificate with thumbprint '{MvcApplication.CertThumprint}' in local store");
+            MvcApplication.InfoLog.WriteLine($"Successfully loaded certificate from thumbprint {MvcApplication.CertThumprint}");
+            return cert;
         }
     }
 }

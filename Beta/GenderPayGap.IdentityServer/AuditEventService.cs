@@ -1,13 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using System.Web;
-using Extensions;
 using IdentityServer3.Core.Events;
 using IdentityServer3.Core.Services;
 
-namespace GpgIdentityServer
+namespace GenderPayGap.IdentityServer
 {
     public class AuditEventService : IEventService
     {
@@ -35,7 +31,7 @@ namespace GpgIdentityServer
 
             if (localLoginDetails != null)
             {
-                Global.Log.WriteLine($"LOGIN ATTEMPT:{evt.EventType},REMOTEIP:{HttpContext.Current.Request.UserHostAddress}, Username:{localLoginDetails.LoginUserName},Details:{evt.Message},Name:{evt.Name}");
+                MvcApplication.InfoLog.WriteLine($"LOGIN ATTEMPT:{evt.EventType},REMOTEIP:{HttpContext.Current.Request.UserHostAddress}, Username:{localLoginDetails.LoginUserName},Details:{evt.Message},Name:{evt.Name}");
             }
             else if (externalLoginDetails!=null)
             {

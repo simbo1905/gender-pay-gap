@@ -1,0 +1,69 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 14
+VisualStudioVersion = 14.0.25420.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "ReadMe", "ReadMe", "{446E2070-0B97-42D5-B3E3-5AA48CCE213C}"
+	ProjectSection(SolutionItems) = preProject
+		..\TestPlan.txt = ..\TestPlan.txt
+		..\TestPlan2.txt = ..\TestPlan2.txt
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Files", "Files", "{75D9C521-1097-4C7D-B66D-24E4DD375B83}"
+	ProjectSection(SolutionItems) = preProject
+		..\.vs\config\applicationhost.config = ..\.vs\config\applicationhost.config
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{4D3CC59E-2C31-45EA-A50C-698D56566686}"
+	ProjectSection(SolutionItems) = preProject
+		..\Local.testsettings = ..\Local.testsettings
+		..\WebEssentials2015-Settings.json = ..\WebEssentials2015-Settings.json
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GenderPayGap.Performance", "GenderPayGap.Performance.csproj", "{637D90F3-7735-45CE-B101-D9BEC62AAC19}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Debug|x86 = Debug|x86
+		DEV.Debug|Any CPU = DEV.Debug|Any CPU
+		DEV.Debug|x86 = DEV.Debug|x86
+		PREPROD|Any CPU = PREPROD|Any CPU
+		PREPROD|x86 = PREPROD|x86
+		PROD.Release|Any CPU = PROD.Release|Any CPU
+		PROD.Release|x86 = PROD.Release|x86
+		Release|Any CPU = Release|Any CPU
+		Release|x86 = Release|x86
+		TEST.Release|Any CPU = TEST.Release|Any CPU
+		TEST.Release|x86 = TEST.Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.Debug|x86.Build.0 = Debug|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.DEV.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.DEV.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.DEV.Debug|x86.ActiveCfg = Debug|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.DEV.Debug|x86.Build.0 = Debug|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.PREPROD|Any CPU.ActiveCfg = Release|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.PREPROD|Any CPU.Build.0 = Release|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.PREPROD|x86.ActiveCfg = Release|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.PREPROD|x86.Build.0 = Release|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.PROD.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.PROD.Release|Any CPU.Build.0 = Release|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.PROD.Release|x86.ActiveCfg = Release|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.PROD.Release|x86.Build.0 = Release|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.Release|Any CPU.Build.0 = Release|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.Release|x86.ActiveCfg = Release|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.Release|x86.Build.0 = Release|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.TEST.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.TEST.Release|Any CPU.Build.0 = Release|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.TEST.Release|x86.ActiveCfg = Release|Any CPU
+		{637D90F3-7735-45CE-B101-D9BEC62AAC19}.TEST.Release|x86.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

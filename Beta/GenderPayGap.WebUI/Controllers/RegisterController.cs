@@ -1,20 +1,26 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Security.Authentication;
 using System.Web.Mvc;
 using Extensions;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using Autofac;
 using GenderPayGap.WebUI.Models;
 using GenderPayGap.WebUI.Classes;
 using System.Configuration;
 using System.Net;
+using System.Net.Http;
 using System.Transactions;
 using System.Web;
 using GenderPayGap.Core.Classes;
 using GenderPayGap.WebUI.Properties;
 using GenderPayGap.Core.Interfaces;
 using GenderPayGap.WebUI.Models.Register;
+using System.Security.Claims;
+using IdentityServer3.Core;
+using Microsoft.Owin.Security;
+using Microsoft.Owin.Security.Cookies;
 
 namespace GenderPayGap.WebUI.Controllers
 {
@@ -33,16 +39,13 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("Init")]
         public ActionResult Init()
         {
-#if DEBUG
-            MvcApplication.Log.WriteLine("Register Controller Initialised");
-#endif
             return new EmptyResult();
         }
         #endregion
 
         #region about-you
         [Route]
-        [OutputCache(Duration = 86400, VaryByParam = "none")]
+        [OutputCache(CacheProfile = "RedirectIndex")]
         public ActionResult Redirect()
         {
             return RedirectToAction("AboutYou");
@@ -118,7 +121,10 @@ namespace GenderPayGap.WebUI.Controllers
             currentUser.Firstname = model.FirstName;
             currentUser.Lastname = model.LastName;
             currentUser.JobTitle = model.JobTitle;
-            currentUser.EmailAddress = model.EmailAddress;
+            if (model.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                currentUser.EmailAddressDB = model.EmailAddress;
+            else
+                currentUser.EmailAddress = model.EmailAddress;
             currentUser.PasswordHash = model.Password.GetSHA512Checksum();
             currentUser.EmailVerifySendDate = null;
             currentUser.EmailVerifiedDate = null;
@@ -142,13 +148,14 @@ namespace GenderPayGap.WebUI.Controllers
 
         #region Verify email
         //Send the verification code and show confirmation
-        public bool ResendVerifyCode(User currentUser)
+        private bool ResendVerifyCode(User currentUser, out string verifyCode)
         {
             //Send a verification link to the email address
+            verifyCode = null;
             try
             {
-                var verifyCode = Encryption.EncryptQuerystring(currentUser.UserId + ":" + currentUser.Created.ToSmallDateTime());
-                if (!this.SendVerifyEmail(currentUser.EmailAddress, verifyCode))
+                verifyCode = Encryption.EncryptQuerystring(currentUser.UserId + ":" + currentUser.Created.ToSmallDateTime());
+                if (!this.SendVerifyEmail(currentUser.EmailAddress, verifyCode, currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)))
                     throw new Exception("Could not send verification email. Please try again later.");
 
                 currentUser.EmailVerifyHash = verifyCode.GetSHA512Checksum();
@@ -159,7 +166,7 @@ namespace GenderPayGap.WebUI.Controllers
             catch (Exception ex)
             {
                 //Log the exception
-                MvcApplication.Log.WriteLine(ex.Message);
+                MvcApplication.ErrorLog.WriteLine(ex.Message);
                 return false;
             }
 
@@ -169,8 +176,15 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("verify-email")]
-        public ActionResult VerifyEmail(string code=null)
+        public ActionResult VerifyEmail(string code=null, string login=null)
         {
+            //If the email address is a test email then simulate signin
+            if (login.StartsWithI(MvcApplication.TestPrefix))
+            {
+                var impersonateResult = ImpersonateUser(login);
+                if (impersonateResult != null) return impersonateResult;
+            }
+
             //Ensure user has completed the registration process
             User currentUser;
             var checkResult = CheckUserRegisteredOk(out currentUser);
@@ -187,23 +201,30 @@ namespace GenderPayGap.WebUI.Controllers
             //If email not sent
             if (currentUser.EmailVerifySendDate.EqualsI(null, DateTime.MinValue))
             {
-                if (!ResendVerifyCode(currentUser))
-                    model.Retry = true;
-                else
-                    model.Sent = true;
+                string verifyCode = null;
+                if (!ResendVerifyCode(currentUser, out verifyCode))
+                    return View("CustomError", new ErrorViewModel(1004));
+
+                model.Sent = true;
+
+                //If the email address is a test email then add to viewbag
+               
+               if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)) ViewBag.VerifyCode = verifyCode;
 
                 //Tell them to verify email
+
                 return View("VerifyEmail", model);
             }
 
             //If verification code has expired
             if (currentUser.EmailVerifySendDate.Value.AddHours(Settings.Default.EmailVerificationExpiryHours) < DateTime.Now)
             {
-                AddModelError(1103);
+                AddModelError(3016);
 
                 model.Resend = true;
 
                 //prompt user to click to request a new one
+                this.CleanModelErrors<VerifyViewModel>();
                 return View("VerifyEmail", model);
             }
 
@@ -215,16 +236,10 @@ namespace GenderPayGap.WebUI.Controllers
                 if (remainingResend>TimeSpan.Zero)
                     //Prompt to check email or wait
                     return View("CustomError", new ErrorViewModel(1102, new { remainingTime = remainingLock.ToFriendly(maxParts: 2) }));
-                else
-                {
-                    //Expired with resend
-                    AddModelError(3016);
-                    this.CleanModelErrors<VerifyViewModel>();
 
-                    //Prompt to click resend
-                    model.Resend = true;
-                    return View("VerifyEmail", model);
-                }
+                //Prompt to click resend
+                model.Resend = true;
+                return View("VerifyEmail", model);
             }
 
             //If too many wrong attempts
@@ -232,7 +247,6 @@ namespace GenderPayGap.WebUI.Controllers
                 return View("CustomError", new ErrorViewModel(1110, new { remainingTime = remainingLock.ToFriendly(maxParts: 2) }));
 
             ActionResult result;
-
             if (currentUser.EmailVerifyHash != code.GetSHA512Checksum())
             {
                 currentUser.VerifyAttempts++;
@@ -297,6 +311,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         #region EmailConfirmed
 
+
         [HttpGet]
         [Auth]
         [Route("email-confirmed")]
@@ -307,8 +322,8 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
+            //If its an administrator show confirmation and logout message
             if (currentUser.IsAdministrator())
-                //If its an administrator show confirmation and logout message
                 return View("CustomError", new ErrorViewModel(1116));
 
             return View("EmailConfirmed");
@@ -414,12 +429,16 @@ namespace GenderPayGap.WebUI.Controllers
             var checkResult = CheckUserRegisteredOk(out currentUser);
             if (checkResult != null) return checkResult;
 
+            ModelState.Include("SearchText");
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<OrganisationViewModel>();
+                return View("OrganisationSearch", model);
+            }
             //Make sure we can load employers from session
             var m = this.UnstashModel<OrganisationViewModel>();
             if (m == null) return View("CustomError", new ErrorViewModel(1112));
             model.Employers = m.Employers;
-
-            ModelState.Include("SearchText");
 
             model.ManualRegistration = true;
             model.BackAction = "OrganisationSearch";
@@ -438,14 +457,18 @@ namespace GenderPayGap.WebUI.Controllers
             switch (model.SectorType)
             {
                 case SectorTypes.Private:
-
-                    model.Employers = PrivateSectorRepository.Search(model.SearchText,1, Settings.Default.EmployerPageSize);
-
+                    try
+                    { 
+                        model.Employers = PrivateSectorRepository.Search(model.SearchText, 1, Settings.Default.EmployerPageSize, currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix) );
+                    }
+                    catch (Exception ex)
+                    {
+                        GovNotifyAPI.SendGeoMessage("GPG - COMPANIES HOUSE ERROR", $"Cant search using Companies House API for query '{model.SearchText}' page:'1' due to following error:\n\n{ex.Message}",test:currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
+                        throw;
+                    }
                     break;
-
                 case SectorTypes.Public:
-
-                    model.Employers = PublicSectorRepository.Search(model.SearchText, 1, Settings.Default.EmployerPageSize);
+                    model.Employers = PublicSectorRepository.Search(model.SearchText, 1, Settings.Default.EmployerPageSize, currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
 
                     break;
 
@@ -537,7 +560,7 @@ namespace GenderPayGap.WebUI.Controllers
             bool doSearch = false;
             if (command == "search")
             {
-                model.SearchText = model.SearchText.Trim();
+                model.SearchText = model.SearchText.TrimI();
 
                 if (string.IsNullOrWhiteSpace(model.SearchText))
                 {
@@ -587,11 +610,19 @@ namespace GenderPayGap.WebUI.Controllers
                 switch (model.SectorType)
                 {
                     case SectorTypes.Private:
-                        model.Employers = PrivateSectorRepository.Search(model.SearchText, nextPage, Settings.Default.EmployerPageSize);
+                        try
+                        {
+                            model.Employers = PrivateSectorRepository.Search(model.SearchText, nextPage, Settings.Default.EmployerPageSize,currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
+                        }
+                        catch (Exception ex)
+                        {
+                            GovNotifyAPI.SendGeoMessage("GPG - COMPANIES HOUSE ERROR", $"Cant search using Companies House API for query '{model.SearchText}' page:'{nextPage}' due to following error:\n\n{ex.Message}", test: currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
+                            throw;
+                        }
                         break;
 
                     case SectorTypes.Public:
-                        model.Employers = PublicSectorRepository.Search(model.SearchText, nextPage, Settings.Default.EmployerPageSize);
+                        model.Employers = PublicSectorRepository.Search(model.SearchText, nextPage, Settings.Default.EmployerPageSize, currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
                         break;
 
                     default:
@@ -859,23 +890,46 @@ namespace GenderPayGap.WebUI.Controllers
             model.Employers = m.Employers;
 
             //Get the sic codes from companies house
-            if (!model.ManualRegistration && model.SectorType == SectorTypes.Private && model.SelectedEmployer!=null)
-                model.SelectedEmployer.SicCodes = PrivateSectorRepository.GetSicCodes(model.SelectedEmployer.CompanyNumber);
+            if (!model.ManualRegistration && model.SelectedEmployer != null)
+            {
+                if (model.SectorType == SectorTypes.Public)
+                    model.SelectedEmployer.SicCodes = PublicSectorRepository.GetSicCodes(model.SelectedEmployer.CompanyNumber);
+                else if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                    model.SelectedEmployer.SicCodes = DataRepository.GetAll<SicCode>().FirstOrDefault(s => s.SicSectionId != "X")?.SicCodeId.ToString();
+                else
+                    try
+                    {
+                        model.SelectedEmployer.SicCodes = PrivateSectorRepository.GetSicCodes(model.SelectedEmployer.CompanyNumber);
+                    }
+                    catch (Exception ex)
+                    {
+                        GovNotifyAPI.SendGeoMessage("GPG - COMPANIES HOUSE ERROR", $"Cant get SIC Codes from Companies House API for company {model.SelectedEmployer.Name} No:{model.SelectedEmployer.CompanyNumber} due to following error:\n\n{ex.Message}", test: currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
+                        throw;
+                    }
+            }
 
             //Save the registration
-            SaveRegistration(currentUser, model);
+            UserOrganisation userOrg;
+            SaveRegistration(currentUser, model, out userOrg);
 
             //Redirect to send pin
             this.StashModel(model);
 
             //If manual registration then show confirm receipt
-            if (model.ManualRegistration)return RedirectToAction("RequestReceived");
+            if (model.ManualRegistration)
+            {
+                var reviewCode = Encryption.EncryptQuerystring(userOrg.UserId + ":" + userOrg.OrganisationId + ":" + DateTime.Now.ToSmallDateTime());
+
+                if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)) TempData["TestUrl"] = Url.Action("ReviewRequest",new {code= reviewCode});
+                return RedirectToAction("RequestReceived");
+            }
 
             //If public sector then we are complete
             if (model.SectorType == SectorTypes.Public)
             {
                 this.StashModel(new CompleteViewModel() { AccountingDate = GetAccountYearStartDate(model.SectorType.Value) });
-                RedirectToAction("Complete");
+                //BUG: the return keyword was missing here so no redirection would occur
+                return RedirectToAction("Complete");
             }
 
             //If private sector then send the pin
@@ -888,13 +942,14 @@ namespace GenderPayGap.WebUI.Controllers
         /// </summary>
         /// <param name="currentUser"></param>
         /// <param name="model"></param>
-        void SaveRegistration(User currentUser,OrganisationViewModel model)
-        {            
+        private void SaveRegistration(User currentUser,OrganisationViewModel model, out UserOrganisation userOrg)
+        {
+            userOrg = null;
             var employer = model.SelectedEmployer;
 
             //Save the new organisation
             Organisation org = null;
-            if (model.SectorType == SectorTypes.Private)
+            if (employer!=null && model.SectorType == SectorTypes.Private)
                 org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.PrivateSectorReference == employer.CompanyNumber);
             else
                 org = DataRepository.GetAll<Organisation>().FirstOrDefault(o => o.SectorType == SectorTypes.Public && o.OrganisationName.ToLower() == model.Name.ToLower());
@@ -916,17 +971,20 @@ namespace GenderPayGap.WebUI.Controllers
                     DataRepository.SaveChanges();
 
                     //Use public sector code or get from employer
-                    var sicCodes = model.SectorType == SectorTypes.Public ? new[] {1} : employer.GetSicCodes();
+                    var sicCodes = employer!=null ? employer.GetSicCodes()  : null;
 
                     //Save the sic codes for the organisation
-                    var allSicCodes = DataRepository.GetAll<SicCode>();
-                    foreach (var code in sicCodes)
+                    if (sicCodes != null)
                     {
-                        var sicCode = code == 0 ? null : allSicCodes.FirstOrDefault(sic => sic.SicCodeId == code);
-                        if (sicCode == null)
-                            MvcApplication.Log.WriteLine($"Invalid SIC code '{code}' received from companies house");
-                        else
-                            org.OrganisationSicCodes.Add(new OrganisationSicCode() {Organisation = org, SicCode = sicCode});
+                        var allSicCodes = DataRepository.GetAll<SicCode>();
+                        foreach (var code in sicCodes)
+                        {
+                            var sicCode = code == 0 ? null : allSicCodes.FirstOrDefault(sic => sic.SicCodeId == code);
+                            if (sicCode == null)
+                                MvcApplication.WarningLog.WriteLine($"Invalid SIC code '{code}' received from companies house");
+                            else
+                                org.OrganisationSicCodes.Add(new OrganisationSicCode() {Organisation = org, SicCode = sicCode});
+                        }
                     }
 
                     org.SetStatus(model.ManualRegistration ? OrganisationStatuses.Pending : OrganisationStatuses.Active, currentUser.UserId);
@@ -970,7 +1028,7 @@ namespace GenderPayGap.WebUI.Controllers
 
                 DataRepository.SaveChanges();
 
-                var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.OrganisationId == org.OrganisationId && uo.UserId == currentUser.UserId);
+                userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.OrganisationId == org.OrganisationId && uo.UserId == currentUser.UserId);
 
                 if (userOrg == null)
                 {
@@ -978,6 +1036,8 @@ namespace GenderPayGap.WebUI.Controllers
                     {
                         UserId = currentUser.UserId,
                         OrganisationId = org.OrganisationId,
+                        //BUG: Org shoud be referenced here, org.OrganisationId is not enough
+                        Organisation = org,
                         Created = DateTime.Now
                     };
                     DataRepository.Insert(userOrg);
@@ -997,11 +1057,7 @@ namespace GenderPayGap.WebUI.Controllers
                     DataRepository.SaveChanges();
 
                     //Send request to GEO
-                    var adminEmail = GovNotifyAPI.GEOGroupEmailAddress;
-#if DEBUG
-                    if (string.IsNullOrWhiteSpace(adminEmail)) adminEmail = currentUser.EmailAddress;
-#endif
-                    SendRegistrationRequest(userOrg, adminEmail, $"{model.ContactFirstName} {currentUser.ContactLastName} ({currentUser.JobTitle})", currentUser.ContactOrganisation, org.OrganisationName, address.GetAddress());
+                    SendRegistrationRequest(userOrg, $"{model.ContactFirstName} {currentUser.ContactLastName} ({currentUser.JobTitle})", currentUser.ContactOrganisation, org.OrganisationName, address.GetAddress(), currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
                 }
 
                 //Set the status to active
@@ -1026,7 +1082,7 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         //Send the registration request
-        protected void SendRegistrationRequest(UserOrganisation userOrg, string adminEmail, string contactName, string contactOrg, string reportingOrg, string reportingAddress)
+        protected void SendRegistrationRequest(UserOrganisation userOrg, string contactName, string contactOrg, string reportingOrg, string reportingAddress, bool test = false)
         {
             //Send a verification link to the email address
             try
@@ -1034,13 +1090,16 @@ namespace GenderPayGap.WebUI.Controllers
                 var reviewCode = Encryption.EncryptQuerystring(userOrg.UserId + ":" + userOrg.OrganisationId + ":" + DateTime.Now.ToSmallDateTime());
                 var reviewUrl = Url.Action("ReviewRequest", "Register", new { code = reviewCode }, "https");
 
-                if (!GovNotifyAPI.SendRegistrationRequest(adminEmail,reviewUrl,contactName, contactOrg, reportingOrg, reportingAddress))
+                //If the email address is a test email then simulate sending
+                if (userOrg.User.EmailAddress.StartsWithI(MvcApplication.TestPrefix)) return;
+
+                if (!GovNotifyAPI.SendRegistrationRequest(reviewUrl,contactName, contactOrg, reportingOrg, reportingAddress,test))
                     throw new Exception("Could not send registration request email. Please try again later.");
             }
             catch (Exception ex)
             {
                 //Log the exception
-                MvcApplication.Log.WriteLine(ex.Message);
+                MvcApplication.ErrorLog.WriteLine(ex.Message);
                 throw;
             }
         }
@@ -1058,6 +1117,8 @@ namespace GenderPayGap.WebUI.Controllers
 
             //Clear the stash
             this.ClearStash();
+
+            if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix) && TempData.ContainsKey("TestUrl")) ViewBag.TestUrl = TempData["TestUrl"];
 
             return View("RequestReceived");
         }
@@ -1162,6 +1223,7 @@ namespace GenderPayGap.WebUI.Controllers
             model.ContactJobTitle = userOrg.User.ContactJobTitle;
             model.ContactOrganisation = userOrg.User.ContactOrganisation;
             model.ContactEmailAddress = userOrg.User.ContactEmailAddress;
+            model.EmailAddress = userOrg.User.EmailAddress;
             model.ContactPhoneNumber = userOrg.User.ContactPhoneNumber;
 
             model.Name = userOrg.Organisation.OrganisationName;
@@ -1210,8 +1272,9 @@ namespace GenderPayGap.WebUI.Controllers
                 userOrg.Organisation.SetStatus(OrganisationStatuses.Active, SingleAdmin?.UserId ?? currentUser.UserId, "Manually registered");
 
                 //Send the approved email to the applicant
-                SendRegistrationAccepted(userOrg.User.ContactEmailAddress);
+                SendRegistrationAccepted(userOrg.User.ContactEmailAddress, userOrg.User.ContactEmailAddress.StartsWithI(MvcApplication.TestPrefix));
 
+                if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)) TempData["TestUrl"] = Url.Action("ChooseOrganisation", new { impersonate=userOrg.User.EmailAddress });
                 result = RedirectToAction("RequestAccepted");
             }
             else 
@@ -1227,19 +1290,19 @@ namespace GenderPayGap.WebUI.Controllers
         }
 
         //Send the registration request
-        protected void SendRegistrationAccepted(string emailAddress)
+        protected void SendRegistrationAccepted(string emailAddress, bool test = false)
         {
             //Send a verification link to the email address
             try
             {
                 string returnUrl = Url.Action("Redirect","Submit",null,"https");
-                if (!GovNotifyAPI.SendRegistrationApproved(returnUrl, emailAddress))
+                if (!GovNotifyAPI.SendRegistrationApproved(returnUrl, emailAddress,test))
                     throw new Exception("Could not send registration accepted email.");
             }
             catch (Exception ex)
             {
                 //Log the exception
-                MvcApplication.Log.WriteLine(ex.Message);
+                MvcApplication.ErrorLog.WriteLine(ex.Message);
                 throw;
             }
         }
@@ -1309,7 +1372,7 @@ namespace GenderPayGap.WebUI.Controllers
             }
 
             //Send the declined email to the applicant
-            SendRegistrationDeclined(emailAddress,string.IsNullOrWhiteSpace(model.CancellationReason) ? "We haven't been able to verify your employer's identity. So we have declined your application." : model.CancellationReason);
+            SendRegistrationDeclined(emailAddress,string.IsNullOrWhiteSpace(model.CancellationReason) ? "We haven't been able to verify your employer's identity. So we have declined your application." : model.CancellationReason, test:emailAddress.StartsWithI(MvcApplication.TestPrefix));
             
             //Save the changes and redirect
             DataRepository.SaveChanges();
@@ -1323,19 +1386,19 @@ namespace GenderPayGap.WebUI.Controllers
 
 
         //Send the registration request
-        protected void SendRegistrationDeclined(string emailAddress,string reason)
+        protected void SendRegistrationDeclined(string emailAddress,string reason,bool test=false)
         {
             //Send a verification link to the email address
             try
             {
                 string returnUrl = Url.Action("OrganisationType", "Register",null,"https");
-                if (!GovNotifyAPI.SendRegistrationDeclined(returnUrl,emailAddress, reason))
+                if (!GovNotifyAPI.SendRegistrationDeclined(returnUrl,emailAddress, reason,test))
                     throw new Exception("Could not send registration declined email.");
             }
             catch (Exception ex)
             {
                 //Log the exception
-                MvcApplication.Log.WriteLine(ex.Message);
+                MvcApplication.ErrorLog.WriteLine(ex.Message);
                 throw;
             }
         }
@@ -1357,6 +1420,8 @@ namespace GenderPayGap.WebUI.Controllers
 
             //Clear the stash
             this.ClearStash();
+
+            if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix) && TempData.ContainsKey("TestUrl")) ViewBag.TestUrl = TempData["TestUrl"];
 
             return View("RequestAccepted", model);
         }
@@ -1380,6 +1445,16 @@ namespace GenderPayGap.WebUI.Controllers
             //Clear the stash
             this.ClearStash();
 
+            if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+            {
+                UserOrganisation userOrg;
+                OrganisationAddress address;
+
+                var result = UnwrapRegistrationRequest(model, out userOrg, out address);
+
+                ViewBag.TestUrl = Url.Action("ChooseOrganisation", new { impersonate = userOrg.User.EmailAddress });
+            }
+
             return View("RequestCancelled", model);
         }
         #endregion
@@ -1396,16 +1471,21 @@ namespace GenderPayGap.WebUI.Controllers
             var userOrg = DataRepository.GetAll<UserOrganisation>().FirstOrDefault(uo => uo.UserId == currentUser.UserId);
 
             //If a pin has never been sent or resend button submitted then send one immediately
-            if (string.IsNullOrWhiteSpace(userOrg.PINHash) || userOrg.PINSentDate.EqualsI(null, DateTime.MinValue))
+            if (string.IsNullOrWhiteSpace(userOrg.PINHash) || userOrg.PINSentDate.EqualsI(null, DateTime.MinValue) || userOrg.PINSentDate.Value.AddDays(Settings.Default.PinInPostExpiryDays) < DateTime.Now)
             {
                 try
                 {
+                    var now = DateTime.Now;
+
                     //Generate a new pin
-                    var pin = ConfigurationManager.AppSettings["TESTING-Pin"];
-                    if (string.IsNullOrWhiteSpace(pin))pin = Crypto.GeneratePasscode(Properties.Settings.Default.PINChars.ToCharArray(),Properties.Settings.Default.PINLength);
+                    var pin = Crypto.GeneratePasscode(Properties.Settings.Default.PINChars.ToCharArray(), Properties.Settings.Default.PINLength);
+
+                    //If the email address is a test email then simulate sending
+                    if (userOrg.User.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                        pin = "ABCDEF";
 
                     //Try and send the PIN in post
-                    if (!this.SendPinInPost(currentUser, userOrg.Organisation, pin.ToString()))
+                    else if (!this.SendPinInPost(userOrg, pin, now,userOrg.User.EmailAddress.StartsWithI(MvcApplication.TestPrefix)))
                         throw new Exception("Could not send PIN in the POST.");
 
                     //Try and send the confirmation email
@@ -1414,14 +1494,13 @@ namespace GenderPayGap.WebUI.Controllers
 
                     //Save the PIN and confirm code
                     userOrg.PINHash = pin.GetSHA512Checksum();
-                    userOrg.PINSentDate = DateTime.Now;
+                    userOrg.PINSentDate = now;
                     DataRepository.SaveChanges();
                 }
                 catch (Exception ex)
                 {
-                    MvcApplication.Log.WriteLine(ex.Message);
-                    AddModelError(3014);
-                    return View("PINSent");
+                    MvcApplication.ErrorLog.WriteLine(ex.Message);
+                    return View("CustomError", new ErrorViewModel(3014));
                 }
             }
 
@@ -1441,7 +1520,7 @@ namespace GenderPayGap.WebUI.Controllers
             return GetSendPIN();
         }
 
-        #endregion
+#endregion
 
         #region RequestPIN
         [HttpGet]
@@ -1461,7 +1540,7 @@ namespace GenderPayGap.WebUI.Controllers
             ViewBag.UserFullName = currentUser.Fullname;
             ViewBag.UserJobTitle = currentUser.JobTitle;
             ViewBag.Organisation = userOrg.Organisation.OrganisationName;
-            ViewBag.Address = userOrg.Organisation.ActiveAddress.GetAddress(",<br/>");
+            ViewBag.Address = userOrg.Address.GetAddress(",<br/>");
             //Show the PIN textbox and button
             return View("RequestPIN");
         }
@@ -1487,7 +1566,7 @@ namespace GenderPayGap.WebUI.Controllers
 
             return RedirectToAction("PINSent");
         }
-        #endregion
+#endregion
 
         #region ActivateService
         [HttpGet]
@@ -1513,9 +1592,14 @@ namespace GenderPayGap.WebUI.Controllers
 
             remaining = userOrg.PINSentDate == null ? TimeSpan.Zero : userOrg.PINSentDate.Value.AddDays(WebUI.Properties.Settings.Default.PinInPostMinRepostDays) - DateTime.Now;
             var model = new CompleteViewModel();
+
             model.PIN = null;
             model.AllowResend = remaining <= TimeSpan.Zero;
             model.Remaining = remaining.ToFriendly(maxParts: 2);
+
+            //If the email address is a test email then simulate sending
+            if (userOrg.User.EmailAddress.StartsWithI(MvcApplication.TestPrefix)) model.PIN="ABCDEF";
+
             //Show the PIN textbox and button
             return View("ActivateService", model);
         }
@@ -1549,7 +1633,7 @@ namespace GenderPayGap.WebUI.Controllers
                 return View("CustomError", new ErrorViewModel(1113, new { remainingTime = remaining.ToFriendly(maxParts: 2) }));
             }
 
-            if (userOrg.PINHash == model.PIN.ToUpper().GetSHA512Checksum())
+            if (userOrg.PINHash == model.PIN.TrimI().ToUpper().GetSHA512Checksum())
             {
                 //Set the user org as confirmed
                 userOrg.PINConfirmedDate = DateTime.Now;
@@ -1582,7 +1666,7 @@ namespace GenderPayGap.WebUI.Controllers
             //Prompt the user with confirmation
             return result1;
         }
-        #endregion
+#endregion
 
         #region Complete
         [HttpGet]
@@ -1606,5 +1690,191 @@ namespace GenderPayGap.WebUI.Controllers
             return View("Complete",model);
         }
         #endregion
+
+        #region password-reset
+        [HttpGet]
+        [Route("password-reset")]
+        public ActionResult PasswordReset()
+        {
+            User currentUser;
+            //Ensure user has not completed the registration process
+            var result = CheckUserRegisteredOk(out currentUser);
+            if (result != null) return result;
+
+            //Clear the stash
+            this.ClearStash();
+
+            //Start new user registration
+            return View("PasswordReset", new ResetViewModel());
+        }
+
+        [SpamProtection(3)]
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Route("password-reset")]
+        public ActionResult PasswordReset(ResetViewModel model)
+        {
+            User currentUser;
+            //Ensure user has not completed the registration process
+            var result = CheckUserRegisteredOk(out currentUser);
+            if (result != null) return result;
+
+            ModelState.Remove(nameof(model.Password));
+            ModelState.Remove(nameof(model.ConfirmPassword));
+
+            //Validate the submitted fields
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<ResetViewModel>();
+                return View("PasswordReset", model);
+            }
+
+            //Ensure email is always lower case
+            model.EmailAddress = model.EmailAddress.ToLower();
+
+            //Check this email address still exists
+            currentUser = DataRepository.FindUserByEmail(model.EmailAddress);
+            if (currentUser == null)
+                return View("CustomError", new ErrorViewModel(1128));
+
+            //Block them if they have requested too many today
+            var remaining = currentUser.ResetSendDate == null ? TimeSpan.Zero : currentUser.ResetSendDate.Value.AddDays(1) - DateTime.Now;
+            if (currentUser.ResetAttempts >= Properties.Settings.Default.MaxResetsPerDay && remaining > TimeSpan.Zero)
+                return View("CustomError", new ErrorViewModel(1121, new { remainingTime = remaining.ToFriendly(maxParts: 2) }));
+
+            if (!ResendPasswordReset(currentUser))
+            {
+                this.AddModelError(1122);
+                this.CleanModelErrors<ResetViewModel>();
+                return View("PasswordReset", model);
+            }
+
+            if (remaining <= TimeSpan.Zero)
+            {
+                currentUser.ResetAttempts=0;
+                currentUser.ResetSendDate = DateTime.Now;
+            }
+
+            currentUser.ResetAttempts++;
+
+            DataRepository.SaveChanges();
+
+            //show confirmation
+            ViewBag.EmailAddress = currentUser.EmailAddress;
+            if (currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))ViewBag.TestUrl = Url.Action("NewPassword", "Register", new { code = Encryption.EncryptQuerystring(currentUser.UserId + ":" + DateTime.Now.ToSmallDateTime())}, "https"); 
+            return View("PasswordResetSent");
+        }
+
+        private bool ResendPasswordReset(User currentUser)
+        {
+            //Send a password reset link to the email address
+            string resetCode = null;
+            try
+            {
+                resetCode = Encryption.EncryptQuerystring(currentUser.UserId + ":" + DateTime.Now.ToSmallDateTime());
+                if (!this.SendPasswordReset(currentUser.EmailAddress, resetCode, currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix)))
+                    throw new Exception("Could not send password reset email. Please try again later.");
+            }
+            catch (Exception ex)
+            {
+                //Log the exception
+                MvcApplication.ErrorLog.WriteLine(ex.Message);
+                return false;
+            }
+
+            return true;
+        }
+
+        [HttpGet]
+        [RequireHttps]
+        [Route("enter-new-password")]
+        public ActionResult NewPassword(string code=null)
+        {
+            User currentUser;
+            //Ensure user has not completed the registration process
+            var result = CheckUserRegisteredOk(out currentUser);
+            if (result != null) return result;
+
+            result=UnwrapPasswordReset(code, out currentUser);
+            if (result != null) return result;
+            var model = new ResetViewModel();
+            model.Resetcode = code;
+            this.StashModel(model);
+
+            //Start new user registration
+            return View("NewPassword", model);
+        }
+
+        private ActionResult UnwrapPasswordReset(string code, out User user)
+        {
+            user = null;
+
+            long userId = 0;
+            DateTime resetDate;
+            try
+            {
+                code = Encryption.DecryptQuerystring(code);
+                code = HttpUtility.UrlDecode(code);
+                var args = code.SplitI(":");
+                if (args.Length != 2) throw new ArgumentException("Too few parameters in password reset code");
+                userId = args[0].ToLong();
+                if (userId == 0) throw new ArgumentException("Invalid user id in password reset code");
+                resetDate = args[1].FromSmallDateTime();
+                if (resetDate==DateTime.MinValue) throw new ArgumentException("Invalid password reset date in password reset code");
+            }
+            catch (Exception ex)
+            {
+                return View("CustomError", new ErrorViewModel(1123));
+            }
+
+            //Get the user oganisation
+            user = DataRepository.GetAll<User>().FirstOrDefault(u => u.UserId == userId);
+
+            if (user == null) return View("CustomError", new ErrorViewModel(1124));
+            if (resetDate.AddDays(1) <DateTime.Now) return View("CustomError", new ErrorViewModel(1126));
+
+            return null;
+        }
+
+        [HttpPost]
+        [RequireHttps]
+        [ValidateAntiForgeryToken]
+        [Route("enter-new-password")]
+        public ActionResult NewPassword(ResetViewModel model)
+        {
+            User currentUser;
+            //Ensure user has not completed the registration process
+            var result = CheckUserRegisteredOk(out currentUser);
+            if (result != null) return result;
+
+            ModelState.Remove(nameof(model.EmailAddress));
+            ModelState.Remove(nameof(model.ConfirmEmailAddress));
+
+            //Validate the submitted fields
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<ResetViewModel>();
+                return View("NewPassword", model);
+            }
+
+            var m = this.UnstashModel<ResetViewModel>();
+            if (m==null || string.IsNullOrWhiteSpace(m.Resetcode)) return View("CustomError", new ErrorViewModel(0));
+
+            result = UnwrapPasswordReset(m.Resetcode, out currentUser);
+            if (result != null) return result;
+            this.ClearStash();
+
+            //Save the user to ensure UserId>0 for new status
+            currentUser.PasswordHash = model.Password.GetSHA512Checksum();
+            currentUser.ResetAttempts = 0;
+            currentUser.ResetSendDate = null;
+            DataRepository.SaveChanges();
+
+            //Send the verification code and showconfirmation
+            return View("CustomError", new ErrorViewModel(1127));
+        }
+
+        #endregion
+
     }
 }

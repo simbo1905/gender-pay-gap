@@ -27,7 +27,10 @@ namespace GenderPayGap.Core.Interfaces
         IEnumerable<string> GetFiles(string directoryPath, string searchPattern = null);
 
         string Read(string filePath);
+        void Write(string filePath, string text);
+
         void Write(string filePath, IEnumerable<string> lines);
+        void Write(string filePath, byte[] bytes);
         void Write(string filePath, Stream stream);
         void Write(string filePath, FileInfo uploadFile);
 

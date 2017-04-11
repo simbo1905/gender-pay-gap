@@ -2,7 +2,7 @@ using System.Linq;
 using Extensions;
 using GenderPayGap.Core.Classes;
 
-namespace GenderPayGap.Models.SqlDatabase
+namespace GenderPayGap.Database
 {
     using System;
     using System.Collections.Generic;
@@ -31,7 +31,7 @@ namespace GenderPayGap.Models.SqlDatabase
         public string PublicSectorReference { get; set; }
 
         [Required(AllowEmptyStrings = false)]
-        [MaxLength(100), MinLength(5)]
+        [MaxLength(100), MinLength(3)]
         [Index]
         public string OrganisationName { get; set; }
 
@@ -113,7 +113,7 @@ namespace GenderPayGap.Models.SqlDatabase
                 Name = OrganisationName,
                 CompanyNumber = PrivateSectorReference,
                 SicSectors = GetSicSectors(",<br/>"),
-                SicCodes = OrganisationSicCodes.Select(sic=>sic.SicCodeId).ToDelimitedString(),
+                SicCodes = OrganisationSicCodes?.Select(sic=>sic.SicCodeId).ToDelimitedString(),
                 Address1 = address.Address1,
                 Address2 = address.Address2,
                 Address3 = address.Address3,
@@ -127,5 +127,11 @@ namespace GenderPayGap.Models.SqlDatabase
         {
             return OrganisationSicCodes.Select(s => s.SicCode.SicSection.Description).ToDelimitedString(delimiter);
         }
+
+        public string GetEncryptedId()
+        {
+            return Encryption.EncryptQuerystring(OrganisationId.ToString());
+        }
+
     }
 }

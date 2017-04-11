@@ -9,7 +9,7 @@
             </h1>
             <p>Enter your email address and password. </p>
             <p class="dynamic-content manual">Not registered yet? <a href="/Register">Register</a></p>
-            <form name="form" method="post" action="{{model.loginUrl}}">
+            <form name="form" method="post" autocomplete="off" action="{{model.loginUrl}}">
                 <anti-forgery-token token="model.antiForgery"></anti-forgery-token>
                     <fieldset>
                         <legend class="visuallyhidden">Sign in</legend>
@@ -30,7 +30,7 @@
                             <button class="button dynamic-content default-content alert manual">Sign In</button>
                         </div>
                         <h3 class="heading-medium">Problems with your password?</h3>
-                        <a id="forgotten-password" href="/Register/ResetPassword">Reset your password</a>
+                        <a id="forgotten-password" href="/Register/password-reset">Reset your password</a>
                     </fieldset>
                 </form>
         </div>

@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
-using GenderPayGap.Models.SqlDatabase;
+using System.Threading.Tasks;
+using GenderPayGap.Database;
 using System.Web;
 using System.Web.Mvc;
 using Microsoft.Owin.Security;
@@ -10,6 +12,7 @@ using Autofac;
 using Extensions;
 using GenderPayGap.Core.Classes;
 using GenderPayGap.WebUI.Classes;
+using GenderPayGap.WebUI.Models.Home;
 using GenderPayGap.WebUI.Properties;
 
 namespace GenderPayGap.WebUI.Controllers
@@ -31,7 +34,7 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Init()
         {
 #if DEBUG
-            MvcApplication.Log.WriteLine("Home Controller Initialised");
+            MvcApplication.InfoLog.WriteLine("Home Controller Initialised");
 #endif
             return new EmptyResult();
         }
@@ -39,26 +42,99 @@ namespace GenderPayGap.WebUI.Controllers
         [Route("~/")]
         public ActionResult Redirect()
         {
-            if (WasController("Register"))return RedirectToAction("AboutYou","Register");
-            if (WasController("Submit"))return RedirectToAction("EnterCalculations", "Submit");
-            return RedirectToAction("SearchResults","Viewing");
-        }
-
-        [Route("SignOut")]
-        public ActionResult SignOut()
-        {
-            Session.Abandon();
-            Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("EnterCalculations", "Submit",null,"https") });
             return RedirectToAction("EnterCalculations","Submit");
         }
 
-        [Route("TimeOut")]
+        [Route("~/sign-out")]
+        public ActionResult SignOut(int delete=0)
+        {
+            //Delete the test user
+            if (!string.IsNullOrWhiteSpace(MvcApplication.TestPrefix))
+            {
+                if (delete == 1)
+                {
+                    var currentUser = DataRepository.FindUser(User);
+                    if (currentUser != null && currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                        DbContext.DeleteAccount(currentUser.UserId);
+                }
+                //Delete all test users
+                else if (delete == -1)
+                {
+                    var prefix = MvcApplication.TestPrefix.ToLower();
+                    Parallel.ForEach(DataRepository.GetAll<User>().Where(u => u.EmailAddressDB.ToLower().StartsWith(prefix)), user =>
+                    {
+                        DbContext.DeleteAccount(user.UserId);
+                    });
+                }
+            }
+
+            Session.Abandon();
+
+            if (delete==0)
+                Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("EnterCalculations", "Submit",null,"https") });
+            else if (User.Identity.IsAuthenticated)
+                Request.GetOwinContext().Authentication.SignOut();
+
+            return RedirectToAction("EnterCalculations","Submit");
+        }
+
+        [Route("~/time-out")]
         public ActionResult TimeOut()
         {
+            //Delete the test user 
+            var currentUser = DataRepository.FindUser(User);
+            if (currentUser != null && currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                DbContext.DeleteAccount(currentUser.UserId);
+
             Session.Abandon();
             Request.GetOwinContext().Authentication.SignOut(new AuthenticationProperties { RedirectUri = Url.Action("EnterCalculations","Submit", null, "https") });
             return null;
         }
+
+        #region Contact Us
+
+        [HttpGet]
+        [Route("~/contact-us")]
+        [OutputCache(CacheProfile = "ContactUs")]
+        public ActionResult ContactUs()
+        {
+            return View("ContactUs");
+        }
+        #endregion
+
+        #region Feedback
+
+        [HttpGet]
+        [Route("~/send-feedback")]
+        public ActionResult SendFeedback()
+        {
+            //create the new view model 
+            var model = new FeedbackViewModel();
+            model.EmailAddress = DataRepository.FindUser(User)?.EmailAddress;
+
+            return View("SendFeedback", model);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [SpamProtection()]
+        [Route("~/send-feedback")]
+        public ActionResult SendFeedback(FeedbackViewModel model)
+        {
+            //Check model is valid
+            if (!ModelState.IsValid)
+            {
+                this.CleanModelErrors<FeedbackViewModel>();
+                return View("SendFeedback", model);
+            }
+
+            //Add the record to the log
+            if (!model.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                MvcApplication.FeedbackLog.AppendCsv(model);
+
+            return View("FeedbackSent");
+        }
+        #endregion
 
         #region TEST CODE ONLY
 #if DEBUG || TEST
@@ -102,12 +178,14 @@ namespace GenderPayGap.WebUI.Controllers
                     Request.GetOwinContext().Authentication.SignOut();
                     break;
                 case "CreateTestData":
-                    CreateTestData();
+                    var recordCount = ConfigurationManager.AppSettings["TESTING-Records"].ToInt32(500);
+                    CreateTestData(recordCount);
                     break;
                 case "ClearDatabase":
                     DbContext.Truncate();
 
-                    MvcApplication.FileRepository.DeleteFiles(Settings.Default.DownloadsLocation);
+                    if (MvcApplication.FileRepository.GetDirectoryExists(Settings.Default.DownloadsLocation))
+                        MvcApplication.FileRepository.DeleteFiles(Settings.Default.DownloadsLocation);
 
                     //Refresh the repository
                     DataRepository = null;
@@ -164,11 +242,24 @@ namespace GenderPayGap.WebUI.Controllers
                             Status = AddressStatuses.Active
                         });
 
-                        DataRepository.Insert(new OrganisationSicCode()
+                        employer.SicCodes = PublicSectorRepository.GetSicCodes(employer.CompanyNumber);
+
+                        foreach (var sicCode in employer.SicCodes.SplitI())
                         {
-                            OrganisationId = organisation.OrganisationId,
-                            SicCodeId = 1
-                        });
+                            var code = sicCode.ToInt32();
+                            if (!sicCodes.Any(s => s.SicCodeId == code))
+                            {
+                                MvcApplication.WarningLog.WriteLine($"Invalid SIC code '{code}' received from companies house");
+                                continue;
+                            }
+                            if (organisation.OrganisationSicCodes.Any(a => a.SicCodeId == code)) continue;
+                            DataRepository.Insert(new OrganisationSicCode()
+                            {
+                                OrganisationId = organisation.OrganisationId,
+                                SicCodeId = code
+                            });
+                        }
+                        DataRepository.SaveChanges();
                     }
                 }
                 else if (sector == SectorTypes.Private)
@@ -213,7 +304,7 @@ namespace GenderPayGap.WebUI.Controllers
                             var code = sicCode.ToInt32();
                             if (!sicCodes.Any(s => s.SicCodeId == code))
                             {
-                                MvcApplication.Log.WriteLine($"Invalid SIC code '{code}' received from companies house");
+                                MvcApplication.WarningLog.WriteLine($"Invalid SIC code '{code}' received from companies house");
                                 continue;
                             }
                             if (organisation.OrganisationSicCodes.Any(a => a.SicCodeId == code)) continue;
@@ -224,6 +315,7 @@ namespace GenderPayGap.WebUI.Controllers
                             });
                         }
                         DataRepository.SaveChanges();
+
                     }
                 }
             }

@@ -7,6 +7,7 @@ using System.Text;
 using System.Net.Mail;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Net;
 
 namespace Extensions
@@ -15,12 +16,6 @@ namespace Extensions
     {
         const string MatchEmailPattern = @"^(?("")("".+?(?<!\\)""@)|(([0-9a-z]((\.(?!\.))|[-!#\$%&'\*\+/=\?\^`\{\}\|~\w])*)(?<=[0-9a-z])@))" +
                 @"(?(\[)(\[(\d{1,3}\.){3}\d{1,3}\])|(([0-9a-z][-\w]*[0-9a-z]*\.)+[a-z0-9][\-a-z0-9]{0,22}[a-z0-9]))$";
-
-        static readonly string SmtpServer = ConfigurationManager.AppSettings["SMTPServer"];
-        static readonly string SmtpPort = ConfigurationManager.AppSettings["SMTPPort"];
-        static readonly string SmtpSenderName = ConfigurationManager.AppSettings["SmtpSenderName"];
-        static readonly string SmtpUsername = ConfigurationManager.AppSettings["SMTPUsername"];
-        static readonly string SmtpPassword = ConfigurationManager.AppSettings["SMTPPassword"];
 
         public static bool IsHostName(this string hostName)
         {
@@ -174,47 +169,107 @@ namespace Extensions
             return found;
         }
 
-        public static void QuickSend(string subject, string recipient, string html, byte[] attachment=null, string attachmentFilename="attachment.dat")
+        public static byte[] QuickSendToFile(string subject, string senderEmailAddress, string senderName, string recipients, string html, byte[] attachment = null, string attachmentFilename = "attachment.dat")
         {
-            SmtpClient mySmtpClient = new SmtpClient(SmtpServer);
-            mySmtpClient.Port = SmtpPort.ToInt32(25);
-            mySmtpClient.EnableSsl = true;
+            if (string.IsNullOrWhiteSpace(senderEmailAddress)) throw new ArgumentNullException(nameof(senderEmailAddress), "Missing or empty senderEmailAddress");
+            if (string.IsNullOrWhiteSpace(recipients)) throw new ArgumentNullException(nameof(recipients), "Missing or empty recipients");
+            if (string.IsNullOrWhiteSpace(html)) throw new ArgumentNullException(nameof(html), "Missing or empty html");
+            if (string.IsNullOrWhiteSpace(senderEmailAddress)) throw new ArgumentNullException(nameof(senderEmailAddress), "Missing or empty senderEmailAddress");
 
-            // set smtp-client with basicAuthentication
-            mySmtpClient.UseDefaultCredentials = false;
-            System.Net.NetworkCredential basicAuthenticationInfo = new
-                System.Net.NetworkCredential(SmtpUsername, SmtpPassword);
-            mySmtpClient.Credentials = basicAuthenticationInfo;
+            SmtpClient mySmtpClient = new SmtpClient();
+            mySmtpClient.DeliveryMethod = SmtpDeliveryMethod.SpecifiedPickupDirectory;
 
-            // add from,to mailaddresses
-            MailAddress from = new MailAddress(SmtpUsername, SmtpSenderName);
-            MailAddress to = new MailAddress(recipient);
-            MailMessage myMail = new System.Net.Mail.MailMessage(from, to);
-
-            // set subject and encoding
-            myMail.Subject = subject;
-            myMail.SubjectEncoding = System.Text.Encoding.UTF8;
+            var myMail = new MailMessage
+            {
+                From = new MailAddress(senderEmailAddress, senderName),
+                Subject = subject,
+                SubjectEncoding = Encoding.UTF8,
+                Body = html,
+                BodyEncoding = Encoding.UTF8,
+                IsBodyHtml = true
+            };
 
             // set body-message and encoding
-            myMail.Body = html;
-            myMail.BodyEncoding = System.Text.Encoding.UTF8;
             // text or html
-            myMail.IsBodyHtml = true;
+
+            // add mailaddresses
+            foreach (var recipient in recipients.SplitI(";"))
+                myMail.To.Add(new MailAddress(recipient));
 
             //Add the attachment
-            if (attachment != null)
+            using (var temDir = new TemporaryDirectory())
             {
-                using (var stream = new MemoryStream(attachment))
-                {
-                    myMail.Attachments.Add(new Attachment(stream,attachmentFilename));
+                mySmtpClient.PickupDirectoryLocation = temDir.FullName;
+                if (attachment == null)
                     mySmtpClient.Send(myMail);
-                }
+                else
+                    using (var stream = new MemoryStream(attachment))
+                    {
+                        myMail.Attachments.Add(new Attachment(stream, attachmentFilename));
+                        mySmtpClient.Send(myMail);
+                    }
+
+                var filePath = Directory.GetFiles(temDir.FullName).FirstOrDefault();
+                if (!string.IsNullOrWhiteSpace(filePath)) return File.ReadAllBytes(filePath);
+            }
+            return null;
+        }
+
+        public static void QuickSend(string subject, string senderEmailAddress, string senderName, string recipients, string html, string smtpServer, string smtpUsername, string smtpPassword, int smtpPort = 25, byte[] attachment = null, string attachmentFilename = "attachment.dat", bool test = false)
+        {
+            if (string.IsNullOrWhiteSpace(senderEmailAddress)) throw new ArgumentNullException(nameof(senderEmailAddress), "Missing or empty senderEmailAddress");
+            if (string.IsNullOrWhiteSpace(recipients)) throw new ArgumentNullException(nameof(recipients), "Missing or empty recipients");
+            if (string.IsNullOrWhiteSpace(html)) throw new ArgumentNullException(nameof(html), "Missing or empty html");
+            if (string.IsNullOrWhiteSpace(senderEmailAddress)) throw new ArgumentNullException(nameof(senderEmailAddress), "Missing or empty senderEmailAddress");
+
+            SmtpClient mySmtpClient = new SmtpClient(smtpServer);
+
+            //Throw an error of no SMTP server, username or password is set
+            if (!string.IsNullOrWhiteSpace(smtpServer))
+            {
+                if (string.IsNullOrWhiteSpace(smtpUsername)) throw new ArgumentNullException(nameof(smtpUsername), "Missing or empty SmtpUsername");
+                if (string.IsNullOrWhiteSpace(smtpPassword)) throw new ArgumentNullException(nameof(smtpPassword), "Missing or empty SmtpPassword");
+                mySmtpClient.Port = smtpPort;
+                mySmtpClient.EnableSsl = true;
+                mySmtpClient.UseDefaultCredentials = false;
+                mySmtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             }
             else
-            {
-                mySmtpClient.Send(myMail);
-            }
+                throw new ArgumentNullException(nameof(smtpServer), "Missing or empty SmtpServer and SmtpDropPath");
 
+            // set smtp-client with basicAuthentication
+            var basicAuthenticationInfo = new NetworkCredential(smtpUsername, smtpPassword);
+            mySmtpClient.Credentials = basicAuthenticationInfo;
+
+            var myMail = new MailMessage
+            {
+                From = new MailAddress(senderEmailAddress, senderName),
+                Subject = subject,
+                SubjectEncoding = Encoding.UTF8,
+                Body = html,
+                BodyEncoding = Encoding.UTF8,
+                IsBodyHtml = true
+            };
+
+            // set body-message and encoding
+            // text or html
+
+            // add mailaddresses
+            foreach (var recipient in recipients.SplitI(";"))
+                myMail.To.Add(new MailAddress(recipient));
+
+            //Add the attachment
+            if (!test)
+            {
+                if (attachment == null)
+                    mySmtpClient.Send(myMail);
+                else
+                    using (var stream = new MemoryStream(attachment))
+                    {
+                        myMail.Attachments.Add(new Attachment(stream, attachmentFilename));
+                        mySmtpClient.Send(myMail);
+                    }
+            }
         }
 
     }

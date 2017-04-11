@@ -1,6 +1,6 @@
 ﻿using System.Configuration;
 using Extensions;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using System.Linq;
 using System.Transactions;
 using System.Web;
@@ -29,7 +29,7 @@ namespace GenderPayGap.WebUI.Controllers
         public ActionResult Init()
         {
 #if DEBUG
-            MvcApplication.Log.WriteLine("Submit Controller Initialised");
+            MvcApplication.InfoLog.WriteLine("Submit Controller Initialised");
 #endif
             return new EmptyResult();
         }
@@ -266,7 +266,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("check-data")]
-        public ActionResult CheckData  /*Confirm*/(string returnUrl=null)
+        public ActionResult CheckData (string returnUrl=null)
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -286,13 +286,13 @@ namespace GenderPayGap.WebUI.Controllers
             }
             model.ReturnUrl = returnUrl;
 
-            return View(model);
+            return View("CheckData", model);
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
         [Route("check-data")]
-        public ActionResult CheckData  /*Confirm*/(ReturnViewModel model)
+        public ActionResult CheckData (ReturnViewModel model)
         {
             //Ensure user has completed the registration process
             User currentUser;
@@ -345,7 +345,9 @@ namespace GenderPayGap.WebUI.Controllers
                 if (oldReturn.Equals(newReturn))
                     newReturn = oldReturn;
                 else
+                {
                     oldReturn.SetStatus(ReturnStatuses.Retired, currentUser.UserId);
+                }
             }
 
             //add the new one
@@ -362,6 +364,10 @@ namespace GenderPayGap.WebUI.Controllers
                 scope.Complete();
             }
 
+            //Alert on submit
+            if (oldReturn==null && MvcApplication.EnableSubmitAlerts && !currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix))
+                GovNotifyAPI.SendGeoMessage("GPG Data Submission Notification",$"GPG data was submitted for first time by '{newReturn.Organisation.OrganisationName}' on {newReturn.StatusDate.ToShortDateString()}\n\n See {Url.Action("EmployerDetails","Viewing",new {id=newReturn.Organisation.GetEncryptedId()},"https")}", test: currentUser.EmailAddress.StartsWithI(MvcApplication.TestPrefix));
+
             return RedirectToAction("SubmissionComplete");
         }
 
@@ -370,7 +376,7 @@ namespace GenderPayGap.WebUI.Controllers
 
         [HttpGet]
         [Route("submission-complete")]
-        public ActionResult SubmissionComplete(/*long id = 1*/ )
+        public ActionResult SubmissionComplete()
         {
             //Ensure user has completed the registration process
             User currentUser;

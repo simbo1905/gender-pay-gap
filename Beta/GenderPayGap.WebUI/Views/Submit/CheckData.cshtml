@@ -1,6 +1,6 @@
 ﻿@*@model GpgDB.Models.GpgDatabase.Return*@
 @using Extensions
-@using GenderPayGap.Models.SqlDatabase
+@using GenderPayGap.Database
 @model GenderPayGap.WebUI.Models.Submit.ReturnViewModel
 
 <main id="content" role="main">
@@ -56,7 +56,7 @@
                     <tbody>
                         <tr>
                             <td>
-                                1. Difference in mean hourly rate of pay - mean
+                                1. Difference in mean hourly rate of pay &#8211; mean
                             </td>
                             <td>
                                 @Html.ValueFor(model => model.DiffMeanHourlyPayPercent)%
@@ -65,7 +65,7 @@
                         </tr>
                         <tr>
                             <td>
-                                2. Difference in median hourly rate of pay - median
+                                2. Difference in median hourly rate of pay &#8211; median
                             </td>
                             <td>
                                 @Html.ValueFor(model => model.DiffMedianHourlyPercent)%
@@ -74,7 +74,7 @@
                         </tr>
                         <tr>
                             <td>
-                                3. Difference in mean bonus pay - mean
+                                3. Difference in mean bonus pay &#8211; mean
                             </td>
                             <td>
                                 @Html.ValueFor(model => model.DiffMeanBonusPercent)%
@@ -83,7 +83,7 @@
                         </tr>
                         <tr>
                             <td>
-                                4. Difference in median bonus pay - median
+                                4. Difference in median bonus pay &#8211; median
                             </td>
                             <td>
                                 @Html.ValueFor(model => model.DiffMedianBonusPercent)%

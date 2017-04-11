@@ -25,14 +25,14 @@
                     <div class="form-group @Html.SetErrorClass(model => model.SectorType,"error")">
                         <fieldset>
                             <label class="block-label selection-button-radio" for="radio-1">
-                                @Html.CustomRadioButtonFor(m=>m.SectorType, GenderPayGap.Models.SqlDatabase.SectorTypes.Private, new { @type = "radio", @class = "styled", @name = "radio-group", @id = "radio-1" })
+                                @Html.CustomRadioButtonFor(m=>m.SectorType, GenderPayGap.Database.SectorTypes.Private, new { @type = "radio", @class = "styled", @name = "radio-group", @id = "radio-1" })
                                 Private limited company,<br/>
                                 Limited liability partnership,<br />
                                 Charity,<br />
                                 Public limited company
                             </label>
                             <label class="block-label selection-button-radio " for="radio-2">
-                                @Html.CustomRadioButtonFor(m => m.SectorType, GenderPayGap.Models.SqlDatabase.SectorTypes.Public, new { @type = "radio", @class = "styled", @name = "radio-group", @id = "radio-2" })
+                                @Html.CustomRadioButtonFor(m => m.SectorType, GenderPayGap.Database.SectorTypes.Public, new { @type = "radio", @class = "styled", @name = "radio-group", @id = "radio-2" })
                                 Public sector organisation
                             </label>
                         </fieldset>

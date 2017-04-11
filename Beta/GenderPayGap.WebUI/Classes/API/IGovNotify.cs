@@ -11,11 +11,12 @@ namespace GenderPayGap.WebUI.Classes
         /// <param name="status"></param>
         void SetStatus(string status);
 
-        Notification SendEmail(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation);
+        Notification SendEmail(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation, bool test = false);
 
-        Notification SendSms(string mobileNumber, string templateId, Dictionary<string, dynamic> personalisation);
+        Notification SendSms(string mobileNumber, string templateId, Dictionary<string, dynamic> personalisation, bool test = false);
 
-        Notification SendPost(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation);
+        Notification SendPost(string emailAddress, string templateId, Dictionary<string, dynamic> personalisation, bool test=false);
+
     }
 
 }

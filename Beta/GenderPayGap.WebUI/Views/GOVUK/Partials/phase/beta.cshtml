@@ -1,4 +1,8 @@
-﻿    <p style="margin-top:10px">
+﻿@using Extensions
+@if (!Request.Url.PathAndQuery.EqualsI(Url.Action("SendFeedback", "Home"),Url.Action("ServiceUnavailable", "Error")))
+{
+    <p style="margin-top: 10px">
         <strong class="phase-tag">BETA</strong>
-        <span>This is a new service – your <a href="#" rel="external" target="_blank" class="font16-ext-link">feedback<span class="visuallyhidden"></span></a> will help us to improve it.</span>
+        <span>This is a new service – your <a href="@Url.Action("SendFeedback", "Home")" rel="external" target="_blank" class="font16-ext-link">feedback</a><span class="visuallyhidden"></span> will help us to improve it.</span>
     </p>
+}

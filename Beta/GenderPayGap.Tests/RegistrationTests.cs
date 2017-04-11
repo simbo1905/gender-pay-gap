@@ -1,6 +1,6 @@
 ﻿using GenderPayGap.WebUI.Controllers;
 using GenderPayGap.WebUI.Models;
-using GenderPayGap.Models.SqlDatabase;
+using GenderPayGap.Database;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
@@ -360,7 +360,7 @@ namespace GenderPayGap.Tests
             Assert.NotNull(result, "Expected RedirectToRouteResult");
 
             //check that the redirection went to the right url step.
-            Assert.That(result.RouteValues["action"].ToString() == "Step2", "");
+            Assert.That(result.RouteValues["action"].ToString() == "Step2", "Redirected to the wrong view");
 
             //check that the model stashed preserved with the redirect is equal to what is expected the Arrange values here
             //Retreive the model stashed preserved with the redirect.
@@ -542,7 +542,7 @@ namespace GenderPayGap.Tests
 
         #region Positive tests
         [Test]
-        [Description("Ensure the Step1 succeeds and gets a new registration form for newly authorized users to register")]
+        [Description("Ensure that a new registration form is returned for a user to register")]
         public void AboutYou_Get_NewRegistration_Success()
         {
             //ARRANGE:
@@ -572,7 +572,7 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Ensure the Step1 succeeds when all fields are good")]
+        [Description("Ensure that the new registration form filled with correct values is sent successfully when all fields values are valid")]
         public void AboutYou_Post_Success()
         {
             //ARRANGE:
@@ -674,7 +674,7 @@ namespace GenderPayGap.Tests
             //ARRANGE:
             //1.Arrange the test setup variables
             var code = "abcdefg";
-            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = null, EmailVerifySendDate = null, EmailVerifyHash = code.GetSHA512Checksum(), Status = UserStatuses.New, Organisations = null };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = null, EmailVerifySendDate = null, Status = UserStatuses.New, Organisations = null };
 
             var verifiedModel = new VerifyViewModel() { Sent = true };
 
@@ -697,7 +697,7 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.VerifyEmail(Encryption.EncryptQuerystring(code)) as ViewResult;
+            var result = controller.VerifyEmail() as ViewResult;
 
             var resultModel = result.Model as VerifyViewModel;
 
@@ -716,9 +716,11 @@ namespace GenderPayGap.Tests
 
             //ensure user is marked as verified
             Assert.AreEqual(resultModel.Sent, true, "Expected VerifyViewModel");
+            
+            //Check the user has a verified send date 
+            Assert.NotNull(user.EmailVerifySendDate, "Email is has not been confirmed!");
         }
 
-        [Ignore("This test needs fixing")]
         [Test]
         [Description("Ensure the Step2 succeeds when all fields are good")]
         public void VerifyEmail_Get_RedirectResult_Success() //Registration complete
@@ -726,9 +728,7 @@ namespace GenderPayGap.Tests
             //ARRANGE:
             //1.Arrange the test setup variables
             var code = "abcdefg";
-            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now, EmailVerifyHash = code.GetSHA512Checksum() };
-            var organisation = new Organisation() { OrganisationId = 1 };
-            var userOrganisation = new UserOrganisation() { OrganisationId = organisation.OrganisationId, Organisation = organisation, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = null, EmailVerifySendDate = DateTime.Now, EmailVerifyHash = code.GetSHA512Checksum() };
 
             //Set the user up as if finished step1 which is email known etc but not sent
             var routeData = new RouteData();
@@ -738,30 +738,32 @@ namespace GenderPayGap.Tests
             var model = new VerifyViewModel();
 
             //var controller = TestHelper.GetController<RegisterController>();
-            var controller = TestHelper.GetController<RegisterController>(1, routeData, user, organisation, userOrganisation);
-            //controller.Bind(model);
+            var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.VerifyEmail(Encryption.EncryptQuerystring(code)) as RedirectToRouteResult;
+            var result = controller.VerifyEmail(code) as RedirectToRouteResult;
 
             //ASSERT:
-            //Check the user is return the confirmation view
-            //Check the user verifcation is now marked as sent
-            //Check a verification has been set against user 
             Assert.NotNull(result, "Expected RedirectToRouteResult");
-            Assert.That(result.RouteValues["action"].ToString() == "Complete", "Registration is not complete!");
+            
+            //Check the user is return the confirmation view
+            Assert.That(result.RouteValues["action"].ToString() == "EmailConfirmed", "Email is has not been confirmed!");
+            
+            //Check the user verification is now marked as sent
+            Assert.NotNull(user.EmailVerifiedDate, "Email is has not been confirmed!");
 
+            //Check a verification has been set against user 
+            Assert.That(user.Status == UserStatuses.Active, "Email is has not been confirmed!");
         }
 
-        [Ignore("This test needs fixing")]
         [Test]
         [Description("Ensure the Step2 user verification succeeds")]
         public void VerifyEmail_Post_Success()
         {
             //ARRANGE:
             //1.Arrange the test setup variables
-            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
+            var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = null };
 
             var organisation = new Organisation() { OrganisationId = 1 };
             var userOrganisation = new UserOrganisation() { OrganisationId = organisation.OrganisationId, Organisation = organisation, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
@@ -776,7 +778,6 @@ namespace GenderPayGap.Tests
             var model = new VerifyViewModel();
             model.EmailAddress = "test@hotmail.com";
             model.Resend = false;
-            model.Retry = false;
 
             //Set model as if email
 
@@ -786,26 +787,19 @@ namespace GenderPayGap.Tests
             // model.WrongCode = false;
 
             //var controller = TestHelper.GetController<RegisterController>();
-            var controller = TestHelper.GetController<RegisterController>(1, routeData, user, userOrganisation);
+            var controller = TestHelper.GetController<RegisterController>(1, routeData, user/*, userOrganisation*/);
             controller.Bind(model);
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.VerifyEmail(model) as RedirectToRouteResult;
-
+          
+            var result = controller.VerifyEmail(model) as ViewResult;
             //ASSERT:
-            //3.Check that the result is not null
-            Assert.NotNull(result, "Expected RedirectToRouteResult");
-
-            //4.Check that the redirection went to the right url step.
-            // Assert.That(result.RouteValues["action"].ToString() == "Step3", "");
-            Assert.That(result.RouteValues["action"].ToString() == "Complete", "Registration is incomplete");
-
-            //5.If the redirection successfull retrieve the model stash sent with the redirect.
-            //  var unStashedmodel = controller.UnstashModel<RegisterViewModel>();
-
-            //6.Check that the unstashed model is not null
-            //  Assert.NotNull(model, "Expected RegisterViewModel");
+            Assert.NotNull(result, "Expected ViewResult");
+            Assert.That(result.GetType() == typeof(ViewResult), "Incorrect resultType returned");
+            Assert.That(result.ViewName == "VerifyEmail", "Incorrect view returned,Verifiction is incomplete");
+            Assert.That(result.Model != null && result.Model.GetType() == typeof(VerifyViewModel), "Expected VerifyViewModel or Incorrect resultType returned");
+            Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
         }
         #endregion
 
@@ -820,7 +814,7 @@ namespace GenderPayGap.Tests
         #region Positive tests
 
         [Test]
-        [Description("Ensure the Step3 succeeds when all fields are good")]
+        [Description("Ensure the Organisation type form is returned for the current user ")]
         public void OrganisationType_Get_Success()
         {
             //ARRANGE:
@@ -847,7 +841,7 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Ensure the Step3 succeeds when all fields are good")]
+        [Description("Private Sector:Ensure the Organisation type form is confirmed and sent successfully")]
         public void OrganisationType_Post_PrivateSector_Success()
         {
             //ARRANGE:
@@ -901,7 +895,7 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Ensure the Step3 succeeds when all fields are good")]
+        [Description("Public Sector:Ensure the Organisation type form is confirmed and sent successfully")]
         public void OrganisationType_Post_PublicSector_Success()
         {
             //ARRANGE:
@@ -963,7 +957,7 @@ namespace GenderPayGap.Tests
 
         #region Positive tests
         [Test]
-        [Description("Ensure the Step4 succeeds when all fields are good")]
+        [Description("Ensure the Organisation search form is returned for the current user ")]
         public void OrganisationSearch_Get_Success()
         {
             //ARRANGE:
@@ -995,8 +989,9 @@ namespace GenderPayGap.Tests
             // controller.PublicSectorRepository.Insert(new EmployerRecord());
         }
 
+       // [Ignore("This test needs fixing")]
         [Test]
-        [Description("Ensure the Step4 succeeds when all fields are good")]
+        [Description("Ensure that organisation search form has a search text in its field sent successfully and a a matching record is returned")]
         public void OrganisationSearch_Post_PrivateSector_Success()
         {
             //ARRANGE:
@@ -1091,7 +1086,6 @@ namespace GenderPayGap.Tests
              });
         }
 
-        [Ignore("This test needs fixing")]
         [Test]
         [Description("Ensure the Step4 succeeds when all fields are good")]
         public void OrganisationSearch_Post_PublicSector_Success()
@@ -1111,7 +1105,7 @@ namespace GenderPayGap.Tests
             var model = new OrganisationViewModel()
                             {
                                 Employers = new PagedResult<EmployerRecord>() { },
-                                SearchText = "smith",
+                                SearchText = "5 Boroughs Partnership NHS Foundation Trust",
                                 ManualRegistration = false,
                                 SectorType = SectorTypes.Public
                             };
@@ -1119,6 +1113,13 @@ namespace GenderPayGap.Tests
 
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
             controller.Bind(model);
+
+            //insert  some records into the db...
+            controller.PublicSectorRepository.Insert(new EmployerRecord() { Name = "2Gether NHS Foundation Trust",                EmailPatterns = "nhs.uk" });
+            controller.PublicSectorRepository.Insert(new EmployerRecord() { Name = "5 Boroughs Partnership NHS Foundation Trust", EmailPatterns = "nhs.uk" });
+            controller.PublicSectorRepository.Insert(new EmployerRecord() { Name = "Abbots Langley Parish Council",               EmailPatterns = "abbotslangley-pc.gov.uk" });
+            controller.PublicSectorRepository.Insert(new EmployerRecord() { Name = "Aberdeen City Council",                       EmailPatterns = "aberdeencityandshire-sdpa.gov.uk" });
+            controller.PublicSectorRepository.Insert(new EmployerRecord() { Name = "Aberdeenshire Council",                       EmailPatterns = "aberdeenshire.gov.uk" });
 
             //Stash the object for the unstash to happen in code
             controller.StashModel(model);
@@ -1160,7 +1161,7 @@ namespace GenderPayGap.Tests
 
         #region Positive tests
         [Test]
-        [Description("Ensure the Step5 succeeds when all fields are good")]
+        [Description("Ensure the Choose Organisation form is returned for the current user to choose an organisation")]
         public void ChooseOrganisation_Get_Success()
         {
             //ARRANGE:
@@ -1190,7 +1191,7 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Ensure the Step5 succeeds when all fields are good")]
+        [Description("Ensure that the new Choose Organisation form is selected and sent successfully when all fields values are valid")]
         public void ChooseOrganisation_Post_PrivateSector_Success()
         {
             //ARRANGE:
@@ -1273,7 +1274,7 @@ namespace GenderPayGap.Tests
         /// Emailpattern matching organisation matching:
         /// </summary>
         [Test]
-        [Description("Ensure the Step5 succeeds when all fields are good")]
+        [Description("Ensure that when Choose Organisation form is selected and sent successfully")]
         public void ChooseOrganisation_Post_PublicSector_Success()
         {
             //ARRANGE:
@@ -1350,7 +1351,7 @@ namespace GenderPayGap.Tests
         /// Emailpattern not matching and organisation not matching:
         /// </summary>
         [Test]
-        [Description("Ensure the Step5 succeeds when all fields are good")]
+        [Description("Public Manual Journey: Ensure that when Choose Organisation form is selected and email pattern and organisation does not matched, user is redirected to the add organisation form")]
         public void ChooseOrganisation_Post_PublicSector_NoEmailMatch_NoOrgMatch_Success()
         {
             //ARRANGE:
@@ -1433,7 +1434,7 @@ namespace GenderPayGap.Tests
         /// Public Sector: Add organisaton address
         /// </summary>
         [Test]
-        [Description("Ensure the AddOrganisation succeeds when all fields are good")]
+        [Description("Ensure the Add Organisation form is returned for the current user to add an organisation")]
         public void AddOrganisation_Get_Success()
         {
             //ARRANGE:
@@ -1468,7 +1469,7 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Ensure the AddAddress succeeds when all fields are good")]
+        [Description("Ensure that the new Add Address form is filled and sent successfully when all fields values are valid")]
         public void AddOrganisation_Post_Success()
         {
             //ARRANGE:
@@ -1527,7 +1528,7 @@ namespace GenderPayGap.Tests
         #region ManualRegistration: Add organisation - Private Sector 
 
         [Test]
-        [Description("Private Manual: Choose your org in private sector in manual reg mode takes you to the Add org name and address view ")]
+        [Description("Private Manual Journey Choose your org in private sector in manual reg mode returns the Add Organisation view ")]
         public void AddOrganisation_Get_PrivateSector_ManualRegistration_Success()
         {
             //ARRANGE:
@@ -1567,7 +1568,7 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Private Manual: Choose your org in private sector in manual reg mode takes you to the Add org name and address view ")]
+        [Description("Private Manual journey: Ensure that the new AddOrganisation form is filled and sent successfully when all fields values are valid")]
         public void AddOrganisation_Post_PrivateSector_ManualRegistration_Success()
         {
             //ARRANGE:
@@ -1674,7 +1675,7 @@ namespace GenderPayGap.Tests
         #region ManualRegistration: Add contact - Private Sector 
 
         [Test]
-        [Description("Private Manual:   ")]
+        [Description("Private Manual Journey: ensure Add Contact form is returned successfully to the user")]
         public void AddContact_Get_PrivateSector_ManualRegistration_Success()
         {
             //ARRANGE:
@@ -1714,9 +1715,9 @@ namespace GenderPayGap.Tests
 
         }
 
-        [Ignore("This test needs fixing")]
+        //[Ignore("This test needs fixing")]
         [Test]
-        [Description("Private Manual:   ")]
+        [Description("Private Manual Journey: ensure Add Contact form is filled and sent successfully")]
         public void AddContact_Post_PrivateSector_ManualRegistration_Success()
         {
             //ARRANGE:
@@ -1733,12 +1734,34 @@ namespace GenderPayGap.Tests
 
             var model = new OrganisationViewModel()
             {
+                Address1 = "123",
+                Address2 = "evergreen terrace",
+                Address3 = "Westminster",
+                CompanyNumber = "wetrw1234fg",
+                ContactEmailAddress = "test@hotmail.com",
+                ContactFirstName = "test firstName",
+                ContactLastName = "test lastName",
+                ContactJobTitle = "test job title",
+                ContactOrganisation = "test Organisation",
+                ContactPhoneNumber = "79000 000 000",
+                Country = "United Kingdom",
+                Name = "Acme ltd",
+                PINExpired = false,
+                PINSent = false,
+                PoBox = "",
+                PostCode = "W1 5qr",
+                ReviewCode = "",
+                SearchText = "Searchtext",
+                //   SelectedEmployerIndex = -1,
+                BackAction = "",
+                CancellationReason = "",
                 Employers = employerResult,
                 ManualRegistration = true,
                 SectorType = SectorTypes.Private
             };
 
-            var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
+
+            var controller = TestHelper.GetController<RegisterController>(user.UserId, routeData, user);
             controller.Bind(model);
 
             //Stash the object for the unstash to happen in code
@@ -1763,7 +1786,7 @@ namespace GenderPayGap.Tests
         #region ManualRegistration: Add organisation - Public Sector 
 
         [Test]
-        [Description("Public Manual:   ")]
+        [Description("Public Manual Journey Choose your org in private sector in manual reg mode returns the Add Organisation view")]
         public void AddOrganisation_Get_PublicSector_ManualRegistration_Success()
         {
             //ARRANGE:
@@ -1803,7 +1826,7 @@ namespace GenderPayGap.Tests
         }
 
         [Test]
-        [Description("Public Manual:   ")]
+        [Description("Public Manual journey: Ensure that the new AddOrganisation form is filled and sent successfully when all fields values are valid")]
         public void AddOrganisation_Post_PublicSector_ManualRegistration_Success()
         {
             //ARRANGE:
@@ -1900,7 +1923,7 @@ namespace GenderPayGap.Tests
         #region ManualRegistration: Add contact - Public Sector 
 
         [Test]
-        [Description("Public Manual:   ")]
+        [Description("Public Sector Manual Journey: ensure Add Contact form is returned successfully to the user")]
         public void AddContact_Get_PublicManualRegistration_Success()
         {
             //ARRANGE:
@@ -1940,9 +1963,9 @@ namespace GenderPayGap.Tests
 
         }
 
-        [Ignore("This test needs fixing")]
+
         [Test]
-        [Description("Public Manual:   ")]
+        [Description("Public Manual:ensure Add Contact form is returned successfully to the user")]
         public void AddContact_Post_PublicSector_ManualRegistration_Success()
         {
             //ARRANGE:
@@ -1957,8 +1980,30 @@ namespace GenderPayGap.Tests
             var employerResult = new PagedResult<EmployerRecord>();
             employerResult.Results = new List<EmployerRecord>();
 
+
             var model = new OrganisationViewModel()
             {
+                Address1 = "123",
+                Address2 = "evergreen terrace",
+                Address3 = "Westminster",
+                CompanyNumber = "wetrw1234fg",
+                ContactEmailAddress = "test@hotmail.com",
+                ContactFirstName = "test firstName",
+                ContactLastName = "test lastName",
+                ContactJobTitle = "test job title",
+                ContactOrganisation = "test Organisation",
+                ContactPhoneNumber = "79000 000 000",
+                Country = "United Kingdom",
+                Name = "Acme ltd",
+                PINExpired = false,
+                PINSent = false,
+                PoBox = "",
+                PostCode = "W1 5qr",
+                ReviewCode = "",
+                SearchText = "Searchtext",
+                //   SelectedEmployerIndex = -1,
+                BackAction = "",
+                CancellationReason = "",
                 Employers = employerResult,
                 ManualRegistration = true,
                 SectorType = SectorTypes.Public
@@ -1972,10 +2017,15 @@ namespace GenderPayGap.Tests
 
             //ACT:
             //2.Run and get the result of the test
-            var result = controller.AddContact(model) as ViewResult;
+            var result = controller.AddContact(model) as RedirectToRouteResult;
 
             //ASSERT:
-            Assert.NotNull(result, "Expected ViewResult");
+            Assert.NotNull(result, "Expected RedirectToRouteResult");
+            //4.Check that the redirection went to the right url step.
+            Assert.That(result.RouteValues["action"].ToString() == "ConfirmOrganisation", "Redirected to the wrong view");
+            var unStashedmodel = controller.UnstashModel<OrganisationViewModel>();
+            Assert.NotNull(model, "Expected OrganisationViewModel");
+            Assert.AreEqual(model == unStashedmodel, true, "Expected equal object entities success");
         }
 
         #endregion
@@ -1988,7 +2038,7 @@ namespace GenderPayGap.Tests
         #region Positive tests
 
         [Test]
-        [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
+        [Description("Ensure the Confirm Organisation form is returned for the current user to confirm an organisation selection")]
         public void ConfirmOrganisation_Get_Success()
         {
             //ARRANGE:
@@ -2021,7 +2071,7 @@ namespace GenderPayGap.Tests
         #region Private sector confirm organisation
        
         [Test]
-        [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
+        [Description("Private Sector Journey: Ensure the Confirm Organisation form is returned for the current user to confirm an organisation selection")]
         public void ConfirmOrganisation_Get_PrivateSector_Success()
         {
             //ARRANGE:
@@ -2055,83 +2105,146 @@ namespace GenderPayGap.Tests
             Assert.That(result.ViewData.ModelState.IsValid, "Model is Invalid");
         }
 
-        [Ignore("This test needs fixing")]
         [Test]
-        [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
+        [Description("Private Sector Journey: Ensure the Confirm Organisation form is confirmed and sent successfully")]
         public void ConfirmOrganisation_Post_PrivateSector_Success()
         {
             //ARRANGE:
             //1.Arrange the test setup variables
             var user = new User() { UserId = 1, EmailAddress = "test@hotmail.com", EmailVerifiedDate = DateTime.Now };
 
-            //var organisation = new Organisation() { OrganisationId = 1 };
-            //var userOrganisation = new UserOrganisation() { OrganisationId = 1, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
+            ICollection<OrganisationSicCode> OrgSicCodeList = new List<OrganisationSicCode>();
+
+            //this might not be neccesary anymore.
+            //do
+            //{
+            //    int count = 0;
+            //    OrgSicCodeList.Add( 
+            //                         new OrganisationSicCode()
+            //                        {
+            //                            SicCodeId = count++,
+            //                            SicCode = new SicCode()
+            //                            { SicCodeId = count++,
+            //                              Description  = "SicCode description {0} " + count++,
+            //                              SicSection = new SicSection()
+            //                              {
+            //                                    Created = DateTime.Now,
+            //                                    Description = "SicSection description {0}" + count++,
+            //                                    SicCodes = new List<SicCode>()
+            //                                    {
+            //                                     new SicCode{ SicCodeId = 1, SicSectionId = "SSID1", SicSection = new SicSection(), Description = "" },
+            //                                     new SicCode{ SicCodeId = 2, SicSectionId = "SSID2", SicSection = new SicSection(), Description = "" },
+            //                                     new SicCode{ SicCodeId = 3, SicSectionId = "SSID3", SicSection = new SicSection(), Description = "" },
+            //                                    },
+            //                                    SicSectionId = count++.ToString()
+            //                               },
+            //                               SicSectionId =  "" + count++ + "",
+            //                               Created = DateTime.Now
+            //                           }
+            //                        }
+            //                       );
+            //}
+            //while (OrgSicCodeList.Count < 14);
 
             //Set user email address verified code and expired sent date
             var routeData = new RouteData();
             routeData.Values.Add("Action", "ConfirmOrganisation");
             routeData.Values.Add("Controller", "Register");
 
+            //this might not be neccesary anymore.
             var employerResult = new PagedResult<EmployerRecord>()
             {
                 Results = new List<EmployerRecord>()
-                            {
-                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-                            }
+                {
+                    new EmployerRecord() { Name = "Acme  Inc", Address1 = "10", Address2 = "EverGreen Terrace", CompanyNumber = "123QA10", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 1).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "w12  3we" },
+                    new EmployerRecord() { Name = "Beano Inc", Address1 = "11", Address2 = "EverGreen Terrace", CompanyNumber = "123QA11", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 2).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "n12  4qw" },
+                    new EmployerRecord() { Name = "Smith ltd", Address1 = "12", Address2 = "EverGreen Terrace", CompanyNumber = "123QA12", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 3).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "nw2  1de" },
+                    new EmployerRecord() { Name = "Trax ltd",  Address1 = "13", Address2 = "EverGreen Terrace", CompanyNumber = "123QA13", SicCodes = OrgSicCodeList.Where(s => s.SicCodeId == 4).ToString(), CompanyStatus = "Active", Country = "UK", PostCode = "sw2  5gh" },
+                }
             };
 
             var model = new OrganisationViewModel()
             {
                 Employers = employerResult,
                 ManualRegistration = false,
-                SectorType = SectorTypes.Private
+                SelectedEmployerIndex = 1,
+                SectorType = SectorTypes.Private,
             };
 
             var controller = TestHelper.GetController<RegisterController>(1, routeData, user);
             controller.Bind(model);
+
+            //insert some employee records with sicCodes into the db...
+            controller.PrivateSectorRepository.Insert(new EmployerRecord()
+            {
+                Name = "acme inc",
+                Address1 = "123",
+                Address2 = "EverGreen Terrace",
+                CompanyNumber = "123QA432",
+                CompanyStatus = "Active",
+                Country = "UK",
+                PostCode = "e12 3eq",
+                SicCodes = "41100,41201,41202"
+            }
+                                                     );
+
+            controller.PrivateSectorRepository.Insert(new EmployerRecord()
+            {
+                Name = "smith ltd",
+                Address1 = "45",
+                Address2 = "iverson rd",
+                CompanyNumber = "123QA11",
+                CompanyStatus = "Active",
+                Country = "UK",
+                PostCode = "nw1 5re",
+                SicCodes = "42110,42130,42210"
+            }
+                                                     );
+
+            controller.PrivateSectorRepository.Insert(new EmployerRecord()
+            {
+                Name = "smith & Wes ltd",
+                Address1 = "45",
+                Address2 = "iverson rd",
+                CompanyNumber = "456GT657",
+                CompanyStatus = "Active",
+                Country = "UK",
+                PostCode = "nw1 5re",
+                SicCodes = "42220,42910,42990"
+            }
+                                                    );
+
+            controller.PrivateSectorRepository.Insert(new EmployerRecord()
+            {
+                Name = "smithers and sons ltd",
+                Address1 = "45",
+                Address2 = "iverson rd",
+                CompanyNumber = "956GT237",
+                CompanyStatus = "Active",
+                Country = "UK",
+                PostCode = "nw1 5re",
+                SicCodes = "43110,43120,43130"
+            }
+                                                    );
+
+            controller.PrivateSectorRepository.Insert(new EmployerRecord()
+            {
+                Name = "excetera ltd",
+                Address1 = "123",
+                Address2 = "Venice avenue ",
+                CompanyNumber = "910QA0942",
+                CompanyStatus = "Active",
+                Country = "UK",
+                PostCode = "w1 9eaz",
+                SicCodes = "43210,43220,43290"
+            }
+                                                     );
+
+            //insert some sicCodes into the db for employee records sicCodes to match...
+            // controller.DataRepository.Insert(OrgSicCodeList);
+            controller.DataRepository.Insert(new SicCode { SicCodeId = 42110, SicSectionId = "SSID1", SicSection = new SicSection(), Description = "" } );
+            controller.DataRepository.Insert(new SicCode { SicCodeId = 42130, SicSectionId = "SSID2", SicSection = new SicSection(), Description = "" } );
+            controller.DataRepository.Insert(new SicCode { SicCodeId = 42210, SicSectionId = "SSID3", SicSection = new SicSection(), Description = "" } );
 
             //Stash the object for the unstash to happen in code
             controller.StashModel(model);
@@ -2162,16 +2275,6 @@ namespace GenderPayGap.Tests
         #endregion
 
         #region Public sector confirm organisation
-
-        //Does not exist - check
-        [Test]
-        [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
-        public void ConfirmOrganisation_Get_PublicSector_Success()
-        {
-
-        }
-
-        [Ignore("This test needs fixing")]
         [Test]
         [Description("Ensure the ConfirmOrganisation succeeds when all fields are good")]
         public void ConfirmOrganisation_Post_PublicSector_Success()
@@ -2182,6 +2285,7 @@ namespace GenderPayGap.Tests
 
             //create an existing organisation model in the db
             var organisation = new Organisation() { OrganisationId = 1 };
+
             var userOrganisation = new UserOrganisation() { OrganisationId = organisation.OrganisationId, Organisation = organisation, UserId = 1, PINConfirmedDate = DateTime.Now, PINHash = "0" };
 
             //Set user email address verified code and expired sent date
@@ -2192,64 +2296,35 @@ namespace GenderPayGap.Tests
             var employerResult = new PagedResult<EmployerRecord>()
             {
                 Results = new List<EmployerRecord>()
-                            {
-                                 new EmployerRecord() {  Name = "1 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "2 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "3 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "4 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "5 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "6 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "7 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "8 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "9 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "10 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "11 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "12 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "13 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "14 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-
-                                 new EmployerRecord() {  Name = "15 Organisation Name", Address1 = "123", Address2 = "EverGreen Terrace",
-                                                    CompanyNumber = "123QA432", CompanyStatus = "Active", Country = "UK", PostCode = "e12 3eq" },
-                            }
+                {
+                    new EmployerRecord() { Name="2Gether NHS Foundation Trust",                EmailPatterns = "nhs.uk" },
+                    new EmployerRecord() { Name="5 Boroughs Partnership NHS Foundation Trust", EmailPatterns = "nhs.uk" },
+                    new EmployerRecord() { Name="Abbots Langley Parish Council",               EmailPatterns = "abbotslangley-pc.gov.uk" },
+                    new EmployerRecord() { Name="Aberdeen City Council",                       EmailPatterns = "aberdeencityandshire-sdpa.gov.uk" },
+                    new EmployerRecord() { Name="Aberdeenshire Council",                       EmailPatterns = "aberdeenshire.gov.uk" },
+                    new EmployerRecord() { Name="Aberford &amp; District Parish Council",      EmailPatterns = "aberford-pc.gov.uk" },
+                    new EmployerRecord() { Name="Abergavenny Town Council",                    EmailPatterns = "AbergavennyTownCouncil.gov.uk" },
+                    new EmployerRecord() { Name="Aberporth Community Council",                 EmailPatterns = "aberporthcommunitycouncil.gov.uk" },
+                    new EmployerRecord() { Name="Abertilly and Llanhilleth Community Council", EmailPatterns = "abertilleryandllanhilleth-wcc.gov.uk" },
+                    new EmployerRecord() { Name="Aberystwyth Town Council",                    EmailPatterns = "aberystwyth.gov.uk" },
+                    new EmployerRecord() { Name="Abingdon Town Council",                       EmailPatterns = "abingdon.gov.uk" },
+                    new EmployerRecord() { Name="Academies Enterprise Trust",                  EmailPatterns = "" },
+                    new EmployerRecord() { Name="Academy Transformation Trust",                EmailPatterns = "" },
+                    new EmployerRecord() { Name="Account NI DFP",                              EmailPatterns = "accountni.gov.uk" },
+                    new EmployerRecord() { Name="Accountant in Bankruptcy",                    EmailPatterns = "aib.gov.uk" }
+                }
             };
-
 
             //model to be saved.
             var model = new OrganisationViewModel()
             {
                 Employers = employerResult,
                 ManualRegistration = false,
+                SelectedEmployerIndex = 1,
                 SectorType = SectorTypes.Public
             };
 
-            var controller = TestHelper.GetController<RegisterController>(1, routeData, user, userOrganisation, organisation);
+            var controller = TestHelper.GetController<RegisterController>(1, routeData, user/*, userOrganisation, organisation*/);
 
             controller.Bind(model);
 
